@@ -23,6 +23,7 @@ All assignments must be completed as RMarkdown documents.
 
 Assignments will be submitted via the submission link provided in each assignment
 
+For Homework 2, please download the RMarkdown file and complete it. You can certainly read the homework on the HTML version
 
 ----
 
