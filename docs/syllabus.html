@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>BIOF 339: Practical R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Practical R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="bio.html">Instructor bio</a>
+</li>
+<li>
+  <a href="slides/index.html">Lectures</a>
+</li>
+<li>
+  <a href="assignments/index.html">Homework</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="notes/index.html">Course Notes</a>
+</li>
+<li>
+  <a href="https://biof339.slack.com">
+    <span class="fa fa-slack"></span>
+     
+    Slack
+  </a>
+</li>
+<li>
+  <a href="https://www.github.com/araastat/BIOF339">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">BIOF 339: Practical R</h1>
+
+</div>
+
+
+<div id="instructor" class="section level2">
+<h2>Instructor</h2>
+<p>Abhijit Dasgupta<br />
+Contact: via Slack or email (<a href="mailto:adasgupta+biof339@araastat.com">adasgupta+biof339@araastat.com</a>)</p>
+</div>
+<div id="course-description" class="section level2">
+<h2>Course description</h2>
+<p>The goal of this course is to introduce R as an analysis platform and tool for data science rather than a programming language. Throughout the course, emphasis will be placed on example-driven learning. Topics to be covered include: installation of R and R packages; command line R; R data types; loading data in R; manipulating data; exploring data through visualization; statistical tests; correcting for multiple comparisons; building models; generating publication-quality graphics; creating reports using RMarkdown. No prior programming experience is required.</p>
+</div>
+<div id="learning-objectives" class="section level1">
+<h1>Learning Objectives</h1>
+<ul>
+<li>Run R and RStudio, making use of inherent R features</li>
+<li>Find and make use of the extensive packages (R add-ons) available for analyzing biological and other forms of data</li>
+<li>Load, manipulate, and combine data to make it amenable to further analyses</li>
+<li>Visualize data with extensive graphics capabilities of R (including ggplot)</li>
+<li>Use R to run statistical models and hypothesis tests and report results conforming to standards expected in scientific journals</li>
+<li>Write reports using the powerful <code>rmarkdown</code> package and its derivatives</li>
+</ul>
+<div id="required-computers-and-software" class="section level2">
+<h2>Required computers and software</h2>
+<p>You are required to bring to each class a personal laptop running Windows, Mac OS X or Linux. You are also required to install the software <a href="http://cran.r-project.org" target="_blank">R</a> and the integrated development environment <a href="https://www.rstudio.com" target="_blank">RStudio</a>. Instructions for installing these are available on the Resources page (see links above).</p>
+</div>
+<div id="outline-of-the-class" class="section level2">
+<h2>Outline of the class</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Date</th>
+<th align="left">Topic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">September 11, 2019</td>
+<td align="left">Introduction to R, RStudio and RMarkdown</td>
+</tr>
+<tr class="even">
+<td align="left">September 18, 2019</td>
+<td align="left">Data Structures in R (classes 5:30-7, 7-8:30)</td>
+</tr>
+<tr class="odd">
+<td align="left">September 25, 2019</td>
+<td align="left">R packages, data import/export, munging</td>
+</tr>
+<tr class="even">
+<td align="left">October 02, 2019</td>
+<td align="left">Towards analytic data: Data Munging, continued</td>
+</tr>
+<tr class="odd">
+<td align="left">October 09, 2019</td>
+<td align="left">Data exploration through visualization</td>
+</tr>
+<tr class="even">
+<td align="left">October 16, 2019</td>
+<td align="left">Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot</td>
+</tr>
+<tr class="odd">
+<td align="left">October 23, 2019</td>
+<td align="left">Statistical analyses: Classical hypothesis testing and computational inference</td>
+</tr>
+<tr class="even">
+<td align="left">October 30, 2019</td>
+<td align="left">Statistical learning: Regression models</td>
+</tr>
+<tr class="odd">
+<td align="left">November 06, 2019</td>
+<td align="left">Statistical learning: Cluster analysis and pattern recognition (classes 5:30-7, 7-8:30)</td>
+</tr>
+<tr class="even">
+<td align="left">November 13, 2019</td>
+<td align="left">More data munging with <code>purrr</code>: grouping, mapping and functional programming</td>
+</tr>
+<tr class="odd">
+<td align="left">November 20, 2019</td>
+<td align="left">Basic bioinformatics: Bioconductor and friends</td>
+</tr>
+<tr class="even">
+<td align="left">November 27, 2019</td>
+<td align="left">No class (Thanksgiving)</td>
+</tr>
+<tr class="odd">
+<td align="left">December 04, 2019</td>
+<td align="left">More complex visualizations and RMarkdown</td>
+</tr>
+<tr class="even">
+<td align="left">December 11, 2019</td>
+<td align="left">Project presentations</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="books-and-learning-materials" class="section level2">
+<h2>Books and learning materials</h2>
+<p>There are no required books for this class. However, we will extensively refer to a few books available freely online and will serve as reading material and ongoing reference material for this course.</p>
+<ol style="list-style-type: decimal">
+<li><em>R for Data Science</em> [R4DS] by Hadley Wickham and Garrett Grolemund (available <a href="https://r4ds.had.co.nz/" target="_blank">online</a>)</li>
+</ol>
+<div id="communication" class="section level3">
+<h3>Communication</h3>
+<p>This class will communicate primarily via <a href="http://www.slack.com" target="_blank">Slack</a>. Please join the BIOF339 Slack channel using <a href="https://join.slack.com/t/biof339/shared_invite/enQtNzU1Njk5NDc2MDMyLWU5MjkwNzNlMmRlYTAwNDg2MGZjYWQ1YzEzMDUxMzc0MzE1NjZkMDFlY2Y0NTIyMGI2Y2VkODBiYmY0MjBiMzE">this link</a>.</p>
+<p>You will see two channels named <em>wed5-7_2019</em> and <em>wed7-9_2019</em>. Please join the channel corresponding to your section. I will be using Slack for broadcasting messages, answering questions and the like. If you have a question, you can directly message me on Slack if you like. Expect an answer within 24 hours.</p>
+</div>
+</div>
+<div id="grades" class="section level2">
+<h2>Grades</h2>
+<p>Grades will be based on the following requirements:</p>
+<ol style="list-style-type: decimal">
+<li>Homeworks, available Friday after class, due by 11:59PM the following Tuesday. (50%)
+<ul>
+<li>No late homeworks, since solutions will be available Wednesday mornings</li>
+<li>I’ll score the top 10 homeworks for grade</li>
+</ul></li>
+<li>Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (20%)</li>
+<li>Class participation (20%)</li>
+<li>Completion and submission of class exercises (10%, marked for completion)
+<ul>
+<li>These will need to be in basic RMarkdown, showing the problem and the solution. You can add a section for questions here that I can address in the following class or online. These will have to be submitted before you leave the classroom</li>
+</ul></li>
+</ol>
+</div>
+<div id="academic-policy-regarding-plagiarism" class="section level2">
+<h2>Academic policy regarding plagiarism</h2>
+<p>The FAES Graduate School at NIH prides itself on providing quality educational experiences and upholds the highest level of honesty, integrity, and mutual respect. It is our policy that cheating, fabrication or plagiarism by students is<br />
+not acceptable in any form. If a student is found to be in violation of any, or all of the below, his/her credits will be forfeited, and he/she will not be allowed to enroll in future courses or education programs administered by FAES.</p>
+<p>• Cheating is defined as an attempt to give or obtain inappropriate/ unauthorized assistance during any academic exercise, such as during examination, homework assignment, class presentation.<br />
+• Fabrication is defined as the falsification of data, information or citations in any academic materials.<br />
+• Plagiarism is defined as using the ideas, methods, or written words of another, without proper acknowledgment and with the intention that they be taken as the work of the deceiver. These include, but are not limited to, the use of published articles, paraphrasing, copying someone else’s homework and turning it in as one’s own and failing to reference footnotes. Procuring information from online sources without proper attribution also constitutes plagiarism.</p>
+<p>See <a href="https://faes.org/sites/default/files/Student_Handbook_2016-17.pdfhttps://faes.org/sites/default/files/Student_Handbook_2016-17.pdf" target="_blank">this link</a> for FAES policy on academic plagiarism.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

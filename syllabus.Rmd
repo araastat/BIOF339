@@ -1,0 +1,131 @@
+---
+title: "BIOF 339: Practical R"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include = F}
+knitr::opts_chunk$set(echo = F, warning=F, message = F)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+library(pander)
+
+startDate <- lubridate::ymd('20190911')
+classDate <- function(wk, startDate ){
+  today <- startDate + 7*(wk-1)
+  return(format(today, "%B %d, %Y"))
+}
+```
+
+## Instructor 
+Abhijit Dasgupta  
+Contact: via Slack or email ([adasgupta+biof339@araastat.com](mailto:adasgupta+biof339@araastat.com)) 
+
+## Course description
+
+The goal of this course is to introduce R as an analysis platform and tool for data science rather than a programming language.
+Throughout the course, emphasis will be placed on example-driven
+learning. Topics to be covered include: installation of R and R
+packages; command line R; R data types; loading data in R; manipulating
+data; exploring data through visualization; statistical tests;
+correcting for multiple comparisons; building models;  generating
+publication-quality graphics; creating reports using RMarkdown. No prior programming experience is
+required.
+
+# Learning Objectives
+
+- Run R and RStudio, making use of inherent R features
+- Find and make use of the extensive packages (R add-ons) available for analyzing biological and other forms of data
+- Load, manipulate, and combine data to make it amenable to further analyses
+- Visualize data with extensive graphics capabilities of R (including ggplot)
+- Use R to run statistical models and hypothesis tests and report results conforming to standards expected in scientific journals
+- Write reports using the powerful `rmarkdown` package and its derivatives
+
+## Required computers and software
+
+You are required to bring to each class a personal laptop running Windows, Mac OS X or Linux. You 
+are also required to install the software [R](http://cran.r-project.org){target=_blank} and
+the integrated development environment [RStudio](https://www.rstudio.com){target=_blank}. Instructions for 
+installing these are available on the Resources page (see links above).
+
+
+## Outline of the class
+
+```{r outline, echo = FALSE}
+dts <- classDate(1:14, startDate)
+topics <- c(
+  'Introduction to R, RStudio and RMarkdown',
+  'Data Structures in R (classes 5:30-7, 7-8:30)',
+  'R packages, data import/export, munging',
+  'Towards analytic data: Data Munging, continued',
+  'Data exploration through visualization',
+  'Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot',
+  'Statistical analyses: Classical hypothesis testing and computational inference',
+  'Statistical learning: Regression models',
+  'Statistical learning: Cluster analysis and pattern recognition (classes 5:30-7, 7-8:30)',
+  "More data munging with `purrr`: grouping, mapping and functional programming",
+  "Basic bioinformatics: Bioconductor and friends",
+  "No class (Thanksgiving)",
+  "More complex visualizations and RMarkdown",
+  "Project presentations")
+D <- tibble(Date = dts, Topic=topics)
+knitr::kable(D)
+
+```
+
+## Books and learning materials
+
+There are no required books for this class. However, we will extensively refer to
+a few books available freely online and will serve as reading material and ongoing 
+reference material for this course. 
+
+1. _R for Data Science_ [R4DS] by Hadley Wickham and Garrett Grolemund (available [online](https://r4ds.had.co.nz/){target=_blank})
+
+### Communication
+
+This class will communicate primarily via [Slack](http://www.slack.com){target=_blank}. Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/enQtNzU1Njk5NDc2MDMyLWU5MjkwNzNlMmRlYTAwNDg2MGZjYWQ1YzEzMDUxMzc0MzE1NjZkMDFlY2Y0NTIyMGI2Y2VkODBiYmY0MjBiMzE).
+
+You will see two channels named *wed5-7_2019* and *wed7-9_2019*. Please join the channel corresponding to your section. I will be using Slack for broadcasting messages, answering questions and the like. If you have a question, you can directly message me on Slack if you like. Expect an answer within 24 hours.
+
+## Grades
+
+Grades will be based on the following requirements:
+
+1. Homeworks, available Friday after class, due by 11:59PM the following Tuesday.  (50%)
+    - No late homeworks, since solutions will be available Wednesday mornings
+    - I'll score the top 10 homeworks for grade
+1. Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (20%)
+1. Class participation (20%)
+1. Completion and submission of class exercises (10%, marked for completion)
+    - These will need to be in basic RMarkdown, showing the problem and the solution. You can add a section for questions here that I can address in the following class or online. These will have to be submitted before you leave the classroom
+
+## Academic policy regarding plagiarism
+
+The FAES Graduate School at NIH prides itself on providing quality
+educational experiences and upholds the highest level of honesty,
+integrity, and mutual respect. It is our policy that cheating,
+fabrication or plagiarism by students is\
+not acceptable in any form. If a student is found to be in violation of
+any, or all of the below, his/her credits will be forfeited, and he/she
+will not be allowed to enroll in future courses or education programs
+administered by FAES.
+
+• Cheating is defined as an attempt to give or obtain inappropriate/
+unauthorized assistance during any academic exercise, such as during
+examination, homework assignment, class presentation.\
+• Fabrication is defined as the falsification of data, information or
+citations in any academic materials.\
+• Plagiarism is defined as using the ideas, methods, or written words of
+another, without proper acknowledgment and with the intention that they
+be taken as the work of the deceiver. These include, but are not limited
+to, the use of published articles, paraphrasing, copying someone else’s
+homework and turning it in as one’s own and failing to reference
+footnotes. Procuring information from online sources without proper
+attribution also constitutes plagiarism.
+
+See [this link](https://faes.org/sites/default/files/Student_Handbook_2016-17.pdfhttps://faes.org/sites/default/files/Student_Handbook_2016-17.pdf){target=_blank} for FAES policy on academic plagiarism.
+
+

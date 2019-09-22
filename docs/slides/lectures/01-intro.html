@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Practical R: Introductions</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="01-intro_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="robot.css" type="text/css" />
+    <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Practical R: Introductions
+### Abhijit Dasgupta
+### Fall, 2019
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339, Fall, 2019&lt;/span&gt;&lt;/div&gt;
+
+---
+class: middle, center
+
+&lt;img src="img/R.jpg" height="561" width="724"/&gt;
+
+---
+
+# What does R look like?
+.right-column30[
+
+
+```r
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies &lt;- 
+  breast_cancer %&gt;% 
+    mutate(luminalA = ifelse(ER == '+' &amp; PR == '+' &amp; HER2 == '-', 1, 0),
+         luminalB = ifelse(ER == '+' &amp; PR == '-' &amp; HER2 == '+', 1, 0),
+         her2 = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '+', 1, 0),
+         basal = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '-', 1, 0)) %&gt;% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %&gt;%
+    count(type)
+```
+]
+
+--
+
+.left-column30[
++ A .heatinline[scripting] language
+  - Provide instructions to the computer
+  - in a .saltinline[structured] manner
+  - to do statistical analysis
+]
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
+]
+.right-column30[
+
+
+```r
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies &lt;- 
+* breast_cancer %&gt;%
+    mutate(luminalA = ifelse(ER == '+' &amp; PR == '+' &amp; HER2 == '-', 1, 0),
+         luminalB = ifelse(ER == '+' &amp; PR == '-' &amp; HER2 == '+', 1, 0),
+         her2 = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '+', 1, 0),
+         basal = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '-', 1, 0)) %&gt;% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %&gt;%
+    count(type)
+```
+]
+
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
++ Create new variables from old variables
+]
+.right-column30[
+
+
+```r
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies &lt;- 
+  breast_cancer %&gt;% 
+*   mutate(luminalA = ifelse(ER == '+' &amp; PR == '+' &amp; HER2 == '-', 1, 0),
+*        luminalB = ifelse(ER == '+' &amp; PR == '-' &amp; HER2 == '+', 1, 0),
+*        her2 = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '+', 1, 0),
+*        basal = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '-', 1, 0)) %&gt;%
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %&gt;%
+    count(type)
+```
+]
+
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
++ Create new variables from old variables
++ Deal with missing values
+]
+.right-column30[
+
+
+```r
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies &lt;- 
+  breast_cancer %&gt;% 
+    mutate(luminalA = ifelse(ER == '+' &amp; PR == '+' &amp; HER2 == '-', 1, 0), 
+         luminalB = ifelse(ER == '+' &amp; PR == '-' &amp; HER2 == '+', 1, 0), 
+         her2 = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '+', 1, 0), 
+         basal = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '-', 1, 0)) %&gt;% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+*     TRUE ~ NA)) %&gt;%
+    count(type)
+```
+]
+
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
++ Create new variables from old variables
++ Deal with missing values
++ Find the frequencies
+]
+.right-column30[
+
+
+```r
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies &lt;- 
+  breast_cancer %&gt;% 
+    mutate(luminalA = ifelse(ER == '+' &amp; PR == '+' &amp; HER2 == '-', 1, 0), 
+         luminalB = ifelse(ER == '+' &amp; PR == '-' &amp; HER2 == '+', 1, 0), 
+         her2 = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '+', 1, 0), 
+         basal = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '-', 1, 0)) %&gt;% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %&gt;%
+*   count(type)
+```
+]
+
+
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
++ Create new variables from old variables
++ Deal with missing values
++ Find the frequencies
++ .heatinline[Comment on what you're doing]
+]
+.right-column30[
+
+
+```r
+*# Determining frequencies of breast cancer subtypes
+
+type_frequencies &lt;- 
+  breast_cancer %&gt;% 
+    mutate(luminalA = ifelse(ER == '+' &amp; PR == '+' &amp; HER2 == '-', 1, 0), 
+         luminalB = ifelse(ER == '+' &amp; PR == '-' &amp; HER2 == '+', 1, 0), 
+         her2 = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '+', 1, 0), 
+         basal = ifelse(ER == '-' &amp; PR == '-' &amp; HER2 == '-', 1, 0)) %&gt;% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %&gt;%
+    count(type) 
+```
+]
+
+--
+
+.center[This is an example of a .heatinline[pipeline] in R. We'll develop different aspects of this
+progressively throughout the semester]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. .heatinline[Have to think]
+1. Reproducible (custom) workflows
+1. Much less error-prone
+1. Much lower costs to repeat analyses, or as you learn more
+1. Easily leverage work of smarter developers
+1. Easier to work with larger datasets (more than size of screen)
+]
+.pull-right[
+.large[Cons:]
+
+1. Have to type
+1. Have to know the language
+1. Higher initial startup cost
+1. .heatinline[Have to think]
+]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. .fatinline[Have to think]
+1. Reproducible (custom) workflows
+1. Much less error-prone
+1. Much lower costs to repeat analyses, or as you learn more
+1. Easily leverage work of smarter developers
+1. Easier to work with larger datasets (more than size of screen)
+]
+.pull-right[
++ You're giving instructions to a fast but stupid machine
++ This machine will do .heatinline[**exactly**] what you tell it
++ The machine is capable of amazing things
++ Can't just _menu-mine_ and try things that __seem__ to be what you want
+
+#### With great power comes great responsibility
+
+#### But also great benefits
+
+]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. Have to think
+1. Reproducible (custom) workflows
+1. .fatinline[Much less error-prone]
+1. Much lower costs to repeat analyses, or as you learn more
+1. Easily leverage work of smarter developers
+1. Easier to work with larger datasets (more than size of screen)
+]
+.pull-right[
++ If your code is not right, it won't run
+  - Can be frustrating
+  - But if it runs you're much more confident
++ If you screw up in Excel
+  - almost impossible to recover
++ You have much more control over what you're doing
+]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. Have to think
+1. Reproducible (custom) workflows
+1. Much less error-prone
+1. Much lower costs to repeat analyses, or as you learn more
+1. .fatinline[Easily leverage work of smarter developers]
+1. Easier to work with larger datasets (more than size of screen)
+]
+.pull-right[
++ Can use _modules_ or _packages_ developed by others
+  - `tidyverse`, `Seurat`, `ggplot2`
++ Can "steal" code from others (provided license allows)
+]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. Have to think
+1. Reproducible (custom) workflows
+1. Much less error-prone
+1. Much lower costs to repeat analyses, or as you learn more
+1. Easily leverage work of smarter developers
+1. .fatinline[Easier to work with larger datasets (more than size of screen)]
+]
+.pull-right[
+Good luck working with
+
++ GWAS data
++ fMRI data
++ Stocks and bonds data
++ Sports data
++ Many more ...
+
+in a unified environment  
+
+Learn once, use everywhere
+]
+
+---
+
+# Why use &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;?
+
++ Specializes in statistics and data visualization
++ Flexible
+  - ~~_If you can do it_~~ __How you can do it__
++ Large ecosystem
+  - Over 16,000 packages, 1500+ dedicated to bioinformatics
+  - Can read from most sources of data
+  - Generic and specialized analyses
++ Fantastic community
+  - Twitter, StackOverflow, blogosphere, conferences, online books
+
+---
+
+# Why use &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;?
+
+R is a very high-quality product that is accepted and used widely in 
+government agencies, corporations and universities worldwide
+
+- Standard data analytic software in bioinformatics, behavioral health and many aspects of quantitative finance
+- Increasingly used in pharma, economics, political science and engineering
+
+--
+
+R is open-source, in that anyone can see the actual code and validate the 
+computations directly
+
+---
+
+# Why use &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;?
+
+- R has a well-deserved reputation for being a great data visualization 
+tool, with users being able to create complex, customizable graphs with relative 
+ease
+- As a scripting language, it allows the same workflows to be coded and re-used.
+- You can set up workflows to validate data, in terms of data quality and missingness, 
+which avoids visual inspection which can be time-consuming and mistake-prone. 
+- R can handle large datasets, and can work with multiple datasets at the same time
+
+---
+
+# Why use &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;?
+
+Specialized packages available for many domains
+
+- Bioinformatics
+- Econometrics
+- Maps and spatial analytics 
+- Text mining and Natural Language Processing
+
+The [CRAN Task Views](https://cran.r-project.org/web/views/) 
+provide curated lists of packages based on different domains
+
+The [Bioconductor Project](https://www.bioconductor.org) is THE source for bioinformatics packages in R. It is the gold standard for many bioinformatic workflows
+
+
+
+---
+
+# Things &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt; is not (in this class)
+
+--
+
+- The 18th letter of the English alphabet
+
+--
+
+- A magic incantation that will produce an analysis
+
+--
+
+- Just something the cool kids are doing
+
+--
+
+- Point-and-click, automatic, WYSIWYG (What you see is what you get)
+    - So it's not Excel, SPSS, Prism, GraphPad
+    - It's much more!!!
+
+---
+
+# A note on Excel &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 384 512"&gt;&lt;path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm60.1 106.5L224 336l60.1 93.5c5.1 8-.6 18.5-10.1 18.5h-34.9c-4.4 0-8.5-2.4-10.6-6.3C208.9 405.5 192 373 192 373c-6.4 14.8-10 20-36.6 68.8-2.1 3.9-6.1 6.3-10.5 6.3H110c-9.5 0-15.2-10.5-10.1-18.5l60.3-93.5-60.3-93.5c-5.2-8 .6-18.5 10.1-18.5h34.8c4.4 0 8.5 2.4 10.6 6.3 26.1 48.8 20 33.6 36.6 68.5 0 0 6.1-11.7 36.6-68.5 2.1-3.9 6.2-6.3 10.6-6.3H274c9.5-.1 15.2 10.4 10.1 18.4zM384 121.9v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"/&gt;&lt;/svg&gt;
+
+.pull-left[
+   
+
+Excel is omnipresent, so it becomes the default data medium
+
+It is great for many things, including _quick-and-dirty_ analyses
+
+.heatinline[It can be error-prone]
+
+It needs to be backed up
+
+It has size limitations
+
+Takes a lot of effort to do complex analyses
+]
+
+--
+
+.pull-right[
++ No way to reproduce analyses without macros
++ No way to document what you are doing
++ Excel has some nasty default behavior
+  - Guess what the `MAR1` gene gets recorded as?
++ Very hard to recover from errors
+  - Shift of one error (off by one row or column)
+  - Google _Duke Potti_ or _Reinhart Rogoff Herndon_
+]
+
+---
+class: middle, center, inverse
+
+# About this class
+
+---
+
+## Learning Objectives
+
+- Run R and RStudio, making use of inherent R features
+- Find and make use of the extensive packages (R add-ons) available for analyzing biological and other forms of data
+- Load, manipulate, and combine data to make it amenable to further analyses
+- Visualize data with extensive graphics capabilities of R (including ggplot)
+- Use R to run statistical models and hypothesis tests and report results conforming to standards expected in scientific journals
+- Write reports using the powerful `rmarkdown` package and its derivatives
+
+---
+
+# Plan
+
+
+Date                 Topic                                                                                               
+-------------------  ----------------------------------------------------------------------------------------------------
+September 11, 2019   Introduction to R, RStudio and RMarkdown                                                            
+September 18, 2019   Data Structures in R .fatinline[(classes 5:30-7, 7-8:30)]                                           
+September 25, 2019   R packages, data import/export                                                                      
+October 02, 2019     Towards analytic data: Data Munging                                                                 
+October 09, 2019     Data exploration through visualization                                                              
+October 16, 2019     Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot                 
+October 23, 2019     Statistical analyses: Classical hypothesis testing and computational inference                      
+October 30, 2019     Statistical learning: Regression models                                                             
+November 06, 2019    Statistical learning: Cluster analysis and pattern recognition .fatinline[(classes 5:30-7, 7-8:30)] 
+November 13, 2019    More data munging with `purrr`: grouping, mapping and functional programming                        
+November 20, 2019    Basic bioinformatics: Bioconductor and friends                                                      
+November 27, 2019    .heatinline[No class (Thanksgiving)]                                                                
+December 04, 2019    More complex visualizations and RMarkdown                                                           
+December 11, 2019    Project presentations                                                                               
+
+
+---
+
+# Grading rubric
+
+1. Homeworks, available Friday after class, due by 11:59PM the following Tuesday.  (50%)
+    - No late homeworks, since solutions will be available Wednesday mornings
+    - I'll score the top 10 homeworks for grade
+1. Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (20%)
+1. Class participation (20%)
+1. Completion and submission of class exercises (10%, marked for completion)
+    - These will need to be in basic RMarkdown, showing the problem and the solution. You can add a section for questions here that I can address in the following class or online. These will have to be submitted before you leave the classroom
+
+---
+
+# Submitting assignments
+
+## Homework
+
++ Each homework will come with a submission link. 
+  - This link will automatically expire at deadline
++ Name your RMarkdown file &lt;Name&gt;_HW&lt;#&gt;.Rmd
+  - For example *FelixLeiter_HW3.Rmd*
++ The RMarkdown file should be self contained, i.e. I should be able to run it
+
+
+### Must contain "BIOF339" and your name in the subject line
+
+### Needs to be a attached RMarkdown file that I can run
+
+We'll talk about RMarkdown later today
+
+---
+
+# Communication
+
+- Primarily via &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/&gt;&lt;/svg&gt; [Slack](http://www.slack.com). 
+  - Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/enQtNzU1Njk5NDc2MDMyLWU5MjkwNzNlMmRlYTAwNDg2MGZjYWQ1YzEzMDUxMzc0MzE1NjZkMDFlY2Y0NTIyMGI2Y2VkODBiYmY0MjBiMzE).
+  - You will see two channels named &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M446.2 270.4c-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-30.3-90 45.4-15.1c19.1-6.2 29.1-26.8 23-45.9-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-93.4 31.2-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-45.3 15c-19.1 6.2-29.1 26.8-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l30.3 90L78 354.8c-19 6.2-29.1 26.9-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 93.6-31.3 15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 45.4-15.1c19-6 29.1-26.7 22.9-45.7zm-254.1 47.2l-30.3-90.2 93.5-31.3 30.3 90.2-93.5 31.3z"/&gt;&lt;/svg&gt;*wed5-7_2019* and &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M446.2 270.4c-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-30.3-90 45.4-15.1c19.1-6.2 29.1-26.8 23-45.9-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-93.4 31.2-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-45.3 15c-19.1 6.2-29.1 26.8-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l30.3 90L78 354.8c-19 6.2-29.1 26.9-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 93.6-31.3 15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 45.4-15.1c19-6 29.1-26.7 22.9-45.7zm-254.1 47.2l-30.3-90.2 93.5-31.3 30.3 90.2-93.5 31.3z"/&gt;&lt;/svg&gt;*wed7-9_2019*. Please join the channel corresponding to your section. 
+- Slack for broadcasting messages, answering questions and the like. 
+  - If you have a question, you can directly message me on Slack. Expect an answer within 24 hours.
+- Office hours by appointment
+
+---
+
+# Class project
+
+- Create a RMarkdown document or presentation
+- Use your own data, or data available on the web (legally)
+- Show me that you can 
+  - import data into R
+  - manipulate (munge) the data
+  - perform some analysis on the data
+  - create a visualization
+  - create a report in RMarkdown
+- 5 minute _lightning talks_ on final class day
+
+---
+class: inverse, middle, center
+
+&lt;svg style="height:200;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;   &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;     &lt;img src="img/RStudioHex.png" height=200 /&gt;
+
+---
+
+
+# &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;
+
+R is the scripting language we will use for statistical analysis
+
+It comes with a very basic GUI and is not very user-friendly as is
+
+.center[
+&lt;img src="img/R1.png" width="350px" height="350px" /&gt;
+]
+
+
+---
+
+&lt;img src="img/RStudioHex.png" height=100 width=100/&gt;
+
+RStudio is a much nicer Integrated Development Environment (IDE) that runs R
+
+.left-column30[
+- You can customize the look and feel of RStudio
+- We'll go through the features of RStudio in a minute
+]
+.right-column30[
+&lt;img src="img/RStudioScreen.png" width="600px" height="400px" /&gt;
+]
+---
+
+# &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;
+
+.left-column30[
+- The version of R you're running
+]
+.right-column30[
+
+When you start R, this is what shows up
+
+```r
+*R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.70 (7657) x86_64-apple-darwin15.6.0]
+```
+
+]
+
+---
+
+# &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;
+
+.left-column30[
+- The version of R you're running
+- The operating system you're running
+]
+.right-column30[
+
+When you start R, this is what shows up
+
+```r
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree" 
+Copyright (C) 2019 The R Foundation for Statistical Computing
+*Platform: x86_64-apple-darwin15.6.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.70 (7657) x86_64-apple-darwin15.6.0]
+```
+
+]
+
+---
+
+# &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;
+
+.left-column30[
+- The version of R you're running
+- The operating system you're running
+- It's free, with no guarantees, but is known to be solid and well-maintained
+]
+.right-column30[
+
+When you start R, this is what shows up
+
+```r
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree" 
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin15.6.0 (64-bit) 
+
+*R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.70 (7657) x86_64-apple-darwin15.6.0]
+```
+
+]
+
+---
+
+
+# &lt;svg style="height:0.8em;top:.04em;position:relative;fill:steelblue;" viewBox="0 0 581 512"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;
+
+.left-column30[
+- The version of R you're running
+- The operating system you're running
+- It's free, with no guarantees, but is known to be solid and well-maintained
+- You can find help online
+]
+.right-column30[
+
+When you start R, this is what shows up
+
+```r
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree" 
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin15.6.0 (64-bit) 
+
+R is free software and comes with ABSOLUTELY NO WARRANTY. 
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+*Type 'demo()' for some demos, 'help()' for on-line help, or
+*'help.start()' for an HTML browser interface to help.
+*Type 'q()' to quit R.
+
+[R.app GUI 1.70 (7657) x86_64-apple-darwin15.6.0]
+```
+
+]
+
+---
+class: middle, center
+
+&lt;img src="img/RStudioHex.png" height=200 /&gt;
+
+### The exact look won't match yours. See demo
+
+---
+
+![](img/RStudioScreenScript.png)
+
+---
+
+
+![](img/RStudioScreenConsole.png)
+
+---
+
+![](img/RStudioScreenEnv.png)
+
+---
+
+![](img/RStudioScreenFE.png)
+
+---
+
+# Options
+
+&lt;table padding=5&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src="img/RSOption1.png" /&gt;
+&lt;td&gt;&lt;img src="img/RSOption2.png" /&gt;
+&lt;td&gt;&lt;img src="img/RSOption3.png" /&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;General options&lt;/td&gt;
+&lt;td&gt;Appearance&lt;/td&gt;
+&lt;td&gt;Arrangement&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+---
+class: middle, inverse, center
+
+# Starting off
+
+---
+
+![](img/NewProject.png)
+
+---
+
+# Start a new project
+
+.left-column30[
+A __RStudio project__ allows you to encapsulate each analysis project
+
+- Keeps files, data, and R separate between projects
+- Allows you to work on different projects concurrently
+]
+.right-column30[
+![](img/NewProject.png)
+]
+
+---
+
+# Starting a new project
+
+.left-column30[
++ Choose a new directory
+]
+.right-column30[
+![](img/NewProject2.png)
+]
+
+---
+
+# Start a new project
+
+.left-column30[
+- Choose a new directory
+- Choose what kind of project
+]
+.right-column30[
+![](img/NewProject3.png)
+]
+
+---
+
+# Start a new project
+
+.left-column30[
+- Choose a new directory
+- Choose what kind of project
+- Where do you want that project to be
+]
+.right-column30[
+![](img/NewProject4.png)
+]
+
+---
+
+# Start a new project
+
+.left-column30[
+- Choose a new directory
+- Choose what kind of project
+- Where do you want that project to be
+- Switch betwen projects easily
+]
+.right-column30[
+![](img/Projects.png)
+]
+
+---
+class: middle, center
+
+# Working in a project
+
+---
+
+# Open a new script 
+
+.left-column30[
+You will start by opening a new script
+
+- This is a blank canvas
+- You will write R code (instructions) in this script
+- This is just a text editor, so you can copy, paste, edit just as in Notepad
+- Good practice is to write code in the script window, then **send** the code to R
+]
+.right-column30[
+![](img/NewScript.png)
+]
+
+---
+
+# Run some code
+
+.pull-left[
+
+Write some code, then send it to the console, where R is running
+
+- You can use the button, but
+- I prefer you learn the keyboard shortcut
+- Ctrl/Cmd + Enter sends either
+  - current line under cursor
+  - highlighted code
+]
+.pull-right[
+![](img/RunCode.png)
+]
+
+---
+class: middle, center, inverse
+
+# Let's play for a while
+
+---
+
+### A calculator
+
+
+```r
+2 + (3 * 5) / 1.75
+```
+
+```
+#&gt;  [1] 10.57143
+```
+
+### A random number generator
+
+
+```r
+set.seed(2085)
+runif(10, 0, 10)
+```
+
+```
+#&gt;   [1] 9.6383786 2.7689373 2.4291854 1.7018136 4.8812344 0.5893566 1.9033637
+#&gt;   [8] 9.7952480 2.1012500 5.6648043
+```
+
+---
+
+# Exploring a data set
+
+The `airquality` dataset, built in to R, provides daily air quality measurements in New York, May to September 1973.
+
+
+
+```r
+airquality
+```
+
+This automatically prints out the full data set, but that's not really useful
+
+.pull-left[
+
+```r
+str(airquality)
+```
+
+```
+#&gt;  'data.frame':	153 obs. of  6 variables:
+#&gt;   $ Ozone  : int  41 36 12 18 NA 28 23 19 8 NA ...
+#&gt;   $ Solar.R: int  190 118 149 313 NA NA 299 99 19 194 ...
+#&gt;   $ Wind   : num  7.4 8 12.6 11.5 14.3 14.9 8.6 13.8 20.1 8.6 ...
+#&gt;   $ Temp   : int  67 72 74 62 56 66 65 59 61 69 ...
+#&gt;   $ Month  : int  5 5 5 5 5 5 5 5 5 5 ...
+#&gt;   $ Day    : int  1 2 3 4 5 6 7 8 9 10 ...
+```
+Note the missing values, denoted `NA`
+]
+
+--
+
+.pull-right[
+
+```r
+head(airquality)
+```
+
+```
+#&gt;    Ozone Solar.R Wind Temp Month Day
+#&gt;  1    41     190  7.4   67     5   1
+#&gt;  2    36     118  8.0   72     5   2
+#&gt;  3    12     149 12.6   74     5   3
+#&gt;  4    18     313 11.5   62     5   4
+#&gt;  5    NA      NA 14.3   56     5   5
+#&gt;  6    28      NA 14.9   66     5   6
+```
+]
+
+---
+
+# Exploring a data set
+
+.pull-left[
+
+```r
+summary(airquality)
+```
+
+```
+#&gt;       Ozone           Solar.R           Wind             Temp      
+#&gt;   Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
+#&gt;   1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
+#&gt;   Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+#&gt;   Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
+#&gt;   3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
+#&gt;   Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+#&gt;   NA's   :37       NA's   :7                                       
+#&gt;       Month            Day      
+#&gt;   Min.   :5.000   Min.   : 1.0  
+#&gt;   1st Qu.:6.000   1st Qu.: 8.0  
+#&gt;   Median :7.000   Median :16.0  
+#&gt;   Mean   :6.993   Mean   :15.8  
+#&gt;   3rd Qu.:8.000   3rd Qu.:23.0  
+#&gt;   Max.   :9.000   Max.   :31.0  
+#&gt;  
+```
+]
+.pull-right[
+
+```r
+library(tableone) # Use a package
+kableone(CreateTableOne(data=airquality), 
+         format='html')
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Overall &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 153 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Ozone (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 42.13 (32.99) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Solar.R (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 185.93 (90.06) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Wind (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.96 (3.52) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Temp (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 77.88 (9.47) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Month (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.99 (1.42) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Day (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15.80 (8.86) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+We'll talk more about this in Week 3 &amp; 6
+]
+
+--
+
+&gt; Sorry!!! You probably don't have the `tableone` package 😿
+
+---
+
+# Sidebar: Installing packages
+
+
+```r
+install.packages('tableone')
+```
+
+You should do this directly in the console rather than in the script. Why? Because
+you only have to do this once (per computer). You don't need to re-install packages
+every time. 
+
+&gt;Some packages I might use might not install this way, since they are 
+developmental and not released. We'll talk about how to install those later. For you 
+Windows folk, it will take a little bit of work
+---
+
+# Exploring one variable
+
+.pull-left[
+
+```r
+mean(airquality$Temp)
+```
+
+```
+#&gt;  [1] 77.88235
+```
+
+
+```r
+median(airquality$Temp)
+```
+
+```
+#&gt;  [1] 79
+```
+]
+.pull-right[
+
+```r
+hist(airquality$Temp)
+```
+
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Exploring two variables
+
+.pull-left[
+
+```r
+plot(Ozone ~ Month, data = airquality)
+```
+
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-18-1.png" height="400" /&gt;
+]
+.pull-right[
+
+```r
+library(ggplot2)
+ggplot(airquality) + 
+  geom_point(aes(x = Month, y = Ozone)) + 
+  geom_smooth(aes(x = Month, y = Ozone), color = 'green') +
+  theme_bw()
+```
+
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-19-1.png" height="400" /&gt;
+
+]
+
+---
+
+# Is there a difference in ozone between months
+
+.pull-left[
+
+```r
+summary(aov(Ozone ~ Month, data=airquality))
+```
+
+```
+#&gt;               Df Sum Sq Mean Sq F value Pr(&gt;F)  
+#&gt;  Month         1   3387    3387   3.171 0.0776 .
+#&gt;  Residuals   114 121756    1068                 
+#&gt;  ---
+#&gt;  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt;  37 observations deleted due to missingness
+```
+
+Whoops!! Only 1 df but 5 months!! 
+
+This is doing ANCOVA/Regression
+]
+
+--
+
+.pull-right[
+
+```r
+summary(aov(Ozone~factor(Month), data=airquality))
+```
+
+```
+#&gt;                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+#&gt;  factor(Month)   4  29438    7359   8.536 4.83e-06 ***
+#&gt;  Residuals     111  95705     862                     
+#&gt;  ---
+#&gt;  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt;  37 observations deleted due to missingness
+```
+
+`factor` can convert a numerical or character variable into a categorical variable
+]
+
+--
+
+&gt; I'm doing a lot of things on the fly here. We'll work through these at a saner pace in the coming weeks. Don't panic!! Breathe!!!
+
+---
+class: middle, center, inverse
+
+# RMarkdown
+
+---
+
+![](img/rmd1.png)
+---
+
+.left-column30[
++ There are some choices you might need to make
+  + Document is like a paper
+  + Presentation is like PowerPoint
+  + Shiny is an interactive web app developed in R. May talk about it towards the end
+  + Various packages also provide templates for RMarkdown documents
+
+]
+.right-column30[
+![](img/rmd2.png)
+]
+
+---
+
+
+
+.left-column30[
++ Elements on the right are output formats
+  - Documents produce Word, PDF or HTML
+  - Presentations produce PowerPoint, PDF, or HTML
+]
+.right-column30[
+![](img/rmd2.png)
+]
+
+---
+
+```
+---
+title: "Untitled"
+author: "Abhijit Dasgupta"
+date: "9/11/2019"
+output: html_document
+---
+```
+
+This determines the title and author, and the output type. Typically don't modify the 
+entry in `output` for now
+
+--
+
+````markdown
+```{r cars}
+summary(cars)
+```
+````
+
+This is a code chunk. RMarkdown evaluates this chunk of code and replaces the code 
+with the results. This code chunk happens to be named "cars". The naming is optional but useful.
+
+---
+
+.pull-left[
+### RMarkdown
+
+````markdown
+```{r cars}
+summary(cars)
+```
+````
+]
+.pull-right[
+### Results
+
+
+```r
+summary(cars)
+```
+
+```
+#&gt;       speed           dist       
+#&gt;   Min.   : 4.0   Min.   :  2.00  
+#&gt;   1st Qu.:12.0   1st Qu.: 26.00  
+#&gt;   Median :15.0   Median : 36.00  
+#&gt;   Mean   :15.4   Mean   : 42.98  
+#&gt;   3rd Qu.:19.0   3rd Qu.: 56.00  
+#&gt;   Max.   :25.0   Max.   :120.00
+```
+]
+
+---
+
+.pull-left[
+### RMarkdown
+
+````markdown
+```{r}
+library(tableone) # Use a package
+kableone(CreateTableOne(data=airquality), 
+         format='html')
+```
+````
+]
+.pull-right[
+### Results
+
+
+```r
+library(tableone) # Use a package
+kableone(CreateTableOne(data=airquality), 
+         format='html')
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Overall &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 153 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Ozone (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 42.13 (32.99) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Solar.R (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 185.93 (90.06) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Wind (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.96 (3.52) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Temp (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 77.88 (9.47) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Month (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6.99 (1.42) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Day (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15.80 (8.86) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+&lt;br&gt;
+&lt;br&gt;
+The code chunk on the left gets **replaced** by the table on the right in your document
+
+
+---
+
+![](img/rmd5.png)
+
+---
+
+## Inline code evaluation
+
+.pull-left[
+
+### RMarkdown
+The airquality data set has   
+`` `r
+nrow(airquality)` `` observations
+
+
+The average ozone level is `` `r
+mean(airquality$Ozone)` `` parts per billion
+]
+.pull-right[
+
+### Results
+
+The airquality data set has 153 observations
+
+The average ozone level is   
+42.1293103 `` parts per billion
+
+]
+
+---
+class: middle, center
+
+# Practice time
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

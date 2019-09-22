@@ -1,0 +1,519 @@
+---
+title: "Data structures in R"
+author: Abhijit Dasgupta
+date: Fall, 2019
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+library(countdown)
+library(fontawesome)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339, Fall, 2019</span></div>
+
+---
+
+## A quick refresh
+
++ R is a scripting language for data analysis and statistics
++ R Markdown is a way of combining textual information and R code to produce reproducible documents
++ RStudio is an integrated environment that makes it easier to work with R
+
+.pull-left[
+You type commands (_code_) for R to run.
+  - objects like data (_nouns_)
+  - functions that do something to R objects (_verbs_)
+]
+.pull-right[
+Examples
+
+```{r, eval=F}
+airquality
+diamonds
+
+summary(airquality)
+
+```
+]
+
+---
+
+# Objects in R
+
+.pull-left[
+Let's start with the `airquality` data.
+
+- It is an object
+- of class `class(airquality)` = `r class(airquality)`
+
+
+How about each column? 
+
+Let's look at the Ozone and Wind columns
+
+- We can access them using `airquality$Ozone` and `airquality$Wind`
+  - `class(airquality$Ozone)` = `r class(airquality$Ozone)`
+  - `class(airquality$Wind)` = `r class(airquality$Wind)`
+
+]
+.pull-right[
+```{r, echo = F}
+head(airquality, 25)
+```
+
+]
+---
+
+# Objects in R
+
+```{r}
+head(iris)
+str(iris)
+```
+
+Now we see another type of object, a `factor`
+
+---
+
+# Objects in R
+
+```{r}
+library(ggplot2)
+str(midwest)
+```
+ Here we have a `character`.
+ 
+---
+
+# Objects in R
+
+The most common types of data we see are `numeric`, `character`, `factor`. You can also see `Date` and `logical`
+
+You can test to see if data is of a particular type, or convert from one data type to another
+
+```{r, echo=F}
+library(tibble)
+d <- tribble(
+  ~"Data type", ~"Test", ~"Convert",
+  'numeric', 'is.numeric','as.numeric',
+  'character','is.character','as.character',
+  'factor','is.factor','as.factor'
+)
+knitr::kable(d, format='html')
+```
+
+--
+
+This conversion is important. Why?
+
+```{r, echo=F}
+countdown(minutes=5)
+```
+
+---
+
+# Factors
+
+Factors are uniquely an R thing. 
+
+They are meant to represent categorical data (gender, race, state, phenotype)
+
+They look like character vectors, but internally act like integers, so you have to 
+be a bit careful with them
+
+--
+
+Whenever you're in doubt, convert them to characters using `as.character`.
+
+We'll see the utility of factors when we do data munging, summaries and modeling
+
+
+
+
+---
+
+## Every object in R has a name
+
+You give an object a name using the syntax `name <- object`
+
+Naming conventions: 
+
+1. Snake_case or pothole_case
+1. CamelCase
+1. Some.people.use.periods
+
+I'm partial to `snake_case`.
+
+The point here is to make expressive names using English so you know what 
+is stored in the name.
+
+---
+
+## A silly exercise
+
+From the iris dataset, save each column into a new object, giving it a name. Then
+see what kind of data that object contains.
+
+```{r, echo=F}
+countdown(minutes = 5)
+```
+
+---
+
+## Bigger objects
+
+### Scalar -> vector (array) -> matrix (2-d array)
+
+--
+
++ A scalar is a single number or word
++ A vector is a bunch of scalars arranged in a row or column
++ A matrix is a bunch of scalars arranged in rows and columns
+
+#### Each of these **must** be of the same data type
+
+---
+
+## Examples
+
+```{r}
+2
+```
+
+--
+
+```{r}
+c(2,3,4,5,6)
+```
+
+> `c()` is the concatenate function
+
+--
+
+```{r}
+matrix(c(1,2,3,4), byrow = T, nrow = 2)
+```
+
+---
+class:middle,center
+
+# Data comes in many flavors
+
+---
+
+## Heterogeneous data
+
+From Excel, we are familiar with keeping different kinds of data together in a spreadsheet
+
++ Expression levels (numeric)
++ Gene names (character)
++ Date of experiment (Date)
+
+
+In R, the objects that can hold heterogeneous data are `data.frame` and `list`
+
+---
+class:middle, center
+
+# Data sets
+
+---
+
+## Typical data structure
+
++ Data is typically in a rectangular format
+  
+    + spreadsheet, database table
+    + CSV (comma-separated values) or TSV (tab-separated values) files
+
++ Characteristic
+  
+    + Rows are observations
+    + Columns are variables
+    + Each column has the same number of observations
+
+> [__Tidy data__](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) is a particularly amenable format for data analysis. 
+ 
+---
+
+# The `data.frame`
+
+Dataframes are the primary mode of storing datasets in R
+
+They were revolutionary in that they kept heterogeneous data together
+
+They share properties of both a __matrix__ and a __list__
+
+```{r}
+class(airquality)
+```
+
+> Technically, a data.frame is a list of vectors (or objects, generally) of the same length  
+
+---
+class: middle, center
+
+# Load some data
+
+---
+
+We'll load the `spine` dataset into R.
+
+To do this, download the data from the web, and store it in the main folder in your
+project.
+
+Then, in the Environment pane, import it using the **Import Dataset** button. You will 
+use the `From text (readr)` option
+
+```{r, echo=F}
+data_spine <- read.csv('data/Dataset_spine.csv', stringsAsFactors=F)
+```
+
+
+---
+
+![](img/readr1.png)
+
+---
+
+![](img/readr2.png)
+
+---
+
+![](img/readr3.png)
+
+---
+class:center, middle
+
+# A digression: Lists and Matrices
+
+---
+
+# Matrices
+
+A __matrix__ is a rectangular array of data _of the same type_
+
+```{r}
+matrix(0, nrow=2, ncol=4)
+```
+```{r}
+matrix(letters, nrow=2)
+```
+```{r}
+matrix(letters, nrow=2, byrow=T)
+```
+
+---
+
+# Matrices
+
+You can create a matrix from a set of _vectors_ of the same length
+```{r}
+x <- c(1,2,3,4)
+y <- c(10,20,30,40)
+```
+Put columns together
+```{r}
+cbind(c(1,2,3,4), c(10,20,30,40)) ## Column bind
+```
+
+---
+
+# Matrices
+
+You can create a matrix from a set of _vectors_ of the same length
+```{r}
+x <- c(1,2,3,4)
+y <- c(10,20,30,40)
+```
+Put rows together
+```{r}
+example_matrix <- rbind(c(1,2,3,4), c(10,20,30,40)) ## Row bind
+example_matrix
+```
+
+---
+
+# Extracting elements
+
+```{r}
+example_matrix 
+example_matrix[1,] ## Extracts 1st row
+example_matrix[,2:3] ## extracts 2nd & 3rd columns
+example_matrix[1,4]
+```
+
+---
+
+# Matrix properties
+```{r}
+example_matrix
+nrow(example_matrix) ## Number of rows
+ncol(example_matrix) ## Number of columns
+dim(example_matrix) ## shortcut for above
+```
+
+---
+
+# Matrix arithmetic
+```{r}
+example_matrix
+example_matrix + 5 ## Add 5 to each element
+example_matrix * 2 ## Multiply each element by 2
+```
+
+---
+
+# Two matrices
+```{r}
+example_matrix
+example_matrix2 <- rbind(3:6, 9:12)
+example_matrix2
+example_matrix + example_matrix2
+```
+
+---
+
+# Two matrices
+```{r}
+example_matrix
+example_matrix2
+example_matrix * example_matrix2 ## Not matrix multiplication, but element-wise multiplication
+```
+
+---
+
+# Two matrices
+```{r}
+rbind(example_matrix, example_matrix2)
+cbind(example_matrix, example_matrix2)
+```
+
+---
+
+# Two matrices
+```{r}
+dim(example_matrix2)
+t(example_matrix2) ## Transpose of a matrix
+example_matrix %*% t(example_matrix2) ## Matrix multiplication
+```
+
+---
+
+# Lists
+
+Lists are collections of arbitrary objects in R
+```{r}
+example_list <- list(c('Andy','Brian','Harry'), 
+                     c(12, 16, 16), 
+                     c(TRUE, TRUE, FALSE), 
+                     matrix(1, nrow=2, ncol=3))
+example_list
+```
+
+---
+
+# Extracting elements from lists
+```{r}
+example_list[[3]]
+```
+```{r}
+example_list[1:2]
+```
+
+---
+
+# Extracting elements from lists
+```{r}
+example_list[[4]]
+class(example_list[[4]])
+example_list[[4]][1,]
+```
+
+---
+
+# Named lists
+```{r}
+example_named_list <- list('Names' = c('Andy','Brian','Harry'), 
+                     "YearsOfEducation" = c(12, 16, 16), 
+                     "Married" = c(TRUE, TRUE, FALSE), 
+                     'something' = matrix(1, nrow=2, ncol=3))
+
+example_named_list[['Names']]
+example_named_list$Names
+example_named_list$Names[3]
+```
+
+---
+class: middle, center
+
+# Back to a Data Frame
+
+---
+
+# Data frames
+
+A data.frame object is a __named list__ where each element is of the same length
+
+You can use both _matrix_ and _list_ functions to operate on data.frame objects!!
+
+---
+
+# Data Frames
+
+```{r}
+head(data_spine)
+```
+
+---
+
+# Data Frames
+```{r}
+dim(data_spine)
+nrow(data_spine)
+
+data_spine_small <- data_spine[1:4,] ## Matrix operation
+```
+
+---
+
+# Data Frames
+```{r}
+data_spine_small[,2] ## Matrix extraction by position
+data_spine_small[[2]] ## List extraction by position
+```
+
+---
+
+# Data Frames
+```{r}
+data_spine_small[['Pelvic.tilt']] ## Named list extraction
+data_spine_small[,'Pelvic.tilt'] ## Data frame named column extraction
+data_spine_small$Pelvic.tilt ## Dollar sign extraction
+```
+
+---
+
+# Data Frames
+
+My preference is for
+
+1. _data frame named column extraction_ `data_spine_small[,'Pelvic.tilt']`, 
+2. _named list extraction_ `data_spine_small[['Pelvic.tilt']]`
+3. _Dollar-based extraction_ `data_spine_small$Pelvic.tilt`
+
+
+---
+
+# Data Frames
+```{r}
+names(data_spine_small)
+
+data_spine_small[,c('Pelvic.tilt', 'Pelvic.slope','Class.attribute')]
+```
+

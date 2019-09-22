@@ -1,0 +1,77 @@
+---
+title: "Homework 1: RMarkdown Practice"
+author: "Abhijit Dasgupta"
+date: "Due Tuesday, September 17, 11:59PM"
+output: html_document
+---
+
+<p style="color: black; border:3px; border-style: solid; border-color: red; padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](https://www.dropbox.com/request/fW9SBzY7tMGqhxYfz2mn){target=_blank}
+</p>
+
+# RMarkdown practice
+
+We will continue with the `airquality` dataset we worked with in class. Learn 
+more about this dataset by typing either `help(airquality)` or `?airquality` at 
+the console prompt. 
+
+In this homework you will create a report and a presentation on this dataset using 
+RMarkdown. You will do this in the same RStudio project you created the first day of class.
+
+> If you missed class, see the lecture slides 43-48
+
+Your documents will incorporate the following 3 code snippets (in order) as R chunks and one piece of code inline. If I'm calling a package you do not have installed, see lecture 1 slides page 54. 
+
+### Snippet 1
+
+```{r, eval = F}
+library(tidyverse)
+library(knitr)
+avg_temp_by_month <- airquality %>% 
+  group_by(Month) %>% 
+  summarize(avgTemp = mean(Temp, na.rm=T))
+kable(avg_temp_by_month)
+```
+
+### Snippet 2
+
+```{r, eval = F}
+ggplot(avg_temp_by_month, aes(x = Month, y = avgTemp)) +
+  geom_point() + 
+  geom_line(color = 'blue') + 
+  labs(y = 'Average Temperature (F)')
+```
+
+### Snippet 3
+
+```{r, eval=F}
+ggplot(airquality, aes(x = Wind, y = Ozone)) + 
+  geom_point() + 
+  geom_smooth(color = 'blue', se = FALSE)
+```
+
+### Inline snippet
+
+`max(airquality$Ozone, na.rm = T)`, which is the maximum recorded Ozone level. Incorporate into a sentence.
+
+### Markdown
+There is a Markdown Quick Reference available in under the Help menu to get you started. 
+
+------
+
+# Assignment:
+
+Background reading
+
+- Read the first 3 sections of the document at [https://rmarkdown.rstudio.com/lesson-1.html](https://rmarkdown.rstudio.com/lesson-1.html){target=_blank}. 
+- To go into more detail on each style below see:
+  - HTML document: [https://bookdown.org/yihui/rmarkdown/html-document.html](https://bookdown.org/yihui/rmarkdown/html-document.html)
+  - HTML ioslide presentation: [https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html)
+
+1. Write a RMarkdown report incorporating these code snippets and create a story around them. You will set the output to HTML. Call this file `<your name>_HW1_report.Rmd`
+1. Write a RMarkdown presentation incorporating these same code snippets. The output format should be HTML(ioslides). Call this file `<your name>_HW1_slides.Rmd`
+
+<p style="color: black; border:3px; border-style: solid; border-color: red; padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](https://www.dropbox.com/request/fW9SBzY7tMGqhxYfz2mn){target=_blank}
+</p>
+

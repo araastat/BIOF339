@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+slides/lectures/*.html
+notes/*.html
+hw/*.html
+slides/lectures/*/*
+Tutorials/*.key
+img/*
+assignments/HW/*.html
+.drake/*
+
