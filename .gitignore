@@ -5,7 +5,7 @@
 slides/lectures/*.html
 notes/*.html
 hw/*.html
-slides/lectures/*/*
+slides/lectures/
 Tutorials/*.key
 img/*
 assignments/HW/*.html
