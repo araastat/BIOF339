@@ -12,6 +12,7 @@ slides_outrmd <- fs::path('docs',slides_rmdfiles)
 slides_outpdf <- str_replace(slides_outrmd, 'Rmd','pdf')
 
 hw_rmdfiles <- dir_ls('assignments/HW', glob = '*.Rmd')
+hw_soln_rmdfiles <- dir_ls('assignments/HW', glob = '*_Solution.Rmd')
 hw_outdir <- here::here('docs','assignments','HW')
 hw_outrmd <- fs::path('docs',hw_rmdfiles)
 
@@ -27,15 +28,19 @@ full_plan <- drake_plan(
     transform = map(rmdf = !!slides_rmdfiles)
   ),
   make_slide_index = target(
-    rmarkdown::render_site(input = knitr_in('slides/index.Rmd')),
+    rmarkdown::render_site(input = knitr_in(here::here('slides/index.Rmd'))),
     trigger = trigger(depend = all(file_exists(!!slides_outrmd)))
   ),
   create_hw_html = target(
     rmarkdown::render(knitr_in(rmdf), output_dir = hw_outdir),
     transform = map(rmdf = !!hw_rmdfiles)
   ),
+  create_hw_sol = target(
+    rmarkdown::render(knitr_in(rmdf), output_dir=hw_outdir),
+                      transform=map(rmdf=!!hw_soln_rmdfiles)
+  ),
   make_hw_index = target(
-    rmarkdown::render_site(input = knitr_in(here::here('assignments'))),
+    rmarkdown::render_site(input = knitr_in(here::here('assignments/index.Rmd'))),
     trigger = trigger(depend = all(file_exists(!!hw_outrmd)))
   ),
   # create_notes_html = target(

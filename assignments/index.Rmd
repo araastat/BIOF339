@@ -33,12 +33,12 @@ For Homework 2, please download the RMarkdown file and complete it. You can cert
 library(tidyverse)
 library(glue)
 library(fs)
-solutions <- dir_ls('HW', glob = '*solution.html', fail=F)
+solutions <- dir_ls('HW', glob = '*Solution.html', fail=F)
 hws <- dir_ls('HW', regex="HW\\d+.html", fail=F)
 hws <- setdiff(hws, solutions)
 rmds <- dir_ls('HW', regexp = 'HW\\d+.Rmd')
 numbers <- sort(unique(stringr::str_match(hws, 'HW(\\d+)')[,2]))
-ind <- match(glue('HW/HW{i}_solution.html', i=numbers), solutions)
+ind <- match(glue('HW/HW{i}_Solution.html', i=numbers), solutions)
 out_data <- tibble(n = numbers, rmds = sort(rmds), hws = sort(hws), solutions = solutions[ind])
 
 out <- tibble('Homework' = glue_data(out_data,'[Homework {n}]({hws})'),
