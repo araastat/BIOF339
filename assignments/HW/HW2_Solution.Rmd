@@ -88,7 +88,10 @@ breast_cancer$Tumor <- as.factor(breast_cancer$Tumor)
 ```
   e. Verify that all the variables in `breast_cancer` match the modifications you made
 ```{r, echo=F, results='hide'}
-breast_cancer <- breast_cancer %>% mutate_if(is.character, as.factor)
+breast_cancer <- breast_cancer %>% mutate_at(vars(Tumor..T1.Coded, Node, Node.Coded, Metastasis,
+  Metastasis.Coded, AJCC.Stage, Converted.Stage, Survival.Data.Form, 
+  Vital.Status), as.factor) %>% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis = as.numeric(Age.at.Initial.Pathologic.Diagnosis))
 ```
   
 ```{r, echo = F, eval = T}
