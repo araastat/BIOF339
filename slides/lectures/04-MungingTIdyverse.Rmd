@@ -1,5 +1,5 @@
 ---
-title: "Practical R: Data Ingestion and Munging"
+title: "Practical R: Data Munging in the tidyverse"
 author: Abhijit Dasgupta
 date: Fall, 2019
 
