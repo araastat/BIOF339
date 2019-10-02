@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Practical R: Data Ingestion and Munging</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="04-MungingTIdyverse_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="04-MungingTIdyverse_files/countdown-0.3.3/countdown.css" rel="stylesheet" />
+    <script src="04-MungingTIdyverse_files/countdown-0.3.3/countdown.js"></script>
+    <link rel="stylesheet" href="robot.css" type="text/css" />
+    <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Practical R: Data Ingestion and Munging
+### Abhijit Dasgupta
+### Fall, 2019
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339, Fall, 2019&lt;/span&gt;&lt;/div&gt;
+
+---
+
+## Where we left off
+
+We learned how to 
+
+1. `separate` columns into multiple columns based on patterns or index
+1. `gather` many columns into 2 columns, with one column having the header information and the other having the values
+1. `spread` two columns into many columns, with one column providing the new column headers and the other the values. 
+
+---
+
+## Tidying the weather data
+
+
+```r
+library(tidyverse)
+weather_data &lt;- rio::import('data/weather.csv')
+```
+
+.pull-left[
+
+```
+#&gt;         id year month element d1   d2   d3 d4   d5 d6 d7 d8 d9  d10  d11
+#&gt;  1 MX17004 2010     1    tmax NA   NA   NA NA   NA NA NA NA NA   NA   NA
+#&gt;  2 MX17004 2010     1    tmin NA   NA   NA NA   NA NA NA NA NA   NA   NA
+#&gt;  3 MX17004 2010     2    tmax NA 27.3 24.1 NA   NA NA NA NA NA   NA 29.7
+#&gt;  4 MX17004 2010     2    tmin NA 14.4 14.4 NA   NA NA NA NA NA   NA 13.4
+#&gt;  5 MX17004 2010     3    tmax NA   NA   NA NA 32.1 NA NA NA NA 34.5   NA
+#&gt;  6 MX17004 2010     3    tmin NA   NA   NA NA 14.2 NA NA NA NA 16.8   NA
+#&gt;    d12 d13 d14 d15  d16 d17 d18 d19 d20 d21 d22  d23 d24 d25 d26 d27 d28
+#&gt;  1  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA
+#&gt;  2  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA
+#&gt;  3  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 29.9  NA  NA  NA  NA  NA
+#&gt;  4  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 10.7  NA  NA  NA  NA  NA
+#&gt;  5  NA  NA  NA  NA 31.1  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA
+#&gt;  6  NA  NA  NA  NA 17.6  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA
+#&gt;    d29  d30 d31
+#&gt;  1  NA 27.8  NA
+#&gt;  2  NA 14.5  NA
+#&gt;  3  NA   NA  NA
+#&gt;  4  NA   NA  NA
+#&gt;  5  NA   NA  NA
+#&gt;  6  NA   NA  NA
+```
+]
+.pull-right[
+
+1. Days are in separate columns
+1. Temperatures for each day is in two rows, max and min
+1. Don't worry about missing values. Just work on getting the shape right
+]
+
+---
+
+## Tidying the weather data
+
+.pull-left[
+
+```r
+weather1 &lt;- tidyr::gather(weather_data, day, temp, -(1:4))
+head(weather1,20)
+```
+]
+.pull-right[
+
+```
+#&gt;          id year month element day temp
+#&gt;  1  MX17004 2010     1    tmax  d1   NA
+#&gt;  2  MX17004 2010     1    tmin  d1   NA
+#&gt;  3  MX17004 2010     2    tmax  d1   NA
+#&gt;  4  MX17004 2010     2    tmin  d1   NA
+#&gt;  5  MX17004 2010     3    tmax  d1   NA
+#&gt;  6  MX17004 2010     3    tmin  d1   NA
+#&gt;  7  MX17004 2010     4    tmax  d1   NA
+#&gt;  8  MX17004 2010     4    tmin  d1   NA
+#&gt;  9  MX17004 2010     5    tmax  d1   NA
+#&gt;  10 MX17004 2010     5    tmin  d1   NA
+#&gt;  11 MX17004 2010     6    tmax  d1   NA
+#&gt;  12 MX17004 2010     6    tmin  d1   NA
+#&gt;  13 MX17004 2010     7    tmax  d1   NA
+#&gt;  14 MX17004 2010     7    tmin  d1   NA
+#&gt;  15 MX17004 2010     8    tmax  d1   NA
+#&gt;  16 MX17004 2010     8    tmin  d1   NA
+#&gt;  17 MX17004 2010    10    tmax  d1   NA
+#&gt;  18 MX17004 2010    10    tmin  d1   NA
+#&gt;  19 MX17004 2010    11    tmax  d1   NA
+#&gt;  20 MX17004 2010    11    tmin  d1   NA
+```
+]
+
+---
+
+## Tidying the weather data
+
+.pull-left[
+
+```r
+weather1 &lt;- tidyr::gather(weather_data, day, temp, -(1:4))
+weather2 &lt;- spread(weather1, element, temp)
+head(weather2, 20)
+```
+]
+.pull-right[
+
+```
+#&gt;          id year month day tmax tmin
+#&gt;  1  MX17004 2010     1  d1   NA   NA
+#&gt;  2  MX17004 2010     1 d10   NA   NA
+#&gt;  3  MX17004 2010     1 d11   NA   NA
+#&gt;  4  MX17004 2010     1 d12   NA   NA
+#&gt;  5  MX17004 2010     1 d13   NA   NA
+#&gt;  6  MX17004 2010     1 d14   NA   NA
+#&gt;  7  MX17004 2010     1 d15   NA   NA
+#&gt;  8  MX17004 2010     1 d16   NA   NA
+#&gt;  9  MX17004 2010     1 d17   NA   NA
+#&gt;  10 MX17004 2010     1 d18   NA   NA
+#&gt;  11 MX17004 2010     1 d19   NA   NA
+#&gt;  12 MX17004 2010     1  d2   NA   NA
+#&gt;  13 MX17004 2010     1 d20   NA   NA
+#&gt;  14 MX17004 2010     1 d21   NA   NA
+#&gt;  15 MX17004 2010     1 d22   NA   NA
+#&gt;  16 MX17004 2010     1 d23   NA   NA
+#&gt;  17 MX17004 2010     1 d24   NA   NA
+#&gt;  18 MX17004 2010     1 d25   NA   NA
+#&gt;  19 MX17004 2010     1 d26   NA   NA
+#&gt;  20 MX17004 2010     1 d27   NA   NA
+```
+]
+
+---
+
+## Tidying the weather data
+
+.pull-left[
+
+```r
+weather1 &lt;- tidyr::gather(weather_data, day, temp, -(1:4))
+weather2 &lt;- spread(weather1, element, temp)
+weather3 &lt;- separate(weather2, col='day', into=c('symbol','day'), sep=1)
+head(weather3)
+```
+
+This gets us into the right shape for the data. 
+
+There still is some work to do, but the format is tidy
+]
+.pull-right[
+
+```
+#&gt;         id year month symbol day tmax tmin
+#&gt;  1 MX17004 2010     1      d   1   NA   NA
+#&gt;  2 MX17004 2010     1      d  10   NA   NA
+#&gt;  3 MX17004 2010     1      d  11   NA   NA
+#&gt;  4 MX17004 2010     1      d  12   NA   NA
+#&gt;  5 MX17004 2010     1      d  13   NA   NA
+#&gt;  6 MX17004 2010     1      d  14   NA   NA
+```
+]
+
+---
+
+## Data transformation (dplyr)
+
+The `dplyr` package gives us a few verbs for data manipulation
+
+
+|Function  |Purpose                                        |
+|:---------|:----------------------------------------------|
+|select    |Select columns based on name or position       |
+|mutate    |Create or change a column                      |
+|filter    |Extract rows based on some criteria            |
+|arrange   |Re-order rows based on values of variable(s)   |
+|group_by  |Split a dataset by unique values of a variable |
+|summarize |Create summary statistics based on columns     |
+
+---
+
+## `select`
+
+You can select columns by name or position, of course. 
+
+You can select consecutive columns using `:` notation, e.g. `select(weather, d1:d31)`
+
+You can also select columns based on some criteria, which are encapsulated in functions.
+
+- `starts_with("___")`, `ends_with("___")`, `contains("____")`
+- `one_of("____","_____","______")`
+
+There are others; see `help(starts_with)`.
+
+These selection methods work in all tidyverse functions
+
+&gt; Note that for these functions, the names of the columns don't need to be quoted. This is called *non-standard evaluation* and
+is a convenience
+
+---
+
+## select
+
+.pull-left[
+
+```r
+*weather1 &lt;- tidyr::gather(weather_data, day, temp, d1:d31)
+head(weather1, 20)
+```
+]
+.pull-right[
+
+```
+#&gt;          id year month element day temp
+#&gt;  1  MX17004 2010     1    tmax  d1   NA
+#&gt;  2  MX17004 2010     1    tmin  d1   NA
+#&gt;  3  MX17004 2010     2    tmax  d1   NA
+#&gt;  4  MX17004 2010     2    tmin  d1   NA
+#&gt;  5  MX17004 2010     3    tmax  d1   NA
+#&gt;  6  MX17004 2010     3    tmin  d1   NA
+#&gt;  7  MX17004 2010     4    tmax  d1   NA
+#&gt;  8  MX17004 2010     4    tmin  d1   NA
+#&gt;  9  MX17004 2010     5    tmax  d1   NA
+#&gt;  10 MX17004 2010     5    tmin  d1   NA
+#&gt;  11 MX17004 2010     6    tmax  d1   NA
+#&gt;  12 MX17004 2010     6    tmin  d1   NA
+#&gt;  13 MX17004 2010     7    tmax  d1   NA
+#&gt;  14 MX17004 2010     7    tmin  d1   NA
+#&gt;  15 MX17004 2010     8    tmax  d1   NA
+#&gt;  16 MX17004 2010     8    tmin  d1   NA
+#&gt;  17 MX17004 2010    10    tmax  d1   NA
+#&gt;  18 MX17004 2010    10    tmin  d1   NA
+#&gt;  19 MX17004 2010    11    tmax  d1   NA
+#&gt;  20 MX17004 2010    11    tmin  d1   NA
+```
+]
+
+---
+
+## select
+
+.pull-left[
+
+```r
+*weather1 &lt;- tidyr::gather(weather_data, key='day', value='temp',
+*                  starts_with('d'))
+head(weather1, 20)
+```
+]
+.pull-right[
+
+```
+#&gt;          id year month element day temp
+#&gt;  1  MX17004 2010     1    tmax  d1   NA
+#&gt;  2  MX17004 2010     1    tmin  d1   NA
+#&gt;  3  MX17004 2010     2    tmax  d1   NA
+#&gt;  4  MX17004 2010     2    tmin  d1   NA
+#&gt;  5  MX17004 2010     3    tmax  d1   NA
+#&gt;  6  MX17004 2010     3    tmin  d1   NA
+#&gt;  7  MX17004 2010     4    tmax  d1   NA
+#&gt;  8  MX17004 2010     4    tmin  d1   NA
+#&gt;  9  MX17004 2010     5    tmax  d1   NA
+#&gt;  10 MX17004 2010     5    tmin  d1   NA
+#&gt;  11 MX17004 2010     6    tmax  d1   NA
+#&gt;  12 MX17004 2010     6    tmin  d1   NA
+#&gt;  13 MX17004 2010     7    tmax  d1   NA
+#&gt;  14 MX17004 2010     7    tmin  d1   NA
+#&gt;  15 MX17004 2010     8    tmax  d1   NA
+#&gt;  16 MX17004 2010     8    tmin  d1   NA
+#&gt;  17 MX17004 2010    10    tmax  d1   NA
+#&gt;  18 MX17004 2010    10    tmin  d1   NA
+#&gt;  19 MX17004 2010    11    tmax  d1   NA
+#&gt;  20 MX17004 2010    11    tmin  d1   NA
+```
+]
+
+
+---
+
+## mutate
+
+.pull-left[
+
+```r
+weather4 &lt;- mutate(weather3, 
+                   num_day = as.numeric(day))
+as_tibble(weather4)
+```
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 341 x 8
+#&gt;     id       year month symbol day    tmax  tmin num_day
+#&gt;     &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+#&gt;   1 MX17004  2010     1 d      1        NA    NA       1
+#&gt;   2 MX17004  2010     1 d      10       NA    NA      10
+#&gt;   3 MX17004  2010     1 d      11       NA    NA      11
+#&gt;   4 MX17004  2010     1 d      12       NA    NA      12
+#&gt;   5 MX17004  2010     1 d      13       NA    NA      13
+#&gt;   6 MX17004  2010     1 d      14       NA    NA      14
+#&gt;   7 MX17004  2010     1 d      15       NA    NA      15
+#&gt;   8 MX17004  2010     1 d      16       NA    NA      16
+#&gt;   9 MX17004  2010     1 d      17       NA    NA      17
+#&gt;  10 MX17004  2010     1 d      18       NA    NA      18
+#&gt;  # … with 331 more rows
+```
+]
+
+---
+
+## mutate
+
+`mutate` can either transform a column in place or create a new column in a dataset
+
+.pull-left[
+
+```r
+weather4 &lt;- mutate(weather3, day = as.numeric(day))
+as_tibble(weather4)
+```
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 341 x 7
+#&gt;     id       year month symbol   day  tmax  tmin
+#&gt;     &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt;   1 MX17004  2010     1 d          1    NA    NA
+#&gt;   2 MX17004  2010     1 d         10    NA    NA
+#&gt;   3 MX17004  2010     1 d         11    NA    NA
+#&gt;   4 MX17004  2010     1 d         12    NA    NA
+#&gt;   5 MX17004  2010     1 d         13    NA    NA
+#&gt;   6 MX17004  2010     1 d         14    NA    NA
+#&gt;   7 MX17004  2010     1 d         15    NA    NA
+#&gt;   8 MX17004  2010     1 d         16    NA    NA
+#&gt;   9 MX17004  2010     1 d         17    NA    NA
+#&gt;  10 MX17004  2010     1 d         18    NA    NA
+#&gt;  # … with 331 more rows
+```
+]
+
+---
+
+## mutate
+
+`mutate` can also be used to deal with missing values, by replacing them with a value, for example
+
+.pull-left[
+
+```r
+mutate(weather4, tmax = replace_na(tmax, 0))
+```
+
+You wouldn't want to do exactly this, of course
+]
+.pull-right[
+
+```
+#&gt;           id year month symbol day tmax tmin
+#&gt;  1   MX17004 2010     1      d   1  0.0   NA
+#&gt;  2   MX17004 2010     1      d  10  0.0   NA
+#&gt;  3   MX17004 2010     1      d  11  0.0   NA
+#&gt;  4   MX17004 2010     1      d  12  0.0   NA
+#&gt;  5   MX17004 2010     1      d  13  0.0   NA
+#&gt;  6   MX17004 2010     1      d  14  0.0   NA
+#&gt;  7   MX17004 2010     1      d  15  0.0   NA
+#&gt;  8   MX17004 2010     1      d  16  0.0   NA
+#&gt;  9   MX17004 2010     1      d  17  0.0   NA
+#&gt;  10  MX17004 2010     1      d  18  0.0   NA
+#&gt;  11  MX17004 2010     1      d  19  0.0   NA
+#&gt;  12  MX17004 2010     1      d   2  0.0   NA
+#&gt;  13  MX17004 2010     1      d  20  0.0   NA
+#&gt;  14  MX17004 2010     1      d  21  0.0   NA
+#&gt;  15  MX17004 2010     1      d  22  0.0   NA
+#&gt;  16  MX17004 2010     1      d  23  0.0   NA
+#&gt;  17  MX17004 2010     1      d  24  0.0   NA
+#&gt;  18  MX17004 2010     1      d  25  0.0   NA
+#&gt;  19  MX17004 2010     1      d  26  0.0   NA
+#&gt;  20  MX17004 2010     1      d  27  0.0   NA
+#&gt;  21  MX17004 2010     1      d  28  0.0   NA
+#&gt;  22  MX17004 2010     1      d  29  0.0   NA
+#&gt;  23  MX17004 2010     1      d   3  0.0   NA
+#&gt;  24  MX17004 2010     1      d  30 27.8 14.5
+#&gt;  25  MX17004 2010     1      d  31  0.0   NA
+#&gt;  26  MX17004 2010     1      d   4  0.0   NA
+#&gt;  27  MX17004 2010     1      d   5  0.0   NA
+#&gt;  28  MX17004 2010     1      d   6  0.0   NA
+#&gt;  29  MX17004 2010     1      d   7  0.0   NA
+#&gt;  30  MX17004 2010     1      d   8  0.0   NA
+#&gt;  31  MX17004 2010     1      d   9  0.0   NA
+#&gt;  32  MX17004 2010     2      d   1  0.0   NA
+#&gt;  33  MX17004 2010     2      d  10  0.0   NA
+#&gt;  34  MX17004 2010     2      d  11 29.7 13.4
+#&gt;  35  MX17004 2010     2      d  12  0.0   NA
+#&gt;  36  MX17004 2010     2      d  13  0.0   NA
+#&gt;  37  MX17004 2010     2      d  14  0.0   NA
+#&gt;  38  MX17004 2010     2      d  15  0.0   NA
+#&gt;  39  MX17004 2010     2      d  16  0.0   NA
+#&gt;  40  MX17004 2010     2      d  17  0.0   NA
+#&gt;  41  MX17004 2010     2      d  18  0.0   NA
+#&gt;  42  MX17004 2010     2      d  19  0.0   NA
+#&gt;  43  MX17004 2010     2      d   2 27.3 14.4
+#&gt;  44  MX17004 2010     2      d  20  0.0   NA
+#&gt;  45  MX17004 2010     2      d  21  0.0   NA
+#&gt;  46  MX17004 2010     2      d  22  0.0   NA
+#&gt;  47  MX17004 2010     2      d  23 29.9 10.7
+#&gt;  48  MX17004 2010     2      d  24  0.0   NA
+#&gt;  49  MX17004 2010     2      d  25  0.0   NA
+#&gt;  50  MX17004 2010     2      d  26  0.0   NA
+#&gt;  51  MX17004 2010     2      d  27  0.0   NA
+#&gt;  52  MX17004 2010     2      d  28  0.0   NA
+#&gt;  53  MX17004 2010     2      d  29  0.0   NA
+#&gt;  54  MX17004 2010     2      d   3 24.1 14.4
+#&gt;  55  MX17004 2010     2      d  30  0.0   NA
+#&gt;  56  MX17004 2010     2      d  31  0.0   NA
+#&gt;  57  MX17004 2010     2      d   4  0.0   NA
+#&gt;  58  MX17004 2010     2      d   5  0.0   NA
+#&gt;  59  MX17004 2010     2      d   6  0.0   NA
+#&gt;  60  MX17004 2010     2      d   7  0.0   NA
+#&gt;  61  MX17004 2010     2      d   8  0.0   NA
+#&gt;  62  MX17004 2010     2      d   9  0.0   NA
+#&gt;  63  MX17004 2010     3      d   1  0.0   NA
+#&gt;  64  MX17004 2010     3      d  10 34.5 16.8
+#&gt;  65  MX17004 2010     3      d  11  0.0   NA
+#&gt;  66  MX17004 2010     3      d  12  0.0   NA
+#&gt;  67  MX17004 2010     3      d  13  0.0   NA
+#&gt;  68  MX17004 2010     3      d  14  0.0   NA
+#&gt;  69  MX17004 2010     3      d  15  0.0   NA
+#&gt;  70  MX17004 2010     3      d  16 31.1 17.6
+#&gt;  71  MX17004 2010     3      d  17  0.0   NA
+#&gt;  72  MX17004 2010     3      d  18  0.0   NA
+#&gt;  73  MX17004 2010     3      d  19  0.0   NA
+#&gt;  74  MX17004 2010     3      d   2  0.0   NA
+#&gt;  75  MX17004 2010     3      d  20  0.0   NA
+#&gt;  76  MX17004 2010     3      d  21  0.0   NA
+#&gt;  77  MX17004 2010     3      d  22  0.0   NA
+#&gt;  78  MX17004 2010     3      d  23  0.0   NA
+#&gt;  79  MX17004 2010     3      d  24  0.0   NA
+#&gt;  80  MX17004 2010     3      d  25  0.0   NA
+#&gt;  81  MX17004 2010     3      d  26  0.0   NA
+#&gt;  82  MX17004 2010     3      d  27  0.0   NA
+#&gt;  83  MX17004 2010     3      d  28  0.0   NA
+#&gt;  84  MX17004 2010     3      d  29  0.0   NA
+#&gt;  85  MX17004 2010     3      d   3  0.0   NA
+#&gt;  86  MX17004 2010     3      d  30  0.0   NA
+#&gt;  87  MX17004 2010     3      d  31  0.0   NA
+#&gt;  88  MX17004 2010     3      d   4  0.0   NA
+#&gt;  89  MX17004 2010     3      d   5 32.1 14.2
+#&gt;  90  MX17004 2010     3      d   6  0.0   NA
+#&gt;  91  MX17004 2010     3      d   7  0.0   NA
+#&gt;  92  MX17004 2010     3      d   8  0.0   NA
+#&gt;  93  MX17004 2010     3      d   9  0.0   NA
+#&gt;  94  MX17004 2010     4      d   1  0.0   NA
+#&gt;  95  MX17004 2010     4      d  10  0.0   NA
+#&gt;  96  MX17004 2010     4      d  11  0.0   NA
+#&gt;  97  MX17004 2010     4      d  12  0.0   NA
+#&gt;  98  MX17004 2010     4      d  13  0.0   NA
+#&gt;  99  MX17004 2010     4      d  14  0.0   NA
+#&gt;  100 MX17004 2010     4      d  15  0.0   NA
+#&gt;  101 MX17004 2010     4      d  16  0.0   NA
+#&gt;  102 MX17004 2010     4      d  17  0.0   NA
+#&gt;  103 MX17004 2010     4      d  18  0.0   NA
+#&gt;  104 MX17004 2010     4      d  19  0.0   NA
+#&gt;  105 MX17004 2010     4      d   2  0.0   NA
+#&gt;  106 MX17004 2010     4      d  20  0.0   NA
+#&gt;  107 MX17004 2010     4      d  21  0.0   NA
+#&gt;  108 MX17004 2010     4      d  22  0.0   NA
+#&gt;  109 MX17004 2010     4      d  23  0.0   NA
+#&gt;  110 MX17004 2010     4      d  24  0.0   NA
+#&gt;  111 MX17004 2010     4      d  25  0.0   NA
+#&gt;  112 MX17004 2010     4      d  26  0.0   NA
+#&gt;  113 MX17004 2010     4      d  27 36.3 16.7
+#&gt;  114 MX17004 2010     4      d  28  0.0   NA
+#&gt;  115 MX17004 2010     4      d  29  0.0   NA
+#&gt;  116 MX17004 2010     4      d   3  0.0   NA
+#&gt;  117 MX17004 2010     4      d  30  0.0   NA
+#&gt;  118 MX17004 2010     4      d  31  0.0   NA
+#&gt;  119 MX17004 2010     4      d   4  0.0   NA
+#&gt;  120 MX17004 2010     4      d   5  0.0   NA
+#&gt;  121 MX17004 2010     4      d   6  0.0   NA
+#&gt;  122 MX17004 2010     4      d   7  0.0   NA
+#&gt;  123 MX17004 2010     4      d   8  0.0   NA
+#&gt;  124 MX17004 2010     4      d   9  0.0   NA
+#&gt;  125 MX17004 2010     5      d   1  0.0   NA
+#&gt;  126 MX17004 2010     5      d  10  0.0   NA
+#&gt;  127 MX17004 2010     5      d  11  0.0   NA
+#&gt;  128 MX17004 2010     5      d  12  0.0   NA
+#&gt;  129 MX17004 2010     5      d  13  0.0   NA
+#&gt;  130 MX17004 2010     5      d  14  0.0   NA
+#&gt;  131 MX17004 2010     5      d  15  0.0   NA
+#&gt;  132 MX17004 2010     5      d  16  0.0   NA
+#&gt;  133 MX17004 2010     5      d  17  0.0   NA
+#&gt;  134 MX17004 2010     5      d  18  0.0   NA
+#&gt;  135 MX17004 2010     5      d  19  0.0   NA
+#&gt;  136 MX17004 2010     5      d   2  0.0   NA
+#&gt;  137 MX17004 2010     5      d  20  0.0   NA
+#&gt;  138 MX17004 2010     5      d  21  0.0   NA
+#&gt;  139 MX17004 2010     5      d  22  0.0   NA
+#&gt;  140 MX17004 2010     5      d  23  0.0   NA
+#&gt;  141 MX17004 2010     5      d  24  0.0   NA
+#&gt;  142 MX17004 2010     5      d  25  0.0   NA
+#&gt;   [ reached 'max' / getOption("max.print") -- omitted 199 rows ]
+```
+]
+---
+
+## filter
+
+`filter` extracts **rows** based on criteria
+
+So if we wanted to just grab January data, we could use
+
+.pull-left[
+
+```r
+january &lt;- filter(weather4, month==1)
+head(january)
+```
+]
+.pull-right[
+
+```
+#&gt;         id year month symbol day tmax tmin
+#&gt;  1 MX17004 2010     1      d   1   NA   NA
+#&gt;  2 MX17004 2010     1      d  10   NA   NA
+#&gt;  3 MX17004 2010     1      d  11   NA   NA
+#&gt;  4 MX17004 2010     1      d  12   NA   NA
+#&gt;  5 MX17004 2010     1      d  13   NA   NA
+#&gt;  6 MX17004 2010     1      d  14   NA   NA
+```
+]
+
+---
+
+## Filter
+
+Some comparison operators for filtering
+
+| Operator | Meaning                          |
+|----------|----------------------------------|
+| ==       | Equals                           |
+| !=       | Not equals                       |
+| &gt; / &lt;    | Greater / less than              |
+| &gt;= / &lt;=  | Greater or equal / Less or equal |
+| !        | Not                              |
+| %in%     | In a set                         |
+
+Combining comparisons
+
+| Operator   | Meaning |
+|------------|---------|
+| &amp;          | And     |
+| &amp;#124;       | Or      |
+
+---
+
+## filter
+
+Let's use the `mpg` dataset from the `ggplot2` package
+
+.pull-left[
+
+```r
+mpg1 &lt;- filter(mpg, 
+       (year==1999) &amp; 
+         (class %in% c('minivan','suv')))
+select(mpg1, manufacturer, cty, hwy, class, year)
+```
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 35 x 5
+#&gt;     manufacturer   cty   hwy class    year
+#&gt;     &lt;chr&gt;        &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;int&gt;
+#&gt;   1 chevrolet       13    17 suv      1999
+#&gt;   2 chevrolet       11    15 suv      1999
+#&gt;   3 chevrolet       14    17 suv      1999
+#&gt;   4 dodge           18    24 minivan  1999
+#&gt;   5 dodge           17    24 minivan  1999
+#&gt;   6 dodge           16    22 minivan  1999
+#&gt;   7 dodge           16    22 minivan  1999
+#&gt;   8 dodge           15    22 minivan  1999
+#&gt;   9 dodge           15    21 minivan  1999
+#&gt;  10 dodge           13    17 suv      1999
+#&gt;  # … with 25 more rows
+```
+]
+
+---
+
+## filter
+
+A common use of `filter` is to remove rows with missing values from your dataset
+
+.pull-left[
+
+```r
+weather5 &lt;- filter(weather4, 
+                   !is.na(tmax) &amp; !is.na(tmin))
+head(weather5, 20)
+```
+
+`is.na` is a *function* that tests whether a value is missing or not. 
+
+So `!is.na` is the opposite of that. 
+]
+.pull-right[
+
+```
+#&gt;          id year month symbol day tmax tmin
+#&gt;  1  MX17004 2010     1      d  30 27.8 14.5
+#&gt;  2  MX17004 2010     2      d  11 29.7 13.4
+#&gt;  3  MX17004 2010     2      d   2 27.3 14.4
+#&gt;  4  MX17004 2010     2      d  23 29.9 10.7
+#&gt;  5  MX17004 2010     2      d   3 24.1 14.4
+#&gt;  6  MX17004 2010     3      d  10 34.5 16.8
+#&gt;  7  MX17004 2010     3      d  16 31.1 17.6
+#&gt;  8  MX17004 2010     3      d   5 32.1 14.2
+#&gt;  9  MX17004 2010     4      d  27 36.3 16.7
+#&gt;  10 MX17004 2010     5      d  27 33.2 18.2
+#&gt;  11 MX17004 2010     6      d  17 28.0 17.5
+#&gt;  12 MX17004 2010     6      d  29 30.1 18.0
+#&gt;  13 MX17004 2010     7      d  14 29.9 16.5
+#&gt;  14 MX17004 2010     7      d   3 28.6 17.5
+#&gt;  15 MX17004 2010     8      d  13 29.8 16.5
+#&gt;  16 MX17004 2010     8      d  23 26.4 15.0
+#&gt;  17 MX17004 2010     8      d  25 29.7 15.6
+#&gt;  18 MX17004 2010     8      d  29 28.0 15.3
+#&gt;  19 MX17004 2010     8      d  31 25.4 15.4
+#&gt;  20 MX17004 2010     8      d   5 29.6 15.8
+```
+]
+
+---
+
+## arrange
+
+`arrange` reorders **rows** of a data set according to the values of one or more variables
+
+.pull-left[
+
+```r
+arrange(weather5, day)
+```
+
+Not quite. 
+]
+.pull-right[
+
+```
+#&gt;          id year month symbol day tmax tmin
+#&gt;  1  MX17004 2010    12      d   1 29.9 13.8
+#&gt;  2  MX17004 2010     2      d   2 27.3 14.4
+#&gt;  3  MX17004 2010    11      d   2 31.3 16.3
+#&gt;  4  MX17004 2010     2      d   3 24.1 14.4
+#&gt;  5  MX17004 2010     7      d   3 28.6 17.5
+#&gt;  6  MX17004 2010    11      d   4 27.2 12.0
+#&gt;  7  MX17004 2010     3      d   5 32.1 14.2
+#&gt;  8  MX17004 2010     8      d   5 29.6 15.8
+#&gt;  9  MX17004 2010    10      d   5 27.0 14.0
+#&gt;  10 MX17004 2010    11      d   5 26.3  7.9
+#&gt;  11 MX17004 2010    12      d   6 27.8 10.5
+#&gt;  12 MX17004 2010    10      d   7 28.1 12.9
+#&gt;  13 MX17004 2010     8      d   8 29.0 17.3
+#&gt;  14 MX17004 2010     3      d  10 34.5 16.8
+#&gt;  15 MX17004 2010     2      d  11 29.7 13.4
+#&gt;  16 MX17004 2010     8      d  13 29.8 16.5
+#&gt;  17 MX17004 2010     7      d  14 29.9 16.5
+#&gt;  18 MX17004 2010    10      d  14 29.5 13.0
+#&gt;  19 MX17004 2010    10      d  15 28.7 10.5
+#&gt;  20 MX17004 2010     3      d  16 31.1 17.6
+#&gt;  21 MX17004 2010     6      d  17 28.0 17.5
+#&gt;  22 MX17004 2010     2      d  23 29.9 10.7
+#&gt;  23 MX17004 2010     8      d  23 26.4 15.0
+#&gt;  24 MX17004 2010     8      d  25 29.7 15.6
+#&gt;  25 MX17004 2010    11      d  26 28.1 12.1
+#&gt;  26 MX17004 2010     4      d  27 36.3 16.7
+#&gt;  27 MX17004 2010     5      d  27 33.2 18.2
+#&gt;  28 MX17004 2010    11      d  27 27.7 14.2
+#&gt;  29 MX17004 2010    10      d  28 31.2 15.0
+#&gt;  30 MX17004 2010     6      d  29 30.1 18.0
+#&gt;  31 MX17004 2010     8      d  29 28.0 15.3
+#&gt;  32 MX17004 2010     1      d  30 27.8 14.5
+#&gt;  33 MX17004 2010     8      d  31 25.4 15.4
+```
+]
+
+---
+
+## arrange
+
+.pull-left[
+
+```r
+arrange(weather5, month, day)
+```
+]
+.pull-right[
+
+```
+#&gt;          id year month symbol day tmax tmin
+#&gt;  1  MX17004 2010     1      d  30 27.8 14.5
+#&gt;  2  MX17004 2010     2      d   2 27.3 14.4
+#&gt;  3  MX17004 2010     2      d   3 24.1 14.4
+#&gt;  4  MX17004 2010     2      d  11 29.7 13.4
+#&gt;  5  MX17004 2010     2      d  23 29.9 10.7
+#&gt;  6  MX17004 2010     3      d   5 32.1 14.2
+#&gt;  7  MX17004 2010     3      d  10 34.5 16.8
+#&gt;  8  MX17004 2010     3      d  16 31.1 17.6
+#&gt;  9  MX17004 2010     4      d  27 36.3 16.7
+#&gt;  10 MX17004 2010     5      d  27 33.2 18.2
+#&gt;  11 MX17004 2010     6      d  17 28.0 17.5
+#&gt;  12 MX17004 2010     6      d  29 30.1 18.0
+#&gt;  13 MX17004 2010     7      d   3 28.6 17.5
+#&gt;  14 MX17004 2010     7      d  14 29.9 16.5
+#&gt;  15 MX17004 2010     8      d   5 29.6 15.8
+#&gt;  16 MX17004 2010     8      d   8 29.0 17.3
+#&gt;  17 MX17004 2010     8      d  13 29.8 16.5
+#&gt;  18 MX17004 2010     8      d  23 26.4 15.0
+#&gt;  19 MX17004 2010     8      d  25 29.7 15.6
+#&gt;  20 MX17004 2010     8      d  29 28.0 15.3
+#&gt;  21 MX17004 2010     8      d  31 25.4 15.4
+#&gt;  22 MX17004 2010    10      d   5 27.0 14.0
+#&gt;  23 MX17004 2010    10      d   7 28.1 12.9
+#&gt;  24 MX17004 2010    10      d  14 29.5 13.0
+#&gt;  25 MX17004 2010    10      d  15 28.7 10.5
+#&gt;  26 MX17004 2010    10      d  28 31.2 15.0
+#&gt;  27 MX17004 2010    11      d   2 31.3 16.3
+#&gt;  28 MX17004 2010    11      d   4 27.2 12.0
+#&gt;  29 MX17004 2010    11      d   5 26.3  7.9
+#&gt;  30 MX17004 2010    11      d  26 28.1 12.1
+#&gt;  31 MX17004 2010    11      d  27 27.7 14.2
+#&gt;  32 MX17004 2010    12      d   1 29.9 13.8
+#&gt;  33 MX17004 2010    12      d   6 27.8 10.5
+```
+]
+
+---
+
+## arrange
+
+1. I use `arrange` sparingly in my workflow
+  - For spiffying up final presentation tables
+  - If order is **really** important
+1. Sorting data is one of the most computationally expensive operations you can do
+  - It can crash your computer for big data
+
+---
+
+## Cluttering up our workspace
+
+We've done a bit, but lets see all the objects we've created
+
+
+```r
+ls()
+```
+
+```
+#&gt;   [1] "dat"          "f"            "fname"        "january"     
+#&gt;   [5] "mpg1"         "outdir"       "pdfname"      "weather_data"
+#&gt;   [9] "weather1"     "weather2"     "weather3"     "weather4"    
+#&gt;  [13] "weather5"
+```
+
+We see a lot of intermediate datasets we've created, that we aren't going to really use anymore
+
+---
+class: middle, center
+
+# Workflow pipes in the tidyverse
+
+---
+
+## Intermediate data sets
+
+Recall how we cleaned the weather dataset yesterday
+
+
+```r
+weather &lt;- as_tibble(weather)
+weather1 &lt;- tidyr::gather(weather, key='day', value = 'temp', starts_with('d'))
+weather2 &lt;- spread(weather1, element, temp)
+weather3 &lt;- separate(weather2, day, c('symbol','day'), sep = 1)
+weather4 &lt;- select(weather3, -symbol)
+weather5 &lt;- mutate(weather4, day = as.numeric(day),
+                   tmax = replace_na(tmax, 0),
+                   tmin = replace_na(tmin, 0))
+weather6 &lt;- arrange(weather5,year,month,day)
+```
+
+This required us to create and keep track of several intermediate datasets
+
+These datasets are essentially temporary datasets which do not hold the final result
+
+What we did is a series of sequential steps to process the data
+
+---
+
+## The tidyverse pipe
+
+The pipe operator `%&gt;%` was first introduced in the `magrittr` package. 
+
+The idea behind the pipe is to take the result of one function and insert that as an input of another function
+
+In the tidyverse, we start with a tibble, and every intermediate result is also a tibble
+
+---
+
+## The tidyverse pipe
+
+1. The result of each function needs to be a tibble
+1. You can omit the input for the data in the code for the function on the right side of the pipe operator, since we know that tits the output from the function to the left of the operator
+
+---
+
+## The tidyverse pipe
+
+
+|Old School                        |Piping school                    |
+|:---------------------------------|:--------------------------------|
+|`mutate(mpg, differ = hwy-city))` |`mpg %&gt;% mutate(differ=hyw-cty)` |
+|`select(mpg, cyl, cty, hwy)`      |`mpg %&gt;% select(cyl, cty, hyw)`  |
+
+There is a handy shortcut in RStudio to type the pipe operator. It is Ctrl-Shift-M on Windows/Linux and Cmd-Shift-M on Mac.
+
+---
+
+## Reading a pipe
+
+
+```r
+mpg %&gt;% 
+  mutate(differ = hwy - cty) %&gt;% 
+  group_by(cyl) %&gt;% 
+  summarize(difference = mean(differ)) %&gt;% 
+  ungroup() 
+```
+
+```
+#&gt;  # A tibble: 4 x 2
+#&gt;      cyl difference
+#&gt;    &lt;int&gt;      &lt;dbl&gt;
+#&gt;  1     4       7.79
+#&gt;  2     5       8.25
+#&gt;  3     6       6.61
+#&gt;  4     8       5.06
+```
+
+You can verbalize the pipe operator as __then__
+
+---
+
+## Reading a pipe
+
+Since the end result of a pipe is a tibble, we can assign a name to store it
+
+
+```r
+summary_mpg &lt;- mpg %&gt;% 
+  mutate(differ = hwy - cty) %&gt;% 
+  group_by(cyl) %&gt;% 
+  summarize(difference = mean(differ)) %&gt;% 
+  ungroup() 
+summary_mpg
+```
+
+```
+#&gt;  # A tibble: 4 x 2
+#&gt;      cyl difference
+#&gt;    &lt;int&gt;      &lt;dbl&gt;
+#&gt;  1     4       7.79
+#&gt;  2     5       8.25
+#&gt;  3     6       6.61
+#&gt;  4     8       5.06
+```
+
+---
+
+## Exercise
+
+Transform the process of tidyfing the weather data into a pipe format
+
+<div class="countdown" id="timer_5d950e35" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+## `group_by` and `summarize`
+
+The `group_by` and `summarize` functions work together, in a principle called 
+
+.center[split-apply-combine]
+
+---
+
+![](img/split-apply-combine.png){
+
+---
+
+## Split-apply-combine
+
+Let's find the average city mileage from the `mpg` dataset by vehicle class
+
+
+```r
+mpg %&gt;% 
+  group_by(class) %&gt;% 
+  summarize(avgMPG = mean(cty))
+```
+
+```
+#&gt;  # A tibble: 7 x 2
+#&gt;    class      avgMPG
+#&gt;    &lt;chr&gt;       &lt;dbl&gt;
+#&gt;  1 2seater      15.4
+#&gt;  2 compact      20.1
+#&gt;  3 midsize      18.8
+#&gt;  4 minivan      15.8
+#&gt;  5 pickup       13  
+#&gt;  6 subcompact   20.4
+#&gt;  7 suv          13.5
+```
+
+
+---
+
+## Split-apply-combine
+
+Let's find the average city mileage from the `mpg` dataset by vehicle class
+
+
+```r
+mpg %&gt;% 
+  group_by(class) %&gt;% 
+  summarize(avgMPG = mean(cty)) %&gt;% 
+* knitr::kable(format='html')
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; class &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; avgMPG &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2seater &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.40000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; compact &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.12766 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; midsize &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.75610 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; minivan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.81818 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; pickup &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.00000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; subcompact &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.37143 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; suv &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.50000 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+![](img/split-apply-combine.png)
+
+---
+
+## Split-apply-combine
+
+We can compute the monthly average minimum and maximum temperatures from the weather dataset
+
+
+```r
+weather5 %&gt;% 
+  arrange(month, day) %&gt;% 
+  group_by(month) %&gt;% 
+  summarize(avgMin = mean(tmin, na.rm=T), avgMax = mean(tmax, na.rm=T))
+```
+
+```
+#&gt;  # A tibble: 11 x 3
+#&gt;     month avgMin avgMax
+#&gt;     &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+#&gt;   1     1   14.5   27.8
+#&gt;   2     2   13.2   27.8
+#&gt;   3     3   16.2   32.6
+#&gt;   4     4   16.7   36.3
+#&gt;   5     5   18.2   33.2
+#&gt;   6     6   17.8   29.0
+#&gt;   7     7   17     29.2
+#&gt;   8     8   15.8   28.3
+#&gt;   9    10   13.1   28.9
+#&gt;  10    11   12.5   28.1
+#&gt;  11    12   12.2   28.8
+```
+
+---
+
+## Split-apply-combine
+
+The split-apply-combine method is also useful in `mutate`.
+
+In the weather dataset, let's impute the monthly averages for the missing values
+
+
+```r
+*weather4 %&gt;% # weather4 still has missing values
+  arrange(month,day) %&gt;% 
+  group_by(month) %&gt;% 
+  mutate(tmax = replace_na(tmax, mean(tmax, na.rm=T)),
+         tmin = replace_na(tmin, mean(tmin, na.rm=T)))
+```
+
+```
+#&gt;  # A tibble: 341 x 7
+#&gt;  # Groups:   month [11]
+#&gt;     id       year month symbol   day  tmax  tmin
+#&gt;     &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt;   1 MX17004  2010     1 d          1  27.8  14.5
+#&gt;   2 MX17004  2010     1 d          2  27.8  14.5
+#&gt;   3 MX17004  2010     1 d          3  27.8  14.5
+#&gt;   4 MX17004  2010     1 d          4  27.8  14.5
+#&gt;   5 MX17004  2010     1 d          5  27.8  14.5
+#&gt;   6 MX17004  2010     1 d          6  27.8  14.5
+#&gt;   7 MX17004  2010     1 d          7  27.8  14.5
+#&gt;   8 MX17004  2010     1 d          8  27.8  14.5
+#&gt;   9 MX17004  2010     1 d          9  27.8  14.5
+#&gt;  10 MX17004  2010     1 d         10  27.8  14.5
+#&gt;  # … with 331 more rows
+```
+
+---
+
+## Split-apply-combine
+
+We can even use this principle for some filtering
+
+
+```r
+weather5 %&gt;% 
+  arrange(month, day) %&gt;% 
+  group_by(month) %&gt;% 
+* filter(tmax &gt;= mean(tmax, na.rm=T)) %&gt;%
+  ungroup()
+```
+
+```
+#&gt;  # A tibble: 16 x 7
+#&gt;     id       year month symbol   day  tmax  tmin
+#&gt;     &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt;   1 MX17004  2010     1 d         30  27.8  14.5
+#&gt;   2 MX17004  2010     2 d         11  29.7  13.4
+#&gt;   3 MX17004  2010     2 d         23  29.9  10.7
+#&gt;   4 MX17004  2010     3 d         10  34.5  16.8
+#&gt;   5 MX17004  2010     4 d         27  36.3  16.7
+#&gt;   6 MX17004  2010     5 d         27  33.2  18.2
+#&gt;   7 MX17004  2010     6 d         29  30.1  18  
+#&gt;   8 MX17004  2010     7 d         14  29.9  16.5
+#&gt;   9 MX17004  2010     8 d          5  29.6  15.8
+#&gt;  10 MX17004  2010     8 d          8  29    17.3
+#&gt;  11 MX17004  2010     8 d         13  29.8  16.5
+#&gt;  12 MX17004  2010     8 d         25  29.7  15.6
+#&gt;  13 MX17004  2010    10 d         14  29.5  13  
+#&gt;  14 MX17004  2010    10 d         28  31.2  15  
+#&gt;  15 MX17004  2010    11 d          2  31.3  16.3
+#&gt;  16 MX17004  2010    12 d          1  29.9  13.8
+```
+
+---
+class:middle, center, inverse
+
+# Organizing data projects
+
+---
+
+## The data science pipeline
+
+&lt;img src="img/0246OS_00_02.png" width="1399" height="500" style="display: block; margin: auto;" /&gt;
+
+---
+
+## RStudio Projects
+
++ RStudio allows you to create [Projects](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
++ These encapsulate individual projects
+
+
+---
+
+## Use a template to organize your projects
+
+Before you even get the data
+
++  Set up a folder structure where
+    + you know what goes where
+    + you can have canned scripts/packages set things up
++ Make sure it's the same structure every time
++ Next time you visit the project, you don't have to go into desperate search mode
+
+---
+
+&lt;img src="img/template.png" height="600" &gt;
+
+---
+
+## Storing data
+
+1. Keep one copy of the raw data in the format you received it
+2. Read in the data into R (see Lecture 7) -&gt; `DataAcquisition.R` 
+3. Save a copy of this data in RDSformat (use endings .rds). We'll see how to do this in a few slides
+
+---
+## Start working with the data
+
+Summaries:
+
++ `summary`
++ `dplyr::summarise`
++ `mean`, `sd`, `range`
+
+Exploratory graphs
+
++ `ggplot`
++ `plot`
+
+Maybe call this file `DataExploration.R`
+
+---
+
+## Data munging 
+
++ Reshaping data
++ Aggregating data
++ Split-apply-combine
+
+Maybe call this file `DataMunging.R`
+
+---
+
+## Modeling
+
+
++ Hypothesis testing
++ Linear models
++ Logistic regression
++ Whatever model you need to run
+
+This process requires a lot of exploration and trial-and-error, so it gets messy
+I'll usually create several files that look at different models, but once I'm done, 
+my "final" models go in `Modeling.R`
+
+&gt; Coming soon
+
+
+---
+
+## Packages to be used
+
+You can use several packages in a particular project
+
+It's good practice to load them first, and know what they are
+
++ Makes sure packages are installed
++ Makes sure package dependencies are met
++ Makes sure package conflicts are known and fixed
+
+---
+
+## Packages to be used
+
+
+```r
+reqpackages &lt;- c('dplyr', 'reshape2', 'readxl',
+                 'ggplot2','stringr','ggthemes')
+for(pkg in reqpackages){
+  if(!(pkg %in% row.names(installed.packages()))){
+    install.packages(pkg, repos='http://cran.r-project.org')
+  }
+}
+
+library(dplyr)
+library(reshape2)
+library(readxl)
+library(stringr)
+library(ggplot2)
+library(ggthemes)
+```
+
+This goes in `packages.R`
+
+---
+
+## Creating a pipeline
+
+Now you can ensure that your analyses are reproducible by creating a pipeline where code is run sequentially in a particular order
+
+
+```r
+source('packages.R')
+source('DataAcquistion.R')
+source('DataExploration.R')
+source('DataMunging.R')
+source('Modeling.R')
+```
+
+Essentially, I'm doing modular programming
+
++ Separate code by function
++ Makes it easier to debug
++ Try to write code for a particular function once
+
+---
+
+## Saving your work
+
+You would often like to store intermediate datasets, and final datasets, so that you can access them quickly.
+
+There are several ways of saving even large datasets so that they can be quickly accessed. 
+
+| Function  | Package | Example                                  | Re-loading the data                 |
+|-----------|---------|------------------------------------------|-------------------------------------|
+| saveRDS   | base    | `saveRDS(weather, file = 'weather.rds')` | `weather &lt;- readRDS('weather.rds')` |
+| write_fst | fst     | `write_fst(weather, file='weather.fst')` | `weather &lt;- read_fst('weather.fst')` |
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
