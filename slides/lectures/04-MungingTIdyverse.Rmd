@@ -1,0 +1,38 @@
+---
+title: "Practical R: Data Ingestion and Munging"
+author: Abhijit Dasgupta
+date: Fall, 2019
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+library(countdown)
+library(fontawesome)
+library(tidyverse)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339, Fall, 2019</span></div>
+
+---
+
+## Where we left off
+
+We learned how to 
+
+1. `separate` columns into multiple columns based on patterns or index
+1. `gather` many columns into 2 columns, with one column having the header information and the other having the values
+1. `spread` two columns into many columns, with one column providing the new column headers and the other the values. 
+
+---
+
+## Tidying the weather data
+
+```{r}
+library(tidyverse)
+weather_data <- rio::import('data/weather.csv')
+```
+
