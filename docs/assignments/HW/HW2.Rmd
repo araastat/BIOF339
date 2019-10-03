@@ -5,19 +5,14 @@ date: "Due September 24, 2019"
 output: html_document
 ---
 
-
 <p style="color: black; border:3px; border-style: solid; border-color: red; padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
 [**Submission Link**](https://www.dropbox.com/request/4l3YxsRsIcUgMFhw3kKl){target=_blank}
 </p>
-
-You will be able to see the submission link when you knit this document to HTML. Please submit **only the RMarkdown file**. 
-
-
+ 
 ```{r setup, echo = T, eval = T, message=F, warning=F}
 # First modify this chunk to activate the packages you will need for this HW.
 # Ensure you have `tidyverse`, `knitr` and `rmarkdown` installed
 # Add statements like `library(tidyverse)`
-
 
 ```
 
