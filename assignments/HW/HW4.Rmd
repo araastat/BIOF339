@@ -1,0 +1,55 @@
+---
+title: "Homework 4: Data munging"
+author: ""
+date: "Due October 8, 2019"
+output: html_document
+---
+
+<p style="color: black; border:3px; border-style: solid; border-color: red; padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](https://www.dropbox.com/request/Vtz7NYZP1uDXQwQpIOZv){target=_blank}
+</p>
+
+
+## Reading
+
+1. [Section 5.6.4](https://r4ds.had.co.nz/transform.html#summarise-funs) of *R for Data Science* gives examples of various summary functions in R. They are using a dataset in those examples derived from the `flights` dataset, which you can create using the following code:
+
+```{r, eval = F}
+library(nycflights13) # Install this package if you don't have it
+
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_time), !is.na(arr_time))
+```
+
+
+## Homework
+
+The dataset [here](data/clinical_data_breast_cancer_hw.csv) provides clinical and
+pathological data for 105 breast cancer patients. Create a fresh RMarkdown file and answer the following questions:
+
+1. Read this data into R, calling it `brca_data`. 
+1. This data is in tidy format, but needs cleaning. 
+    a. Evaluate whether all the variables are of the correct type. If not, evaluate why, and correct the problem.
+    b. For the molecular results for ER, PR and HER2, any entry that is not Positive or Negative should be changed to a missing value.
+1. Create a new dataset that contains patient ID, ER, PR and HER2 status. You need to use one of the functions `starts_with`, `ends_with` or `contains` within the `select` function. 
+1. Creating new variables (what `dplyr` function will you use for all of these?):
+    a. Create a variable giving the TNM status of each patient. The T, N and M statuses are given separately. I want a single variable encoded as, for example, "T2N0M0". [Hint: The function `paste` is your friend]
+    c. Create a variable that divides the patients into 3 categories based on molecular profiles [Hint: The function `case_when` might help]:
+        - Luminal (ER positive and/or PR positive)
+        - HER2 (HER2 positive)
+        - Basal-like (ER, PR and HER2 negative)
+    d. Create a variable that equals the time of death if they are dead (see the variable `Vital.Status`) or the time of last contact if they are alive. This is a common computation for survival analysis studies, and is called the overall survival time. [Hint: the function `ifelse` might be useful]
+1. Let's compute some summaries 
+    a. Find the number of patients with each breast cancer type
+    a. Find the average age of patients with each breast cancer type
+    a. Find the proportion of patients who are dead for each breast cancer type
+    a. Find the proportion of patients with each TNM status
+
+> c and d require creating a new variable to compute the proportion after determining the counts using either `count` or a group_by/summarize pipe using `n()`.
+
+**[Extra credit:]** What proportion of the Luminal patients are of tumor stage T1 or T2?
+
+Save the cleaned breast cancer dataset as `brca_cleaned`. You can save this to your computer using `saveRDS(brca_cleaned, file="<a filename of your choice>.rds")`. We'll be using this dataset again whe we do plots and modeling.
+
+
+    
