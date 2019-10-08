@@ -62,14 +62,14 @@ topics <- c(
   'R packages, data import/export, munging',
   'Towards analytic data: Data Munging, continued',
   'Data exploration through visualization',
+  'More data visualization and RMarkdown',
   'Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot',
   'Statistical analyses: Classical hypothesis testing and computational inference',
   'Statistical learning: Regression models',
-  'Statistical learning: Cluster analysis and pattern recognition (classes 5:30-7, 7-8:30)',
   "More data munging with `purrr`: grouping, mapping and functional programming",
   "Basic bioinformatics: Bioconductor and friends",
   "No class (Thanksgiving)",
-  "More complex visualizations and RMarkdown",
+  'Statistical learning: Cluster analysis and pattern recognition',
   "Project presentations")
 D <- tibble(Date = dts, Topic=topics)
 knitr::kable(D)
