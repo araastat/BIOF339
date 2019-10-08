@@ -7,7 +7,7 @@ date: Fall, 2019
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ', warning=F, message=F,
-                      cache=T)
+                      cache=F)
 library(tidyverse)
 # source('https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal.R')
 options(htmltools.dir.version = FALSE)
@@ -268,7 +268,7 @@ These graphs are clickable. For example, click on a symbol on the legend, or dra
 
 ## Animated graphs
 
-```{r aniplot, eval=T, echo=F}
+```{r aniplot, eval=T, echo=F, results='hide'}
 library(ggplot2)
 library(gganimate)
 theme_set(theme_bw())
@@ -286,8 +286,10 @@ p <- ggplot(
 p <- p + transition_time(year) +
   labs(title = "Year: {frame_time}")
 animate(p, renderer = gifski_renderer(), device='png')
+anim_save('img/anim.gif')
 ```
 
+![](img/anim.gif)
 
 
 ---
