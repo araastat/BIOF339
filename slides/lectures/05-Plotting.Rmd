@@ -7,7 +7,7 @@ date: Fall, 2019
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ', warning=F, message=F,
-                      cache=T)
+                      cache=F)
 library(tidyverse)
 ```
 
