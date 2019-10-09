@@ -490,6 +490,9 @@ Creating new variables (what <code>dplyr</code> function will you use for all of
 <p>Create a variable giving the TNM status of each patient. The T, N and M statuses are given separately. I want a single variable encoded as, for example, “T2N0M0”. [Hint: The function <code>paste</code> is your friend]</p>
 <pre class="r"><code>brca_data &lt;- brca_data %&gt;% 
   mutate(TNM = paste(Tumor, Node, Metastasis, sep=&#39;&#39;))</code></pre>
+<p>A (perhaps nicer) solution is</p>
+<pre class="r"><code>brca_data &lt;- brca_data %&gt;% 
+  unite(TNM, Tumor, Node, Metastasis, sep=&#39;&#39;, remove = F)</code></pre>
 <li>
 Create a variable that divides the patients into 3 categories based on molecular profiles [Hint: The function <code>case_when</code> might help]:
 <ul>

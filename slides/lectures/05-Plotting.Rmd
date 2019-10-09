@@ -7,7 +7,7 @@ date: Fall, 2019
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ', warning=F, message=F,
-                      cache=F,
+                      cache=T,
                       fig.path = '05-Plotting_files/figs/')
 library(tidyverse)
 # source('https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal.R')
@@ -19,6 +19,89 @@ layout: true
 <div class="my-header">
 <span>BIOF339, Fall, 2019</span></div>
 
+
+---
+
+## Before we start
+
+Some functions I found particularly useful from your solutions to HW 3:
+
+- `readr::parse_number`
+- `dplyr::recode`
+- `tidyr::gather(..., na.rm=T)`
+- `readxl::read_excel(...., na="NA")`
+
+--
+
+> `recode` just switches one value for another. `caes_when` actually evaluates boolean expressions to decide on a new value
+
+---
+
+## A basic function
+
+```{r, eval = F}
+name <- function(variables) {
+  
+}
+```
+
+- `variables` represents the inputs to the function. Several inputs can be separated by commas. Options are also inputs in a greater sense
+- The part between `{}` represents the recipe, i.e. the R code needed to execute the function
+- You have to give the function a name (here, `name`)
+- The `function` keyword is non-negotiable
+
+---
+
+# A basic function
+
+```{r}
+
+my_mean <- function(x){
+  out <- sum(x, na.rm=T)/length(x)
+  return(out)
+}
+```
+
+- `x` is a place holder for whatever object (here, a vector of numbers) you want as input
+- We compute the sum of the non-missing values of x, divide by the number of numbers in x and create the mean. We then `return` that value as output of the function.
+
+--
+
+Technically this is wrong. we need to divide by `sum(!is.na(x))` and not `length(x)`. Why?
+
+---
+
+## Why functions
+
+Functions encapsulate repeated tasks. All the functions you use from packages are meant to be re-used. Your functions are written to be re-used too. 
+
+--
+
+### Where do we use functions in the tidyverse pipes?
+
+- `mutate_at`, `mutate_if`, `mutate_all` all require some function that is repeated over different columns of the data
+- You can use functions to transform variables in the `mutate` function
+- You can use a function to define some complex condition for the `filter` function
+
+--
+
+### Further reading
+
+[Chapter 19](https://r4ds.had.co.nz/functions.html) of the R4DS book
+ 
+---
+
+## Function syntax and arguments
+
+The main way you can figure out the syntax for a function is from its help documentation
+
+```{r, eval=F}
+help(case_when)
+```
+
+```{r, eval=F}
+?parse_number
+```
 
 ---
 class: middle, center
