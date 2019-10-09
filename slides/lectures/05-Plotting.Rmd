@@ -7,10 +7,11 @@ date: Fall, 2019
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ', warning=F, message=F,
-                      cache=F)
+                      cache=F,
+                      fig.path = '05-Plotting_files/figs/')
 library(tidyverse)
 # source('https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal.R')
-options(htmltools.dir.version = FALSE)
+options(htmltools.dir.version = TRUE)
 ```
 
 layout: true
