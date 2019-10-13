@@ -60,7 +60,14 @@ brca_molecular <- brca_data %>%
 brca_data <- brca_data %>% 
   mutate(TNM = paste(Tumor, Node, Metastasis, sep=''))
 ```
-    
+
+A (perhaps nicer) solution is 
+
+```{r}
+brca_data <- brca_data %>% 
+  unite(TNM, Tumor, Node, Metastasis, sep='', remove = F)
+```
+
 <li>Create a variable that divides the patients into 3 categories based on molecular profiles [Hint: The function `case_when` might help]:
 <ul>
 <li> Luminal (ER positive and/or PR positive)
