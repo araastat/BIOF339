@@ -227,7 +227,7 @@ brca_clinical <- readr::read_csv('data/BreastCancer_Clinical.csv')
 ## Reading Excel
 
 ```{r}
-excel_sheets('data/BreastCancer.xlsx')
+readxl::excel_sheets('data/BreastCancer.xlsx')
 brca_expression <- readxl::read_excel('data/BreastCancer.xlsx', sheet='Expression')
 ```
 

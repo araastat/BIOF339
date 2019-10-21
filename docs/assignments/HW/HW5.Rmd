@@ -5,6 +5,11 @@ date: "Due Wednesday October 16, 2019"
 output: html_document
 ---
 
+<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](https://www.dropbox.com/request/MTY0A7xHdxVdwj1GTRBO){target=_blank}
+</p>
+
+
 
 ## Reading
 

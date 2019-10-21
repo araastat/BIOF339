@@ -7,8 +7,11 @@ date: Fall, 2019
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ', warning=F, message=F,
-                      cache=T)
+                      cache=F,
+                      fig.path = '05-Plotting_files/figs/')
 library(tidyverse)
+# source('https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal.R')
+options(htmltools.dir.version = TRUE)
 ```
 
 layout: true
@@ -16,6 +19,89 @@ layout: true
 <div class="my-header">
 <span>BIOF339, Fall, 2019</span></div>
 
+
+---
+
+## Before we start
+
+Some functions I found particularly useful from your solutions to HW 3:
+
+- `readr::parse_number`
+- `dplyr::recode`
+- `tidyr::gather(..., na.rm=T)`
+- `readxl::read_excel(...., na="NA")`
+
+--
+
+> `recode` just switches one value for another. `caes_when` actually evaluates boolean expressions to decide on a new value
+
+---
+
+## A basic function
+
+```{r, eval = F}
+name <- function(variables) {
+  
+}
+```
+
+- `variables` represents the inputs to the function. Several inputs can be separated by commas. Options are also inputs in a greater sense
+- The part between `{}` represents the recipe, i.e. the R code needed to execute the function
+- You have to give the function a name (here, `name`)
+- The `function` keyword is non-negotiable
+
+---
+
+# A basic function
+
+```{r}
+
+my_mean <- function(x){
+  out <- sum(x, na.rm=T)/length(x)
+  return(out)
+}
+```
+
+- `x` is a place holder for whatever object (here, a vector of numbers) you want as input
+- We compute the sum of the non-missing values of x, divide by the number of numbers in x and create the mean. We then `return` that value as output of the function.
+
+--
+
+Technically this is wrong. we need to divide by `sum(!is.na(x))` and not `length(x)`. Why?
+
+---
+
+## Why functions
+
+Functions encapsulate repeated tasks. All the functions you use from packages are meant to be re-used. Your functions are written to be re-used too. 
+
+--
+
+### Where do we use functions in the tidyverse pipes?
+
+- `mutate_at`, `mutate_if`, `mutate_all` all require some function that is repeated over different columns of the data
+- You can use functions to transform variables in the `mutate` function
+- You can use a function to define some complex condition for the `filter` function
+
+--
+
+### Further reading
+
+[Chapter 19](https://r4ds.had.co.nz/functions.html) of the R4DS book
+ 
+---
+
+## Function syntax and arguments
+
+The main way you can figure out the syntax for a function is from its help documentation
+
+```{r, eval=F}
+help(case_when)
+```
+
+```{r, eval=F}
+?parse_number
+```
 
 ---
 class: middle, center
@@ -202,7 +288,7 @@ the line for the significance levels
 
 ### Circular Manhattan plot
 
-```{r, echo = F, results = 'hide', message = F, warning=F, out.width="500px", fig.align='center'}
+```{r cmplot, include=F}
 #install.packages('CMplot')
 library(CMplot)
 data(pig60K)
@@ -211,9 +297,13 @@ CMplot(pig60K, plot.type="c", chr.labels=paste("Chr",c(1:18,"X"),sep=""), r=0.4,
         memo="", dpi=300)
 detach('package:CMplot')
 ```
-```{r, echo = F, out.width="500px" ,fig.align = "center"}
+
+
+
+```{r, echo=F, out.height="500", out.width="500"}
 knitr::include_graphics('Circular-Manhattan.trait1.trait2.trait3.jpg')
 ```
+
 
 ???
 This gives a different representation of the manhattan plot. This example looks at three traits simultaneously
@@ -224,7 +314,7 @@ This gives a different representation of the manhattan plot. This example looks 
 
 ### Maps
 
-```{r, echo = F, out.height="500px", fig.align='center'}
+```{r, echo = F}
 library(choroplethr)
 data(df_pop_county)
 county_choropleth(df_pop_county,
@@ -235,22 +325,55 @@ detach('package:choroplethr')
 
 ---
 
-## Gallery
-
 ### Interactive graphs
 
-```{r,  echo=F, fig.align='center', out.height="500px"}
+```{r,  echo=F, eval=T}
 library(plotly)
-p=ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width, color=Species, shape=Species)) + 
-    geom_point(size=6, alpha=0.6)
+library(fs)
+library(here)
+p=ggplot(iris, 
+         aes(x=Sepal.Length, y=Sepal.Width, color=Species, shape=Species)) + 
+  geom_point(size=2, alpha=0.6)+
+  theme_bw()
+
 mytext=paste("Sepal Length = ", iris$Sepal.Length, "\n" , "Sepal Width = ", iris$Sepal.Width, "\n", "Row Number: ",rownames(iris),  sep="")    
 pp=plotly_build(p)   
 style( pp, text=mytext, hoverinfo = "text", traces = c(1, 2, 3) )
-ggplotly(p)
+pg <- ggplotly(p)
+# htmltools::save_html(pg, file = here::here('slides','lectures','05-Plotting_files','pl.html'))
 ```
+
+<!---<iframe src="05-Plotting_files/pl.html" width="1200" height="500" scrolling="yes" seamless="seamless" frameBorder="0"> </iframe> --->
 
 ???
 These graphs are clickable. For example, click on a symbol on the legend, or drag your mouse over a region with left button held down. 
+
+---
+
+## Animated graphs
+
+```{r aniplot, eval=T, echo=F, results='hide'}
+library(ggplot2)
+library(gganimate)
+theme_set(theme_bw())
+
+library(gapminder)
+p <- ggplot(
+  gapminder, 
+  aes(x = gdpPercap, y=lifeExp, size = pop, colour = country)
+  ) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy")
+p <- p + transition_time(year) +
+  labs(title = "Year: {frame_time}")
+animate(p, renderer = gifski_renderer(), device='png')
+anim_save('img/anim.gif')
+```
+
+![](img/anim.gif)
 
 
 ---
@@ -449,6 +572,9 @@ What goes in
 
 ]
 
+???
+This sets the axes up on the canvas
+
 ---
 
 .pull-left[
@@ -479,6 +605,10 @@ What to draw:
 ```
 
 ]
+
+???
+
+Now we tell it how to represent the data that is being mapped to the canvas. Here its points
 
 ---
 
@@ -854,6 +984,25 @@ ggplot(data=brca_clean,
 ## Univariate plots
 
 .pull-left[
+```{r u22, eval = F, echo = T}
+ggplot(data=brca_clean,
+       mapping = aes(x = Age)) + 
+  geom_density()
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="u22"}
+```
+]
+
+???
+
+A smoother representation of the distribution
+---
+
+## Univariate plots
+
+.pull-left[
 ```{r u3, eval = F, echo = T}
 ggplot(data = brca_clean,
        mapping = aes(x = Tumor)) + 
@@ -888,6 +1037,9 @@ ggplot(data = brca_clean,
 ```
 ]
 
+???
+A boxplot gives a 5 number summary of the data
+
 ---
 
 ## Continuous with discrete
@@ -905,6 +1057,10 @@ ggplot(data = brca_clean,
 ```{r, eval=T, echo = F, ref.label="u5"}
 ```
 ]
+
+???
+
+The violin plot gives more detail. It's essentially a reflected density plot
 
 ---
 
