@@ -13,7 +13,7 @@ output: html_document
 The following links provide data for U.S. incidence rates per 100,000, standardized to the 2000 standard U.S. population,  for 
 [brain](data/Brain.csv), [colon](data/Colon.csv), [esophageal](data/Esophagus.csv), [lung](data/Lung.csv) and [oral](data/Oral.csv) cancers for the period 1975-2016. These data are provided from the [SEER program](https://seer.cancer.gov){target=_blank}. 
 
-Our goal is to create a single graphic showing the patterns of incidence rates over this time period for the 5 cancers, something like the one below:
+Our goal is to create a single graphic showing the patterns of incidence rates over this time period for the 5 cancers, something like the one below: 
 
 ![](img/hw6.png)
 
