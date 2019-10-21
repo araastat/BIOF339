@@ -377,14 +377,17 @@ summary {
 <ol style="list-style-type: decimal">
 <li>Each csv file is in the same format. Open one in a text editor like Notepad (Windows) or TextEdit (Mac) to see lines you may need to skip. (I don’t suggest Excel since it has a habit of changing formating and adding columns when you save back into csv). Then read each of the five files into R. For convenience I’ll refer to these datasets as <code>brain</code>, <code>colon</code>, <code>esophagus</code>, <code>lung</code> and <code>oral</code>.
 <ul>
-<li>Confirm that each dataset has 42 rows and 4 columns</li>
+<li>Confirm that each dataset has 43 rows and 10 columns</li>
 </ul></li>
+<li>Create three separate datasets for each site, one for both sexes, one for males and one for females. Each dataset should still have year of diagnosis. So each dataset should have 43 rows and 4 columns.</li>
+</ol>
+<p>For the next few points, I will refer to the both sexes datasets. You’ll do the same for the male and female datasets.</p>
+<ol style="list-style-type: decimal">
 <li>Each dataset has the same column headers. We’ll be joining the data sets into a single data set using the year of diagnosis as the <strong>key</strong>, i.e. the common variable that will determine the joins. This means we have to make the column names for the different data sets (except the year column) distinctive. Change the column names replacing <code>both_sexes</code> with the names of the cancer sites
 <ul>
-<li><em>Hints: <code>names(brain)</code> gives the column names for the brain data. You can also change column names using <code>names(brain) &lt;- ...</code> since this is just a vector. In particular, you can try something like <code>names(brain) &lt;- stringr::str_replace(names(brain), 'both_sexes', 'brain')</code></em></li>
+<li><em>Hints: <code>names(brain)</code> gives the column names for the brain data. You can also change column names using <code>names(brain) &lt;- ...</code> since this is just a vector. In particular, you can try something like <code>names(brain) &lt;- stringr::str_replace(names(brain), &#39;both_sexes&#39;, &#39;brain&#39;)</code></em></li>
 </ul></li>
 <li><p>Create a new composite dataset by repeatedly using <code>left_join</code> or <code>inner_join</code> to add each site-specific dataset to the composite data set. What I mean is, create a dataset joining A and B, then join C to the result, then join D to the result and so on.</p></li>
-<li><p>Now create 3 data sets, one for all races, one for whites and one for blacks. Make sure you keep the year of diagnosis in each one.</p></li>
 <li>For each of these datasets:
 <ol style="list-style-type: lower-alpha">
 <li>Remove the row with the overall 1975-2016 rates</li>
