@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Loops, Maps, and Table One</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="07-Maps-Table1_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="robot.css" type="text/css" />
+    <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Loops, Maps, and Table One
+### Abhijit Dasgupta
+### Fall, 2019
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339, Fall, 2019&lt;/span&gt;&lt;/div&gt;
+
+---
+
+# Where we are
+
++ Got a start on plotting and creating panelled graphs with ggplot2
++ Can modify a data set somewhat
+    - `dplyr` verbs (mutate, filter, select, separate, unite)
+    - joins
+    - gather/spread
+
+---
+
+# Repetitive copying
+
+For HW 6 (sorry about the mess), you had to copy and paste multiple times to get
+things done
+
+- Had to do same processing on multiple data sets
+- Had to do same graphs from multiple data sets
+
+---
+class: middle, center
+
+# For loops and Maps
+
+---
+
+## For loops
+
+For-loops are a computational structure that allows you to do the same thing
+repeatedly over a loop with some index. 
+
+The basic structure is
+
+
+```r
+for (variable in vector) {
+  &lt;code to execute for each iteration&gt;
+}
+```
+
+---
+
+## For loops
+
+.pull-left[
+Using numeric indices
+
+
+```r
+library(fs)
+sites &lt;- c('Brain','Colon','Esophagus','Lung','Oral')
+dats &lt;- list() # Initialize empty list
+for(i in 1:length(sites)){
+  dats[[i]] &lt;- 
+    read_csv(path('data',
+                             paste0(sites[i], '.csv')), 
+                        skip=4)
+}
+```
+]
+.pull-right[
+Using names
+
+
+```r
+library(fs)
+sites &lt;- c('Brain','Colon','Esophagus','Lung','Oral')
+dats &lt;- list() # Initialize empty list
+for(n in sites){
+  dats[[n]] &lt;- 
+    read_csv(path('data',
+                  paste0(n, '.csv')), 
+             skip=4)
+}
+```
+]
+
+---
+
+## Lists
+
+Directly using lists has efficiency advantages. `rio` can load all the datasets
+into a list, for example.
+
+
+```r
+dats &lt;- rio::import_list(path('data', paste0(sites,'.csv')))
+names(dats)
+```
+
+```
+#&gt;  [1] "Brain"     "Colon"     "Esophagus" "Lung"      "Oral"
+```
+
+```r
+str(dats[['Brain']])
+```
+
+```
+#&gt;  'data.frame':	43 obs. of  10 variables:
+#&gt;   $ Year of Diagnosis   : chr  "1975-2016" "1975" "1976" "1977" ...
+#&gt;   $ All Races,Both Sexes: num  6.59 5.85 5.82 6.17 5.76 6.12 6.3 6.51 6.42 6.31 ...
+#&gt;   $ All Races,Males     : num  7.88 6.84 7.14 7.76 6.79 7.42 7.58 8.07 7.93 7.6 ...
+#&gt;   $ All Races,Females   : num  5.51 5.01 4.68 4.89 4.91 5.01 5.24 5.2 5.24 5.19 ...
+#&gt;   $ Whites,Both Sexes   : num  7.22 6.21 6.18 6.6 6.1 6.6 6.81 6.9 6.92 6.88 ...
+#&gt;   $ Whites,Males        : num  8.61 7.31 7.51 8.26 7.19 8.03 8.2 8.44 8.57 8.2 ...
+#&gt;   $ Whites,Females      : num  6.04 5.28 5.03 5.27 5.19 5.37 5.65 5.63 5.64 5.74 ...
+#&gt;   $ Blacks,Both Sexes   : num  4.08 4.14 3.32 3.55 3.86 3.69 3.14 5.02 3.71 2.75 ...
+#&gt;   $ Blacks,Males        : num  4.79 4.31 5.37 5.17 4.34 4.19 3.35 7.24 4.4 3.79 ...
+#&gt;   $ Blacks,Females      : chr  "3.51" "3.88" "-" "2.47" ...
+```
+
+--
+
+Recall, lists are the most generic buckets in R. Elements of lists can be anything. 
+To use `map` it's best that each element of the input list be of the same type
+---
+
+## Maps
+
+`map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
+
+
+```r
+map(&lt;list&gt;, &lt;function&gt;, &lt;function arguments&gt;)
+```
+
+For example, if we want to take out the first row of each dataset and make sure all 
+the variables are numeric, we could do:
+
+
+```r
+dats &lt;- map(dats, function(d){
+  d %&gt;% slice(-1) %&gt;%  # remove first row
+    mutate_all( as.numeric)
+})
+str(dats[['Brain']])
+```
+
+```
+#&gt;  'data.frame':	42 obs. of  10 variables:
+#&gt;   $ Year of Diagnosis   : num  1975 1976 1977 1978 1979 ...
+#&gt;   $ All Races,Both Sexes: num  5.85 5.82 6.17 5.76 6.12 6.3 6.51 6.42 6.31 6.12 ...
+#&gt;   $ All Races,Males     : num  6.84 7.14 7.76 6.79 7.42 7.58 8.07 7.93 7.6 7.18 ...
+#&gt;   $ All Races,Females   : num  5.01 4.68 4.89 4.91 5.01 5.24 5.2 5.24 5.19 5.2 ...
+#&gt;   $ Whites,Both Sexes   : num  6.21 6.18 6.6 6.1 6.6 6.81 6.9 6.92 6.88 6.49 ...
+#&gt;   $ Whites,Males        : num  7.31 7.51 8.26 7.19 8.03 8.2 8.44 8.57 8.2 7.64 ...
+#&gt;   $ Whites,Females      : num  5.28 5.03 5.27 5.19 5.37 5.65 5.63 5.64 5.74 5.49 ...
+#&gt;   $ Blacks,Both Sexes   : num  4.14 3.32 3.55 3.86 3.69 3.14 5.02 3.71 2.75 4.53 ...
+#&gt;   $ Blacks,Males        : num  4.31 5.37 5.17 4.34 4.19 3.35 7.24 4.4 3.79 5.34 ...
+#&gt;   $ Blacks,Females      : num  3.88 NA 2.47 3.51 3.23 2.92 3.16 3.05 1.84 3.88 ...
+```
+
+---
+
+## Maps
+
+`map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
+
+
+```r
+map(&lt;list&gt;, &lt;function&gt;, &lt;function arguments&gt;)
+```
+
+For example, if we want to take out the first row of each dataset and make sure all 
+the variables are numeric, we could do:
+
+
+```r
+dats &lt;- map(dats, function(d){
+  d %&gt;% slice(-1) %&gt;%  # remove first row
+    mutate_all( as.numeric)
+})
+str(dats[['Brain']])
+```
+
+The argument for the function inside the `map` function is an element of the list. In this case, it is a data frame.
+
+The output of `map` is a list the same length as the input list.
+
+---
+
+## Maps
+
+I don't like the names with spaces, so I can just apply a function to each data set to fix that.
+
+
+```r
+dats &lt;- map(dats, janitor::clean_names)
+str(dats[['Oral']])
+```
+
+```
+#&gt;  'data.frame':	42 obs. of  10 variables:
+#&gt;   $ year_of_diagnosis   : num  1975 1976 1977 1978 1979 ...
+#&gt;   $ all_races_both_sexes: num  13.2 13.3 12.7 13.4 14 ...
+#&gt;   $ all_races_males     : num  21.2 21 20.1 20.9 21.9 ...
+#&gt;   $ all_races_females   : num  7.09 7.39 6.94 7.71 7.98 7.91 7.91 7.93 7.24 7.86 ...
+#&gt;   $ whites_both_sexes   : num  13.3 13.2 12.6 13.2 13.7 ...
+#&gt;   $ whites_males        : num  21.7 21.1 19.9 20.7 21.6 ...
+#&gt;   $ whites_females      : num  6.94 7.38 7 7.57 7.72 7.62 7.95 7.85 7.28 7.64 ...
+#&gt;   $ blacks_both_sexes   : num  13.4 15.2 14.5 15.9 18.5 ...
+#&gt;   $ blacks_males        : num  20.2 23.8 23.9 26 28.2 ...
+#&gt;   $ blacks_females      : num  8.23 8.37 6.77 8.18 10.77 ...
+```
+
+---
+
+## Maps
+
+Now let's split up by sexes
+
+
+```r
+dats_all &lt;- map(dats, select, year_of_diagnosis, ends_with('sexes'))
+dats_male &lt;- map(dats, select, year_of_diagnosis, ends_with('_males'))
+dats_female &lt;- map(dats, select, year_of_diagnosis, ends_with('females'))
+str(dats_all[['Esophagus']])
+```
+
+```
+#&gt;  'data.frame':	42 obs. of  4 variables:
+#&gt;   $ year_of_diagnosis   : num  1975 1976 1977 1978 1979 ...
+#&gt;   $ all_races_both_sexes: num  4.14 4.3 4.06 4.12 4.42 4.27 4.14 4.26 4.29 4.18 ...
+#&gt;   $ whites_both_sexes   : num  3.55 3.72 3.33 3.41 3.73 3.54 3.31 3.46 3.57 3.52 ...
+#&gt;   $ blacks_both_sexes   : num  10.9 10.7 12 13.1 12.9 ...
+```
+
+--
+
+Here I used the form `map(&lt;list&gt;, &lt;function&gt;, &lt;function arguments&gt;)`.
+
+Earlier I had used `map(&lt;list&gt;,&lt;function definition&gt;)` and `map(&lt;list&gt;, &lt;function&gt;)` with no (i.e., default) arguments.
+
+---
+
+## Maps
+
+Let's make the column headers of each dataset reflect the site, so that when we join we can keep the 
+sites separate
+
+
+```r
+for(n in sites){
+  names(dats_all[[n]]) &lt;- str_replace(names(dats_all[[n]]), 'both_sexes',n)
+  names(dats_male[[n]]) &lt;- str_replace(names(dats_male[[n]]), 'male',n)
+  names(dats_female[[n]]) &lt;- str_replace(names(dats_female[[n]]), 'female',n)
+}
+names(dats_all[['Esophagus']])
+```
+
+```
+#&gt;  [1] "year_of_diagnosis"   "all_races_Esophagus" "whites_Esophagus"   
+#&gt;  [4] "blacks_Esophagus"
+```
+
+
+---
+## Higher order maps
+
+When we joined these data sets, we had to repeatedly use `left_join` to create the final data set. There is a shortcut to this repeated operation of a function with two inputs as applied to a list successively.
+
+
+```r
+dats2_all &lt;- Reduce(left_join, dats_all)
+dats2_male &lt;- Reduce(left_join, dats_male)
+dats2_female &lt;- Reduce(left_join, dats_female)
+```
+
+--
+&gt; Could we have used a for loop or map here? Sure, but it makes it harder to read IMO.
+
+--
+
+```r
+str(dats2_all)
+```
+
+```
+#&gt;  'data.frame':	42 obs. of  16 variables:
+#&gt;   $ year_of_diagnosis  : num  1975 1976 1977 1978 1979 ...
+#&gt;   $ all_races_Brain    : num  5.85 5.82 6.17 5.76 6.12 6.3 6.51 6.42 6.31 6.12 ...
+#&gt;   $ whites_Brain       : num  6.21 6.18 6.6 6.1 6.6 6.81 6.9 6.92 6.88 6.49 ...
+#&gt;   $ blacks_Brain       : num  4.14 3.32 3.55 3.86 3.69 3.14 5.02 3.71 2.75 4.53 ...
+#&gt;   $ all_races_Colon    : num  59.5 61.3 62.4 62 62.4 ...
+#&gt;   $ whites_Colon       : num  60.2 62.2 63.2 62.8 63 ...
+#&gt;   $ blacks_Colon       : num  56.9 55 60.8 62.2 58.6 ...
+#&gt;   $ all_races_Esophagus: num  4.14 4.3 4.06 4.12 4.42 4.27 4.14 4.26 4.29 4.18 ...
+#&gt;   $ whites_Esophagus   : num  3.55 3.72 3.33 3.41 3.73 3.54 3.31 3.46 3.57 3.52 ...
+#&gt;   $ blacks_Esophagus   : num  10.9 10.7 12 13.1 12.9 ...
+#&gt;   $ all_races_Lung     : num  52.2 55.4 56.7 57.8 58.6 ...
+#&gt;   $ whites_Lung        : num  51.9 54.6 55.9 57.2 58 ...
+#&gt;   $ blacks_Lung        : num  64.5 72.3 73.6 74.4 74.5 ...
+#&gt;   $ all_races_Oral     : num  13.2 13.3 12.7 13.4 14 ...
+#&gt;   $ whites_Oral        : num  13.3 13.2 12.6 13.2 13.7 ...
+#&gt;   $ blacks_Oral        : num  13.4 15.2 14.5 15.9 18.5 ...
+```
+
+---
+
+## Maps
+
+Next, we want to separate the races from the sites, after a `gather`. The `all_races` will pose a problem if we split on `_`. Let's fix that.
+
+
+```r
+names(dats2_all) &lt;- str_replace(names(dats2_all), 'all_races','allraces')
+names(dats2_male) &lt;- str_replace(names(dats2_male), 'all_races','allraces')
+names(dats2_female) &lt;- str_replace(names(dats2_female), 'all_races','allraces')
+```
+
+---
+
+## Maps
+
+Now, for each of these , we need to gather then separate. We'll put the data sets in a list first
+
+
+```r
+dats2 &lt;- list('both'=dats2_all, 'male'=dats2_male, 'female'=dats2_female)
+dats2 &lt;- map(dats2,
+             function(d){
+               d %&gt;% tidyr::gather(variable, rate, -year_of_diagnosis) %&gt;% 
+                 separate(variable, c('race','site'), sep='_')
+             })
+str(dats2[['both']])
+```
+
+```
+#&gt;  'data.frame':	630 obs. of  4 variables:
+#&gt;   $ year_of_diagnosis: num  1975 1976 1977 1978 1979 ...
+#&gt;   $ race             : chr  "allraces" "allraces" "allraces" "allraces" ...
+#&gt;   $ site             : chr  "Brain" "Brain" "Brain" "Brain" ...
+#&gt;   $ rate             : num  5.85 5.82 6.17 5.76 6.12 6.3 6.51 6.42 6.31 6.12 ...
+```
+
+---
+
+## Final graphing
+
+Now we're in a position to do the graphing. 
+
+.pull-left[
+
+```r
+pltlist &lt;- dats2[['both']] %&gt;% group_split(race) %&gt;% 
+  map(function(d) {ggplot(d, 
+                          aes(x = year_of_diagnosis,
+                              y = rate,
+                              color=site))+
+  geom_point(show.legend = F) })
+cowplot::plot_grid(plotlist=pltlist, ncol=1, 
+                   labels=c('Both','Males','Females'))
+```
+
+I'm using quite advanced R here, but hopefully you'll learn by example.
+
+`group_split` splits the dataset by the values of the grouping variable into a list
+
+(Yes, your homework asked for a different panel placement)
+]
+.pull-right[
+![](07-Maps-Table1_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+
+---
+class: middle, center
+
+# Table One
+
+---
+
+When we start a manuscript, we start with Table 1, which gives the description of the data. We can do
+this manually, but there is a really nice `tableone` package that does this well.
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; 1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; 2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; p &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; test &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 158 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 154 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; time (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2015.62 (1094.12) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1996.86 (1155.93) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.883 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; status (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.894 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 83 (52.5) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 85 ( 55.2) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 ( 6.3) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 (  5.8) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 65 (41.1) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 60 ( 39.0) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; trt = 2 (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0 ( 0.0) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 154 (100.0) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;lt;0.001 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; age (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 51.42 (11.01) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 48.58 (9.96) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.018 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sex = f (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 137 (86.7) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 139 ( 90.3) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.421 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ascites = 1 (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 14 ( 8.9) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 (  6.5) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.567 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; hepato = 1 (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 73 (46.2) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 87 ( 56.5) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.088 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; spiders = 1 (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 45 (28.5) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 45 ( 29.2) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.985 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edema (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.877 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 132 (83.5) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 131 ( 85.1) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 0.5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 16 (10.1) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13 (  8.4) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 ( 6.3) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 (  6.5) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bili (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.87 (3.63) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.65 (5.28) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.131 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; chol (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 365.01 (209.54) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 373.88 (252.48) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.748 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; albumin (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.52 (0.44) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.52 (0.40) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.874 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; copper (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 97.64 (90.59) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 97.65 (80.49) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.999 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; alk.phos (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2021.30 (2183.44) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1943.01 (2101.69) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.747 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ast (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120.21 (54.52) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 124.97 (58.93) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.460 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; trig (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 124.14 (71.54) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 125.25 (58.52) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.886 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; platelet (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 258.75 (100.32) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 265.20 (90.73) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.555 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; protime (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10.65 (0.85) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10.80 (1.14) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.197 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; stage (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.201 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 12 ( 7.6) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 (  2.6) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 35 (22.2) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 32 ( 20.8) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 56 (35.4) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 64 ( 41.6) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 55 (34.8) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 54 ( 35.1) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+We'll use the `pbc` dataset in the `survival` package
+
+
+```r
+library(tableone)
+kableone(CreateTableOne(data=pbc), format='html')
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Overall &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 418 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; id (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 209.50 (120.81) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; time (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1917.78 (1104.67) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; status (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.83 (0.96) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; trt (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.49 (0.50) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; age (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 50.74 (10.45) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sex = f (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 374 (89.5) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ascites (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.08 (0.27) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; hepato (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.51 (0.50) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; spiders (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.29 (0.45) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edema (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.10 (0.25) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bili (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.22 (4.41) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; chol (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 369.51 (231.94) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; albumin (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.50 (0.42) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; copper (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 97.65 (85.61) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; alk.phos (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1982.66 (2140.39) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ast (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122.56 (56.70) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; trig (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 124.70 (65.15) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; platelet (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 257.02 (98.33) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; protime (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10.73 (1.02) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; stage (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.02 (0.88) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+Some of these may be categorical, and some numeric
+
+.pull-left[
+
+```r
+myVars &lt;- c("time", "status", "trt", "age", 
+            "sex", "ascites", "hepato",
+            "spiders", "edema", "bili", "chol",
+            "albumin", "copper", "alk.phos",
+            "ast", "trig", "platelet", "protime", "stage")
+## Vector of categorical variables that need transformation
+catVars &lt;- c("status", "trt", "ascites", "hepato",
+             "spiders", "edema", "stage")
+tab2 &lt;- CreateTableOne(data=pbc, 
+                        vars=myVars, 
+                        factorVars=catVars)
+kableone(tab2, format='html')
+```
+]
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Overall &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 418 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; time (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1917.78 (1104.67) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; status (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 232 (55.5) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 25 ( 6.0) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 161 (38.5) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; trt = 2 (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 154 (49.4) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; age (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 50.74 (10.45) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sex = f (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 374 (89.5) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ascites = 1 (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 24 ( 7.7) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; hepato = 1 (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 160 (51.3) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; spiders = 1 (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 90 (28.8) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; edema (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 354 (84.7) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 0.5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 44 (10.5) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 20 ( 4.8) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bili (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.22 (4.41) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; chol (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 369.51 (231.94) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; albumin (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.50 (0.42) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; copper (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 97.65 (85.61) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; alk.phos (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1982.66 (2140.39) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ast (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122.56 (56.70) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; trig (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 124.70 (65.15) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; platelet (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 257.02 (98.33) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; protime (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10.73 (1.02) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; stage (%) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 21 ( 5.1) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 92 (22.3) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 155 (37.6) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 144 (35.0) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+You can also get missingness information from these summary objects
+
+
+```r
+summary(tab2)
+```
+
+```
+#&gt;  
+#&gt;       ### Summary of continuous variables ###
+#&gt;  
+#&gt;  strata: Overall
+#&gt;             n miss p.miss mean    sd median   p25  p75   min   max  skew
+#&gt;  time     418    0    0.0 1918 1e+03   1730 1e+03 2614  41.0  4795  0.47
+#&gt;  age      418    0    0.0   51 1e+01     51 4e+01   58  26.3    78  0.09
+#&gt;  bili     418    0    0.0    3 4e+00      1 8e-01    3   0.3    28  2.72
+#&gt;  chol     418  134   32.1  370 2e+02    310 2e+02  400 120.0  1775  3.41
+#&gt;  albumin  418    0    0.0    3 4e-01      4 3e+00    4   2.0     5 -0.47
+#&gt;  copper   418  108   25.8   98 9e+01     73 4e+01  123   4.0   588  2.30
+#&gt;  alk.phos 418  106   25.4 1983 2e+03   1259 9e+02 1980 289.0 13862  2.99
+#&gt;  ast      418  106   25.4  123 6e+01    115 8e+01  152  26.4   457  1.45
+#&gt;  trig     418  136   32.5  125 7e+01    108 8e+01  151  33.0   598  2.52
+#&gt;  platelet 418   11    2.6  257 1e+02    251 2e+02  318  62.0   721  0.63
+#&gt;  protime  418    2    0.5   11 1e+00     11 1e+01   11   9.0    18  2.22
+#&gt;           kurt
+#&gt;  time     -0.5
+#&gt;  age      -0.6
+#&gt;  bili      8.1
+#&gt;  chol     14.3
+#&gt;  albumin   0.6
+#&gt;  copper    7.6
+#&gt;  alk.phos  9.7
+#&gt;  ast       4.3
+#&gt;  trig     11.8
+#&gt;  platelet  0.9
+#&gt;  protime  10.0
+#&gt;  
+#&gt;  =======================================================================================
+#&gt;  
+#&gt;       ### Summary of categorical variables ### 
+#&gt;  
+#&gt;  strata: Overall
+#&gt;       var   n miss p.miss level freq percent cum.percent
+#&gt;    status 418    0    0.0     0  232    55.5        55.5
+#&gt;                               1   25     6.0        61.5
+#&gt;                               2  161    38.5       100.0
+#&gt;                                                         
+#&gt;       trt 418  106   25.4     1  158    50.6        50.6
+#&gt;                               2  154    49.4       100.0
+#&gt;                                                         
+#&gt;       sex 418    0    0.0     m   44    10.5        10.5
+#&gt;                               f  374    89.5       100.0
+#&gt;                                                         
+#&gt;   ascites 418  106   25.4     0  288    92.3        92.3
+#&gt;                               1   24     7.7       100.0
+#&gt;                                                         
+#&gt;    hepato 418  106   25.4     0  152    48.7        48.7
+#&gt;                               1  160    51.3       100.0
+#&gt;                                                         
+#&gt;   spiders 418  106   25.4     0  222    71.2        71.2
+#&gt;                               1   90    28.8       100.0
+#&gt;                                                         
+#&gt;     edema 418    0    0.0     0  354    84.7        84.7
+#&gt;                             0.5   44    10.5        95.2
+#&gt;                               1   20     4.8       100.0
+#&gt;                                                         
+#&gt;     stage 418    6    1.4     1   21     5.1         5.1
+#&gt;                               2   92    22.3        27.4
+#&gt;                               3  155    37.6        65.0
+#&gt;                               4  144    35.0       100.0
+#&gt;  
+```
+
+---
+
+Often times lab values or biomarker levels are rather skew, and aren't summarized well by the mean. You can specify them as non-normal.
+
+.pull-left[
+
+```r
+biomarkers &lt;- c("bili","chol","copper","alk.phos","ast","trig","protime")
+tab3 &lt;- CreateTableOne(data=pbc,
+                       vars=biomarkers)
+kableone(print(tab3, nonnormal = biomarkers), format='html')
+```
+]
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Overall &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 418 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bili (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.40 [0.80, 3.40] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; chol (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 309.50 [249.50, 400.00] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; copper (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 73.00 [41.25, 123.00] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; alk.phos (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1259.00 [871.50, 1980.00] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ast (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 114.70 [80.60, 151.90] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; trig (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 108.00 [84.25, 151.00] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; protime (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10.60 [10.00, 11.10] &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+We can test differences by strata too
+
+.pull-left[
+
+```r
+myvars=c('age', biomarkers)
+tab4 &lt;- CreateTableOne(data=pbc,
+                       vars=myvars,
+                       strata='trt')
+kableone(
+  print(tab4, nonnormal=biomarkers),
+  format='html'
+)
+```
+]
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; 1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; 2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; p &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; test &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 158 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 154 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; age (mean (SD)) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 51.42 (11.01) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 48.58 (9.96) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.018 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bili (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.40 [0.80, 3.20] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.30 [0.72, 3.60] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.842 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; nonnorm &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; chol (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 315.50 [247.75, 417.00] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 303.50 [254.25, 377.00] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.544 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; nonnorm &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; copper (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 73.00 [40.00, 121.00] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 73.00 [43.00, 139.00] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.717 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; nonnorm &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; alk.phos (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1214.50 [840.75, 2028.00] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1283.00 [922.50, 1949.75] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.812 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; nonnorm &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ast (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 111.60 [76.73, 151.51] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 117.40 [83.78, 151.90] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.459 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; nonnorm &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; trig (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 106.00 [84.50, 146.00] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 113.00 [84.50, 155.00] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.370 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; nonnorm &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; protime (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10.60 [10.03, 11.00] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10.60 [10.00, 11.40] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.588 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; nonnorm &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

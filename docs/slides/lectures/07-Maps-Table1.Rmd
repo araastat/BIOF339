@@ -1,0 +1,385 @@
+---
+title: "Loops, Maps, and Table One"
+author: Abhijit Dasgupta
+date: Fall, 2019
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339, Fall, 2019</span></div>
+
+---
+
+# Where we are
+
++ Got a start on plotting and creating panelled graphs with ggplot2
++ Can modify a data set somewhat
+    - `dplyr` verbs (mutate, filter, select, separate, unite)
+    - joins
+    - gather/spread
+
+---
+
+# Repetitive copying
+
+For HW 6 (sorry about the mess), you had to copy and paste multiple times to get
+things done
+
+- Had to do same processing on multiple data sets
+- Had to do same graphs from multiple data sets
+
+---
+class: middle, center
+
+# For loops and Maps
+
+---
+
+## For loops
+
+For-loops are a computational structure that allows you to do the same thing
+repeatedly over a loop with some index. 
+
+The basic structure is
+
+```{r, eval=F}
+for (variable in vector) {
+  <code to execute for each iteration>
+}
+```
+
+---
+
+## For loops
+
+.pull-left[
+Using numeric indices
+
+```{r , eval = F, echo = T}
+library(fs)
+sites <- c('Brain','Colon','Esophagus','Lung','Oral')
+dats <- list() # Initialize empty list
+for(i in 1:length(sites)){
+  dats[[i]] <- 
+    read_csv(path('data',
+                             paste0(sites[i], '.csv')), 
+                        skip=4)
+}
+```
+]
+.pull-right[
+Using names
+
+```{r, eval=T, echo = T, message=F, warning=F}
+library(fs)
+sites <- c('Brain','Colon','Esophagus','Lung','Oral')
+dats <- list() # Initialize empty list
+for(n in sites){
+  dats[[n]] <- 
+    read_csv(path('data',
+                  paste0(n, '.csv')), 
+             skip=4)
+}
+```
+]
+
+---
+
+## Lists
+
+Directly using lists has efficiency advantages. `rio` can load all the datasets
+into a list, for example.
+
+```{r}
+dats <- rio::import_list(path('data', paste0(sites,'.csv')))
+names(dats)
+str(dats[['Brain']])
+```
+
+--
+
+Recall, lists are the most generic buckets in R. Elements of lists can be anything. 
+To use `map` it's best that each element of the input list be of the same type
+---
+
+## Maps
+
+`map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
+
+```{r, eval=F}
+map(<list>, <function>, <function arguments>)
+```
+
+For example, if we want to take out the first row of each dataset and make sure all 
+the variables are numeric, we could do:
+
+```{r, warning=F}
+dats <- map(dats, function(d){
+  d %>% slice(-1) %>%  # remove first row
+    mutate_all( as.numeric)
+})
+str(dats[['Brain']])
+```
+
+---
+
+## Maps
+
+`map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
+
+```{r, eval=F}
+map(<list>, <function>, <function arguments>)
+```
+
+For example, if we want to take out the first row of each dataset and make sure all 
+the variables are numeric, we could do:
+
+```{r, warning=F, eval=F}
+dats <- map(dats, function(d){
+  d %>% slice(-1) %>%  # remove first row
+    mutate_all( as.numeric)
+})
+str(dats[['Brain']])
+```
+
+The argument for the function inside the `map` function is an element of the list. In this case, it is a data frame.
+
+The output of `map` is a list the same length as the input list.
+
+---
+
+## Maps
+
+I don't like the names with spaces, so I can just apply a function to each data set to fix that.
+
+```{r}
+dats <- map(dats, janitor::clean_names)
+str(dats[['Oral']])
+```
+
+---
+
+## Maps
+
+Now let's split up by sexes
+
+```{r}
+dats_all <- map(dats, select, year_of_diagnosis, ends_with('sexes'))
+dats_male <- map(dats, select, year_of_diagnosis, ends_with('_males'))
+dats_female <- map(dats, select, year_of_diagnosis, ends_with('females'))
+str(dats_all[['Esophagus']])
+```
+
+--
+
+Here I used the form `map(<list>, <function>, <function arguments>)`.
+
+Earlier I had used `map(<list>,<function definition>)` and `map(<list>, <function>)` with no (i.e., default) arguments.
+
+---
+
+## Maps
+
+Let's make the column headers of each dataset reflect the site, so that when we join we can keep the 
+sites separate
+
+```{r}
+for(n in sites){
+  names(dats_all[[n]]) <- str_replace(names(dats_all[[n]]), 'both_sexes',n)
+  names(dats_male[[n]]) <- str_replace(names(dats_male[[n]]), 'male',n)
+  names(dats_female[[n]]) <- str_replace(names(dats_female[[n]]), 'female',n)
+}
+names(dats_all[['Esophagus']])
+```
+
+
+---
+## Higher order maps
+
+When we joined these data sets, we had to repeatedly use `left_join` to create the final data set. There is a shortcut to this repeated operation of a function with two inputs as applied to a list successively.
+
+```{r, message=F}
+dats2_all <- Reduce(left_join, dats_all)
+dats2_male <- Reduce(left_join, dats_male)
+dats2_female <- Reduce(left_join, dats_female)
+```
+
+--
+> Could we have used a for loop or map here? Sure, but it makes it harder to read IMO.
+
+--
+```{r}
+str(dats2_all)
+```
+
+---
+
+## Maps
+
+Next, we want to separate the races from the sites, after a `gather`. The `all_races` will pose a problem if we split on `_`. Let's fix that.
+
+```{r}
+names(dats2_all) <- str_replace(names(dats2_all), 'all_races','allraces')
+names(dats2_male) <- str_replace(names(dats2_male), 'all_races','allraces')
+names(dats2_female) <- str_replace(names(dats2_female), 'all_races','allraces')
+```
+
+---
+
+## Maps
+
+Now, for each of these , we need to gather then separate. We'll put the data sets in a list first
+
+```{r}
+dats2 <- list('both'=dats2_all, 'male'=dats2_male, 'female'=dats2_female)
+dats2 <- map(dats2,
+             function(d){
+               d %>% tidyr::gather(variable, rate, -year_of_diagnosis) %>% 
+                 separate(variable, c('race','site'), sep='_')
+             })
+str(dats2[['both']])
+```
+
+---
+
+## Final graphing
+
+Now we're in a position to do the graphing. 
+
+.pull-left[
+```{r plt1, eval = F, echo = T}
+pltlist <- dats2[['both']] %>% group_split(race) %>% 
+  map(function(d) {ggplot(d, 
+                          aes(x = year_of_diagnosis,
+                              y = rate,
+                              color=site))+
+  geom_point(show.legend = F) })
+cowplot::plot_grid(plotlist=pltlist, ncol=1, 
+                   labels=c('Both','Males','Females'))
+```
+
+I'm using quite advanced R here, but hopefully you'll learn by example.
+
+`group_split` splits the dataset by the values of the grouping variable into a list
+
+(Yes, your homework asked for a different panel placement)
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="plt1"}
+```
+]
+```{r}
+
+```
+
+---
+class: middle, center
+
+# Table One
+
+---
+
+When we start a manuscript, we start with Table 1, which gives the description of the data. We can do
+this manually, but there is a really nice `tableone` package that does this well.
+
+```{r, echo=F}
+library(tableone)
+library(survival)
+data(pbc)
+myVars <- c("time", "status", "trt", "age", "sex", "ascites", "hepato",
+          "spiders", "edema", "bili", "chol", "albumin", "copper", "alk.phos",
+          "ast", "trig", "platelet", "protime", "stage")
+## Vector of categorical variables that need transformation
+catVars <- c("status", "trt", "ascites", "hepato",
+             "spiders", "edema", "stage")
+## Create a TableOne object
+tab2 <- CreateTableOne(vars = myVars, data = pbc, factorVars = catVars, strata='trt')
+
+kableone(tab2, format='html')
+```
+
+---
+
+We'll use the `pbc` dataset in the `survival` package
+
+```{r}
+library(tableone)
+kableone(CreateTableOne(data=pbc), format='html')
+```
+
+---
+
+Some of these may be categorical, and some numeric
+
+.pull-left[
+```{r t11, eval = F, echo = T}
+myVars <- c("time", "status", "trt", "age", 
+            "sex", "ascites", "hepato",
+            "spiders", "edema", "bili", "chol",
+            "albumin", "copper", "alk.phos",
+            "ast", "trig", "platelet", "protime", "stage")
+## Vector of categorical variables that need transformation
+catVars <- c("status", "trt", "ascites", "hepato",
+             "spiders", "edema", "stage")
+tab2 <- CreateTableOne(data=pbc, 
+                        vars=myVars, 
+                        factorVars=catVars)
+kableone(tab2, format='html')
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="t11"}
+```
+]
+
+---
+
+You can also get missingness information from these summary objects
+
+```{r}
+summary(tab2)
+```
+
+---
+
+Often times lab values or biomarker levels are rather skew, and aren't summarized well by the mean. You can specify them as non-normal.
+
+.pull-left[
+```{r t12, eval = F, echo = T}
+biomarkers <- c("bili","chol","copper","alk.phos","ast","trig","protime")
+tab3 <- CreateTableOne(data=pbc,
+                       vars=biomarkers)
+kableone(print(tab3, nonnormal = biomarkers), format='html')
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="t12"}
+```
+]
+
+---
+
+We can test differences by strata too
+
+.pull-left[
+```{r t13, eval = F, echo = T}
+myvars=c('age', biomarkers)
+tab4 <- CreateTableOne(data=pbc,
+                       vars=myvars,
+                       strata='trt')
+kableone(
+  print(tab4, nonnormal=biomarkers),
+  format='html'
+)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="t13"}
+```
+]
