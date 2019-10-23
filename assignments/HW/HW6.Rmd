@@ -29,6 +29,7 @@ For the next few points, I will refer to the both sexes datasets. You'll do the 
 
 1. Create a new composite dataset by repeatedly using `left_join` or `inner_join` to add each site-specific dataset to the composite data set. What I mean is, create a dataset joining A and B, then join C to the result, then join D to the result and so on.
 
+
 1. For each of these datasets:
     a. Remove the row with the overall 1975-2016 rates
     b. Use `gather` to make a dataset with 3 columns: year, type of cancer and cancer incidence rate
