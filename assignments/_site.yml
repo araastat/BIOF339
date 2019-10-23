@@ -20,10 +20,10 @@ navbar:
     href: ../notes/index.html
   - icon: fa-slack
     text: Slack
-    href: https://biof439dataviz.slack.com
+    href: https://biof339.slack.com
   - icon: fa-github
     text: GitHub
-    href: https://www.github.com/araastat/BIOF439
+    href: https://www.github.com/araastat/BIOF339
 output:
   html_document:
     theme: cosmo
