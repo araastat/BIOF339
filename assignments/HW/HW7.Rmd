@@ -10,8 +10,8 @@ Information about the experiment is available [here](https://www.ncbi.nlm.nih.go
 this is a mouse experiment where the authors were interested in PIK3CA mutation
 variants. This interest is derived from PIK3CA's implication in glioblastoma tumorogenesis. There are 26 mice with different engineered genetics. 
 
-The data are available as a zip file [here](https://www.dropbox.com/s/0fttg8r9ub3gm82/GSE123519_RAW.zip?dl=0). The 
-experimental design is available [here](https://www.dropbox.com/s/b510c7fx82u5prh/GSE123519design.xlsx?dl=0).
+The data are available as a zip file [here](https://www.dropbox.com/s/0fttg8r9ub3gm82/GSE123519_RAW.zip?dl=1). The 
+experimental design is available [here](https://www.dropbox.com/s/b510c7fx82u5prh/GSE123519design.xlsx?dl=1).
 
 ### Prelim work
 1. Create a RStudio Project for this homework. Within the project, create a `data` directory. Note its path. 
