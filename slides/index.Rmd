@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### Contents
 
-```{r top-table, echo = F, message=F}
+```{r top-table, echo = F, message=F, warning=F}
 library(tidyverse)
 library(fs)
 library(glue)
@@ -32,9 +32,11 @@ parse_title <- function(f){
   rmarkdown::yaml_front_matter(f)$title
 }
 setwd(here::here('docs','slides'))
-htmls <- dir_ls('lectures',regex = '\\d{2}.*html')
-pdfs <- dir_ls('lectures', regex = '\\d{2}.*pdf')
 rmds <- dir_ls('lectures', regex = '\\d{2}.*.Rmd')
+htmls <- str_replace(rmds, 'Rmd','html')
+pdfs <- str_replace(rmds, 'Rmd','pdf')
+# htmls <- dir_ls('lectures',regex = '\\d{2}.*html')
+# pdfs <- dir_ls('lectures', regex = '\\d{2}.*pdf')
 htmls <- tibble(HTML = htmls) %>% 
   mutate(base = path_file(HTML) %>% str_replace('.html',''))
 pdfs <- tibble(PDF = pdfs) %>% 
@@ -64,3 +66,8 @@ setwd(here::here())
 ## Lecture 2
 
 Data: [link](lectures/data/Dataset_spine.csv)
+
+## Lecture 7
+
+The annotated R file is [here](notes/Supplement_06.R). There are also nicely 
+formated documents ([HTML](notes/Supplement_06.html)|[PDF](notes/Supplement_06.pdf))
