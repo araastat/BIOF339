@@ -29,7 +29,7 @@ can be accessed from the [Lectures page](../../slides/index.html).
     a. Keep only the variables `tracking_id`, `gend_id`, and `locus` through `FPKM`.
     b. Change the gene names in `gene_id` to capital letters (use `stringr::str_to_upper` or other equivalent functions)
     c. Split the `locus` variable into a `chromosome` and a `location` variable.
-    d. Filter **out** all observations ith FPKM less than 1 (no real scientific reason, just because)
+    d. Filter **out** all observations with FPKM less than 1 (no real scientific reason, just because)
 1. Now make a single data set stacking the processed datasets, adding a column that
 specifies the sample identifier of each observation. You might like to call this column `sampleID` to make the next step simpler
 1. Import the design information into a data frame. Add the design information to 

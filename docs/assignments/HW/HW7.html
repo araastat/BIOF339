@@ -389,7 +389,7 @@ summary {
 <li>Keep only the variables <code>tracking_id</code>, <code>gend_id</code>, and <code>locus</code> through <code>FPKM</code>.</li>
 <li>Change the gene names in <code>gene_id</code> to capital letters (use <code>stringr::str_to_upper</code> or other equivalent functions)</li>
 <li>Split the <code>locus</code> variable into a <code>chromosome</code> and a <code>location</code> variable.</li>
-<li>Filter <strong>out</strong> all observations ith FPKM less than 1 (no real scientific reason, just because)</li>
+<li>Filter <strong>out</strong> all observations with FPKM less than 1 (no real scientific reason, just because)</li>
 </ol></li>
 <li>Now make a single data set stacking the processed datasets, adding a column that specifies the sample identifier of each observation. You might like to call this column <code>sampleID</code> to make the next step simpler</li>
 <li>Import the design information into a data frame. Add the design information to the genetic dataset you created above, ensuring that ids and genotype specification (stored in the column <code>Class</code>) are aligned.</li>
