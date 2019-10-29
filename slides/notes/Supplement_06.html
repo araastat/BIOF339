@@ -12,7 +12,7 @@
 
 <meta name="author" content="abhijit" />
 
-<meta name="date" content="2019-10-28" />
+<meta name="date" content="2019-10-29" />
 
 <title>An annotated R script for Homework 6 using lists and maps</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">An annotated R script for Homework 6 using lists and maps</h1>
 <h4 class="author">abhijit</h4>
-<h4 class="date">2019-10-28</h4>
+<h4 class="date">2019-10-29</h4>
 
 </div>
 
@@ -460,32 +460,27 @@ dats2_female &lt;- Reduce(left_join, dats_female)</code></pre>
 <p>Since we’ll be doing the same operation on all three datasets, we can write a function instead of copying-and-pasting.</p>
 <pre class="r"><code>f1 &lt;- function(d){
   d %&gt;% 
-  gather(variable, rate, -year_of_diagnosis) %&gt;% 
+  tidyr::gather(variable, rate, -year_of_diagnosis) %&gt;% 
   mutate(variable = str_replace(variable,
                                 &#39;all_races&#39;,
                                 &#39;allraces&#39;)) %&gt;% 
   separate(variable, c(&#39;race&#39;,&#39;site&#39;), sep=&#39;_&#39;)
 }</code></pre>
 <p>Now we can do one of two things: either just do this separately for the three datasets:</p>
-<pre class="r"><code>dats3_both &lt;- f1(dats2_both)</code></pre>
-<pre><code>## Error: function gather() in drake is defunct.</code></pre>
-<pre class="r"><code>dats3_male &lt;- f1(dats2_male)</code></pre>
-<pre><code>## Error: function gather() in drake is defunct.</code></pre>
-<pre class="r"><code>dats3_female &lt;- f1(dats2_female)</code></pre>
-<pre><code>## Error: function gather() in drake is defunct.</code></pre>
+<pre class="r"><code>dats3_both &lt;- f1(dats2_both)
+dats3_male &lt;- f1(dats2_male)
+dats3_female &lt;- f1(dats2_female)</code></pre>
 <p>or use lists and maps</p>
 <pre class="r"><code>dats2 &lt;- list(&#39;both&#39; = dats2_both,
               &#39;male&#39; = dats2_male,
               &#39;female&#39; = dats2_female)
 
 dats3 &lt;- map(dats2, f1)</code></pre>
-<pre><code>## Error: function gather() in drake is defunct.</code></pre>
 <p>or, create a pipeline of lists using <code>map</code>:</p>
-<pre class="r"><code>dats2_both %&gt;% 
-  map(gather, variable, rate, -year_of_diagnosis) %&gt;% 
+<pre class="r"><code>dats3 &lt;- dats2 %&gt;% 
+  map(tidyr::gather, variable, rate, -year_of_diagnosis) %&gt;% 
   map(mutate, variable = str_replace(variable, &#39;all_races&#39;,&#39;allraces&#39;)) %&gt;% 
   map(separate, variable, c(&#39;race&#39;,&#39;site&#39;), sep=&#39;_&#39;)</code></pre>
-<pre><code>## Error: function .f() in drake is defunct.</code></pre>
 <p>Note that the map pipeline is very similar to the pipeline in <code>f1</code>. Whereever we had <code>function(...)</code> in <code>f1</code>, we now have <code>map(function, ...)</code> where <code>function</code> is the function name and <code>...</code> are the function arguments.</p>
 <p>The last step is to create the graphs. I’m doing a simpler version where I just use a for-loop to create all the plots</p>
 <pre class="r"><code>for(nm in names(dats3)){

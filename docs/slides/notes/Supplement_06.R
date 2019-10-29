@@ -4,7 +4,7 @@
 #' ---
 #' 
 #+, include=FALSE
-knitr::opts_chunk$set(error=T, warning=F, message=F)
+knitr::opts_chunk$set(error=F, warning=F, message=F)
 #' First, read the data in. We've stored just the data files in the folder `data/HW6`.
 #+
 library(tidyverse)
@@ -145,7 +145,7 @@ dats2_female <- Reduce(left_join, dats_female)
 #' instead of copying-and-pasting.
 f1 <- function(d){
   d %>% 
-  gather(variable, rate, -year_of_diagnosis) %>% 
+  tidyr::gather(variable, rate, -year_of_diagnosis) %>% 
   mutate(variable = str_replace(variable,
                                 'all_races',
                                 'allraces')) %>% 
@@ -163,8 +163,8 @@ dats2 <- list('both' = dats2_both,
 
 dats3 <- map(dats2, f1)
 #' or, create a pipeline of lists using `map`:
-dats2_both %>% 
-  map(gather, variable, rate, -year_of_diagnosis) %>% 
+dats3 <- dats2 %>% 
+  map(tidyr::gather, variable, rate, -year_of_diagnosis) %>% 
   map(mutate, variable = str_replace(variable, 'all_races','allraces')) %>% 
   map(separate, variable, c('race','site'), sep='_')
 #' Note that the map pipeline is very similar to the pipeline in `f1`. Whereever we
