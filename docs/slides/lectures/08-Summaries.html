@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Describing and summarizing data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="08-Summaries_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="robot.css" type="text/css" />
+    <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Describing and summarizing data
+### Abhijit Dasgupta
+### Fall, 2019
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339, Fall, 2019&lt;/span&gt;&lt;/div&gt;
+
+---
+
+## Where we've been
+
+1. Understand what tidy data is
+1. Manipulate data to make it tidy (tidyr, dplyr)
+1. Transform particular variables
+1. Write basic functions
+1. High-throughput analyses
+    - Lists of data sets
+    - `map` to apply similar processes to each data set
+    - for-loops to repeat same recipe on multiple data sets or objects
+
+---
+
+## Where we're going
+
+1. Creating data summaries
+1. Basic statistical comparisons between groups
+1. Creating tables 
+    -  Table 1
+    -  Tables for analytic results
+
+--
+
+The basic assumption we'll make is that we will start with a tidy data set.
+
+
+---
+class: middle, center
+
+# Statistical summaries
+
+---
+
+## Univariate summaries
+
+**Single summaries**  
+.pull-left[
+- Mean (`mean`)
+- Variance(`var`)
+- Standard deviation (`sd`)
+- Count (`nrow` or `dplyr::n` or `dplyr::n_distinct`)
+]
+.pull-right[
+- Median ('median')
+- Inter-quartile range (`IQR`)
+- Mean absolute deviation (`mad`)
+- Minimum (`min`) and Maximum (`max`)
+]
+
+--
+
+**Multiple summaries**  
+- Quantiles (`quantile`)
+- Range (`range`)
+
+---
+class: middle, center
+
+# Summarizing the breast cancer expression dataset
+
+---
+
+## Mean
+
+.pull-left[
+
+```r
+brca &lt;- rio::import('data/BreastCancer_Expression.csv')
+brca %&gt;% 
+  summarize_at(vars(starts_with('NP')), 
+*              mean, na.rm=T)
+```
+]
+.pull-right[
+
+```
+#&gt;    NP_958782 NP_958785 NP_958786 NP_000436 NP_958781 NP_958780 NP_958783
+#&gt;  1 0.3202321 0.3269153 0.3264254 0.3236833 0.3270832 0.3263382 0.3259212
+#&gt;    NP_958784  NP_112598 NP_001611
+#&gt;  1 0.3259995 -0.3074577 0.4578748
+```
+]
+
+---
+
+## Median
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  summarize_at(vars(starts_with('NP')), 
+*              median, na.rm=T)
+```
+]
+.pull-right[
+
+```
+#&gt;    NP_958782 NP_958785 NP_958786 NP_000436 NP_958781 NP_958780 NP_958783
+#&gt;  1 0.3236627 0.3269726 0.3269726 0.3302826 0.3269726 0.3269726 0.3269726
+#&gt;    NP_958784  NP_112598 NP_001611
+#&gt;  1 0.3269726 -0.6021319 0.6948104
+```
+]
+
+---
+
+## Standard deviation
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  summarize_at(vars(starts_with('NP')),
+*              sd, na.rm=T)
+```
+]
+.pull-right[
+
+```
+#&gt;    NP_958782 NP_958785 NP_958786 NP_000436 NP_958781 NP_958780 NP_958783
+#&gt;  1 0.9767777 0.9800721 0.9799358 0.9784656 0.9806001 0.9796277 0.9806739
+#&gt;    NP_958784 NP_112598 NP_001611
+#&gt;  1 0.9807512  2.024663  1.496951
+```
+]
+
+---
+
+## Multiple summaries together
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  summarize_at(vars(starts_with('NP')),
+               c(mean,
+               median,
+               sd), na.rm=T)
+```
+]
+.pull-right[
+
+```
+#&gt;    NP_958782_fn1 NP_958785_fn1 NP_958786_fn1 NP_000436_fn1 NP_958781_fn1
+#&gt;  1     0.3202321     0.3269153     0.3264254     0.3236833     0.3270832
+#&gt;    NP_958780_fn1 NP_958783_fn1 NP_958784_fn1 NP_112598_fn1 NP_001611_fn1
+#&gt;  1     0.3263382     0.3259212     0.3259995    -0.3074577     0.4578748
+#&gt;    NP_958782_fn2 NP_958785_fn2 NP_958786_fn2 NP_000436_fn2 NP_958781_fn2
+#&gt;  1     0.3236627     0.3269726     0.3269726     0.3302826     0.3269726
+#&gt;    NP_958780_fn2 NP_958783_fn2 NP_958784_fn2 NP_112598_fn2 NP_001611_fn2
+#&gt;  1     0.3269726     0.3269726     0.3269726    -0.6021319     0.6948104
+#&gt;    NP_958782_fn3 NP_958785_fn3 NP_958786_fn3 NP_000436_fn3 NP_958781_fn3
+#&gt;  1     0.9767777     0.9800721     0.9799358     0.9784656     0.9806001
+#&gt;    NP_958780_fn3 NP_958783_fn3 NP_958784_fn3 NP_112598_fn3 NP_001611_fn3
+#&gt;  1     0.9796277     0.9806739     0.9807512      2.024663      1.496951
+```
+]
+
+---
+
+## Multiple summaries together
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  summarize_at(-1, # got tired of typing
+               c('Mean'=mean,
+                 'Median' = median,
+                 'SD'=sd), na.rm=T) 
+```
+]
+.pull-right[
+
+```
+#&gt;    NP_958782_Mean NP_958785_Mean NP_958786_Mean NP_000436_Mean
+#&gt;  1      0.3202321      0.3269153      0.3264254      0.3236833
+#&gt;    NP_958781_Mean NP_958780_Mean NP_958783_Mean NP_958784_Mean
+#&gt;  1      0.3270832      0.3263382      0.3259212      0.3259995
+#&gt;    NP_112598_Mean NP_001611_Mean NP_958782_Median NP_958785_Median
+#&gt;  1     -0.3074577      0.4578748        0.3236627        0.3269726
+#&gt;    NP_958786_Median NP_000436_Median NP_958781_Median NP_958780_Median
+#&gt;  1        0.3269726        0.3302826        0.3269726        0.3269726
+#&gt;    NP_958783_Median NP_958784_Median NP_112598_Median NP_001611_Median
+#&gt;  1        0.3269726        0.3269726       -0.6021319        0.6948104
+#&gt;    NP_958782_SD NP_958785_SD NP_958786_SD NP_000436_SD NP_958781_SD
+#&gt;  1    0.9767777    0.9800721    0.9799358    0.9784656    0.9806001
+#&gt;    NP_958780_SD NP_958783_SD NP_958784_SD NP_112598_SD NP_001611_SD
+#&gt;  1    0.9796277    0.9806739    0.9807512     2.024663     1.496951
+```
+]
+
+---
+
+## Multiple summaries together
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  summarize_at(-1, 
+               c('Mean' = mean,
+                 'Median' = median,
+                 'SD' = sd), na.rm=T) %&gt;% 
+* tidyr::gather(variable, value) %&gt;%
+* separate(variable,
+*          c("Type",'ID','Statistic'), sep='_') %&gt;%
+* spread(Statistic, value) %&gt;%
+* unite(ID, c('Type','ID'), sep='_')
+```
+
+The highlighted part is to format the output
+]
+.pull-right[
+
+```
+#&gt;            ID       Mean     Median        SD
+#&gt;  1  NP_000436  0.3236833  0.3302826 0.9784656
+#&gt;  2  NP_001611  0.4578748  0.6948104 1.4969506
+#&gt;  3  NP_112598 -0.3074577 -0.6021319 2.0246634
+#&gt;  4  NP_958780  0.3263382  0.3269726 0.9796277
+#&gt;  5  NP_958781  0.3270832  0.3269726 0.9806001
+#&gt;  6  NP_958782  0.3202321  0.3236627 0.9767777
+#&gt;  7  NP_958783  0.3259212  0.3269726 0.9806739
+#&gt;  8  NP_958784  0.3259995  0.3269726 0.9807512
+#&gt;  9  NP_958785  0.3269153  0.3269726 0.9800721
+#&gt;  10 NP_958786  0.3264254  0.3269726 0.9799358
+```
+]
+
+---
+
+## Data set summary
+
+There is a function `summary` that will give you summaries of all the variables. It's nice for looking at the data, but the output format isn't very good for further manipulation
+
+.pull-left[
+
+```r
+summary(brca[,-1])
+```
+]
+.pull-right[
+
+```
+#&gt;     NP_958782         NP_958785         NP_958786         NP_000436      
+#&gt;   Min.   :-1.9478   Min.   :-1.9527   Min.   :-1.9552   Min.   :-1.9478  
+#&gt;   1st Qu.:-0.4549   1st Qu.:-0.4421   1st Qu.:-0.4440   1st Qu.:-0.4385  
+#&gt;   Median : 0.3237   Median : 0.3270   Median : 0.3270   Median : 0.3303  
+#&gt;   Mean   : 0.3202   Mean   : 0.3269   Mean   : 0.3264   Mean   : 0.3237  
+#&gt;   3rd Qu.: 0.9181   3rd Qu.: 0.9238   3rd Qu.: 0.9238   3rd Qu.: 0.9180  
+#&gt;   Max.   : 2.7651   Max.   : 2.7797   Max.   : 2.7797   Max.   : 2.7980  
+#&gt;     NP_958781         NP_958780         NP_958783         NP_958784      
+#&gt;   Min.   :-1.9576   Min.   :-1.9552   Min.   :-1.9552   Min.   :-1.9552  
+#&gt;   1st Qu.:-0.4440   1st Qu.:-0.4458   1st Qu.:-0.4440   1st Qu.:-0.4440  
+#&gt;   Median : 0.3270   Median : 0.3270   Median : 0.3270   Median : 0.3270  
+#&gt;   Mean   : 0.3271   Mean   : 0.3263   Mean   : 0.3259   Mean   : 0.3260  
+#&gt;   3rd Qu.: 0.9277   3rd Qu.: 0.9238   3rd Qu.: 0.9238   3rd Qu.: 0.9238  
+#&gt;   Max.   : 2.7870   Max.   : 2.7797   Max.   : 2.7834   Max.   : 2.7834  
+#&gt;     NP_112598         NP_001611      
+#&gt;   Min.   :-4.9527   Min.   :-2.5751  
+#&gt;   1st Qu.:-1.6741   1st Qu.:-0.5216  
+#&gt;   Median :-0.6021   Median : 0.6948  
+#&gt;   Mean   :-0.3075   Mean   : 0.4579  
+#&gt;   3rd Qu.: 0.8696   3rd Qu.: 1.4394  
+#&gt;   Max.   : 4.9557   Max.   : 3.4365
+```
+]
+
+---
+class: middle, center
+
+# Maybe an easier way?
+
+---
+
+## The `tableone` package
+
+The `tableone` package is meant to create, you guessed it, Table 1. 
+
+It is quite a convenient package for most purposes and saves gobs of time
+
+---
+
+## The `tableone` package
+
+.pull-left[
+
+```r
+library(tableone)
+tab1 &lt;- CreateTableOne(data=brca[,-1])
+tab1
+```
+]
+.pull-right[
+
+```
+#&gt;                         
+#&gt;                          Overall     
+#&gt;    n                        83       
+#&gt;    NP_958782 (mean (SD))  0.32 (0.98)
+#&gt;    NP_958785 (mean (SD))  0.33 (0.98)
+#&gt;    NP_958786 (mean (SD))  0.33 (0.98)
+#&gt;    NP_000436 (mean (SD))  0.32 (0.98)
+#&gt;    NP_958781 (mean (SD))  0.33 (0.98)
+#&gt;    NP_958780 (mean (SD))  0.33 (0.98)
+#&gt;    NP_958783 (mean (SD))  0.33 (0.98)
+#&gt;    NP_958784 (mean (SD))  0.33 (0.98)
+#&gt;    NP_112598 (mean (SD)) -0.31 (2.02)
+#&gt;    NP_001611 (mean (SD))  0.46 (1.50)
+```
+]
+
+---
+
+## The `tableone` package
+
+.pull-left[
+
+```r
+library(tableone)
+tab1 &lt;- CreateTableOne(data = brca[-1])
+print(tab1, nonnormal = names(brca)[-1])
+```
+
+You have to give the variable names of those you think are non-normally distributed and need to be summarized by the median
+]
+.pull-right[
+
+```
+#&gt;                            
+#&gt;                             Overall            
+#&gt;    n                           83              
+#&gt;    NP_958782 (median [IQR])  0.32 [-0.45, 0.92]
+#&gt;    NP_958785 (median [IQR])  0.33 [-0.44, 0.92]
+#&gt;    NP_958786 (median [IQR])  0.33 [-0.44, 0.92]
+#&gt;    NP_000436 (median [IQR])  0.33 [-0.44, 0.92]
+#&gt;    NP_958781 (median [IQR])  0.33 [-0.44, 0.93]
+#&gt;    NP_958780 (median [IQR])  0.33 [-0.45, 0.92]
+#&gt;    NP_958783 (median [IQR])  0.33 [-0.44, 0.92]
+#&gt;    NP_958784 (median [IQR])  0.33 [-0.44, 0.92]
+#&gt;    NP_112598 (median [IQR]) -0.60 [-1.67, 0.87]
+#&gt;    NP_001611 (median [IQR])  0.69 [-0.52, 1.44]
+```
+]
+
+---
+
+## The `tableone` package
+
+.pull-left[
+
+```r
+library(tableone)
+tab1 &lt;- CreateTableOne(data = brca[-1])
+kableone(print(tab1, nonnormal = names(brca)[-1]),
+         format='html')
+```
+]
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Overall &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; n &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 83 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_958782 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.32 [-0.45, 0.92] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_958785 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.33 [-0.44, 0.92] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_958786 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.33 [-0.44, 0.92] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_000436 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.33 [-0.44, 0.92] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_958781 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.33 [-0.44, 0.93] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_958780 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.33 [-0.45, 0.92] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_958783 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.33 [-0.44, 0.92] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_958784 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.33 [-0.44, 0.92] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_112598 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.60 [-1.67, 0.87] &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NP_001611 (median [IQR]) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.69 [-0.52, 1.44] &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+class: middle, center
+
+# Mixed data
+
+---
+
+Let's first put the expression and clinical data together
+
+
+```r
+library(rio)
+brca1 &lt;- import('data/clinical_data_breast_cancer_hw.csv')
+brca2 &lt;- import('data/BreastCancer_Expression.csv')
+brca &lt;- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %&gt;% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis =
+           as.numeric(Age.at.Initial.Pathologic.Diagnosis)) %&gt;% 
+  mutate(ER.Status = ifelse(ER.Status %in% c('Positive','Negative'),
+                            ER.Status, NA))
+```
+
+```
+#&gt;  Warning: NAs introduced by coercion
+```
+
+```r
+summary(brca)
+```
+
+```
+#&gt;   Complete.TCGA.ID      Gender          Age.at.Initial.Pathologic.Diagnosis
+#&gt;   Length:108         Length:108         Min.   :30.00                      
+#&gt;   Class :character   Class :character   1st Qu.:49.00                      
+#&gt;   Mode  :character   Mode  :character   Median :58.00                      
+#&gt;                                         Mean   :58.72                      
+#&gt;                                         3rd Qu.:66.50                      
+#&gt;                                         Max.   :88.00                      
+#&gt;                                         NA's   :1                          
+#&gt;    ER.Status          PR.Status         HER2.Final.Status 
+#&gt;   Length:108         Length:108         Length:108        
+#&gt;   Class :character   Class :character   Class :character  
+#&gt;   Mode  :character   Mode  :character   Mode  :character  
+#&gt;                                                           
+#&gt;                                                           
+#&gt;                                                           
+#&gt;                                                           
+#&gt;      Tumor               Node            Metastasis       
+#&gt;   Length:108         Length:108         Length:108        
+#&gt;   Class :character   Class :character   Class :character  
+#&gt;   Mode  :character   Mode  :character   Mode  :character  
+#&gt;                                                           
+#&gt;                                                           
+#&gt;                                                           
+#&gt;                                                           
+#&gt;    AJCC.Stage        Vital.Status       Days.to.Date.of.Last.Contact
+#&gt;   Length:108         Length:108         Min.   :   0.0              
+#&gt;   Class :character   Class :character   1st Qu.: 237.5              
+#&gt;   Mode  :character   Mode  :character   Median : 654.0              
+#&gt;                                         Mean   : 806.4              
+#&gt;                                         3rd Qu.:1297.5              
+#&gt;                                         Max.   :2850.0              
+#&gt;                                                                     
+#&gt;   Days.to.date.of.Death   NP_958782         NP_958785      
+#&gt;   Min.   : 160.0        Min.   :-1.9478   Min.   :-1.9527  
+#&gt;   1st Qu.: 947.5        1st Qu.:-0.4831   1st Qu.:-0.4804  
+#&gt;   Median :1364.0        Median : 0.3175   Median : 0.3116  
+#&gt;   Mean   :1254.5        Mean   : 0.3201   Mean   : 0.3267  
+#&gt;   3rd Qu.:1627.5        3rd Qu.: 0.9924   3rd Qu.: 0.9962  
+#&gt;   Max.   :2483.0        Max.   : 2.7651   Max.   : 2.7797  
+#&gt;   NA's   :97            NA's   :28        NA's   :28       
+#&gt;     NP_958786         NP_000436         NP_958781         NP_958780      
+#&gt;   Min.   :-1.9552   Min.   :-1.9478   Min.   :-1.9576   Min.   :-1.9552  
+#&gt;   1st Qu.:-0.4831   1st Qu.:-0.4749   1st Qu.:-0.4832   1st Qu.:-0.4859  
+#&gt;   Median : 0.3116   Median : 0.3132   Median : 0.3116   Median : 0.3116  
+#&gt;   Mean   : 0.3262   Mean   : 0.3234   Mean   : 0.3267   Mean   : 0.3261  
+#&gt;   3rd Qu.: 0.9962   3rd Qu.: 0.9919   3rd Qu.: 1.0020   3rd Qu.: 0.9962  
+#&gt;   Max.   : 2.7797   Max.   : 2.7980   Max.   : 2.7870   Max.   : 2.7797  
+#&gt;   NA's   :28        NA's   :28        NA's   :28        NA's   :28       
+#&gt;     NP_958783         NP_958784         NP_112598         NP_001611      
+#&gt;   Min.   :-1.9552   Min.   :-1.9552   Min.   :-4.9527   Min.   :-2.5751  
+#&gt;   1st Qu.:-0.4831   1st Qu.:-0.4831   1st Qu.:-1.7264   1st Qu.:-0.5562  
+#&gt;   Median : 0.3116   Median : 0.3116   Median :-0.6596   Median : 0.6084  
+#&gt;   Mean   : 0.3257   Mean   : 0.3258   Mean   :-0.3046   Mean   : 0.3830  
+#&gt;   3rd Qu.: 0.9962   3rd Qu.: 0.9962   3rd Qu.: 1.0183   3rd Qu.: 1.3563  
+#&gt;   Max.   : 2.7834   Max.   : 2.7834   Max.   : 4.9557   Max.   : 3.4365  
+#&gt;   NA's   :28        NA's   :28        NA's   :28        NA's   :28
+```
+
+---
+
+Let's first put the expression and clinical data together
+
+
+```r
+library(rio)
+brca1 &lt;- import('data/clinical_data_breast_cancer_hw.csv')
+brca2 &lt;- import('data/BreastCancer_Expression.csv')
+brca &lt;- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %&gt;% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis =
+           as.numeric(Age.at.Initial.Pathologic.Diagnosis)) %&gt;% 
+  mutate(ER.Status = ifelse(ER.Status %in% c('Positive','Negative'),
+                            ER.Status, NA),
+         HER2.Final.Status = ifelse(HER2.Final.Status=='Equivocal', 
+                                    NA, HER2.Final.Status)) %&gt;% 
+  mutate_if(is.character, as.factor) %&gt;% 
+* mutate(Complete.TCGA.ID = as.character(Complete.TCGA.ID))
+```
+
+```
+#&gt;  Warning: NAs introduced by coercion
+```
+
+```r
+str(brca)
+```
+
+```
+#&gt;  'data.frame':	108 obs. of  23 variables:
+#&gt;   $ Complete.TCGA.ID                   : chr  "TCGA-A2-A0T2" "TCGA-A2-A0CM" "TCGA-BH-A18V" "TCGA-BH-A18Q" ...
+#&gt;   $ Gender                             : Factor w/ 2 levels "FEMALE","MALE": 1 1 1 1 1 1 1 1 1 1 ...
+#&gt;   $ Age.at.Initial.Pathologic.Diagnosis: num  66 40 48 56 38 57 74 60 61 NA ...
+#&gt;   $ ER.Status                          : Factor w/ 2 levels "Negative","Positive": 1 1 1 1 1 1 1 1 1 1 ...
+#&gt;   $ PR.Status                          : Factor w/ 2 levels "Negative","Positive": 1 1 1 1 1 1 1 1 1 1 ...
+#&gt;   $ HER2.Final.Status                  : Factor w/ 2 levels "Negative","Positive": 1 1 1 1 1 1 1 1 1 1 ...
+#&gt;   $ Tumor                              : Factor w/ 4 levels "T1","T2","T3",..: 3 2 2 2 3 2 3 2 2 2 ...
+#&gt;   $ Node                               : Factor w/ 4 levels "N0","N1","N2",..: 4 1 2 2 4 1 1 1 1 1 ...
+#&gt;   $ Metastasis                         : Factor w/ 2 levels "M0","M1": 2 1 1 1 1 1 1 1 1 1 ...
+#&gt;   $ AJCC.Stage                         : Factor w/ 11 levels "Stage I","Stage IA",..: 11 5 6 6 10 5 6 5 5 5 ...
+#&gt;   $ Vital.Status                       : Factor w/ 2 levels "DECEASED","LIVING": 1 1 1 1 2 2 2 2 2 2 ...
+#&gt;   $ Days.to.Date.of.Last.Contact       : int  240 754 1555 1692 133 309 425 643 775 964 ...
+#&gt;   $ Days.to.date.of.Death              : int  240 754 1555 1692 NA NA NA NA NA NA ...
+#&gt;   $ NP_958782                          : num  NA 0.683 NA 0.195 NA ...
+#&gt;   $ NP_958785                          : num  NA 0.694 NA 0.215 NA ...
+#&gt;   $ NP_958786                          : num  NA 0.698 NA 0.215 NA ...
+#&gt;   $ NP_000436                          : num  NA 0.687 NA 0.205 NA ...
+#&gt;   $ NP_958781                          : num  NA 0.687 NA 0.215 NA ...
+#&gt;   $ NP_958780                          : num  NA 0.698 NA 0.215 NA ...
+#&gt;   $ NP_958783                          : num  NA 0.698 NA 0.215 NA ...
+#&gt;   $ NP_958784                          : num  NA 0.698 NA 0.215 NA ...
+#&gt;   $ NP_112598                          : num  NA -2.65 NA -1.04 NA ...
+#&gt;   $ NP_001611                          : num  NA -0.984 NA -0.517 NA ...
+```
+
+---
+
+Identify which variables are categorical (factors) and which are continuous (numeric)
+
+
+```r
+catvars &lt;- brca %&gt;% select_if(is.factor) %&gt;% names()
+ctsvars &lt;- brca %&gt;% select_if(is.numeric) %&gt;% names()
+```
+
+---
+
+.pull-left[
+
+```r
+CreateCatTable(vars = catvars, data = brca)
+```
+]
+.pull-right[
+
+```
+#&gt;                                    
+#&gt;                                     Overall   
+#&gt;    n                                108       
+#&gt;    Gender = MALE (%)                 2 ( 1.9) 
+#&gt;    ER.Status = Positive (%)         69 (64.5) 
+#&gt;    PR.Status = Positive (%)         55 (50.9) 
+#&gt;    HER2.Final.Status = Positive (%) 28 (26.2) 
+#&gt;    Tumor (%)                                  
+#&gt;       T1                            16 (14.8) 
+#&gt;       T2                            67 (62.0) 
+#&gt;       T3                            19 (17.6) 
+#&gt;       T4                             6 ( 5.6) 
+#&gt;    Node (%)                                   
+#&gt;       N0                            54 (50.0) 
+#&gt;       N1                            30 (27.8) 
+#&gt;       N2                            15 (13.9) 
+#&gt;       N3                             9 ( 8.3) 
+#&gt;    Metastasis = M1 (%)               2 ( 1.9) 
+#&gt;    AJCC.Stage (%)                             
+#&gt;       Stage I                        3 ( 2.8) 
+#&gt;       Stage IA                       7 ( 6.5) 
+#&gt;       Stage IB                       2 ( 1.9) 
+#&gt;       Stage II                      11 (10.2) 
+#&gt;       Stage IIA                     32 (29.6) 
+#&gt;       Stage IIB                     23 (21.3) 
+#&gt;       Stage III                      4 ( 3.7) 
+#&gt;       Stage IIIA                    12 (11.1) 
+#&gt;       Stage IIIB                     6 ( 5.6) 
+#&gt;       Stage IIIC                     6 ( 5.6) 
+#&gt;       Stage IV                       2 ( 1.9) 
+#&gt;    Vital.Status = LIVING (%)        97 (89.8)
+```
+]
+
+---
+
+.pull-left[
+
+```r
+CreateContTable(vars = ctsvars, data = brca)
+```
+]
+.pull-right[
+
+```
+#&gt;                                                   
+#&gt;                                                    Overall         
+#&gt;    n                                               108             
+#&gt;    Age.at.Initial.Pathologic.Diagnosis (mean (SD))   58.72 (13.21) 
+#&gt;    Days.to.Date.of.Last.Contact (mean (SD))         806.37 (667.70)
+#&gt;    Days.to.date.of.Death (mean (SD))               1254.45 (678.05)
+#&gt;    NP_958782 (mean (SD))                              0.32 (0.99)  
+#&gt;    NP_958785 (mean (SD))                              0.33 (1.00)  
+#&gt;    NP_958786 (mean (SD))                              0.33 (1.00)  
+#&gt;    NP_000436 (mean (SD))                              0.32 (0.99)  
+#&gt;    NP_958781 (mean (SD))                              0.33 (1.00)  
+#&gt;    NP_958780 (mean (SD))                              0.33 (1.00)  
+#&gt;    NP_958783 (mean (SD))                              0.33 (1.00)  
+#&gt;    NP_958784 (mean (SD))                              0.33 (1.00)  
+#&gt;    NP_112598 (mean (SD))                             -0.30 (2.06)  
+#&gt;    NP_001611 (mean (SD))                              0.38 (1.46)
+```
+]
+
+---
+
+.pull-left[
+
+```r
+brca &lt;- brca %&gt;% 
+  rename(
+    'Age'='Age.at.Initial.Pathologic.Diagnosis',
+    'Last.Contact' = 'Days.to.Date.of.Last.Contact',
+    'Death' = 'Days.to.date.of.Death'
+  )
+ctsvars &lt;- brca %&gt;% select_if(is.numeric) %&gt;% names()
+CreateContTable(vars = ctsvars, data = brca)
+```
+]
+.pull-right[
+
+```
+#&gt;                            
+#&gt;                             Overall         
+#&gt;    n                        108             
+#&gt;    Age (mean (SD))            58.72 (13.21) 
+#&gt;    Last.Contact (mean (SD))  806.37 (667.70)
+#&gt;    Death (mean (SD))        1254.45 (678.05)
+#&gt;    NP_958782 (mean (SD))       0.32 (0.99)  
+#&gt;    NP_958785 (mean (SD))       0.33 (1.00)  
+#&gt;    NP_958786 (mean (SD))       0.33 (1.00)  
+#&gt;    NP_000436 (mean (SD))       0.32 (0.99)  
+#&gt;    NP_958781 (mean (SD))       0.33 (1.00)  
+#&gt;    NP_958780 (mean (SD))       0.33 (1.00)  
+#&gt;    NP_958783 (mean (SD))       0.33 (1.00)  
+#&gt;    NP_958784 (mean (SD))       0.33 (1.00)  
+#&gt;    NP_112598 (mean (SD))      -0.30 (2.06)  
+#&gt;    NP_001611 (mean (SD))       0.38 (1.46)
+```
+]
+
+---
+
+## Putting it together
+
+.pull-left[
+
+```r
+CreateTableOne(vars = c(catvars, ctsvars),
+               data = brca)
+```
+]
+.pull-right[
+
+```
+#&gt;                                    
+#&gt;                                     Overall         
+#&gt;    n                                    108         
+#&gt;    Gender = MALE (%)                      2 ( 1.9)  
+#&gt;    ER.Status = Positive (%)              69 (64.5)  
+#&gt;    PR.Status = Positive (%)              55 (50.9)  
+#&gt;    HER2.Final.Status = Positive (%)      28 (26.2)  
+#&gt;    Tumor (%)                                        
+#&gt;       T1                                 16 (14.8)  
+#&gt;       T2                                 67 (62.0)  
+#&gt;       T3                                 19 (17.6)  
+#&gt;       T4                                  6 ( 5.6)  
+#&gt;    Node (%)                                         
+#&gt;       N0                                 54 (50.0)  
+#&gt;       N1                                 30 (27.8)  
+#&gt;       N2                                 15 (13.9)  
+#&gt;       N3                                  9 ( 8.3)  
+#&gt;    Metastasis = M1 (%)                    2 ( 1.9)  
+#&gt;    AJCC.Stage (%)                                   
+#&gt;       Stage I                             3 ( 2.8)  
+#&gt;       Stage IA                            7 ( 6.5)  
+#&gt;       Stage IB                            2 ( 1.9)  
+#&gt;       Stage II                           11 (10.2)  
+#&gt;       Stage IIA                          32 (29.6)  
+#&gt;       Stage IIB                          23 (21.3)  
+#&gt;       Stage III                           4 ( 3.7)  
+#&gt;       Stage IIIA                         12 (11.1)  
+#&gt;       Stage IIIB                          6 ( 5.6)  
+#&gt;       Stage IIIC                          6 ( 5.6)  
+#&gt;       Stage IV                            2 ( 1.9)  
+#&gt;    Vital.Status = LIVING (%)             97 (89.8)  
+#&gt;    Age (mean (SD))                    58.72 (13.21) 
+#&gt;    Last.Contact (mean (SD))          806.37 (667.70)
+#&gt;    Death (mean (SD))                1254.45 (678.05)
+#&gt;    NP_958782 (mean (SD))               0.32 (0.99)  
+#&gt;    NP_958785 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_958786 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_000436 (mean (SD))               0.32 (0.99)  
+#&gt;    NP_958781 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_958780 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_958783 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_958784 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_112598 (mean (SD))              -0.30 (2.06)  
+#&gt;    NP_001611 (mean (SD))               0.38 (1.46)
+```
+]
+
+---
+
+## Putting it together
+
+.pull-left[
+
+```r
+CreateTableOne(data = brca[,-1])
+```
+]
+.pull-right[
+
+```
+#&gt;                                    
+#&gt;                                     Overall         
+#&gt;    n                                    108         
+#&gt;    Gender = MALE (%)                      2 ( 1.9)  
+#&gt;    Age (mean (SD))                    58.72 (13.21) 
+#&gt;    ER.Status = Positive (%)              69 (64.5)  
+#&gt;    PR.Status = Positive (%)              55 (50.9)  
+#&gt;    HER2.Final.Status = Positive (%)      28 (26.2)  
+#&gt;    Tumor (%)                                        
+#&gt;       T1                                 16 (14.8)  
+#&gt;       T2                                 67 (62.0)  
+#&gt;       T3                                 19 (17.6)  
+#&gt;       T4                                  6 ( 5.6)  
+#&gt;    Node (%)                                         
+#&gt;       N0                                 54 (50.0)  
+#&gt;       N1                                 30 (27.8)  
+#&gt;       N2                                 15 (13.9)  
+#&gt;       N3                                  9 ( 8.3)  
+#&gt;    Metastasis = M1 (%)                    2 ( 1.9)  
+#&gt;    AJCC.Stage (%)                                   
+#&gt;       Stage I                             3 ( 2.8)  
+#&gt;       Stage IA                            7 ( 6.5)  
+#&gt;       Stage IB                            2 ( 1.9)  
+#&gt;       Stage II                           11 (10.2)  
+#&gt;       Stage IIA                          32 (29.6)  
+#&gt;       Stage IIB                          23 (21.3)  
+#&gt;       Stage III                           4 ( 3.7)  
+#&gt;       Stage IIIA                         12 (11.1)  
+#&gt;       Stage IIIB                          6 ( 5.6)  
+#&gt;       Stage IIIC                          6 ( 5.6)  
+#&gt;       Stage IV                            2 ( 1.9)  
+#&gt;    Vital.Status = LIVING (%)             97 (89.8)  
+#&gt;    Last.Contact (mean (SD))          806.37 (667.70)
+#&gt;    Death (mean (SD))                1254.45 (678.05)
+#&gt;    NP_958782 (mean (SD))               0.32 (0.99)  
+#&gt;    NP_958785 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_958786 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_000436 (mean (SD))               0.32 (0.99)  
+#&gt;    NP_958781 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_958780 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_958783 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_958784 (mean (SD))               0.33 (1.00)  
+#&gt;    NP_112598 (mean (SD))              -0.30 (2.06)  
+#&gt;    NP_001611 (mean (SD))               0.38 (1.46)
+```
+]
+
+
+---
+
+class: middle, center
+
+# Grouped summaries
+
+---
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  group_by(ER.Status) %&gt;% 
+  summarize_at(vars(starts_with('NP')),
+               mean)
+```
+
+There are missing values now, so we have to use `na.rm=T`.
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 3 x 11
+#&gt;    ER.Status NP_958782 NP_958785 NP_958786 NP_000436 NP_958781 NP_958780
+#&gt;    &lt;fct&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1 Negative         NA        NA        NA        NA        NA        NA
+#&gt;  2 Positive         NA        NA        NA        NA        NA        NA
+#&gt;  3 &lt;NA&gt;             NA        NA        NA        NA        NA        NA
+#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;,
+#&gt;  #   NP_112598 &lt;dbl&gt;, NP_001611 &lt;dbl&gt;
+```
+]
+
+---
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  group_by(ER.Status) %&gt;% 
+  summarize_at(vars(starts_with('NP')),
+*              mean, na.rm=T)
+```
+
+We still have a row for the missing values of ER.Status
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 3 x 11
+#&gt;    ER.Status NP_958782 NP_958785 NP_958786 NP_000436 NP_958781 NP_958780
+#&gt;    &lt;fct&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1 Negative      0.429     0.438     0.439     0.432     0.436     0.436
+#&gt;  2 Positive      0.267     0.273     0.272     0.271     0.274     0.273
+#&gt;  3 &lt;NA&gt;        NaN       NaN       NaN       NaN       NaN       NaN    
+#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;,
+#&gt;  #   NP_112598 &lt;dbl&gt;, NP_001611 &lt;dbl&gt;
+```
+]
+
+---
+
+.pull-left[
+
+```r
+brca %&gt;% 
+* filter(!is.na(ER.Status)) %&gt;%
+  group_by(ER.Status) %&gt;% 
+  summarize_at(vars(starts_with('NP')),
+               mean, na.rm=T)
+```
+
+How about reversing the rows and columns for readability
+
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 2 x 11
+#&gt;    ER.Status NP_958782 NP_958785 NP_958786 NP_000436 NP_958781 NP_958780
+#&gt;    &lt;fct&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1 Negative      0.429     0.438     0.439     0.432     0.436     0.436
+#&gt;  2 Positive      0.267     0.273     0.272     0.271     0.274     0.273
+#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;,
+#&gt;  #   NP_112598 &lt;dbl&gt;, NP_001611 &lt;dbl&gt;
+```
+]
+
+---
+
+.pull-left[
+
+```r
+brca %&gt;% 
+* filter(!is.na(ER.Status)) %&gt;%
+  group_by(ER.Status) %&gt;% 
+  summarize_at(vars(starts_with('NP')),
+               mean, na.rm=T) %&gt;% 
+* tidyr::gather(ID, value, -ER.Status) %&gt;%
+* spread(ER.Status, value)
+```
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 10 x 3
+#&gt;     ID        Negative Positive
+#&gt;     &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;   1 NP_000436    0.432    0.271
+#&gt;   2 NP_001611   -0.566    0.840
+#&gt;   3 NP_112598   -0.197   -0.357
+#&gt;   4 NP_958780    0.436    0.273
+#&gt;   5 NP_958781    0.436    0.274
+#&gt;   6 NP_958782    0.429    0.267
+#&gt;   7 NP_958783    0.436    0.272
+#&gt;   8 NP_958784    0.436    0.273
+#&gt;   9 NP_958785    0.438    0.273
+#&gt;  10 NP_958786    0.439    0.272
+```
+]
+
+---
+
+### Using `tableone`
+
+
+```r
+CreateTableOne(
+  data = brca %&gt;% filter(!is.na(ER.Status)),
+  vars = brca %&gt;% 
+    select(starts_with('NP')) %&gt;% 
+    names(),
+  strata = 'ER.Status',
+  test = F)
+```
+
+```
+#&gt;                         Stratified by ER.Status
+#&gt;                          Negative     Positive    
+#&gt;    n                        38           69       
+#&gt;    NP_958782 (mean (SD))  0.43 (1.13)  0.27 (0.93)
+#&gt;    NP_958785 (mean (SD))  0.44 (1.14)  0.27 (0.93)
+#&gt;    NP_958786 (mean (SD))  0.44 (1.14)  0.27 (0.93)
+#&gt;    NP_000436 (mean (SD))  0.43 (1.14)  0.27 (0.93)
+#&gt;    NP_958781 (mean (SD))  0.44 (1.14)  0.27 (0.93)
+#&gt;    NP_958780 (mean (SD))  0.44 (1.14)  0.27 (0.93)
+#&gt;    NP_958783 (mean (SD))  0.44 (1.14)  0.27 (0.93)
+#&gt;    NP_958784 (mean (SD))  0.44 (1.14)  0.27 (0.93)
+#&gt;    NP_112598 (mean (SD)) -0.20 (2.28) -0.36 (1.97)
+#&gt;    NP_001611 (mean (SD)) -0.57 (1.54)  0.84 (1.19)
+```
+
+---
+class: middle, center
+
+# Comparing two groups
+
+---
+
+## The t-test
+
+The t-test compares whether the mean of a variable differs between two groups. 
+
+It does assume the normal distribution for the data, but is robust to deviations from normality
+
+Do **not** test for normality before doing the t-test. It isn't necessary and screws up your error rates
+
+---
+
+## The t-test
+
+In R, there is a convenient function `t.test`
+
+
+```r
+t.test(NP_958782 ~ ER.Status, data = brca)
+```
+
+```
+#&gt;  
+#&gt;  	Welch Two Sample t-test
+#&gt;  
+#&gt;  data:  NP_958782 by ER.Status
+#&gt;  t = 0.63522, df = 41.807, p-value = 0.5287
+#&gt;  alternative hypothesis: true difference in means is not equal to 0
+#&gt;  95 percent confidence interval:
+#&gt;   -0.3523151  0.6759226
+#&gt;  sample estimates:
+#&gt;  mean in group Negative mean in group Positive 
+#&gt;               0.4292798              0.2674761
+```
+
+Read the code as 
+
+"Do a t-test to see if (the mean of) `NP_958782` differs by `ER.Status`, where
+both are taken from the data set `brca`"
+
+You can read the `~` as "by", as in "t-test of NP_958782 by ER.Status"
+
+---
+
+## The t-test
+
+The packge `broom` provides a function `tidy` that makes the results of these
+statistical tests tidy.
+
+
+```r
+t.test(NP_958782 ~ ER.Status, data=brca) %&gt;% 
+  broom::tidy()
+```
+
+```
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+```
+
+--
+
+
+```
+#&gt;  
+#&gt;  	Welch Two Sample t-test
+#&gt;  
+#&gt;  data:  NP_958782 by ER.Status
+#&gt;  t = 0.63522, df = 41.807, p-value = 0.5287
+#&gt;  alternative hypothesis: true difference in means is not equal to 0
+#&gt;  95 percent confidence interval:
+#&gt;   -0.3523151  0.6759226
+#&gt;  sample estimates:
+#&gt;  mean in group Negative mean in group Positive 
+#&gt;               0.4292798              0.2674761
+```
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  select(ER.Status, starts_with('NP')) %&gt;% 
+  tidyr::gather(protein,expression, -ER.Status)
+```
+]
+.pull-right[
+
+```
+#&gt;      ER.Status   protein  expression
+#&gt;  1    Negative NP_958782          NA
+#&gt;  2    Negative NP_958782  0.68340354
+#&gt;  3    Negative NP_958782          NA
+#&gt;  4    Negative NP_958782  0.19534065
+#&gt;  5    Negative NP_958782          NA
+#&gt;  6    Negative NP_958782 -1.12317308
+#&gt;  7    Negative NP_958782  0.53859578
+#&gt;  8    Negative NP_958782          NA
+#&gt;  9    Negative NP_958782  0.83113175
+#&gt;  10   Negative NP_958782  0.65584968
+#&gt;  11   Negative NP_958782  0.10749090
+#&gt;  12   Negative NP_958782 -0.39855983
+#&gt;  13   Negative NP_958782 -0.10667998
+#&gt;  14   Negative NP_958782 -1.94779243
+#&gt;  15   Negative NP_958782  0.32366271
+#&gt;  16   Negative NP_958782  2.45513793
+#&gt;  17   Negative NP_958782 -0.03322133
+#&gt;  18   Negative NP_958782          NA
+#&gt;  19   Negative NP_958782  0.35053566
+#&gt;  20   Negative NP_958782  0.67390470
+#&gt;  21   Negative NP_958782  2.60994298
+#&gt;  22   Negative NP_958782  2.70725015
+#&gt;  23   Negative NP_958782  0.14018179
+#&gt;  24   Negative NP_958782          NA
+#&gt;  25   Negative NP_958782 -1.08652907
+#&gt;  26   Negative NP_958782          NA
+#&gt;  27       &lt;NA&gt; NP_958782          NA
+#&gt;  28   Negative NP_958782          NA
+#&gt;  29   Negative NP_958782          NA
+#&gt;  30   Negative NP_958782          NA
+#&gt;  31   Negative NP_958782  1.09613118
+#&gt;  32   Negative NP_958782  1.10068807
+#&gt;  33   Negative NP_958782  0.55977697
+#&gt;  34   Negative NP_958782 -0.91267028
+#&gt;  35   Positive NP_958782  1.87398183
+#&gt;  36   Positive NP_958782 -1.52334349
+#&gt;  37   Positive NP_958782 -0.58342864
+#&gt;  38   Negative NP_958782  1.40757026
+#&gt;  39   Negative NP_958782          NA
+#&gt;  40   Negative NP_958782          NA
+#&gt;  41   Positive NP_958782 -0.20491791
+#&gt;  42   Negative NP_958782 -0.78719498
+#&gt;  43   Positive NP_958782 -0.49405958
+#&gt;  44   Negative NP_958782  1.12050183
+#&gt;  45   Positive NP_958782  2.76508066
+#&gt;  46   Positive NP_958782 -1.10167521
+#&gt;  47   Positive NP_958782  1.10126053
+#&gt;  48   Positive NP_958782          NA
+#&gt;  49   Positive NP_958782          NA
+#&gt;  50   Positive NP_958782          NA
+#&gt;  51   Positive NP_958782          NA
+#&gt;  52   Positive NP_958782          NA
+#&gt;  53   Positive NP_958782  0.31131919
+#&gt;  54   Positive NP_958782  0.76204441
+#&gt;  55   Positive NP_958782  0.79397556
+#&gt;  56   Positive NP_958782          NA
+#&gt;  57   Positive NP_958782  0.06377853
+#&gt;  58   Positive NP_958782  0.45298593
+#&gt;  59   Positive NP_958782  0.81882406
+#&gt;  60   Positive NP_958782  0.02000705
+#&gt;  61   Positive NP_958782 -0.06583842
+#&gt;  62   Positive NP_958782  0.26485911
+#&gt;  63   Positive NP_958782  0.19587669
+#&gt;  64   Positive NP_958782  1.18510823
+#&gt;  65   Positive NP_958782  0.75718813
+#&gt;  66   Positive NP_958782  0.56889458
+#&gt;  67   Positive NP_958782  0.38458773
+#&gt;  68   Positive NP_958782  0.46108752
+#&gt;  69   Positive NP_958782  1.22250730
+#&gt;  70   Positive NP_958782  0.57830868
+#&gt;  71   Positive NP_958782 -0.51836650
+#&gt;  72   Positive NP_958782 -0.20563748
+#&gt;  73   Positive NP_958782  1.46666516
+#&gt;  74   Positive NP_958782  0.86265926
+#&gt;  75   Positive NP_958782  1.05322494
+#&gt;  76   Positive NP_958782 -0.48777247
+#&gt;  77   Positive NP_958782 -0.26503035
+#&gt;  78   Positive NP_958782          NA
+#&gt;  79   Positive NP_958782          NA
+#&gt;  80   Positive NP_958782  1.27918472
+#&gt;  81   Positive NP_958782 -1.00123984
+#&gt;  82   Positive NP_958782  0.58371325
+#&gt;  83   Positive NP_958782 -0.07820182
+#&gt;  84   Positive NP_958782  1.17488099
+#&gt;  85   Positive NP_958782          NA
+#&gt;  86   Positive NP_958782          NA
+#&gt;  87   Positive NP_958782 -0.30726684
+#&gt;  88   Positive NP_958782  1.39524718
+#&gt;  89   Positive NP_958782 -0.65982805
+#&gt;  90   Positive NP_958782 -0.96390393
+#&gt;  91   Positive NP_958782  0.23854713
+#&gt;  92   Positive NP_958782 -0.49640909
+#&gt;  93   Positive NP_958782  1.04895925
+#&gt;  94   Positive NP_958782          NA
+#&gt;  95   Positive NP_958782          NA
+#&gt;  96   Positive NP_958782 -0.42818149
+#&gt;  97   Positive NP_958782  1.50196696
+#&gt;  98   Positive NP_958782          NA
+#&gt;  99   Positive NP_958782  0.97356417
+#&gt;  100  Positive NP_958782 -0.51142119
+#&gt;  101  Positive NP_958782 -1.51427833
+#&gt;  102  Positive NP_958782 -0.75982306
+#&gt;  103  Positive NP_958782          NA
+#&gt;  104  Positive NP_958782 -0.55221197
+#&gt;  105  Positive NP_958782 -0.69231577
+#&gt;  106  Positive NP_958782 -0.48155015
+#&gt;  107  Positive NP_958782          NA
+#&gt;  108  Positive NP_958782  2.18012330
+#&gt;  109  Negative NP_958785          NA
+#&gt;  110  Negative NP_958785  0.69442409
+#&gt;  111  Negative NP_958785          NA
+#&gt;  112  Negative NP_958785  0.21541294
+#&gt;  113  Negative NP_958785          NA
+#&gt;  114  Negative NP_958785 -1.12317308
+#&gt;  115  Negative NP_958785  0.54221052
+#&gt;  116  Negative NP_958785          NA
+#&gt;  117  Negative NP_958785  0.85653983
+#&gt;  118  Negative NP_958785  0.65814259
+#&gt;  119  Negative NP_958785  0.10416449
+#&gt;  120  Negative NP_958785 -0.39260141
+#&gt;  121  Negative NP_958785 -0.10667998
+#&gt;  122  Negative NP_958785 -1.95271766
+#&gt;  123  Negative NP_958785  0.32697264
+#&gt;  124  Negative NP_958785  2.48013666
+#&gt;  125  Negative NP_958785 -0.03021642
+#&gt;  126  Negative NP_958785          NA
+#&gt;  127  Negative NP_958785  0.36740533
+#&gt;  128  Negative NP_958785  0.68871756
+#&gt;  129  Negative NP_958785  2.65042179
+#&gt;  130  Negative NP_958785  2.73383192
+#&gt;  131  Negative NP_958785  0.12605376
+#&gt;  132  Negative NP_958785          NA
+#&gt;  133  Negative NP_958785 -1.09549238
+#&gt;  134  Negative NP_958785          NA
+#&gt;  135      &lt;NA&gt; NP_958785          NA
+#&gt;  136  Negative NP_958785          NA
+#&gt;  137  Negative NP_958785          NA
+#&gt;  138  Negative NP_958785          NA
+#&gt;  139  Negative NP_958785  1.11137037
+#&gt;  140  Negative NP_958785  1.10068807
+#&gt;  141  Negative NP_958785  0.56340687
+#&gt;  142  Negative NP_958785 -0.92797866
+#&gt;  143  Positive NP_958785  1.87038310
+#&gt;  144  Positive NP_958785 -1.51264622
+#&gt;  145  Positive NP_958785 -0.57254887
+#&gt;  146  Negative NP_958785  1.40757026
+#&gt;  147  Negative NP_958785          NA
+#&gt;  148  Negative NP_958785          NA
+#&gt;  149  Positive NP_958785 -0.16241849
+#&gt;  150  Negative NP_958785 -0.75594056
+#&gt;  151  Positive NP_958785 -0.50389919
+#&gt;  152  Negative NP_958785  1.13761779
+#&gt;  153  Positive NP_958785  2.77970922
+#&gt;  154  Positive NP_958785 -1.10878258
+#&gt;  155  Positive NP_958785  1.10126053
+#&gt;  156  Positive NP_958785          NA
+#&gt;  157  Positive NP_958785          NA
+#&gt;  158  Positive NP_958785          NA
+#&gt;  159  Positive NP_958785          NA
+#&gt;  160  Positive NP_958785          NA
+#&gt;  161  Positive NP_958785  0.29617712
+#&gt;  162  Positive NP_958785  0.76204441
+#&gt;  163  Positive NP_958785  0.81818151
+#&gt;  164  Positive NP_958785          NA
+#&gt;  165  Positive NP_958785  0.09333637
+#&gt;  166  Positive NP_958785  0.47259013
+#&gt;  167  Positive NP_958785  0.81487725
+#&gt;  168  Positive NP_958785  0.01195532
+#&gt;  169  Positive NP_958785 -0.05589267
+#&gt;  170  Positive NP_958785  0.27571131
+#&gt;  171  Positive NP_958785  0.19587669
+#&gt;  172  Positive NP_958785  1.19261195
+#&gt;  173  Positive NP_958785  0.78087066
+#&gt;  174  Positive NP_958785  0.56889458
+#&gt;  175  Positive NP_958785  0.37139283
+#&gt;  176  Positive NP_958785  0.46108752
+#&gt;  177  Positive NP_958785  1.21897360
+#&gt;  178  Positive NP_958785  0.58221285
+#&gt;  179  Positive NP_958785 -0.51000200
+#&gt;  180  Positive NP_958785 -0.20563748
+#&gt;  181  Positive NP_958785  1.48228346
+#&gt;  182  Positive NP_958785  0.87018604
+#&gt;  183  Positive NP_958785  1.05594815
+#&gt;  184  Positive NP_958785 -0.48777247
+#&gt;  185  Positive NP_958785 -0.25164229
+#&gt;  186  Positive NP_958785          NA
+#&gt;  187  Positive NP_958785          NA
+#&gt;  188  Positive NP_958785  1.27516713
+#&gt;  189  Positive NP_958785 -1.00461982
+#&gt;  190  Positive NP_958785  0.58062313
+#&gt;  191  Positive NP_958785 -0.06805814
+#&gt;  192  Positive NP_958785  1.18320879
+#&gt;  193  Positive NP_958785          NA
+#&gt;  194  Positive NP_958785          NA
+#&gt;  195  Positive NP_958785 -0.30726684
+#&gt;  196  Positive NP_958785  1.40892213
+#&gt;  197  Positive NP_958785 -0.64874215
+#&gt;  198  Positive NP_958785 -0.93820953
+#&gt;  199  Positive NP_958785  0.24981815
+#&gt;  200  Positive NP_958785 -0.49850890
+#&gt;  201  Positive NP_958785  1.05225694
+#&gt;  202  Positive NP_958785          NA
+#&gt;  203  Positive NP_958785          NA
+#&gt;  204  Positive NP_958785 -0.40637805
+#&gt;  205  Positive NP_958785  1.51034838
+#&gt;  206  Positive NP_958785          NA
+#&gt;  207  Positive NP_958785  0.97747606
+#&gt;  208  Positive NP_958785 -0.52606668
+#&gt;  209  Positive NP_958785 -1.52828543
+#&gt;  210  Positive NP_958785 -0.75982306
+#&gt;  211  Positive NP_958785          NA
+#&gt;  212  Positive NP_958785 -0.54774937
+#&gt;  213  Positive NP_958785 -0.65946866
+#&gt;  214  Positive NP_958785 -0.47788983
+#&gt;  215  Positive NP_958785          NA
+#&gt;  216  Positive NP_958785  2.18012330
+#&gt;  217  Negative NP_958786          NA
+#&gt;  218  Negative NP_958786  0.69809760
+#&gt;  219  Negative NP_958786          NA
+#&gt;  220  Negative NP_958786  0.21541294
+#&gt;  221  Negative NP_958786          NA
+#&gt;  222  Negative NP_958786 -1.11686051
+#&gt;  223  Negative NP_958786  0.54221052
+#&gt;  224  Negative NP_958786          NA
+#&gt;  225  Negative NP_958786  0.85653983
+#&gt;  226  Negative NP_958786  0.65584968
+#&gt;  227  Negative NP_958786  0.10749090
+#&gt;  228  Negative NP_958786 -0.39260141
+#&gt;  229  Negative NP_958786 -0.10667998
+#&gt;  230  Negative NP_958786 -1.95518028
+#&gt;  231  Negative NP_958786  0.32697264
+#&gt;  232  Negative NP_958786  2.48013666
+#&gt;  233  Negative NP_958786 -0.02721152
+#&gt;  234  Negative NP_958786          NA
+#&gt;  235  Negative NP_958786  0.36740533
+#&gt;  236  Negative NP_958786  0.68871756
+#&gt;  237  Negative NP_958786  2.65042179
+#&gt;  238  Negative NP_958786  2.73762932
+#&gt;  239  Negative NP_958786  0.13311778
+#&gt;  240  Negative NP_958786          NA
+#&gt;  241  Negative NP_958786 -1.09549238
+#&gt;  242  Negative NP_958786          NA
+#&gt;  243      &lt;NA&gt; NP_958786          NA
+#&gt;  244  Negative NP_958786          NA
+#&gt;  245  Negative NP_958786          NA
+#&gt;  246  Negative NP_958786          NA
+#&gt;  247  Negative NP_958786  1.11137037
+#&gt;  248  Negative NP_958786  1.10068807
+#&gt;  249  Negative NP_958786  0.55977697
+#&gt;  250  Negative NP_958786 -0.92797866
+#&gt;  251  Positive NP_958786  1.87038310
+#&gt;  252  Positive NP_958786 -1.50997191
+#&gt;  253  Positive NP_958786 -0.56710898
+#&gt;  254  Negative NP_958786  1.41031183
+#&gt;  255  Negative NP_958786          NA
+#&gt;  256  Negative NP_958786          NA
+#&gt;  257  Positive NP_958786 -0.16666843
+#&gt;  258  Negative NP_958786 -0.75594056
+#&gt;  259  Positive NP_958786 -0.50061932
+#&gt;  260  Negative NP_958786  1.13761779
+#&gt;  261  Positive NP_958786  2.77970922
+#&gt;  262  Positive NP_958786 -1.10878258
+#&gt;  263  Positive NP_958786  1.09776669
+#&gt;  264  Positive NP_958786          NA
+#&gt;  265  Positive NP_958786          NA
+#&gt;  266  Positive NP_958786          NA
+#&gt;  267  Positive NP_958786          NA
+#&gt;  268  Positive NP_958786          NA
+#&gt;  269  Positive NP_958786  0.29617712
+#&gt;  270  Positive NP_958786  0.76638435
+#&gt;  271  Positive NP_958786  0.81472351
+#&gt;  272  Positive NP_958786          NA
+#&gt;  273  Positive NP_958786  0.08446902
+#&gt;  274  Positive NP_958786  0.47259013
+#&gt;  275  Positive NP_958786  0.81487725
+#&gt;  276  Positive NP_958786  0.01195532
+#&gt;  277  Positive NP_958786 -0.06583842
+#&gt;  278  Positive NP_958786  0.27571131
+#&gt;  279  Positive NP_958786  0.19587669
+#&gt;  280  Positive NP_958786  1.18886009
+#&gt;  281  Positive NP_958786  0.77410422
+#&gt;  282  Positive NP_958786  0.56889458
+#&gt;  283  Positive NP_958786  0.37139283
+#&gt;  284  Positive NP_958786  0.46108752
+#&gt;  285  Positive NP_958786  1.22250730
+#&gt;  286  Positive NP_958786  0.57830868
+#&gt;  287  Positive NP_958786 -0.50721383
+#&gt;  288  Positive NP_958786 -0.20563748
+#&gt;  289  Positive NP_958786  1.47447431
+#&gt;  290  Positive NP_958786  0.87018604
+#&gt;  291  Positive NP_958786  1.05594815
+#&gt;  292  Positive NP_958786 -0.48777247
+#&gt;  293  Positive NP_958786 -0.25164229
+#&gt;  294  Positive NP_958786          NA
+#&gt;  295  Positive NP_958786          NA
+#&gt;  296  Positive NP_958786  1.27516713
+#&gt;  297  Positive NP_958786 -1.00461982
+#&gt;  298  Positive NP_958786  0.58062313
+#&gt;  299  Positive NP_958786 -0.07143937
+#&gt;  300  Positive NP_958786  1.18320879
+#&gt;  301  Positive NP_958786          NA
+#&gt;  302  Positive NP_958786          NA
+#&gt;  303  Positive NP_958786 -0.30726684
+#&gt;  304  Positive NP_958786  1.41234087
+#&gt;  305  Positive NP_958786 -0.65428510
+#&gt;  306  Positive NP_958786 -0.94391940
+#&gt;  307  Positive NP_958786  0.24418264
+#&gt;  308  Positive NP_958786 -0.49640909
+#&gt;  309  Positive NP_958786  1.05225694
+#&gt;  310  Positive NP_958786          NA
+#&gt;  311  Positive NP_958786          NA
+#&gt;  312  Positive NP_958786 -0.40637805
+#&gt;  313  Positive NP_958786  1.50196696
+#&gt;  314  Positive NP_958786          NA
+#&gt;  315  Positive NP_958786  0.97747606
+#&gt;  316  Positive NP_958786 -0.52606668
+#&gt;  317  Positive NP_958786 -1.52828543
+#&gt;  318  Positive NP_958786 -0.74911369
+#&gt;  319  Positive NP_958786          NA
+#&gt;  320  Positive NP_958786 -0.55221197
+#&gt;  321  Positive NP_958786 -0.66416111
+#&gt;  322  Positive NP_958786 -0.48155015
+#&gt;  323  Positive NP_958786          NA
+#&gt;  324  Positive NP_958786  2.18012330
+#&gt;  325  Negative NP_000436          NA
+#&gt;  326  Negative NP_000436  0.68707705
+#&gt;  327  Negative NP_000436          NA
+#&gt;  328  Negative NP_000436  0.20537680
+#&gt;  329  Negative NP_000436          NA
+#&gt;  330  Negative NP_000436 -1.12948566
+#&gt;  331  Negative NP_000436  0.53498104
+#&gt;  332  Negative NP_000436          NA
+#&gt;  333  Negative NP_000436  0.83677799
+#&gt;   [ reached 'max' / getOption("max.print") -- omitted 747 rows ]
+```
+]
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  select(ER.Status, starts_with('NP')) %&gt;% 
+  tidyr::gather(protein,expression, -ER.Status) %&gt;% 
+  group_split(protein)
+```
+]
+.pull-right[
+
+```
+#&gt;  [[1]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_000436     NA    
+#&gt;   2 Negative  NP_000436      0.687
+#&gt;   3 Negative  NP_000436     NA    
+#&gt;   4 Negative  NP_000436      0.205
+#&gt;   5 Negative  NP_000436     NA    
+#&gt;   6 Negative  NP_000436     -1.13 
+#&gt;   7 Negative  NP_000436      0.535
+#&gt;   8 Negative  NP_000436     NA    
+#&gt;   9 Negative  NP_000436      0.837
+#&gt;  10 Negative  NP_000436      0.656
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[2]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_001611     NA    
+#&gt;   2 Negative  NP_001611     -0.984
+#&gt;   3 Negative  NP_001611     NA    
+#&gt;   4 Negative  NP_001611     -0.517
+#&gt;   5 Negative  NP_001611     NA    
+#&gt;   6 Negative  NP_001611     -2.58 
+#&gt;   7 Negative  NP_001611      0.267
+#&gt;   8 Negative  NP_001611     NA    
+#&gt;   9 Negative  NP_001611      2.84 
+#&gt;  10 Negative  NP_001611      1.31 
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[3]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_112598     NA    
+#&gt;   2 Negative  NP_112598     -2.65 
+#&gt;   3 Negative  NP_112598     NA    
+#&gt;   4 Negative  NP_112598     -1.04 
+#&gt;   5 Negative  NP_112598     NA    
+#&gt;   6 Negative  NP_112598      2.24 
+#&gt;   7 Negative  NP_112598     -0.148
+#&gt;   8 Negative  NP_112598     NA    
+#&gt;   9 Negative  NP_112598     -0.967
+#&gt;  10 Negative  NP_112598     -1.97 
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[4]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_958780     NA    
+#&gt;   2 Negative  NP_958780      0.698
+#&gt;   3 Negative  NP_958780     NA    
+#&gt;   4 Negative  NP_958780      0.215
+#&gt;   5 Negative  NP_958780     NA    
+#&gt;   6 Negative  NP_958780     -1.12 
+#&gt;   7 Negative  NP_958780      0.542
+#&gt;   8 Negative  NP_958780     NA    
+#&gt;   9 Negative  NP_958780      0.857
+#&gt;  10 Negative  NP_958780      0.658
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[5]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_958781     NA    
+#&gt;   2 Negative  NP_958781      0.687
+#&gt;   3 Negative  NP_958781     NA    
+#&gt;   4 Negative  NP_958781      0.215
+#&gt;   5 Negative  NP_958781     NA    
+#&gt;   6 Negative  NP_958781     -1.13 
+#&gt;   7 Negative  NP_958781      0.542
+#&gt;   8 Negative  NP_958781     NA    
+#&gt;   9 Negative  NP_958781      0.865
+#&gt;  10 Negative  NP_958781      0.651
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[6]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_958782     NA    
+#&gt;   2 Negative  NP_958782      0.683
+#&gt;   3 Negative  NP_958782     NA    
+#&gt;   4 Negative  NP_958782      0.195
+#&gt;   5 Negative  NP_958782     NA    
+#&gt;   6 Negative  NP_958782     -1.12 
+#&gt;   7 Negative  NP_958782      0.539
+#&gt;   8 Negative  NP_958782     NA    
+#&gt;   9 Negative  NP_958782      0.831
+#&gt;  10 Negative  NP_958782      0.656
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[7]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_958783     NA    
+#&gt;   2 Negative  NP_958783      0.698
+#&gt;   3 Negative  NP_958783     NA    
+#&gt;   4 Negative  NP_958783      0.215
+#&gt;   5 Negative  NP_958783     NA    
+#&gt;   6 Negative  NP_958783     -1.12 
+#&gt;   7 Negative  NP_958783      0.542
+#&gt;   8 Negative  NP_958783     NA    
+#&gt;   9 Negative  NP_958783      0.851
+#&gt;  10 Negative  NP_958783      0.656
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[8]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_958784     NA    
+#&gt;   2 Negative  NP_958784      0.698
+#&gt;   3 Negative  NP_958784     NA    
+#&gt;   4 Negative  NP_958784      0.215
+#&gt;   5 Negative  NP_958784     NA    
+#&gt;   6 Negative  NP_958784     -1.12 
+#&gt;   7 Negative  NP_958784      0.542
+#&gt;   8 Negative  NP_958784     NA    
+#&gt;   9 Negative  NP_958784      0.851
+#&gt;  10 Negative  NP_958784      0.656
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[9]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_958785     NA    
+#&gt;   2 Negative  NP_958785      0.694
+#&gt;   3 Negative  NP_958785     NA    
+#&gt;   4 Negative  NP_958785      0.215
+#&gt;   5 Negative  NP_958785     NA    
+#&gt;   6 Negative  NP_958785     -1.12 
+#&gt;   7 Negative  NP_958785      0.542
+#&gt;   8 Negative  NP_958785     NA    
+#&gt;   9 Negative  NP_958785      0.857
+#&gt;  10 Negative  NP_958785      0.658
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  [[10]]
+#&gt;  # A tibble: 108 x 3
+#&gt;     ER.Status protein   expression
+#&gt;     &lt;fct&gt;     &lt;chr&gt;          &lt;dbl&gt;
+#&gt;   1 Negative  NP_958786     NA    
+#&gt;   2 Negative  NP_958786      0.698
+#&gt;   3 Negative  NP_958786     NA    
+#&gt;   4 Negative  NP_958786      0.215
+#&gt;   5 Negative  NP_958786     NA    
+#&gt;   6 Negative  NP_958786     -1.12 
+#&gt;   7 Negative  NP_958786      0.542
+#&gt;   8 Negative  NP_958786     NA    
+#&gt;   9 Negative  NP_958786      0.857
+#&gt;  10 Negative  NP_958786      0.656
+#&gt;  # … with 98 more rows
+#&gt;  
+#&gt;  attr(,"ptype")
+#&gt;  # A tibble: 0 x 3
+#&gt;  # … with 3 variables: ER.Status &lt;fct&gt;, protein &lt;chr&gt;, expression &lt;dbl&gt;
+```
+]
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  select(ER.Status, starts_with('NP')) %&gt;% 
+  tidyr::gather(protein,expression, -ER.Status) %&gt;% 
+* split(.$protein) %&gt;%
+  map(~broom::tidy(t.test(expression ~ ER.Status, 
+                          data=.)))
+```
+]
+.pull-right[
+
+```
+#&gt;  $NP_000436
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.161     0.432     0.271     0.628   0.534      41.5   -0.356
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_001611
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    -1.41    -0.566     0.840     -4.10 1.99e-4      39.9    -2.10
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_112598
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.160    -0.197    -0.357     0.306   0.761      43.5   -0.892
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_958780
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.163     0.436     0.273     0.637   0.528      41.6   -0.354
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_958781
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.162     0.436     0.274     0.633   0.530      41.5   -0.356
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_958782
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_958783
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.164     0.436     0.272     0.639   0.527      41.5   -0.354
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_958784
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.164     0.436     0.273     0.639   0.527      41.5   -0.354
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_958785
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.165     0.438     0.273     0.642   0.524      41.6   -0.353
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+#&gt;  
+#&gt;  $NP_958786
+#&gt;  # A tibble: 1 x 10
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;  1    0.166     0.439     0.272     0.649   0.520      41.6   -0.351
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+```
+]
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  select(ER.Status, starts_with('NP')) %&gt;% 
+  tidyr::gather(protein,expression, -ER.Status) %&gt;% 
+* split(.$protein) %&gt;%
+  map(~broom::tidy(t.test(expression ~ ER.Status, 
+                          data=.))) %&gt;% 
+  bind_rows(.id='Protein')
+```
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 10 x 11
+#&gt;     Protein estimate estimate1 estimate2 statistic p.value parameter
+#&gt;     &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;   1 NP_000…    0.161     0.432     0.271     0.628 5.34e-1      41.5
+#&gt;   2 NP_001…   -1.41     -0.566     0.840    -4.10  1.99e-4      39.9
+#&gt;   3 NP_112…    0.160    -0.197    -0.357     0.306 7.61e-1      43.5
+#&gt;   4 NP_958…    0.163     0.436     0.273     0.637 5.28e-1      41.6
+#&gt;   5 NP_958…    0.162     0.436     0.274     0.633 5.30e-1      41.5
+#&gt;   6 NP_958…    0.162     0.429     0.267     0.635 5.29e-1      41.8
+#&gt;   7 NP_958…    0.164     0.436     0.272     0.639 5.27e-1      41.5
+#&gt;   8 NP_958…    0.164     0.436     0.273     0.639 5.27e-1      41.5
+#&gt;   9 NP_958…    0.165     0.438     0.273     0.642 5.24e-1      41.6
+#&gt;  10 NP_958…    0.166     0.439     0.272     0.649 5.20e-1      41.6
+#&gt;  # … with 4 more variables: conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;, method &lt;chr&gt;,
+#&gt;  #   alternative &lt;chr&gt;
+```
+]
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  select(ER.Status, starts_with('NP')) %&gt;% 
+  tidyr::gather(protein,expression, -ER.Status) %&gt;% 
+* split(.$protein) %&gt;%
+  map(~broom::tidy(t.test(expression ~ ER.Status, 
+                          data=.))) %&gt;% 
+  bind_rows(.id='Protein') %&gt;% 
+  select(Protein, estimate, p.value, conf.low, conf.high)
+```
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 10 x 5
+#&gt;     Protein   estimate  p.value conf.low conf.high
+#&gt;     &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;   1 NP_000436    0.161 0.534      -0.356     0.677
+#&gt;   2 NP_001611   -1.41  0.000199   -2.10     -0.712
+#&gt;   3 NP_112598    0.160 0.761      -0.892     1.21 
+#&gt;   4 NP_958780    0.163 0.528      -0.354     0.680
+#&gt;   5 NP_958781    0.162 0.530      -0.356     0.680
+#&gt;   6 NP_958782    0.162 0.529      -0.352     0.676
+#&gt;   7 NP_958783    0.164 0.527      -0.354     0.681
+#&gt;   8 NP_958784    0.164 0.527      -0.354     0.681
+#&gt;   9 NP_958785    0.165 0.524      -0.353     0.682
+#&gt;  10 NP_958786    0.166 0.520      -0.351     0.684
+```
+]
+
+---
+class: center, middle
+
+# Back to testing
+
+---
+
+## Wilcoxon test, nonparametric t-test
+
+
+```r
+wilcox.test(NP_958782 ~ ER.Status, data=brca) %&gt;% 
+  broom::tidy()
+```
+
+```
+#&gt;  # A tibble: 1 x 4
+#&gt;    statistic p.value method                                      alternative
+#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                                       &lt;chr&gt;      
+#&gt;  1       755   0.590 Wilcoxon rank sum test with continuity cor… two.sided
+```
+
+--
+
+
+```
+#&gt;  
+#&gt;  	Wilcoxon rank sum test with continuity correction
+#&gt;  
+#&gt;  data:  NP_958782 by ER.Status
+#&gt;  W = 755, p-value = 0.5897
+#&gt;  alternative hypothesis: true location shift is not equal to 0
+```
+
+---
+
+## Wilcoxon test
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  select(ER.Status, starts_with('NP')) %&gt;% 
+  tidyr::gather(protein,expression, -ER.Status) %&gt;% 
+  split(.$protein) %&gt;% 
+  map(~broom::tidy(wilcox.test(expression ~ ER.Status, 
+                          data=.))) %&gt;% 
+  bind_rows(.id='Protein') %&gt;% 
+  select(Protein, p.value)
+```
+]
+.pull-right[
+
+```
+#&gt;  # A tibble: 10 x 2
+#&gt;     Protein     p.value
+#&gt;     &lt;chr&gt;         &lt;dbl&gt;
+#&gt;   1 NP_000436 0.583    
+#&gt;   2 NP_001611 0.0000928
+#&gt;   3 NP_112598 0.939    
+#&gt;   4 NP_958780 0.583    
+#&gt;   5 NP_958781 0.576    
+#&gt;   6 NP_958782 0.590    
+#&gt;   7 NP_958783 0.583    
+#&gt;   8 NP_958784 0.576    
+#&gt;   9 NP_958785 0.576    
+#&gt;  10 NP_958786 0.576
+```
+]
+
+---
+
+## Using `tableone`
+
+
+
+```r
+CreateTableOne(
+  data = brca %&gt;% filter(!is.na(ER.Status)),
+  vars = brca %&gt;% 
+    select(starts_with('NP')) %&gt;% 
+    names(),
+  strata = 'ER.Status',
+  test = T,
+  testNormal = t.test
+)
+```
+
+```
+#&gt;                         Stratified by ER.Status
+#&gt;                          Negative     Positive     p      test
+#&gt;    n                        38           69                   
+#&gt;    NP_958782 (mean (SD))  0.43 (1.13)  0.27 (0.93)  0.498     
+#&gt;    NP_958785 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.492     
+#&gt;    NP_958786 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.487     
+#&gt;    NP_000436 (mean (SD))  0.43 (1.14)  0.27 (0.93)  0.502     
+#&gt;    NP_958781 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.499     
+#&gt;    NP_958780 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.496     
+#&gt;    NP_958783 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.495     
+#&gt;    NP_958784 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.495     
+#&gt;    NP_112598 (mean (SD)) -0.20 (2.28) -0.36 (1.97)  0.748     
+#&gt;    NP_001611 (mean (SD)) -0.57 (1.54)  0.84 (1.19) &lt;0.001
+```
+
+--
+
+This is not quite the same results as before
+
+---
+
+## Using `tableone`
+
+
+
+```r
+CreateTableOne(
+  data = brca %&gt;% filter(!is.na(ER.Status)),
+  vars = brca %&gt;% 
+    select(starts_with('NP')) %&gt;% 
+    names(),
+  strata = 'ER.Status',
+  test = T,
+  testNormal = t.test,
+* argsNormal = list(var.equal=F)
+)
+```
+
+```
+#&gt;                         Stratified by ER.Status
+#&gt;                          Negative     Positive     p      test
+#&gt;    n                        38           69                   
+#&gt;    NP_958782 (mean (SD))  0.43 (1.13)  0.27 (0.93)  0.529     
+#&gt;    NP_958785 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.524     
+#&gt;    NP_958786 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.520     
+#&gt;    NP_000436 (mean (SD))  0.43 (1.14)  0.27 (0.93)  0.534     
+#&gt;    NP_958781 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.530     
+#&gt;    NP_958780 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.528     
+#&gt;    NP_958783 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.527     
+#&gt;    NP_958784 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.527     
+#&gt;    NP_112598 (mean (SD)) -0.20 (2.28) -0.36 (1.97)  0.761     
+#&gt;    NP_001611 (mean (SD)) -0.57 (1.54)  0.84 (1.19) &lt;0.001
+```
+
+---
+
+## Tests for discrete data
+
+Testing whether the distribution of a categorical variable differs by levels of 
+another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
+
+
+```r
+fisher.test(table(brca$Tumor, brca$ER.Status))
+```
+
+```
+#&gt;  
+#&gt;  	Fisher's Exact Test for Count Data
+#&gt;  
+#&gt;  data:  table(brca$Tumor, brca$ER.Status)
+#&gt;  p-value = 0.6003
+#&gt;  alternative hypothesis: two.sided
+```
+
+---
+
+## Tests for discrete data
+
+Testing whether the distribution of a categorical variable differs by levels of 
+another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
+
+
+```r
+chisq.test(table(brca$Tumor, brca$ER.Status))
+```
+
+```
+#&gt;  Warning in chisq.test(table(brca$Tumor, brca$ER.Status)): Chi-squared
+#&gt;  approximation may be incorrect
+```
+
+```
+#&gt;  
+#&gt;  	Pearson's Chi-squared test
+#&gt;  
+#&gt;  data:  table(brca$Tumor, brca$ER.Status)
+#&gt;  X-squared = 2.094, df = 3, p-value = 0.5531
+```
+
+---
+
+## Tests for discrete data
+
+We can use `broom::tidy` for either of these
+
+
+```r
+chisq.test(table(brca$Tumor, brca$ER.Status)) %&gt;% 
+  broom::tidy()
+```
+
+```
+#&gt;  Warning in chisq.test(table(brca$Tumor, brca$ER.Status)): Chi-squared
+#&gt;  approximation may be incorrect
+```
+
+```
+#&gt;  # A tibble: 1 x 4
+#&gt;    statistic p.value parameter method                    
+#&gt;        &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+#&gt;  1      2.09   0.553         3 Pearson's Chi-squared test
+```
+
+---
+
+## Using `tableone`
+
+
+```r
+CreateCatTable(vars = c('Tumor','Node','Metastasis'),
+               data = filter(brca, !is.na(ER.Status)),
+               strata = 'ER.Status',
+               test = T) # chisq.test
+```
+
+```
+#&gt;                       Stratified by ER.Status
+#&gt;                        Negative   Positive   p      test
+#&gt;    n                   38         69                    
+#&gt;    Tumor (%)                                  0.553     
+#&gt;       T1                6 (15.8)  10 (14.5)             
+#&gt;       T2               26 (68.4)  40 (58.0)             
+#&gt;       T3                5 (13.2)  14 (20.3)             
+#&gt;       T4                1 ( 2.6)   5 ( 7.2)             
+#&gt;    Node (%)                                   0.685     
+#&gt;       N0               22 (57.9)  32 (46.4)             
+#&gt;       N1                8 (21.1)  21 (30.4)             
+#&gt;       N2                5 (13.2)  10 (14.5)             
+#&gt;       N3                3 ( 7.9)   6 ( 8.7)             
+#&gt;    Metastasis = M1 (%)  1 ( 2.6)   1 ( 1.4)   1.000
+```
+
+---
+
+## Using `tableone`
+
+
+```r
+c1 &lt;- CreateCatTable(vars = c('Tumor','Node','Metastasis'),
+               data = filter(brca, !is.na(ER.Status)),
+               strata = 'ER.Status',
+               test = T)
+print(c1, exact = c('Tumor','Node','Metastasis')) # fisher.test
+```
+
+```
+#&gt;                       Stratified by ER.Status
+#&gt;                        Negative   Positive   p      test 
+#&gt;    n                   38         69                     
+#&gt;    Tumor (%)                                  0.600 exact
+#&gt;       T1                6 (15.8)  10 (14.5)              
+#&gt;       T2               26 (68.4)  40 (58.0)              
+#&gt;       T3                5 (13.2)  14 (20.3)              
+#&gt;       T4                1 ( 2.6)   5 ( 7.2)              
+#&gt;    Node (%)                                   0.695 exact
+#&gt;       N0               22 (57.9)  32 (46.4)              
+#&gt;       N1                8 (21.1)  21 (30.4)              
+#&gt;       N2                5 (13.2)  10 (14.5)              
+#&gt;       N3                3 ( 7.9)   6 ( 8.7)              
+#&gt;    Metastasis = M1 (%)  1 ( 2.6)   1 ( 1.4)   1.000 exact
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

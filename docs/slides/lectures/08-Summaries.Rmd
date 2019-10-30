@@ -1,0 +1,784 @@
+---
+title: "Describing and summarizing data"
+author: Abhijit Dasgupta
+date: Fall, 2019
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339, Fall, 2019</span></div>
+
+---
+
+## Where we've been
+
+1. Understand what tidy data is
+1. Manipulate data to make it tidy (tidyr, dplyr)
+1. Transform particular variables
+1. Write basic functions
+1. High-throughput analyses
+    - Lists of data sets
+    - `map` to apply similar processes to each data set
+    - for-loops to repeat same recipe on multiple data sets or objects
+
+---
+
+## Where we're going
+
+1. Creating data summaries
+1. Basic statistical comparisons between groups
+1. Creating tables 
+    -  Table 1
+    -  Tables for analytic results
+
+--
+
+The basic assumption we'll make is that we will start with a tidy data set.
+
+
+---
+class: middle, center
+
+# Statistical summaries
+
+---
+
+## Univariate summaries
+
+**Single summaries**  
+.pull-left[
+- Mean (`mean`)
+- Variance(`var`)
+- Standard deviation (`sd`)
+- Count (`nrow` or `dplyr::n` or `dplyr::n_distinct`)
+]
+.pull-right[
+- Median ('median')
+- Inter-quartile range (`IQR`)
+- Mean absolute deviation (`mad`)
+- Minimum (`min`) and Maximum (`max`)
+]
+
+--
+
+**Multiple summaries**  
+- Quantiles (`quantile`)
+- Range (`range`)
+
+---
+class: middle, center
+
+# Summarizing the breast cancer expression dataset
+
+---
+
+## Mean
+
+.pull-left[
+```{r s1, eval = F, echo = T}
+brca <- rio::import('data/BreastCancer_Expression.csv')
+brca %>% 
+  summarize_at(vars(starts_with('NP')), 
+               mean, na.rm=T) #<<
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="s1"}
+```
+]
+
+---
+
+## Median
+
+.pull-left[
+```{r s2, eval = F, echo = T}
+brca %>% 
+  summarize_at(vars(starts_with('NP')), 
+               median, na.rm=T) #<<
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="s2"}
+```
+]
+
+---
+
+## Standard deviation
+
+.pull-left[
+```{r s3, eval = F, echo = T}
+brca %>% 
+  summarize_at(vars(starts_with('NP')),
+               sd, na.rm=T) #<<
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="s3"}
+```
+]
+
+---
+
+## Multiple summaries together
+
+.pull-left[
+```{r s4, eval = F, echo = T}
+brca %>% 
+  summarize_at(vars(starts_with('NP')),
+               c(mean,
+               median,
+               sd), na.rm=T)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="s4"}
+```
+]
+
+---
+
+## Multiple summaries together
+
+.pull-left[
+```{r s5, eval = F, echo = T}
+brca %>% 
+  summarize_at(-1, # got tired of typing
+               c('Mean'=mean,
+                 'Median' = median,
+                 'SD'=sd), na.rm=T) 
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="s5"}
+```
+]
+
+---
+
+## Multiple summaries together
+
+.pull-left[
+```{r s7, eval = F, echo = T}
+brca %>% 
+  summarize_at(-1, 
+               c('Mean' = mean,
+                 'Median' = median,
+                 'SD' = sd), na.rm=T) %>% 
+  tidyr::gather(variable, value) %>% #<<
+  separate(variable, #<<
+           c("Type",'ID','Statistic'), sep='_') %>% #<<
+  spread(Statistic, value) %>% #<<
+  unite(ID, c('Type','ID'), sep='_') #<<
+```
+
+The highlighted part is to format the output
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="s7"}
+```
+]
+
+---
+
+## Data set summary
+
+There is a function `summary` that will give you summaries of all the variables. It's nice for looking at the data, but the output format isn't very good for further manipulation
+
+.pull-left[
+```{r s8, eval = F, echo = T}
+summary(brca[,-1])
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="s8"}
+```
+]
+
+---
+class: middle, center
+
+# Maybe an easier way?
+
+---
+
+## The `tableone` package
+
+The `tableone` package is meant to create, you guessed it, Table 1. 
+
+It is quite a convenient package for most purposes and saves gobs of time
+
+---
+
+## The `tableone` package
+
+.pull-left[
+```{r t1, eval = F, echo = T}
+library(tableone)
+tab1 <- CreateTableOne(data=brca[,-1])
+tab1
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="t1"}
+```
+]
+
+---
+
+## The `tableone` package
+
+.pull-left[
+```{r t2, eval = F, echo = T}
+library(tableone)
+tab1 <- CreateTableOne(data = brca[-1])
+print(tab1, nonnormal = names(brca)[-1])
+```
+
+You have to give the variable names of those you think are non-normally distributed and need to be summarized by the median
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="t2"}
+```
+]
+
+---
+
+## The `tableone` package
+
+.pull-left[
+```{r t3, eval = F, echo = T}
+library(tableone)
+tab1 <- CreateTableOne(data = brca[-1])
+kableone(print(tab1, nonnormal = names(brca)[-1]),
+         format='html')
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="t3"}
+```
+]
+
+---
+class: middle, center
+
+# Mixed data
+
+---
+
+Let's first put the expression and clinical data together
+
+```{r}
+library(rio)
+brca1 <- import('data/clinical_data_breast_cancer_hw.csv')
+brca2 <- import('data/BreastCancer_Expression.csv')
+brca <- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %>% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis =
+           as.numeric(Age.at.Initial.Pathologic.Diagnosis)) %>% 
+  mutate(ER.Status = ifelse(ER.Status %in% c('Positive','Negative'),
+                            ER.Status, NA))
+
+summary(brca)
+```
+
+---
+
+Let's first put the expression and clinical data together
+
+```{r}
+library(rio)
+brca1 <- import('data/clinical_data_breast_cancer_hw.csv')
+brca2 <- import('data/BreastCancer_Expression.csv')
+brca <- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %>% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis =
+           as.numeric(Age.at.Initial.Pathologic.Diagnosis)) %>% 
+  mutate(ER.Status = ifelse(ER.Status %in% c('Positive','Negative'),
+                            ER.Status, NA),
+         HER2.Final.Status = ifelse(HER2.Final.Status=='Equivocal', 
+                                    NA, HER2.Final.Status)) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(Complete.TCGA.ID = as.character(Complete.TCGA.ID)) #<<
+
+str(brca)
+```
+
+---
+
+Identify which variables are categorical (factors) and which are continuous (numeric)
+
+```{r}
+catvars <- brca %>% select_if(is.factor) %>% names()
+ctsvars <- brca %>% select_if(is.numeric) %>% names()
+```
+
+---
+
+.pull-left[
+```{r tab1, eval = F, echo = T}
+CreateCatTable(vars = catvars, data = brca)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="tab1"}
+```
+]
+
+---
+
+.pull-left[
+```{r tab2, eval = F, echo = T}
+CreateContTable(vars = ctsvars, data = brca)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="tab2"}
+```
+]
+
+---
+
+.pull-left[
+```{r tab2a, eval = F, echo = T}
+brca <- brca %>% 
+  rename(
+    'Age'='Age.at.Initial.Pathologic.Diagnosis',
+    'Last.Contact' = 'Days.to.Date.of.Last.Contact',
+    'Death' = 'Days.to.date.of.Death'
+  )
+ctsvars <- brca %>% select_if(is.numeric) %>% names()
+CreateContTable(vars = ctsvars, data = brca)
+
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="tab2a"}
+```
+]
+
+---
+
+## Putting it together
+
+.pull-left[
+```{r tab3, eval = F, echo = T}
+CreateTableOne(vars = c(catvars, ctsvars),
+               data = brca)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="tab3"}
+```
+]
+
+---
+
+## Putting it together
+
+.pull-left[
+```{r tab4, eval = F, echo = T}
+CreateTableOne(data = brca[,-1])
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="tab4"}
+```
+]
+
+
+---
+
+class: middle, center
+
+# Grouped summaries
+
+---
+
+.pull-left[
+```{r grp1, eval = F, echo = T, warning=F, message=F}
+brca %>% 
+  group_by(ER.Status) %>% 
+  summarize_at(vars(starts_with('NP')),
+               mean)
+```
+
+There are missing values now, so we have to use `na.rm=T`.
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="grp1", warning=F, message=F}
+```
+]
+
+---
+
+.pull-left[
+```{r grp1a, eval = F, echo = T}
+brca %>% 
+  group_by(ER.Status) %>% 
+  summarize_at(vars(starts_with('NP')),
+               mean, na.rm=T) #<<
+```
+
+We still have a row for the missing values of ER.Status
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="grp1a", warning=F, message=F}
+```
+]
+
+---
+
+.pull-left[
+```{r grp1b, eval = F, echo = T}
+brca %>% 
+  filter(!is.na(ER.Status)) %>% #<<
+  group_by(ER.Status) %>% 
+  summarize_at(vars(starts_with('NP')),
+               mean, na.rm=T)
+```
+
+How about reversing the rows and columns for readability
+
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="grp1b"}
+```
+]
+
+---
+
+.pull-left[
+```{r grp1c, eval = F, echo = T}
+brca %>% 
+  filter(!is.na(ER.Status)) %>% #<<
+  group_by(ER.Status) %>% 
+  summarize_at(vars(starts_with('NP')),
+               mean, na.rm=T) %>% 
+  tidyr::gather(ID, value, -ER.Status) %>% #<<
+  spread(ER.Status, value) #<<
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="grp1c"}
+```
+]
+
+---
+
+### Using `tableone`
+
+```{r grp1d, eval = F, echo = T}
+CreateTableOne(
+  data = brca %>% filter(!is.na(ER.Status)),
+  vars = brca %>% 
+    select(starts_with('NP')) %>% 
+    names(),
+  strata = 'ER.Status',
+  test = F)
+```
+```{r, eval=T, echo = F, ref.label="grp1d"}
+```
+
+---
+class: middle, center
+
+# Comparing two groups
+
+---
+
+## The t-test
+
+The t-test compares whether the mean of a variable differs between two groups. 
+
+It does assume the normal distribution for the data, but is robust to deviations from normality
+
+Do **not** test for normality before doing the t-test. It isn't necessary and screws up your error rates
+
+---
+
+## The t-test
+
+In R, there is a convenient function `t.test`
+
+```{r}
+t.test(NP_958782 ~ ER.Status, data = brca)
+```
+
+Read the code as 
+
+"Do a t-test to see if (the mean of) `NP_958782` differs by `ER.Status`, where
+both are taken from the data set `brca`"
+
+You can read the `~` as "by", as in "t-test of NP_958782 by ER.Status"
+
+---
+
+## The t-test
+
+The packge `broom` provides a function `tidy` that makes the results of these
+statistical tests tidy.
+
+```{r}
+t.test(NP_958782 ~ ER.Status, data=brca) %>% 
+  broom::tidy()
+```
+
+--
+
+```{r, echo=F}
+t.test(NP_958782 ~ ER.Status, data=brca)
+```
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+```{r test1, eval = F, echo = T}
+brca %>% 
+  select(ER.Status, starts_with('NP')) %>% 
+  tidyr::gather(protein,expression, -ER.Status)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="test1"}
+```
+]
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+```{r test2, eval = F, echo = T}
+brca %>% 
+  select(ER.Status, starts_with('NP')) %>% 
+  tidyr::gather(protein,expression, -ER.Status) %>% 
+  group_split(protein)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="test2"}
+```
+]
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+```{r test2a, eval = F, echo = T}
+brca %>% 
+  select(ER.Status, starts_with('NP')) %>% 
+  tidyr::gather(protein,expression, -ER.Status) %>% 
+  split(.$protein) %>% #<<
+  map(~broom::tidy(t.test(expression ~ ER.Status, 
+                          data=.)))
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="test2a"}
+```
+]
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+```{r test2b, eval = F, echo = T}
+brca %>% 
+  select(ER.Status, starts_with('NP')) %>% 
+  tidyr::gather(protein,expression, -ER.Status) %>% 
+  split(.$protein) %>% #<<
+  map(~broom::tidy(t.test(expression ~ ER.Status, 
+                          data=.))) %>% 
+  bind_rows(.id='Protein')
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="test2b"}
+```
+]
+
+---
+
+## Using `broom`
+
+The fact that `broom::tidy` makes the results of tests into tibbles is in fact
+extremely useful in high-throughput work
+
+.pull-left[
+```{r test2c, eval = F, echo = T}
+brca %>% 
+  select(ER.Status, starts_with('NP')) %>% 
+  tidyr::gather(protein,expression, -ER.Status) %>% 
+  split(.$protein) %>% #<<
+  map(~broom::tidy(t.test(expression ~ ER.Status, 
+                          data=.))) %>% 
+  bind_rows(.id='Protein') %>% 
+  select(Protein, estimate, p.value, conf.low, conf.high)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="test2c"}
+```
+]
+
+---
+class: center, middle
+
+# Back to testing
+
+---
+
+## Wilcoxon test, nonparametric t-test
+
+```{r}
+wilcox.test(NP_958782 ~ ER.Status, data=brca) %>% 
+  broom::tidy()
+```
+
+--
+
+```{r, echo=F}
+wilcox.test(NP_958782 ~ ER.Status, data=brca)
+```
+
+---
+
+## Wilcoxon test
+
+.pull-left[
+```{r test3, eval = F, echo = T}
+brca %>% 
+  select(ER.Status, starts_with('NP')) %>% 
+  tidyr::gather(protein,expression, -ER.Status) %>% 
+  split(.$protein) %>% 
+  map(~broom::tidy(wilcox.test(expression ~ ER.Status, 
+                          data=.))) %>% 
+  bind_rows(.id='Protein') %>% 
+  select(Protein, p.value)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="test3"}
+```
+]
+
+---
+
+## Using `tableone`
+
+
+```{r table4, eval = F, echo = T}
+CreateTableOne(
+  data = brca %>% filter(!is.na(ER.Status)),
+  vars = brca %>% 
+    select(starts_with('NP')) %>% 
+    names(),
+  strata = 'ER.Status',
+  test = T,
+  testNormal = t.test
+)
+```
+```{r, eval=T, echo = F, ref.label="table4"}
+```
+
+--
+
+This is not quite the same results as before
+
+---
+
+## Using `tableone`
+
+
+```{r table4a, eval = F, echo = T}
+CreateTableOne(
+  data = brca %>% filter(!is.na(ER.Status)),
+  vars = brca %>% 
+    select(starts_with('NP')) %>% 
+    names(),
+  strata = 'ER.Status',
+  test = T,
+  testNormal = t.test,
+  argsNormal = list(var.equal=F) #<<
+)
+```
+```{r, eval=T, echo = F, ref.label="table4a"}
+```
+
+---
+
+## Tests for discrete data
+
+Testing whether the distribution of a categorical variable differs by levels of 
+another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
+
+```{r}
+fisher.test(table(brca$Tumor, brca$ER.Status))
+```
+
+---
+
+## Tests for discrete data
+
+Testing whether the distribution of a categorical variable differs by levels of 
+another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
+
+```{r}
+chisq.test(table(brca$Tumor, brca$ER.Status))
+```
+
+---
+
+## Tests for discrete data
+
+We can use `broom::tidy` for either of these
+
+```{r}
+chisq.test(table(brca$Tumor, brca$ER.Status)) %>% 
+  broom::tidy()
+```
+
+---
+
+## Using `tableone`
+
+```{r}
+CreateCatTable(vars = c('Tumor','Node','Metastasis'),
+               data = filter(brca, !is.na(ER.Status)),
+               strata = 'ER.Status',
+               test = T) # chisq.test
+```
+
+---
+
+## Using `tableone`
+
+```{r}
+c1 <- CreateCatTable(vars = c('Tumor','Node','Metastasis'),
+               data = filter(brca, !is.na(ER.Status)),
+               strata = 'ER.Status',
+               test = T)
+print(c1, exact = c('Tumor','Node','Metastasis')) # fisher.test
+```
