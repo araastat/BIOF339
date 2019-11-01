@@ -19,6 +19,24 @@ hw_outrmd <- fs::path('docs',hw_rmdfiles)
 top_rmdfiles <- unlist(map(dir_ls(type='d'), ~dir_ls(., glob='*.Rmd')))
 top_rmdfiles <- top_rmdfiles[!str_detect(top_rmdfiles, 'notes')]
 
+slides_plan <- drake_plan(
+  create_slides_html = target(
+    rmarkdown::render(knitr_in(rmdf), output_dir=slides_outdir),
+    transform = map(rmdf=!!slides_rmdfiles)
+  ),
+  create_slides_pdf = target(
+    coursedown::slide2pdf(knitr_in(rmdf)),
+    transform = map(rmdf = !!slides_rmdfiles)
+  ),
+  create_index = target(
+    rmarkdown::render_site(knitr_in('slides/index.Rmd')),
+    trigger = trigger(depend =T, file=T, command=T, 
+                      change = max(map_dbl(!!slides_rmdfiles, 
+                                       function(x) file.info(x)$mtime))),
+    transform = map( rmdf = !!slides_rmdfiles)
+  )
+)
+
 full_plan <- drake_plan(
   create_slides_html = target(
     rmarkdown::render(knitr_in(rmdf), output_dir=slides_outdir),
@@ -29,7 +47,7 @@ full_plan <- drake_plan(
     transform = map(rmdf = !!slides_rmdfiles)
   ),
   make_slide_index = target(
-    rmarkdown::render_site(input = knitr_in(here::here('slides/index.Rmd'))),
+    rmarkdown::render(input = knitr_in(here::here('slides/index.Rmd'))),
     trigger = trigger(depend = all(file_exists(!!slides_outrmd)))
   ),
   create_hw_html = target(
