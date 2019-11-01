@@ -11,6 +11,8 @@ assignments/HW/*.html
 .drake/*
 slides/lectures/*cache/*
 docs/slides/lectures/05-Plotting_cache/*
+docs/slides/lectures/05-Plotting_files/*
+slides/lectures/05-Plotting_files/*
 slides/lectures/data/*
 slides/lectures/img/*
 slides/lectures/06-joins-plots_files/*
