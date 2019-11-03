@@ -79,7 +79,7 @@ log-expression levels of 10 probes for the same individuals that are in the clin
 1. Modify the dataset appropriately and draw a facetted plot where each facet is a histogram of the expression levels of each probe. 
 ```{r}
 brca_expression <- import('data/BreastCancer_Expression.xlsx')
-brca_expression %>% gather(probe, expression, starts_with('NP')) %>% 
+brca_expression %>% tidyr::gather(probe, expression, starts_with('NP')) %>% 
   ggplot(aes(x = expression))+geom_histogram()+
   facet_wrap(~probe)
 
