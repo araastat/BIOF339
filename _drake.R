@@ -1,8 +1,8 @@
-library(drake)
-library(fs)
-library(here)
-suppressPackageStartupMessages(library(tidyverse))
-library(bookdown)
+# library(drake)
+# library(fs)
+# library(here)
+# suppressPackageStartupMessages(library(tidyverse))
+# library(bookdown)
 
 last_drake = max(dir_info('.drake')$modification_time)
 
