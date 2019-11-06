@@ -1,10 +1,10 @@
-# library(drake)
-# library(fs)
-# library(here)
-# suppressPackageStartupMessages(library(tidyverse))
-# library(bookdown)
+ library(drake)
+ library(fs)
+ library(here)
+ suppressPackageStartupMessages(library(tidyverse))
+ library(bookdown)
 
-last_drake = max(dir_info('.drake')$modification_time)
+last_drake = max(fs::dir_info('.drake')$modification_time)
 
 slides_rmdfiles <- dir_ls('slides/lectures/', glob = '*.Rmd')
 slides_outdir <- here::here('docs','slides','lectures')
@@ -12,7 +12,6 @@ slides_outrmd <- fs::path('docs',slides_rmdfiles)
 slides_outpdf <- str_replace(slides_outrmd, 'Rmd','pdf')
 
 hw_rmdfiles <- dir_ls('assignments/HW', glob = '*.Rmd')
-hw_soln_rmdfiles <- dir_ls('assignments/HW', glob = '*_Solution.Rmd')
 hw_outdir <- here::here('docs','assignments','HW')
 hw_outrmd <- fs::path('docs',hw_rmdfiles)
 
@@ -32,10 +31,23 @@ slides_plan <- drake_plan(
     rmarkdown::render_site(knitr_in('slides/index.Rmd')),
     trigger = trigger(depend =T, file=T, command=T, 
                       change = max(map_dbl(!!slides_rmdfiles, 
-                                       function(x) file.info(x)$mtime))),
-    transform = map( rmdf = !!slides_rmdfiles)
+                                       function(x) file.info(x)$mtime)))
   )
 )
+
+hw_plan <- drake_plan(
+  create_hw_html = target(
+    rmarkdown::render(knitr_in(rmdf), output_dir = hw_outdir),
+    transform = map(rmdf = !!hw_rmdfiles)
+  ),
+  create_index = target(
+    rmarkdown::render_site(knitr_in('slides/index.Rmd')),
+    trigger = trigger(depend=T, file=T, command=T,
+                      change = max(map_dbl(!!hw_rmdfiles, 
+                                           function(x) file.info(x)$mtime)))
+  )
+)
+
 
 full_plan <- drake_plan(
   create_slides_html = target(

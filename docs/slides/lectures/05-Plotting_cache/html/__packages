@@ -14,9 +14,11 @@ ggridges
 XML
 acs
 plotly
+fs
+here
+gganimate
+gapminder
 rio
 qqman
 drake
-fs
-here
 bookdown
