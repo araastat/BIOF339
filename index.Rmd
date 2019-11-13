@@ -6,6 +6,7 @@ output:
   html_document:
     includes:
       after_body: footer.html
+      css: 
 ---
 
 ```{r, include = FALSE, eval = knitr::opts_knit$get("rmarkdown.pandoc.to") == "html"}
