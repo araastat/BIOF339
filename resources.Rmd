@@ -45,6 +45,7 @@ can't or are uncomfortable with this step, no worries. We'll also do it in class
 
 [<img style="height:150px; width:112px; border: 3px solid black;" src="img/msmb.png"/>](http://web.stanford.edu/class/bios221/book/){target=_blank} 
 [<img style="height:150px; border: 3px solid black;" src="img/md.png"/>](https://moderndive.com/){target=_blank}
+[<img style="height:150px; border: 3px solid black;" src="img/kaplan.png"/>](https://dtkaplan.github.io/SM2-bookdown/){target=_blank}
 
 ### Data visualization using R 
 
