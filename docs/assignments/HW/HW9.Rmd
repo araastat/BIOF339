@@ -1,0 +1,82 @@
+---
+title: "Homework 9: Statistical tests and models"
+author: "Abhijit Dasgupta"
+date: "Due Tuesday, November 5 at midnight"
+output: html_document
+---
+
+
+```{r setup, include=F}
+library(tidyverse)
+```
+
+```{r, echo=F}
+library(reticulate)
+source_python('create_request.py')
+a <- py$create_request('2019-11-20T00:00:00','Homework 9','/BIOF339_Fall2019/Homeworks/HW9')
+```
+
+<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](`r a$url`){target='_blank'}
+</p>
+
+This homework will serve as both an exercise in exploring data leading to modeling, as
+well as a starter on some Bioconductor datasets. The preliminaries are below. The `Golub_Merge`
+dataset is from a leukemia study by Golub, comprising 47 ALL patients and 25
+AML patients, assayed using Affymetrix Hgu6800 microarray chips. The chips comprised 7129 probes, 
+with probes with "AFFX" in the title comprising housekeeping or control probes. They are
+loaded as an `exprSet` objecct. 
+
+```{r, warning=F, message=F}
+if (!requireNamespace("BiocManager", quietly = TRUE)){
+  install.packages("BiocManager")
+}
+if(!requireNamespace('golubEsets', quietly=TRUE)){
+  BiocManager::install("golubEsets")
+}
+library(golubEsets)
+data("Golub_Merge")
+expr_controls <- as.data.frame(t(head(exprs(Golub_Merge),10))) %>% 
+  rownames_to_column('Samples')
+expr_probes <- as.data.frame(t(tail(exprs(Golub_Merge), 10))) %>% 
+  rownames_to_column('Samples')
+pheno <- pData(Golub_Merge) %>% mutate(Samples = as.character(Samples))
+```
+
+The `expr_controls` comprises 10 AFFX control probes, and `expr_probes` comprises 10 test probes. Check the 
+original data `exprs(Golub_Merge)` to understand why we're taking the transpose of the matrix (switching rows and columns) using the `t()` function.  
+
+1. Add the phenotype data (`pheno`) columns to each of the expression data sets
+1. Choose one of the control probes in `expr_controls` and draw figures showing how 
+its expression varies by AML or ALL (`ALL.AML`), whether blood was taken from bone marrow 
+or peripheral blood (`BM.PB`), and institution (`Source`). Do the same with one of the test probes 
+in `expr_probes`. 
+1. We expect that the control probes shouldn't have expression differ between different 
+conditions. Let us formally test whether the control probe you chose differs between different levels
+of a factor. For each test, use the function `broom::tidy` to get nicely formatted results for each test
+    a. Test whether it differs between levels of `ALL.AML` and `BM.PB` using the T-test (`t.test`) and the Wilcoxon test (`wilcox.test`)
+    b. To compare more than 2 groups at once, you can use an ANOVA (`aov`) or a Kruskal-Wallis test (`kruskal.test`). Both of these take the same formula format we've seen before. 
+    c. Use a permutation test (using the `infer` package) to see in a distribution-free manner if your chosen control probe differs by different sources. The strategy will be to generate the permutation samples, and then, instead of calculating "diff in means" as we did in class, you will calculate "F", the F-statistic that the ANOVA uses. The test will be one-sided, in that the p-value will be the probablility of seeing a F-value larger that what you observe. 
+
+Extra credit:
+
+1. You've figured out how to do the testing for a single probe in the control probes against `ALL.AML`, 
+`BM.PB` and `Source`. Use `gather`, `split` and `broom::tidy` (among other functions) to create the following table of p-values:
+
+<table border=1>
+<tr> <th> probe </th> <th> ALL.AML </th> <th> BM.PB </th> <th> Source </th>  </tr>
+  <tr> <td> AFFX-BioB-3_at </td> <td align="right"> 0.77 </td> <td align="right"> 0.39 </td> <td align="right"> 0.85 </td> </tr>
+  <tr> <td> AFFX-BioB-5_at </td> <td align="right"> 0.34 </td> <td align="right"> 0.52 </td> <td align="right"> 0.55 </td> </tr>
+  <tr> <td> AFFX-BioB-5_st </td> <td align="right"> 0.67 </td> <td align="right"> 0.16 </td> <td align="right"> 0.30 </td> </tr>
+  <tr> <td> AFFX-BioB-M_at </td> <td align="right"> 0.14 </td> <td align="right"> 0.79 </td> <td align="right"> 0.01 </td> </tr>
+  <tr> <td> AFFX-BioC-3_at </td> <td align="right"> 0.17 </td> <td align="right"> 0.30 </td> <td align="right"> 0.72 </td> </tr>
+  <tr> <td> AFFX-BioC-5_at </td> <td align="right"> 0.01 </td> <td align="right"> 0.37 </td> <td align="right"> 0.04 </td> </tr>
+  <tr> <td> AFFX-BioDn-3_at </td> <td align="right"> 0.06 </td> <td align="right"> 0.35 </td> <td align="right"> 0.04 </td> </tr>
+  <tr> <td> AFFX-BioDn-5_at </td> <td align="right"> 0.30 </td> <td align="right"> 0.30 </td> <td align="right"> 0.27 </td> </tr>
+  <tr> <td> AFFX-CreX-3_at </td> <td align="right"> 0.16 </td> <td align="right"> 0.58 </td> <td align="right"> 0.10 </td> </tr>
+  <tr> <td> AFFX-CreX-5_at </td> <td align="right"> 0.02 </td> <td align="right"> 0.48 </td> <td align="right"> 0.00 </td> </tr>
+   </table>
+
+Do the same for the 10 probes in the `expr_probes` dataset
+
+
