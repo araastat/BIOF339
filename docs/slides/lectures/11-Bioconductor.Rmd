@@ -363,14 +363,6 @@ ggplot(dat, aes(x = dex, y = count, fill=dex))+
 ```
 
 ---
-
-## Another visualization
-
-```{r, fig.width=7}
-plotMA(res, ylim=c(-5,5))
-```
-
----
 class:middle,center
 # A Seurat pipeline
 
@@ -577,5 +569,13 @@ d3heatmap(exprs(exdat2), distfun = corrdist,
 ```
 
 [Link](../heatmap.html)
+
 Put your mouse over each point :)
 
+---
+
+# Resources
+
++ [Organizing Single Cell Analysis with Bioconductor](https://osca.bioconductor.org/)
++ [Bioconductor Courses](https://bioconductor.org/help/course-materials/)
++ [2019 Bioconductor workshops](http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/)

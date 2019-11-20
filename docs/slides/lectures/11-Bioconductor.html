@@ -176,7 +176,7 @@ str(sample.ExpressionSet)
 #&gt;    .. .. .. .. ..@ .Data:List of 2
 #&gt;    .. .. .. .. .. ..$ : int [1:3] 1 0 0
 #&gt;    .. .. .. .. .. ..$ : int [1:3] 1 1 0
-#&gt;    ..@ assayData        :&lt;environment: 0x7fee1c47dc90&gt; 
+#&gt;    ..@ assayData        :&lt;environment: 0x7fedf9c6c578&gt; 
 #&gt;    ..@ phenoData        :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
 #&gt;    .. .. ..@ varMetadata      :'data.frame':	3 obs. of  1 variable:
 #&gt;    .. .. .. ..$ labelDescription: chr [1:3] "Female/Male" "Case/Control" "Testing Score"
@@ -1059,17 +1059,6 @@ ggplot(dat, aes(x = dex, y = count, fill=dex))+
 ![](11-Bioconductor_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 ---
-
-## Another visualization
-
-
-```r
-plotMA(res, ylim=c(-5,5))
-```
-
-![](11-Bioconductor_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
-
----
 class:middle,center
 # A Seurat pipeline
 
@@ -1139,7 +1128,7 @@ data are stored on genomics databases like GEO
 (plt &lt;- VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1170,7 +1159,7 @@ plot2 &lt;- LabelPoints(plot = plot1, points = top10, repel = TRUE)
 CombinePlots(plots = list(plot1, plot2))
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1212,7 +1201,7 @@ print(pbmc[["pca"]], dims = 1:5, nfeatures = 5)
 DimPlot(pbmc, reduction = "pca")
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1224,7 +1213,7 @@ pbmc &lt;- RunTSNE(pbmc, dims=1:10)
 DimPlot(pbmc, reduction='tsne')
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
 
 ---
 class:middle,center
@@ -1287,7 +1276,7 @@ reg1 &lt;- regHeatmap(exprs(exdat2), legend=2, col=heat.colors,
 plot(reg1)
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1299,7 +1288,7 @@ reg1 &lt;- regHeatmap(exprs(exdat2), legend=2, col=heat.colors,
 plot(reg1)
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
 
 
 
@@ -1315,7 +1304,7 @@ reg2 &lt;- regHeatmap(exprs(exdat2), legend=2, col=heat.colors,
 plot(reg2)
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1325,7 +1314,7 @@ ann1 &lt;- annHeatmap(exprs(exdat2), ann=pData(exdat2), col = heat.colors)
 plot(ann1)
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1338,7 +1327,7 @@ ann2 &lt;- annHeatmap(exprs(exdat2), ann=pData(exdat2), col = heat.colors,
 plot(ann2)
 ```
 
-![](11-Bioconductor_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+![](11-Bioconductor_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1352,7 +1341,16 @@ d3heatmap(exprs(exdat2), distfun = corrdist,
 ```
 
 [Link](../heatmap.html)
+
 Put your mouse over each point :)
+
+---
+
+# Resources
+
++ [Organizing Single Cell Analysis with Bioconductor](https://osca.bioconductor.org/)
++ [Bioconductor Courses](https://bioconductor.org/help/course-materials/)
++ [2019 Bioconductor workshops](http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
