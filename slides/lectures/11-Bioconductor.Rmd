@@ -484,11 +484,11 @@ class:middle,center
 
 There are several ways of doing heatmaps in R:
 
-+ [http://sebastianraschka.com/Articles/heatmaps_in_r.html](http://sebastianraschka.com/Articles/heatmaps_in_r.html){target="_blank"}
-+ [https://plot.ly/r/heatmaps/](https://plot.ly/r/heatmaps/){target="_blank"}
-+ [http://moderndata.plot.ly/interactive-heat-maps-for-r/](http://moderndata.plot.ly/interactive-heat-maps-for-r/){target="_blank"}
-+ [http://www.siliconcreek.net/r/simple-heatmap-in-r-with-ggplot2](http://www.siliconcreek.net/r/simple-heatmap-in-r-with-ggplot2){target="_blank"}
-+ [https://rud.is/b/2016/02/14/making-faceted-heatmaps-with-ggplot2/](https://rud.is/b/2016/02/14/making-faceted-heatmaps-with-ggplot2/){target="_blank"}
++ [http://sebastianraschka.com/Articles/heatmaps_in_r.html](http://sebastianraschka.com/Articles/heatmaps_in_r.html)
++ [https://plot.ly/r/heatmaps/](https://plot.ly/r/heatmaps/)
++ [http://moderndata.plot.ly/interactive-heat-maps-for-r/](http://moderndata.plot.ly/interactive-heat-maps-for-r/)
++ [http://www.siliconcreek.net/r/simple-heatmap-in-r-with-ggplot2](http://www.siliconcreek.net/r/simple-heatmap-in-r-with-ggplot2)
++ [https://rud.is/b/2016/02/14/making-faceted-heatmaps-with-ggplot2/](https://rud.is/b/2016/02/14/making-faceted-heatmaps-with-ggplot2/)
 
 ---
 
