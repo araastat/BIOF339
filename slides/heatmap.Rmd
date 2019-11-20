@@ -1,0 +1,20 @@
+## Some example data
+
+```{r,echo=F,  message=F, warning=F}
+library(Biobase)
+library(d3heatmap)
+data(sample.ExpressionSet)
+exdat <-  sample.ExpressionSet
+library(limma)
+design1 <- model.matrix(~type, data=pData(exdat))
+lm1 <- lmFit(exprs(exdat), design1)
+lm1 <- eBayes(lm1) # compute linear model for each probeset
+geneID <- rownames(topTable(lm1, coef=2, num=100, adjust='none',p.value=0.05))
+exdat2 <- exdat[geneID,] # Keep features with p-values < 0.05
+corrdist <- function(x) as.dist(1-cor(t(x)))
+hclust.avl <-  function(x) hclust(x, method='average')
+
+d3heatmap(exprs(exdat2), distfun = corrdist, 
+          hclustfun = hclust.avl, scale='row')
+```
+

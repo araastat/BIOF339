@@ -55,7 +55,7 @@ def create_request(timestamp, name, directory, late=True, token=tk):
       deadline=UpdateFileRequestDeadline('update',dl))
     return(a1)
   
-  a = dbx.file_requests_create(title='Homework 8', destination='/biof339_Fall2019', 
+  a = dbx.file_requests_create(title=name, destination=directory, 
     deadline=dl)
   return(a)
 

@@ -7,7 +7,7 @@ output: html_document
 
 
 
-```{r, echo=F}
+```{r, echo=F, eval=F}
 library(reticulate)
 source_python('create_request.py')
 a <- py$create_request('2019-11-07T00:00:00','Homework 8','/BIOF339_Fall2019/Homeworks/HW8')

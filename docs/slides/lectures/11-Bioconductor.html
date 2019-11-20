@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>A very short, sketchy, introduction to Bioconductor</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="11-Bioconductor_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="robot.css" type="text/css" />
+    <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A very short, sketchy, introduction to Bioconductor
+### Abhijit Dasgupta
+### Fall, 2019
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339, Fall, 2019&lt;/span&gt;&lt;/div&gt;
+
+---
+
+## Bioconductor
+
+Bioconductor provides tools for the analysis and comprehension of high-throughput genomic and biological data, using R.
+
++ 1823 packages
++ Covers the bioinformatic pipeline
+
+
++ Analysis [`GenomicRanges`, `Biostrings`, `GenomicAlignments`, `SummarizedExperiment`]
++ Annotation (species/platform specific, system) [`biomaRt`, `org.Hs.eg.db`, `GO.db`, `KEGG.db`]
++ Experiments [`TENxPBMCData`, `airway`, `ALL`]
++ Workflows [`rnaseqGene`, `TCGAWorkflow`]
+
+---
+
+## Bioconductor
+
+.center[Bioconductor v. 3.10 packages]
+.pull-left[
+![](img/software.png)
+
+![](img/experiments.png)
+]
+.pull-right[
+![](img/annotations.png)
+
+![](img/workflow.png)
+]
+
+---
+
+## Installing Bioconductor packages
+
+Bioconductor is a separate repository and system which uses R. So the process is a bit different than `install.packages`. The following works for R version 3.5 and higher.
+
+
+```r
+install.packages("BiocManager")
+*BiocManager::install(c('Biobase','limma','hgu95av2.db','Biostrings'))
+```
+
+There are several packages that are often installed for each Bioconductor package, and some have functions
+that have the same name as one's you've used. So
+
++ Use `package::function` format for calling functions from non-Bioconductor packages
+
+---
+
+## Bioconductor basics
+
+
+```r
+library(Biostrings)
+dna &lt;- DNAStringSet(c("AACAT", "GGCGCCT"))
+reverseComplement(dna)
+```
+
+```
+#&gt;    A DNAStringSet instance of length 2
+#&gt;      width seq
+#&gt;  [1]     5 ATGTT
+#&gt;  [2]     7 AGGCGCC
+```
+
+--
+
+
+```r
+library(Biostrings)
+data("phiX174Phage")
+phiX174Phage
+```
+
+```
+#&gt;    A DNAStringSet instance of length 6
+#&gt;      width seq                                                      names               
+#&gt;  [1]  5386 GAGTTTTATCGCTTCCATGACGCAGAA...AAAATGATTGGCGTATCCAACCTGCA Genbank
+#&gt;  [2]  5386 GAGTTTTATCGCTTCCATGACGCAGAA...AAAATGATTGGCGTATCCAACCTGCA RF70s
+#&gt;  [3]  5386 GAGTTTTATCGCTTCCATGACGCAGAA...AAAATGATTGGCGTATCCAACCTGCA SS78
+#&gt;  [4]  5386 GAGTTTTATCGCTTCCATGACGCAGAA...AAAATGATTGGCGTATCCAACCTGCA Bull
+#&gt;  [5]  5386 GAGTTTTATCGCTTCCATGACGCAGAA...AAAATGATTGGCGTATCCAACCTGCA G97
+#&gt;  [6]  5386 GAGTTTTATCGCTTCCATGACGCAGAA...AAAATGATTGGCGTATCCAACCTGCA NEB03
+```
+
+---
+
+## Bioconductor basics
+
+
+```r
+letterFrequency(phiX174Phage, 'GC', as.prob=TRUE)
+```
+
+```
+#&gt;             G|C
+#&gt;  [1,] 0.4476420
+#&gt;  [2,] 0.4472707
+#&gt;  [3,] 0.4472707
+#&gt;  [4,] 0.4470850
+#&gt;  [5,] 0.4472707
+#&gt;  [6,] 0.4470850
+```
+
+---
+
+## Bioconductor data structures
+
++ So far we've seen the `data.frame` or `tibble` be the unit of data storage
++ In Bioconductor, data are stored in **containers** which can contain many elements of data for an experiment
+    - Actual quantitative results of experiments
+    - Phenotype data
+    - Genotype meta-data
+    - Results of analysis
+  
++ In Bioconductor workflows, the same container is updated with new elements, which can then be accessed using accessor functions
+
+---
+
+## An ExpressionSet
+
+
+```r
+library(Biobase)
+data('sample.ExpressionSet')
+str(sample.ExpressionSet)
+```
+
+```
+#&gt;  Formal class 'ExpressionSet' [package "Biobase"] with 7 slots
+#&gt;    ..@ experimentData   :Formal class 'MIAME' [package "Biobase"] with 13 slots
+#&gt;    .. .. ..@ name             : chr "Pierre Fermat"
+#&gt;    .. .. ..@ lab              : chr "Francis Galton Lab"
+#&gt;    .. .. ..@ contact          : chr "pfermat@lab.not.exist"
+#&gt;    .. .. ..@ title            : chr "Smoking-Cancer Experiment"
+#&gt;    .. .. ..@ abstract         : chr "An example object of expression set (ExpressionSet) class"
+#&gt;    .. .. ..@ url              : chr "www.lab.not.exist"
+#&gt;    .. .. ..@ pubMedIds        : chr ""
+#&gt;    .. .. ..@ samples          : list()
+#&gt;    .. .. ..@ hybridizations   : list()
+#&gt;    .. .. ..@ normControls     : list()
+#&gt;    .. .. ..@ preprocessing    : list()
+#&gt;    .. .. ..@ other            :List of 1
+#&gt;    .. .. .. ..$ notes: chr "An example object of expression set (exprSet) class"
+#&gt;    .. .. ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slot
+#&gt;    .. .. .. .. ..@ .Data:List of 2
+#&gt;    .. .. .. .. .. ..$ : int [1:3] 1 0 0
+#&gt;    .. .. .. .. .. ..$ : int [1:3] 1 1 0
+#&gt;    ..@ assayData        :&lt;environment: 0x7fee1c47dc90&gt; 
+#&gt;    ..@ phenoData        :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
+#&gt;    .. .. ..@ varMetadata      :'data.frame':	3 obs. of  1 variable:
+#&gt;    .. .. .. ..$ labelDescription: chr [1:3] "Female/Male" "Case/Control" "Testing Score"
+#&gt;    .. .. ..@ data             :'data.frame':	26 obs. of  3 variables:
+#&gt;    .. .. .. ..$ sex  : Factor w/ 2 levels "Female","Male": 1 2 2 2 1 2 2 2 1 2 ...
+#&gt;    .. .. .. ..$ type : Factor w/ 2 levels "Case","Control": 2 1 2 1 1 2 1 1 1 2 ...
+#&gt;    .. .. .. ..$ score: num [1:26] 0.75 0.4 0.73 0.42 0.93 0.22 0.96 0.79 0.37 0.63 ...
+#&gt;    .. .. ..@ dimLabels        : chr [1:2] "sampleNames" "sampleColumns"
+#&gt;    .. .. ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slot
+#&gt;    .. .. .. .. ..@ .Data:List of 1
+#&gt;    .. .. .. .. .. ..$ : int [1:3] 1 1 0
+#&gt;    ..@ featureData      :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
+#&gt;    .. .. ..@ varMetadata      :'data.frame':	0 obs. of  1 variable:
+#&gt;    .. .. .. ..$ labelDescription: chr(0) 
+#&gt;    .. .. ..@ data             :'data.frame':	500 obs. of  0 variables
+#&gt;    .. .. ..@ dimLabels        : chr [1:2] "featureNames" "featureColumns"
+#&gt;    .. .. ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slot
+#&gt;    .. .. .. .. ..@ .Data:List of 1
+#&gt;    .. .. .. .. .. ..$ : int [1:3] 1 1 0
+#&gt;    ..@ annotation       : chr "hgu95av2"
+#&gt;    ..@ protocolData     :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
+#&gt;    .. .. ..@ varMetadata      :'data.frame':	0 obs. of  1 variable:
+#&gt;    .. .. .. ..$ labelDescription: chr(0) 
+#&gt;    .. .. ..@ data             :'data.frame':	26 obs. of  0 variables
+#&gt;    .. .. ..@ dimLabels        : chr [1:2] "sampleNames" "sampleColumns"
+#&gt;    .. .. ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slot
+#&gt;    .. .. .. .. ..@ .Data:List of 1
+#&gt;    .. .. .. .. .. ..$ : int [1:3] 1 1 0
+#&gt;    ..@ .__classVersion__:Formal class 'Versions' [package "Biobase"] with 1 slot
+#&gt;    .. .. ..@ .Data:List of 4
+#&gt;    .. .. .. ..$ : int [1:3] 2 13 0
+#&gt;    .. .. .. ..$ : int [1:3] 2 11 5
+#&gt;    .. .. .. ..$ : int [1:3] 1 3 0
+#&gt;    .. .. .. ..$ : int [1:3] 1 0 0
+```
+
+---
+
+## An ExpressionSet
+
+These objects are based on a different R structure. Instead of extracting elements using `$`, this structure uses **slots** which are accessed using `@`
+
+
+```r
+slotNames(sample.ExpressionSet)
+```
+
+```
+#&gt;  [1] "experimentData"    "assayData"         "phenoData"         "featureData"      
+#&gt;  [5] "annotation"        "protocolData"      ".__classVersion__"
+```
+
+```r
+sample.ExpressionSet@phenoData
+```
+
+```
+#&gt;  An object of class 'AnnotatedDataFrame'
+#&gt;    sampleNames: A B ... Z (26 total)
+#&gt;    varLabels: sex type score
+#&gt;    varMetadata: labelDescription
+```
+
+---
+
+## An ExpressionSet
+
+We almost never use `@`. Instead we use *accessor functions* to extract data
+
+
+```r
+pData(sample.ExpressionSet) # Phenotype data
+```
+
+```
+#&gt;       sex    type score
+#&gt;  A Female Control  0.75
+#&gt;  B   Male    Case  0.40
+#&gt;  C   Male Control  0.73
+#&gt;  D   Male    Case  0.42
+#&gt;  E Female    Case  0.93
+#&gt;  F   Male Control  0.22
+#&gt;  G   Male    Case  0.96
+#&gt;  H   Male    Case  0.79
+#&gt;  I Female    Case  0.37
+#&gt;  J   Male Control  0.63
+#&gt;  K   Male    Case  0.26
+#&gt;  L Female Control  0.36
+#&gt;  M   Male    Case  0.41
+#&gt;  N   Male    Case  0.80
+#&gt;  O Female    Case  0.10
+#&gt;  P Female Control  0.41
+#&gt;  Q Female    Case  0.16
+#&gt;  R   Male Control  0.72
+#&gt;  S   Male    Case  0.17
+#&gt;  T Female    Case  0.74
+#&gt;  U   Male Control  0.35
+#&gt;  V Female Control  0.77
+#&gt;  W   Male Control  0.27
+#&gt;  X   Male Control  0.98
+#&gt;  Y Female    Case  0.94
+#&gt;  Z Female    Case  0.32
+```
+
+
+---
+
+## An ExpressionSet
+
+We almost never use `@`. Instead we use *accessor functions* to extract data
+
+
+```r
+head(exprs(sample.ExpressionSet)) # Expression data
+```
+
+```
+#&gt;                         A         B        C        D        E       F        G       H
+#&gt;  AFFX-MurIL2_at  192.7420  85.75330 176.7570 135.5750 64.49390 76.3569 160.5050 65.9631
+#&gt;  AFFX-MurIL10_at  97.1370 126.19600  77.9216  93.3713 24.39860 85.5088  98.9086 81.6932
+#&gt;  AFFX-MurIL4_at   45.8192   8.83135  33.0632  28.7072  5.94492 28.2925  30.9694 14.7923
+#&gt;  AFFX-MurFAS_at   22.5445   3.60093  14.6883  12.3397 36.86630 11.2568  23.0034 16.2134
+#&gt;  AFFX-BioB-5_at   96.7875  30.43800  46.1271  70.9319 56.17440 42.6756  86.5156 30.7927
+#&gt;  AFFX-BioB-M_at   89.0730  25.84610  57.2033  69.9766 49.58220 26.1262  75.0083 42.3352
+#&gt;                        I         J        K       L       M       N       O       P
+#&gt;  AFFX-MurIL2_at  56.9039 135.60800 63.44320 78.2126 83.0943 89.3372 91.0615 95.9377
+#&gt;  AFFX-MurIL10_at 97.8015  90.48380 70.57330 94.5418 75.3455 68.5827 87.4050 84.4581
+#&gt;  AFFX-MurIL4_at  14.2399  34.48740 20.35210 14.1554 20.6251 15.9231 20.1579 27.8139
+#&gt;  AFFX-MurFAS_at  12.0375   4.54978  8.51782 27.2852 10.1616 20.2488 15.7849 14.3276
+#&gt;  AFFX-BioB-5_at  19.7183  46.35200 39.13260 41.7698 80.2197 36.4903 36.4021 35.3054
+#&gt;  AFFX-BioB-M_at  41.1207  91.53070 39.91360 49.8397 63.4794 24.7007 47.4641 47.3578
+#&gt;                         Q        R         S       T         U        V       W
+#&gt;  AFFX-MurIL2_at  179.8450 152.4670 180.83400 85.4146 157.98900 146.8000 93.8829
+#&gt;  AFFX-MurIL10_at  87.6806 108.0320 134.26300 91.4031  -8.68811  85.0212 79.2998
+#&gt;  AFFX-MurIL4_at   32.7911  33.5292  19.81720 20.4190  26.87200  31.1488 22.3420
+#&gt;  AFFX-MurFAS_at   15.9488  14.6753  -7.91911 12.8875  11.91860  12.8324 11.1390
+#&gt;  AFFX-BioB-5_at   58.6239 114.0620  93.44020 22.5168  48.64620  90.2215 42.0053
+#&gt;  AFFX-BioB-M_at   58.1331 104.1220 115.83100 58.1224  73.42210  64.6066 40.3068
+#&gt;                          X       Y         Z
+#&gt;  AFFX-MurIL2_at  103.85500 64.4340 175.61500
+#&gt;  AFFX-MurIL10_at  71.65520 64.2369  78.70680
+#&gt;  AFFX-MurIL4_at   19.01350 12.1686  17.37800
+#&gt;  AFFX-MurFAS_at    7.55564 19.9849   8.96849
+#&gt;  AFFX-BioB-5_at   57.57380 44.8216  61.70440
+#&gt;  AFFX-BioB-M_at   41.82090 46.1087  49.41220
+```
+
+---
+
+## SummarizedExperiment
+
+This is a more common structure related to modern experiments with different technologies
+
+.center[![](img/se.png)]
+
+---
+
+## An Example
+
+
+```r
+library(SummarizedExperiment)
+data(airway, package="airway")
+se &lt;- airway
+se
+```
+
+```
+#&gt;  class: RangedSummarizedExperiment 
+#&gt;  dim: 64102 8 
+#&gt;  metadata(1): ''
+#&gt;  assays(1): counts
+#&gt;  rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
+#&gt;  rowData names(0):
+#&gt;  colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
+#&gt;  colData names(9): SampleName cell ... Sample BioSample
+```
+
+---
+
+## An Example
+
+Count data from the scRNA-seq experiment
+
+
+```r
+assay(se)
+```
+
+```
+#&gt;                  SRR1039508 SRR1039509 SRR1039512 SRR1039513 SRR1039516 SRR1039517
+#&gt;  ENSG00000000003        679        448        873        408       1138       1047
+#&gt;  ENSG00000000005          0          0          0          0          0          0
+#&gt;  ENSG00000000419        467        515        621        365        587        799
+#&gt;  ENSG00000000457        260        211        263        164        245        331
+#&gt;  ENSG00000000460         60         55         40         35         78         63
+#&gt;  ENSG00000000938          0          0          2          0          1          0
+#&gt;  ENSG00000000971       3251       3679       6177       4252       6721      11027
+#&gt;  ENSG00000001036       1433       1062       1733        881       1424       1439
+#&gt;  ENSG00000001084        519        380        595        493        820        714
+#&gt;  ENSG00000001167        394        236        464        175        658        584
+#&gt;  ENSG00000001460        172        168        264        118        241        210
+#&gt;  ENSG00000001461       2112       1867       5137       2657       2735       2751
+#&gt;  ENSG00000001497        524        488        638        357        676        806
+#&gt;  ENSG00000001561         71         51        211        156         23         38
+#&gt;  ENSG00000001617        555        394        905        415        727        697
+#&gt;  ENSG00000001626         10          2          9          2         10          6
+#&gt;  ENSG00000001629       1660       1251       2259       1079       2462       2514
+#&gt;  ENSG00000001630         59         54         66         23         84         87
+#&gt;  ENSG00000001631        729        692        943        475       1034       1163
+#&gt;  ENSG00000002016        201        161        256         99        268        257
+#&gt;  ENSG00000002079          3          0          3          1          4          0
+#&gt;  ENSG00000002330        206        174        184        111        194        260
+#&gt;  ENSG00000002549       1459       1294       1317        998       1451       1824
+#&gt;  ENSG00000002586       7507       7203       9501       6214      10973      12863
+#&gt;  ENSG00000002587          2          0          1          0          0          2
+#&gt;  ENSG00000002726          0          0          1          0          0          0
+#&gt;  ENSG00000002745          4          6         22         10          2          1
+#&gt;  ENSG00000002746        151        139        117         65         90        102
+#&gt;  ENSG00000002822        411        303        446        195        445        523
+#&gt;  ENSG00000002834       6314       6364       7831       5809       6677      11970
+#&gt;  ENSG00000002919        234        246        298        211        217        376
+#&gt;  ENSG00000002933       1254       1508        636        431         25         27
+#&gt;  ENSG00000003056       1189        947       1266        693       1288       1555
+#&gt;  ENSG00000003096        550        315        557        171        519        284
+#&gt;  ENSG00000003137        124         57        256         63         30         45
+#&gt;  ENSG00000003147          0          0          0          1          1          2
+#&gt;  ENSG00000003249         81         71        207         80        109        112
+#&gt;  ENSG00000003393        769        723        791        540       1115       1509
+#&gt;  ENSG00000003400         98         59        133         72         58         49
+#&gt;  ENSG00000003402       1424       2617       1742       2364       2342       5198
+#&gt;  ENSG00000003436       4373       4183       5794       3230       7344       4981
+#&gt;  ENSG00000003509        287        280        357        191        386        396
+#&gt;  ENSG00000003756       2368       1748       2694       1327       2647       2520
+#&gt;  ENSG00000003987         17         25         25         29         20         51
+#&gt;  ENSG00000003989         47         56         12          3         51        102
+#&gt;  ENSG00000004059       1090       1306       1140        817       1334       1986
+#&gt;  ENSG00000004139         86         83        103         51        115         99
+#&gt;  ENSG00000004142       1496       1545       1607        964       1754       2301
+#&gt;  ENSG00000004399       4077       4260       3651       1649       5387       5992
+#&gt;  ENSG00000004455       1207       1111       1485        767       1497       2274
+#&gt;  ENSG00000004468          3          1          0          0          3          1
+#&gt;  ENSG00000004478        502        461        551        281        612        659
+#&gt;  ENSG00000004487       1410        989       1492        727       1708       1614
+#&gt;  ENSG00000004534       1202       1015       1855        919       1721       1714
+#&gt;  ENSG00000004660         95         55         59         35         87         79
+#&gt;  ENSG00000004700        940       1096       1192        766        949       1452
+#&gt;  ENSG00000004766        492        413        546        337        611        677
+#&gt;  ENSG00000004776       3473       3078       2775       1621       2084       2254
+#&gt;  ENSG00000004777        131        112        134         56         91         76
+#&gt;  ENSG00000004779        329        335        494        258        417        572
+#&gt;  ENSG00000004799         81        782        130       1106        235        485
+#&gt;  ENSG00000004809          0          0          0          0          0          0
+#&gt;  ENSG00000004838         12         11         22          8         12         18
+#&gt;  ENSG00000004846         23          3         70         11          8          9
+#&gt;  ENSG00000004848          0          0          0          0          0          0
+#&gt;  ENSG00000004864        143        117        131         88        227        284
+#&gt;  ENSG00000004866        449        259        772        241        527        502
+#&gt;  ENSG00000004897       1549       1339       1730       1107       1793       2173
+#&gt;  ENSG00000004939          0          0          0          0          0          0
+#&gt;  ENSG00000004948          0          0          0          0          0          0
+#&gt;  ENSG00000004961        446        330        531        287        666        604
+#&gt;  ENSG00000004975       1366       1002       1069        516       1237       1061
+#&gt;  ENSG00000005001          0          0          0          0          0          0
+#&gt;  ENSG00000005007       2158       2266       2436       1518       2341       3310
+#&gt;  ENSG00000005020        833        781        715        556        637        827
+#&gt;  ENSG00000005022       1340       1059       1323        785       1294       1450
+#&gt;  ENSG00000005059        215        197        249        177        193        204
+#&gt;  ENSG00000005073          1          0          1          0          1          1
+#&gt;  ENSG00000005075        797        828       1010        529        980       1265
+#&gt;  ENSG00000005100        434        445        487        356        522        695
+#&gt;  ENSG00000005102          1          0          0          0          3          0
+#&gt;  ENSG00000005108          9          7          6          8          9         20
+#&gt;  ENSG00000005156        229        143        242         93        347        409
+#&gt;  ENSG00000005175        347        294        237        123        513        449
+#&gt;  ENSG00000005187          4          6         12         10          9         10
+#&gt;  ENSG00000005189         82         62         88         58         92         53
+#&gt;  ENSG00000005194        413        410        557        352        537        685
+#&gt;  ENSG00000005206        680        586        760        418        748       1049
+#&gt;  ENSG00000005238        805        627        850        396        989        957
+#&gt;  ENSG00000005243       1132        928       1332        755        990       1088
+#&gt;  ENSG00000005249        220        242        281        317        291        387
+#&gt;  ENSG00000005302        481        523        495        316        496        687
+#&gt;  ENSG00000005339       2639       1917       3135       1491       3225       3957
+#&gt;  ENSG00000005379        186        152        122         87        171        311
+#&gt;  ENSG00000005381          4         10          9          1          0          3
+#&gt;  ENSG00000005421          0          0          0          0          1          0
+#&gt;  ENSG00000005436        214        216        282        182        318        422
+#&gt;  ENSG00000005448        229        206        270        152        234        432
+#&gt;  ENSG00000005469        498        379        305        171        626        508
+#&gt;  ENSG00000005471         64         18         60         17         21         18
+#&gt;  ENSG00000005483       1679       1466       1698       1096       2159       2558
+#&gt;  ENSG00000005486        768        618       1110        564       1185       1423
+#&gt;  ENSG00000005513         10          2          5          0          5          3
+#&gt;  ENSG00000005700       1069        824       1512        790       1335       1703
+#&gt;  ENSG00000005801        200        172        295        136        320        279
+#&gt;  ENSG00000005810       2688       2018       2621       1535       2946       3682
+#&gt;  ENSG00000005812       1361       1380       1381       1300       1126       1815
+#&gt;  ENSG00000005844          1          0          2          0          1          1
+#&gt;  ENSG00000005882        610        546        740        407        817        774
+#&gt;  ENSG00000005884        708        655       1566       1114       1328       2635
+#&gt;  ENSG00000005889        679        593        771        465        857       1115
+#&gt;  ENSG00000005893       5102       4470       6219       3853       5653       6954
+#&gt;  ENSG00000005955       1329       1279       1772       1055       1705       1918
+#&gt;  ENSG00000005961          5         11         12          3          7          5
+#&gt;  ENSG00000005981          0          0          0          0          0          0
+#&gt;  ENSG00000006007       1941       1825       2481       1676       2858       3584
+#&gt;  ENSG00000006015        517        463        410        191        260        366
+#&gt;  ENSG00000006016        132         95         98         82         79        168
+#&gt;  ENSG00000006025        229        132        278         78        185         97
+#&gt;  ENSG00000006042       2986       2393       3664       2077       3852       4572
+#&gt;  ENSG00000006047          0          1          1          0          1          0
+#&gt;  ENSG00000006059          0          0          0          0          0          0
+#&gt;  ENSG00000006062        272        224        274         79        287        177
+#&gt;  ENSG00000006071          0          0          0          0          0          0
+#&gt;  ENSG00000006074          0          0          0          0          0          0
+#&gt;                  SRR1039520 SRR1039521
+#&gt;  ENSG00000000003        770        572
+#&gt;  ENSG00000000005          0          0
+#&gt;  ENSG00000000419        417        508
+#&gt;  ENSG00000000457        233        229
+#&gt;  ENSG00000000460         76         60
+#&gt;  ENSG00000000938          0          0
+#&gt;  ENSG00000000971       5176       7995
+#&gt;  ENSG00000001036       1359       1109
+#&gt;  ENSG00000001084        696        704
+#&gt;  ENSG00000001167        360        269
+#&gt;  ENSG00000001460        155        177
+#&gt;  ENSG00000001461       2467       2905
+#&gt;  ENSG00000001497        493        475
+#&gt;  ENSG00000001561        134        172
+#&gt;  ENSG00000001617        618        599
+#&gt;  ENSG00000001626          5          5
+#&gt;  ENSG00000001629       1888       1660
+#&gt;  ENSG00000001630         31         59
+#&gt;  ENSG00000001631        731        744
+#&gt;  ENSG00000002016        160        137
+#&gt;  ENSG00000002079          0          1
+#&gt;  ENSG00000002330        156        177
+#&gt;  ENSG00000002549        853       1031
+#&gt;  ENSG00000002586       6834       7225
+#&gt;  ENSG00000002587          0          0
+#&gt;  ENSG00000002726          0          0
+#&gt;  ENSG00000002745          5          3
+#&gt;  ENSG00000002746         86        119
+#&gt;  ENSG00000002822        295        300
+#&gt;  ENSG00000002834       5766       7825
+#&gt;  ENSG00000002919        184        265
+#&gt;  ENSG00000002933         70        109
+#&gt;  ENSG00000003056        957        899
+#&gt;  ENSG00000003096        485        224
+#&gt;  ENSG00000003137        194         68
+#&gt;  ENSG00000003147          2          0
+#&gt;  ENSG00000003249        156        128
+#&gt;  ENSG00000003393        768        864
+#&gt;  ENSG00000003400         96         67
+#&gt;  ENSG00000003402       1262       3761
+#&gt;  ENSG00000003436       3452       3342
+#&gt;  ENSG00000003509        251        248
+#&gt;  ENSG00000003756       1996       2073
+#&gt;  ENSG00000003987         12         27
+#&gt;  ENSG00000003989         18         46
+#&gt;  ENSG00000004059       1028       1347
+#&gt;  ENSG00000004139         82         77
+#&gt;  ENSG00000004142       1133       1256
+#&gt;  ENSG00000004399       2718       2809
+#&gt;  ENSG00000004455       1017        921
+#&gt;  ENSG00000004468          2          1
+#&gt;  ENSG00000004478        400        392
+#&gt;  ENSG00000004487       1263       1035
+#&gt;  ENSG00000004534       1171       1013
+#&gt;  ENSG00000004660        154         67
+#&gt;  ENSG00000004700        812       1192
+#&gt;  ENSG00000004766        435        424
+#&gt;  ENSG00000004776       3571       3153
+#&gt;  ENSG00000004777        111         71
+#&gt;  ENSG00000004779        294        325
+#&gt;  ENSG00000004799        628       3187
+#&gt;  ENSG00000004809          0          0
+#&gt;  ENSG00000004838         17          6
+#&gt;  ENSG00000004846         22          5
+#&gt;  ENSG00000004848          0          0
+#&gt;  ENSG00000004864        146        129
+#&gt;  ENSG00000004866        401        296
+#&gt;  ENSG00000004897       1338       1407
+#&gt;  ENSG00000004939          0          0
+#&gt;  ENSG00000004948          0          0
+#&gt;  ENSG00000004961        360        405
+#&gt;  ENSG00000004975       1020        841
+#&gt;  ENSG00000005001          0          0
+#&gt;  ENSG00000005007       1964       2495
+#&gt;  ENSG00000005020        769        904
+#&gt;  ENSG00000005022        922        974
+#&gt;  ENSG00000005059        211        236
+#&gt;  ENSG00000005073          0          0
+#&gt;  ENSG00000005075        678        682
+#&gt;  ENSG00000005100        379        628
+#&gt;  ENSG00000005102          0          0
+#&gt;  ENSG00000005108         12         15
+#&gt;  ENSG00000005156        182        126
+#&gt;  ENSG00000005175        345        298
+#&gt;  ENSG00000005187         12          6
+#&gt;  ENSG00000005189         93         71
+#&gt;  ENSG00000005194        355        428
+#&gt;  ENSG00000005206        583        632
+#&gt;  ENSG00000005238        596        621
+#&gt;  ENSG00000005243       1038        940
+#&gt;  ENSG00000005249        209        413
+#&gt;  ENSG00000005302        404        379
+#&gt;  ENSG00000005339       2378       2557
+#&gt;  ENSG00000005379        118        130
+#&gt;  ENSG00000005381          6          3
+#&gt;  ENSG00000005421          0          0
+#&gt;  ENSG00000005436        238        252
+#&gt;  ENSG00000005448        166        247
+#&gt;  ENSG00000005469        515        472
+#&gt;  ENSG00000005471         52         22
+#&gt;  ENSG00000005483       1546       1782
+#&gt;  ENSG00000005486        763        687
+#&gt;  ENSG00000005513          5          7
+#&gt;  ENSG00000005700       1157       1165
+#&gt;  ENSG00000005801        197        150
+#&gt;  ENSG00000005810       2216       2298
+#&gt;  ENSG00000005812       1162       1680
+#&gt;  ENSG00000005844          1          0
+#&gt;  ENSG00000005882        650        704
+#&gt;  ENSG00000005884       1207       1457
+#&gt;  ENSG00000005889        929       1028
+#&gt;  ENSG00000005893       4722       5161
+#&gt;  ENSG00000005955       1152       1465
+#&gt;  ENSG00000005961         14         10
+#&gt;  ENSG00000005981          0          0
+#&gt;  ENSG00000006007       1729       2105
+#&gt;  ENSG00000006015        410        375
+#&gt;  ENSG00000006016        243        263
+#&gt;  ENSG00000006025        205        104
+#&gt;  ENSG00000006042       2927       3010
+#&gt;  ENSG00000006047          3          0
+#&gt;  ENSG00000006059          0          0
+#&gt;  ENSG00000006062        199        116
+#&gt;  ENSG00000006071          0          0
+#&gt;  ENSG00000006074          0          1
+#&gt;   [ reached getOption("max.print") -- omitted 63977 rows ]
+```
+
+---
+
+## An Example
+
+Genomic ranges for each transcript
+
+
+```r
+rowRanges(se)
+```
+
+```
+#&gt;  GRangesList object of length 64102:
+#&gt;  $ENSG00000000003 
+#&gt;  GRanges object with 17 ranges and 2 metadata columns:
+#&gt;         seqnames            ranges strand |   exon_id       exon_name
+#&gt;            &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;     &lt;character&gt;
+#&gt;     [1]        X 99883667-99884983      - |    667145 ENSE00001459322
+#&gt;     [2]        X 99885756-99885863      - |    667146 ENSE00000868868
+#&gt;     [3]        X 99887482-99887565      - |    667147 ENSE00000401072
+#&gt;     [4]        X 99887538-99887565      - |    667148 ENSE00001849132
+#&gt;     [5]        X 99888402-99888536      - |    667149 ENSE00003554016
+#&gt;     ...      ...               ...    ... .       ...             ...
+#&gt;    [13]        X 99890555-99890743      - |    667156 ENSE00003512331
+#&gt;    [14]        X 99891188-99891686      - |    667158 ENSE00001886883
+#&gt;    [15]        X 99891605-99891803      - |    667159 ENSE00001855382
+#&gt;    [16]        X 99891790-99892101      - |    667160 ENSE00001863395
+#&gt;    [17]        X 99894942-99894988      - |    667161 ENSE00001828996
+#&gt;  
+#&gt;  ...
+#&gt;  &lt;64101 more elements&gt;
+#&gt;  -------
+#&gt;  seqinfo: 722 sequences (1 circular) from an unspecified genome
+```
+
+---
+
+## An Example
+
+Phenotype data
+
+
+```r
+colData(se)
+```
+
+```
+#&gt;  DataFrame with 8 rows and 9 columns
+#&gt;             SampleName     cell      dex    albut        Run avgLength Experiment
+#&gt;               &lt;factor&gt; &lt;factor&gt; &lt;factor&gt; &lt;factor&gt;   &lt;factor&gt; &lt;integer&gt;   &lt;factor&gt;
+#&gt;  SRR1039508 GSM1275862   N61311    untrt    untrt SRR1039508       126  SRX384345
+#&gt;  SRR1039509 GSM1275863   N61311      trt    untrt SRR1039509       126  SRX384346
+#&gt;  SRR1039512 GSM1275866  N052611    untrt    untrt SRR1039512       126  SRX384349
+#&gt;  SRR1039513 GSM1275867  N052611      trt    untrt SRR1039513        87  SRX384350
+#&gt;  SRR1039516 GSM1275870  N080611    untrt    untrt SRR1039516       120  SRX384353
+#&gt;  SRR1039517 GSM1275871  N080611      trt    untrt SRR1039517       126  SRX384354
+#&gt;  SRR1039520 GSM1275874  N061011    untrt    untrt SRR1039520       101  SRX384357
+#&gt;  SRR1039521 GSM1275875  N061011      trt    untrt SRR1039521        98  SRX384358
+#&gt;                Sample    BioSample
+#&gt;              &lt;factor&gt;     &lt;factor&gt;
+#&gt;  SRR1039508 SRS508568 SAMN02422669
+#&gt;  SRR1039509 SRS508567 SAMN02422675
+#&gt;  SRR1039512 SRS508571 SAMN02422678
+#&gt;  SRR1039513 SRS508572 SAMN02422670
+#&gt;  SRR1039516 SRS508575 SAMN02422682
+#&gt;  SRR1039517 SRS508576 SAMN02422673
+#&gt;  SRR1039520 SRS508579 SAMN02422683
+#&gt;  SRR1039521 SRS508580 SAMN02422677
+```
+
+---
+
+## An Example
+
+Experimental meta-data
+
+```r
+metadata(se)
+```
+
+```
+#&gt;  [[1]]
+#&gt;  Experiment data
+#&gt;    Experimenter name: Himes BE 
+#&gt;    Laboratory: NA 
+#&gt;    Contact information:  
+#&gt;    Title: RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells. 
+#&gt;    URL: http://www.ncbi.nlm.nih.gov/pubmed/24926665 
+#&gt;    PMIDs: 24926665 
+#&gt;  
+#&gt;    Abstract: A 226 word abstract is available. Use 'abstract' method.
+```
+
+---
+
+## An Example
+
+Data subsetting
+
+.pull-left[
+
+```r
+se[1:5, 1:3]
+```
+
+```
+#&gt;  class: RangedSummarizedExperiment 
+#&gt;  dim: 5 3 
+#&gt;  metadata(1): ''
+#&gt;  assays(1): counts
+#&gt;  rownames(5): ENSG00000000003 ENSG00000000005 ENSG00000000419 ENSG00000000457
+#&gt;    ENSG00000000460
+#&gt;  rowData names(0):
+#&gt;  colnames(3): SRR1039508 SRR1039509 SRR1039512
+#&gt;  colData names(9): SampleName cell ... Sample BioSample
+```
+
+]
+.pull-right[
+
+```r
+se[,se$cell=='N61311']
+```
+
+```
+#&gt;  class: RangedSummarizedExperiment 
+#&gt;  dim: 64102 2 
+#&gt;  metadata(1): ''
+#&gt;  assays(1): counts
+#&gt;  rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
+#&gt;  rowData names(0):
+#&gt;  colnames(2): SRR1039508 SRR1039509
+#&gt;  colData names(9): SampleName cell ... Sample BioSample
+```
+
+]
+
+---
+class: center, middle
+
+# Annotation
+
+---
+
+## biomaRt
+
+The `biomaRt` package allows access to many public annotation databases
+
+
+```r
+library(biomaRt)
+ensemblDB &lt;- useMart('ensembl')
+searchDatasets(mart=ensemblDB, pattern='Human')
+```
+
+```
+#&gt;                   dataset              description    version
+#&gt;  85 hsapiens_gene_ensembl Human genes (GRCh38.p13) GRCh38.p13
+```
+
+--
+
+```r
+ensemblHuman &lt;- useMart('ensembl', dataset='hsapiens_gene_ensembl')
+```
+
+---
+
+## Identifying attributes
+
+
+```r
+searchAttributes(mart=ensemblHuman, pattern='affy')
+```
+
+```
+#&gt;                       name                 description         page
+#&gt;  104          affy_hc_g110          AFFY HC G110 probe feature_page
+#&gt;  105         affy_hg_focus         AFFY HG Focus probe feature_page
+#&gt;  106         affy_hg_u133a         AFFY HG U133A probe feature_page
+#&gt;  107       affy_hg_u133a_2       AFFY HG U133A 2 probe feature_page
+#&gt;  108         affy_hg_u133b         AFFY HG U133B probe feature_page
+#&gt;  109   affy_hg_u133_plus_2   AFFY HG U133 Plus 2 probe feature_page
+#&gt;  110          affy_hg_u95a          AFFY HG U95A probe feature_page
+#&gt;  111        affy_hg_u95av2        AFFY HG U95Av2 probe feature_page
+#&gt;  112          affy_hg_u95b          AFFY HG U95B probe feature_page
+#&gt;  113          affy_hg_u95c          AFFY HG U95C probe feature_page
+#&gt;  114          affy_hg_u95d          AFFY HG U95D probe feature_page
+#&gt;  115          affy_hg_u95e          AFFY HG U95E probe feature_page
+#&gt;  116          affy_hta_2_0          AFFY HTA 2 0 probe feature_page
+#&gt;  117   affy_huex_1_0_st_v2   AFFY HuEx 1 0 st v2 probe feature_page
+#&gt;  118         affy_hugenefl         AFFY HuGeneFL probe feature_page
+#&gt;  119 affy_hugene_1_0_st_v1 AFFY HuGene 1 0 st v1 probe feature_page
+#&gt;  120 affy_hugene_2_0_st_v1 AFFY HuGene 2 0 st v1 probe feature_page
+#&gt;  121        affy_primeview        AFFY PrimeView probe feature_page
+#&gt;  122         affy_u133_x3p         AFFY U133 X3P probe feature_page
+```
+
+---
+
+## Identifying attributes
+
+
+```r
+searchAttributes(mart=ensemblHuman, pattern='hgnc')
+```
+
+```
+#&gt;                name        description         page
+#&gt;  62         hgnc_id            HGNC ID feature_page
+#&gt;  63     hgnc_symbol        HGNC symbol feature_page
+#&gt;  94 hgnc_trans_name Transcript name ID feature_page
+```
+
+---
+
+## Annotating probsets
+
+We first grab some probesets from the `sample.ExpressionSet` Affy experiment
+
+
+```r
+affyIDs &lt;- rownames(featureData(sample.ExpressionSet))
+```
+
+Now let's find annotation
+
+
+```r
+getBM(attributes = c('affy_hg_u95av2','hgnc_symbol'),
+      filters = 'affy_hg_u95av2',
+      values = affyIDs[200:203],
+      mart = ensemblHuman)
+```
+
+```
+#&gt;    affy_hg_u95av2 hgnc_symbol
+#&gt;  1     31439_f_at         RHD
+#&gt;  2       31440_at        TCF7
+#&gt;  3     31439_f_at        RHCE
+#&gt;  4       31442_at     CEACAM5
+```
+
+---
+class:middle, center
+
+# A RNA-seq pipeline
+
+---
+
+## The workflow
+
++ Exploratory data analysis
++ Differential expression analysis with [DESeq2](https://bioconductor.org/packages/DESeq2)
++ Visualization
+
+
++ We will start after reads have been aligned to a reference genome and reads overlapping known genes have been counted
+
+
+#### The experiment
+
++ In the experiment, four primary human airway smooth muscle cell lines were treated with 1 micromolar dexamethasone for 18 hours. 
++ For each of the four cell lines, we have a treated and an untreated sample.
+
+---
+
+## Get data
+
+
+```r
+# BiocManager::install('airway')
+library(airway)
+data(airway)
+se &lt;- airway
+head(assay(airway))
+```
+
+```
+#&gt;                  SRR1039508 SRR1039509 SRR1039512 SRR1039513 SRR1039516 SRR1039517
+#&gt;  ENSG00000000003        679        448        873        408       1138       1047
+#&gt;  ENSG00000000005          0          0          0          0          0          0
+#&gt;  ENSG00000000419        467        515        621        365        587        799
+#&gt;  ENSG00000000457        260        211        263        164        245        331
+#&gt;  ENSG00000000460         60         55         40         35         78         63
+#&gt;  ENSG00000000938          0          0          2          0          1          0
+#&gt;                  SRR1039520 SRR1039521
+#&gt;  ENSG00000000003        770        572
+#&gt;  ENSG00000000005          0          0
+#&gt;  ENSG00000000419        417        508
+#&gt;  ENSG00000000457        233        229
+#&gt;  ENSG00000000460         76         60
+#&gt;  ENSG00000000938          0          0
+```
+
+---
+
+## Create a DESeqDataSet
+
+
+```r
+# BiocManager::install('DESeq2')
+library("DESeq2")
+dds &lt;- DESeqDataSet(se, design = ~ cell + dex)
+dds
+```
+
+```
+#&gt;  class: DESeqDataSet 
+#&gt;  dim: 64102 8 
+#&gt;  metadata(2): '' version
+#&gt;  assays(1): counts
+#&gt;  rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
+#&gt;  rowData names(0):
+#&gt;  colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
+#&gt;  colData names(9): SampleName cell ... Sample BioSample
+```
+
+---
+
+## Run differential expression pipeline
+
+
+```r
+dds &lt;- DESeq(dds)
+```
+
+```
+#&gt;  estimating size factors
+```
+
+```
+#&gt;  estimating dispersions
+```
+
+```
+#&gt;  gene-wise dispersion estimates
+```
+
+```
+#&gt;  mean-dispersion relationship
+```
+
+```
+#&gt;  final dispersion estimates
+```
+
+```
+#&gt;  fitting model and testing
+```
+
+---
+
+## Run differential expression pipeline
+
+
+```r
+(res &lt;- results(dds))
+```
+
+```
+#&gt;  log2 fold change (MLE): dex untrt vs trt 
+#&gt;  Wald test p-value: dex untrt vs trt 
+#&gt;  DataFrame with 64102 rows and 6 columns
+#&gt;                          baseMean      log2FoldChange             lfcSE
+#&gt;                         &lt;numeric&gt;           &lt;numeric&gt;         &lt;numeric&gt;
+#&gt;  ENSG00000000003 708.602169691234   0.381253982523043 0.100654411867396
+#&gt;  ENSG00000000005                0                  NA                NA
+#&gt;  ENSG00000000419 520.297900552084  -0.206812601085043 0.112218646508368
+#&gt;  ENSG00000000457 237.163036796015 -0.0379204312050886 0.143444654933749
+#&gt;  ENSG00000000460 57.9326331250967  0.0881681758708941 0.287141822933388
+#&gt;  ...                          ...                 ...               ...
+#&gt;  LRG_94                         0                  NA                NA
+#&gt;  LRG_96                         0                  NA                NA
+#&gt;  LRG_97                         0                  NA                NA
+#&gt;  LRG_98                         0                  NA                NA
+#&gt;  LRG_99                         0                  NA                NA
+#&gt;                                stat               pvalue                padj
+#&gt;                           &lt;numeric&gt;            &lt;numeric&gt;           &lt;numeric&gt;
+#&gt;  ENSG00000000003   3.78775232451125 0.000152016273081244 0.00128362968201811
+#&gt;  ENSG00000000005                 NA                   NA                  NA
+#&gt;  ENSG00000000419  -1.84294328545142   0.0653372915124384   0.196546085664315
+#&gt;  ENSG00000000457 -0.264355832725887    0.791505741607837   0.911459479590443
+#&gt;  ENSG00000000460  0.307054454729667    0.758801923977348   0.895032784968832
+#&gt;  ...                            ...                  ...                 ...
+#&gt;  LRG_94                          NA                   NA                  NA
+#&gt;  LRG_96                          NA                   NA                  NA
+#&gt;  LRG_97                          NA                   NA                  NA
+#&gt;  LRG_98                          NA                   NA                  NA
+#&gt;  LRG_99                          NA                   NA                  NA
+```
+ 
+---
+
+## Summarizing results
+
+```r
+library(tidyverse)
+as.data.frame(res) %&gt;% 
+  rownames_to_column(var = 'ID') %&gt;% 
+  filter(padj &lt; 0.1) %&gt;% 
+  arrange(desc(abs(log2FoldChange))) %&gt;% head()
+```
+
+```
+#&gt;                 ID   baseMean log2FoldChange     lfcSE       stat       pvalue
+#&gt;  1 ENSG00000179593  67.243048      -9.505975 1.0545032  -9.014647 1.975049e-19
+#&gt;  2 ENSG00000109906 385.071029      -7.352626 0.5363887 -13.707645 9.137621e-43
+#&gt;  3 ENSG00000250978  56.318194      -6.327383 0.6777973  -9.335214 1.007876e-20
+#&gt;  4 ENSG00000132518   5.654654      -5.885114 1.3240439  -4.444803 8.797262e-06
+#&gt;  5 ENSG00000128285   6.624741       5.325904 1.2578147   4.234251 2.293144e-05
+#&gt;  6 ENSG00000127954 286.384119      -5.207158 0.4930818 -10.560435 4.545484e-26
+#&gt;            padj
+#&gt;  1 1.253739e-17
+#&gt;  2 2.256617e-40
+#&gt;  3 7.210311e-19
+#&gt;  4 1.000612e-04
+#&gt;  5 2.380012e-04
+#&gt;  6 5.058395e-24
+```
+
+---
+
+## A visualization
+
+
+```r
+topGene &lt;- rownames(res)[which.min(res$padj)]
+dat &lt;- plotCounts(dds, gene=topGene, intgroup=c("dex"), returnData=TRUE)
+ggplot(dat, aes(x = dex, y = count, fill=dex))+
+  geom_dotplot(binaxis='y', stackdir='center')+
+  scale_y_log10()
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+
+---
+
+## Another visualization
+
+
+```r
+plotMA(res, ylim=c(-5,5))
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+class:middle,center
+# A Seurat pipeline
+
+---
+
+## Grab the data and convert for Seurat
+
+
+
+
+
+```r
+library(TENxPBMCData)
+library(Seurat)
+
+pbmc_3k &lt;- TENxPBMCData(dataset='pbmc3k')
+colnames(pbmc_3k) &lt;- paste0('Cell', seq_len(ncol(pbmc_3k)))
+pbmc &lt;- CreateSeuratObject( counts=assay(pbmc_3k, 'counts'),
+                            project='pbmc3k',
+                            min.cells=3,
+                            min.features = 200)
+
+pbmc
+```
+
+```
+#&gt;  An object of class Seurat 
+#&gt;  13714 features across 2700 samples within 1 assay 
+#&gt;  Active assay: RNA (13714 features)
+```
+
+---
+
+## A bit of QC
+
+
+```r
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+rownames(pbmc@assays$RNA@counts) &lt;- r2
+rownames(pbmc[['RNA']]@meta.features) &lt;- r2
+rownames(pbmc@assays$RNA@data) &lt;- r2 # Change to gene names from Ensembl
+pbmc[["percent.mt"]] &lt;- PercentageFeatureSet(pbmc, pattern = "^MT-") # percentage in mitochondria genome
+head(pbmc@meta.data)
+```
+
+```
+#&gt;        orig.ident nCount_RNA nFeature_RNA percent.mt
+#&gt;  Cell1     pbmc3k       2419          779  3.0177759
+#&gt;  Cell2     pbmc3k       4903         1352  3.7935958
+#&gt;  Cell3     pbmc3k       3147         1129  0.8897363
+#&gt;  Cell4     pbmc3k       2639          960  1.7430845
+#&gt;  Cell5     pbmc3k        980          521  1.2244898
+#&gt;  Cell6     pbmc3k       2163          781  1.6643551
+```
+
+&gt; See how analyses results are added to the same container. The idea is to keep all the experimental information
+together. This was a philosophic choice maide by the Bioconductor developers, inspired by the MIAME requirements and how
+data are stored on genomics databases like GEO
+
+---
+
+## Visualization
+
+
+```r
+# Visualize QC metrics as a violin plot
+(plt &lt;- VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+---
+
+## Normalization
+
+
+```r
+pbmc &lt;- NormalizeData(pbmc)
+```
+
+&gt; Note, we're saving in the same object
+
+---
+
+## Feature selection
+
+
+```r
+rownames(pbmc[['RNA']]@meta.features) &lt;- r2
+pbmc &lt;- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 2000)
+
+# Identify the 10 most highly variable genes
+top10 &lt;- head(VariableFeatures(pbmc), 10)
+
+# plot variable features with and without labels
+plot1 &lt;- VariableFeaturePlot(pbmc)
+plot2 &lt;- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+CombinePlots(plots = list(plot1, plot2))
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+
+---
+
+## PCA
+
+
+```r
+pbmc &lt;- ScaleData(pbmc)
+pbmc &lt;- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
+print(pbmc[["pca"]], dims = 1:5, nfeatures = 5)
+```
+
+```
+#&gt;  PC_ 1 
+#&gt;  Positive:  MALAT1, LTB, IL32, CD2, ACAP1 
+#&gt;  Negative:  CST3, TYROBP, LST1, AIF1, FTL 
+#&gt;  PC_ 2 
+#&gt;  Positive:  CD79A, MS4A1, TCL1A, HLA-DQA1, HLA-DRA 
+#&gt;  Negative:  NKG7, PRF1, CST7, GZMA, GZMB 
+#&gt;  PC_ 3 
+#&gt;  Positive:  HLA-DQA1, CD79A, CD79B, HLA-DQB1, HLA-DPB1 
+#&gt;  Negative:  PPBP, PF4, SDPR, SPARC, GNG11 
+#&gt;  PC_ 4 
+#&gt;  Positive:  HLA-DQA1, CD79A, CD79B, HIST1H2AC, HLA-DQB1 
+#&gt;  Negative:  VIM, S100A8, S100A6, S100A4, S100A9 
+#&gt;  PC_ 5 
+#&gt;  Positive:  GZMB, FGFBP2, NKG7, GNLY, PRF1 
+#&gt;  Negative:  LTB, VIM, AQP3, PPA1, MAL
+```
+
+&gt; Important to note that each step just adds elements to the Seurat object
+
+---
+
+## PCA
+
+
+```r
+DimPlot(pbmc, reduction = "pca")
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+---
+
+## t-SNE
+
+
+```r
+pbmc &lt;- RunTSNE(pbmc, dims=1:10)
+DimPlot(pbmc, reduction='tsne')
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
+---
+class:middle,center
+# Heatmaps
+
+---
+
+## Heatmaps
+
+There are several ways of doing heatmaps in R:
+
++ [http://sebastianraschka.com/Articles/heatmaps_in_r.html](http://sebastianraschka.com/Articles/heatmaps_in_r.html){target="_blank"}
++ [https://plot.ly/r/heatmaps/](https://plot.ly/r/heatmaps/){target="_blank"}
++ [http://moderndata.plot.ly/interactive-heat-maps-for-r/](http://moderndata.plot.ly/interactive-heat-maps-for-r/){target="_blank"}
++ [http://www.siliconcreek.net/r/simple-heatmap-in-r-with-ggplot2](http://www.siliconcreek.net/r/simple-heatmap-in-r-with-ggplot2){target="_blank"}
++ [https://rud.is/b/2016/02/14/making-faceted-heatmaps-with-ggplot2/](https://rud.is/b/2016/02/14/making-faceted-heatmaps-with-ggplot2/){target="_blank"}
+
+---
+
+## Some example data
+
+
+```r
+library(Biobase)
+data(sample.ExpressionSet)
+exdat &lt;-  sample.ExpressionSet
+library(limma)
+design1 &lt;- model.matrix(~type, data=pData(exdat))
+lm1 &lt;- lmFit(exprs(exdat), design1)
+lm1 &lt;- eBayes(lm1) # compute linear model for each probeset
+geneID &lt;- rownames(topTable(lm1, coef=2, num=100, adjust='none',p.value=0.05))
+exdat2 &lt;- exdat[geneID,] # Keep features with p-values &lt; 0.05
+exdat2
+```
+
+```
+#&gt;  ExpressionSet (storageMode: lockedEnvironment)
+#&gt;  assayData: 46 features, 26 samples 
+#&gt;    element names: exprs, se.exprs 
+#&gt;  protocolData: none
+#&gt;  phenoData
+#&gt;    sampleNames: A B ... Z (26 total)
+#&gt;    varLabels: sex type score
+#&gt;    varMetadata: labelDescription
+#&gt;  featureData: none
+#&gt;  experimentData: use 'experimentData(object)'
+#&gt;  Annotation: hgu95av2
+```
+
+---
+
+
+
+```r
+# BiocManager::install('Heatplus')
+
+library(Heatplus)
+reg1 &lt;- regHeatmap(exprs(exdat2), legend=2, col=heat.colors, 
+                   breaks=-3:3)
+plot(reg1)
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+library(Heatplus)
+reg1 &lt;- regHeatmap(exprs(exdat2), legend=2, col=heat.colors, 
+                   breaks=-3:3)
+plot(reg1)
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+
+
+
+---
+
+
+```r
+corrdist &lt;- function(x) as.dist(1-cor(t(x)))
+hclust.avl &lt;-  function(x) hclust(x, method='average')
+reg2 &lt;- regHeatmap(exprs(exdat2), legend=2, col=heat.colors,
+                   breaks=-3:3, 
+                   dendrogram = list(clustfun=hclust.avl, distfun=corrdist))
+plot(reg2)
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+ann1 &lt;- annHeatmap(exprs(exdat2), ann=pData(exdat2), col = heat.colors)
+plot(ann1)
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+
+---
+
+
+
+```r
+ann2 &lt;- annHeatmap(exprs(exdat2), ann=pData(exdat2), col = heat.colors,
+                   cluster = list(cuth=7500,
+                                  label=c('Control-like','Case-like')))
+plot(ann2)
+```
+
+![](11-Bioconductor_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+
+---
+
+
+
+```r
+# install.packages('d3heatmap')
+library(d3heatmap)
+d3heatmap(exprs(exdat2), distfun = corrdist, 
+          hclustfun = hclust.avl, scale='row')
+```
+
+[Link](../heatmap.html)
+Put your mouse over each point :)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

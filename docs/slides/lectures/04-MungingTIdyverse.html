@@ -52,27 +52,20 @@ weather_data &lt;- rio::import('data/weather.csv')
 .pull-left[
 
 ```
-#&gt;         id year month element d1   d2   d3 d4   d5 d6 d7 d8 d9  d10  d11
-#&gt;  1 MX17004 2010     1    tmax NA   NA   NA NA   NA NA NA NA NA   NA   NA
-#&gt;  2 MX17004 2010     1    tmin NA   NA   NA NA   NA NA NA NA NA   NA   NA
-#&gt;  3 MX17004 2010     2    tmax NA 27.3 24.1 NA   NA NA NA NA NA   NA 29.7
-#&gt;  4 MX17004 2010     2    tmin NA 14.4 14.4 NA   NA NA NA NA NA   NA 13.4
-#&gt;  5 MX17004 2010     3    tmax NA   NA   NA NA 32.1 NA NA NA NA 34.5   NA
-#&gt;  6 MX17004 2010     3    tmin NA   NA   NA NA 14.2 NA NA NA NA 16.8   NA
-#&gt;    d12 d13 d14 d15  d16 d17 d18 d19 d20 d21 d22  d23 d24 d25 d26 d27 d28
-#&gt;  1  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA
-#&gt;  2  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA
-#&gt;  3  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 29.9  NA  NA  NA  NA  NA
-#&gt;  4  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 10.7  NA  NA  NA  NA  NA
-#&gt;  5  NA  NA  NA  NA 31.1  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA
-#&gt;  6  NA  NA  NA  NA 17.6  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA
-#&gt;    d29  d30 d31
-#&gt;  1  NA 27.8  NA
-#&gt;  2  NA 14.5  NA
-#&gt;  3  NA   NA  NA
-#&gt;  4  NA   NA  NA
-#&gt;  5  NA   NA  NA
-#&gt;  6  NA   NA  NA
+#&gt;         id year month element d1   d2   d3 d4   d5 d6 d7 d8 d9  d10  d11 d12 d13 d14
+#&gt;  1 MX17004 2010     1    tmax NA   NA   NA NA   NA NA NA NA NA   NA   NA  NA  NA  NA
+#&gt;  2 MX17004 2010     1    tmin NA   NA   NA NA   NA NA NA NA NA   NA   NA  NA  NA  NA
+#&gt;  3 MX17004 2010     2    tmax NA 27.3 24.1 NA   NA NA NA NA NA   NA 29.7  NA  NA  NA
+#&gt;  4 MX17004 2010     2    tmin NA 14.4 14.4 NA   NA NA NA NA NA   NA 13.4  NA  NA  NA
+#&gt;  5 MX17004 2010     3    tmax NA   NA   NA NA 32.1 NA NA NA NA 34.5   NA  NA  NA  NA
+#&gt;  6 MX17004 2010     3    tmin NA   NA   NA NA 14.2 NA NA NA NA 16.8   NA  NA  NA  NA
+#&gt;    d15  d16 d17 d18 d19 d20 d21 d22  d23 d24 d25 d26 d27 d28 d29  d30 d31
+#&gt;  1  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 27.8  NA
+#&gt;  2  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 14.5  NA
+#&gt;  3  NA   NA  NA  NA  NA  NA  NA  NA 29.9  NA  NA  NA  NA  NA  NA   NA  NA
+#&gt;  4  NA   NA  NA  NA  NA  NA  NA  NA 10.7  NA  NA  NA  NA  NA  NA   NA  NA
+#&gt;  5  NA 31.1  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA
+#&gt;  6  NA 17.6  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA
 ```
 ]
 .pull-right[
@@ -787,10 +780,8 @@ ls()
 ```
 
 ```
-#&gt;   [1] "dat"          "f"            "fname"        "january"     
-#&gt;   [5] "mpg1"         "outdir"       "pdfname"      "weather_data"
-#&gt;   [9] "weather1"     "weather2"     "weather3"     "weather4"    
-#&gt;  [13] "weather5"
+#&gt;  [1] "dat"          "january"      "mpg1"         "weather_data" "weather1"    
+#&gt;  [6] "weather2"     "weather3"     "weather4"     "weather5"
 ```
 
 We see a lot of intermediate datasets we've created, that we aren't going to really use anymore
@@ -911,7 +902,7 @@ summary_mpg
 
 Transform the process of tidyfing the weather data into a pipe format
 
-<div class="countdown" id="timer_5d95120d" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5dd59b38" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1318,7 +1309,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 (function() {

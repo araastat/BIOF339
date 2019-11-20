@@ -913,8 +913,8 @@ runif(10, 0, 10)
 ```
 
 ```
-#&gt;   [1] 9.6383786 2.7689373 2.4291854 1.7018136 4.8812344 0.5893566 1.9033637
-#&gt;   [8] 9.7952480 2.1012500 5.6648043
+#&gt;   [1] 9.6383786 2.7689373 2.4291854 1.7018136 4.8812344 0.5893566 1.9033637 9.7952480
+#&gt;   [9] 2.1012500 5.6648043
 ```
 
 ---
@@ -979,21 +979,21 @@ summary(airquality)
 ```
 
 ```
-#&gt;       Ozone           Solar.R           Wind             Temp      
-#&gt;   Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
-#&gt;   1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
-#&gt;   Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
-#&gt;   Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
-#&gt;   3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
-#&gt;   Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
-#&gt;   NA's   :37       NA's   :7                                       
-#&gt;       Month            Day      
-#&gt;   Min.   :5.000   Min.   : 1.0  
-#&gt;   1st Qu.:6.000   1st Qu.: 8.0  
-#&gt;   Median :7.000   Median :16.0  
-#&gt;   Mean   :6.993   Mean   :15.8  
-#&gt;   3rd Qu.:8.000   3rd Qu.:23.0  
-#&gt;   Max.   :9.000   Max.   :31.0  
+#&gt;       Ozone           Solar.R           Wind             Temp           Month      
+#&gt;   Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00   Min.   :5.000  
+#&gt;   1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00   1st Qu.:6.000  
+#&gt;   Median : 31.50   Median :205.0   Median : 9.700   Median :79.00   Median :7.000  
+#&gt;   Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88   Mean   :6.993  
+#&gt;   3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00   3rd Qu.:8.000  
+#&gt;   Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00   Max.   :9.000  
+#&gt;   NA's   :37       NA's   :7                                                       
+#&gt;        Day      
+#&gt;   Min.   : 1.0  
+#&gt;   1st Qu.: 8.0  
+#&gt;   Median :16.0  
+#&gt;   Mean   :15.8  
+#&gt;   3rd Qu.:23.0  
+#&gt;   Max.   :31.0  
 #&gt;  
 ```
 ]
@@ -1096,7 +1096,7 @@ median(airquality$Temp)
 hist(airquality$Temp)
 ```
 
-![](01-intro_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -1109,7 +1109,7 @@ hist(airquality$Temp)
 plot(Ozone ~ Month, data = airquality)
 ```
 
-&lt;img src="01-intro_files/figure-html/unnamed-chunk-18-1.png" height="400" /&gt;
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-18-1.png" height="400" /&gt;
 ]
 .pull-right[
 
@@ -1121,7 +1121,7 @@ ggplot(airquality) +
   theme_bw()
 ```
 
-&lt;img src="01-intro_files/figure-html/unnamed-chunk-19-1.png" height="400" /&gt;
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-19-1.png" height="400" /&gt;
 
 ]
 
@@ -1415,7 +1415,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 (function() {
