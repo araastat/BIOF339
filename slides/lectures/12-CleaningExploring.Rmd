@@ -1,0 +1,331 @@
+---
+title: "Data validation and exploration"
+author: Abhijit Dasgupta
+date: Fall, 2019
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+library(tidyverse)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339, Fall, 2019</span></div>
+
+---
+
+## Plan today
+
+- Dynamic exploration of data
+- Data validation
+- Missing data evaluation
+
+---
+class: middle, center
+
+# Why go back to this?
+
+---
+
+## This is important!!
+
++ Most of the time in an analysis is spent understanding and cleaning data
++ Recognize that  unless you've ended up with good-quality data, the rest of the analyses are moot
++ This is tedious, careful, non-sexy work
+    - Hard to tell your boss you're still fixing the data
+    - No real results yet
+    - But essential to understanding the appropriate analyses and the tweaks you may need.
+    
+---
+
+## What does a dataset look like?
+
+.pull-left[
+```{r v1, eval = F, echo = T}
+library(tidyverse)
+library(visdat)
+beaches <- rio::import('data/sydneybeaches3.csv')
+vis_dat(beaches)
+```
+]
+.pull-right[
+```{r, eval = T, echo = F, ref.label = "v1"}
+```
+]
+
+---
+
+## What does a dataset look like?
+
+.pull-left[
+```{r v2, eval = F, echo = T}
+brca <- rio::import('data/clinical_data_breast_cancer_modified.csv')
+vis_dat(brca)
+```
+]
+.pull-right[
+```{r, eval = T, echo = F, ref.label = "v2"}
+```
+]
+
+---
+
+## What does a dataset look like?
+
+.pull-left[
+```{r v3, eval = F, echo = T}
+vis_dat(airquality)
+```
+
+These plots give a nice insight into 
+
+1. data types
+1. Missing data patterns (more on this later)
+
+]
+.pull-right[
+```{r, eval = T, echo = F, ref.label = "v3"}
+```
+]
+
+---
+class: middle, center
+
+# Let's get a bit more quantitative
+
+---
+
+## `summary` and `str`/`glimpse` are a first pass
+
+.pull-left[
+```{r}
+summary(airquality)
+```
+]
+.pull-right[
+```{r}
+glimpse(airquality)
+```
+
+]
+
+---
+
+## Validating data values
+
++ We can certainly be reactive by just describing the data and looking for anomalies. 
++ For larger data or multiple data files it makes sense to be proactive and catch errors that you want to avoid, before exploring for new errors. 
++ The `assertthat` package provides nice tools to do this
+
+--
+
+> **Note to self:** I don't do this enough. This is a good defensive programming technique that can catch crucial problems that aren't always automatically flagged as errors
+
+---
+
+## Being assertive
+
+```{r, error=T}
+library(assertthat)
+assert_that(all(between(airquality$Day, 1, 31) ))
+assert_that(is.factor(mpg$manufacturer))
+assert_that(all(beaches$season_name %in% c('Summer','Winter','Spring', 'Fall')))
+
+```
+
+---
+
+## Being assertive
+
++ `assert_that` generates an error, which will stop things
++ `see_if` does the same validation, but just generates a `TRUE/FALSE`, which you can capture
+
+```{r}
+see_if(is.factor(mpg$manufacturer))
+```
+
++ `validate_that` generates `TRUE` if the assertion is true, otherwise generates a string explaining the error
+
+```{r}
+validate_that(is.factor(mpg$manufacturer))
+validate_that(is.character(mpg$manufacturer))
+```
+
+---
+
+## Being assertive
+
+You can even write your own validation functions and custom messages
+
+```{r, error=TRUE}
+is_odd <- function(x){
+    assert_that(is.numeric(x), length(x)==1)
+    x %% 2 == 1
+}
+assert_that(is_odd(2))
+
+on_failure(is_odd) <- function(call, env) {
+  paste0(deparse(call$x), " is even") # This is a R trick
+}
+assert_that(is_odd(2))
+
+is_odd(1:2)
+```
+
+---
+class: middle,center
+
+# Missing data
+
+---
+
+## Missing data
+
+R denotes missing data as `NA`, and supplies several functions to deal with missing data.
+
+The most fundamental is `is.na`, which gives a TRUE/FALSE answer
+
+```{r}
+is.na(NA)
+is.na(25)
+```
+
+---
+
+## Missing data
+
+When we get a new dataset, it's useful to get a sense of the missingness
+
+```{r}
+mpg %>% summarize_all(function(x) sum(is.na(x)))
+```
+
+---
+
+## Missing data
+
+The `naniar` package allows a tidyverse-compatible way to deal with missing data
+
+```{r}
+library(naniar)
+weather <- rio::import('data/weather.csv')
+all_complete(mpg)
+all_complete(weather)
+weather %>% summarize_all(pct_complete)
+```
+
+---
+
+
+## Missing data
+
+```{r}
+gg_miss_case(weather, show_pct = T)
+```
+
+---
+
+## Missing data
+
+```{r}
+gg_miss_var(weather, show_pct=T)
+```
+
+## Are there patterns to the missing data
+
++ Most analyses assume that data is either 
+    - Missing completely at random (MCAR)
+    - Missing at random (MAR)
++ MCAR means
+    - The missing data is just a random subset of the data
++ MAR means
+    - Whether data is missing is related to values of some other variable(s)
+    - If we control for those variable(s), the missing data would form a random subset of each of those data subsets defined by unique values of these variables
+
+---
+
+## Are there patterns to the missing data
+
+#### MAR or MCAR allows us to ignore the missing data, since it doesn't bias our analyses
+#### If data are **not** MCAR or MAR, we really need to understand the issing data mechanism and how that might affect our results. 
+---
+
+## Co-patterns of missingness
+
+.pull-left[
+```{r v4, eval = T, echo = T}
+gg_miss_upset(airquality)
+```
+]
+.pull-right[
+```{r v5, eval = T, echo = T}
+gg_miss_upset(riskfactors)
+```
+]
+
+---
+
+## Co-patterns of missingness
+
+.pull-left[
+```{r d1, fig.height=3, message=T}
+ggplot(airquality,
+       aes(x = Ozone,
+           y = Solar.R)) +
+geom_point()
+```
+]
+.pull-right[
+```{r, fig.height=3}
+ggplot(airquality,
+       aes(x = Ozone,
+           y = Solar.R)) +
+ geom_miss_point()
+```
+]
+
+---
+
+## Co-patterns of missingness
+
+```{r, warning=F}
+gg_miss_fct(x = riskfactors, fct = marital)
+```
+
+---
+
+## Replacing missing data
+
+`tidyr` has  a function `replace_na` which will replace all missing values with some particular value. 
+
+In the weather dataset, values are missing generally because there wasn't recorded rainfall on a day. So these values should really be 0
+
+```{r}
+weather1 <- weather %>% mutate(d1 = replace_na(d1, 0))
+pct_miss(weather1$d1)
+```
+
+---
+
+### Question: How would you replace all the missing values with 0?
+
+--
+
+```{r, results = 'hide'}
+weather %>% mutate_all(function(x) replace_na(x, 0))
+```
+
+--
+
+### How would you replace the missing values with the mean of the variable?
+
+--
+
+```{r, results = 'hide'}
+weather %>% mutate_if(is.numeric, function(x) replace_na(x, mean(x, na.rm=T)))
+```
+
+---

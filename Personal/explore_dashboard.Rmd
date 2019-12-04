@@ -1,0 +1,45 @@
+---
+title: "Data exploration"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    runtime: shiny
+---
+  
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(tidyverse)
+library(naniar)
+data(airquality)
+```
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+  
+```{r}
+selectInput('xcol', 'X Variable', names(airquality))
+
+selectInput('ycol', 'Y Variable', names(airquality),
+            selected=names(airquality)[[2]])
+```
+
+Column
+-----------------------------------------------------------------------
+  
+### Scatter plot
+  
+```{r}
+# Combine the selected variables into a new data frame
+selectedData <- reactive({
+  airquality[, c(input$xcol, input$ycol)] 
+})
+
+
+
+renderPlot({
+  ggplot(selectedData(), aes_string(x=input$xcol, y=input$ycol)) + geom_point()
+})
+```
+

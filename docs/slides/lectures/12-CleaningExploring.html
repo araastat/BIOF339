@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Data validation and exploration</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="12-CleaningExploring_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="robot.css" type="text/css" />
+    <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data validation and exploration
+### Abhijit Dasgupta
+### Fall, 2019
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339, Fall, 2019&lt;/span&gt;&lt;/div&gt;
+
+---
+
+## Plan today
+
+- Dynamic exploration of data
+- Data validation
+- Missing data evaluation
+
+---
+class: middle, center
+
+# Why go back to this?
+
+---
+
+## This is important!!
+
++ Most of the time in an analysis is spent understanding and cleaning data
++ Recognize that  unless you've ended up with good-quality data, the rest of the analyses are moot
++ This is tedious, careful, non-sexy work
+    - Hard to tell your boss you're still fixing the data
+    - No real results yet
+    - But essential to understanding the appropriate analyses and the tweaks you may need.
+    
+---
+
+## What does a dataset look like?
+
+.pull-left[
+
+```r
+library(tidyverse)
+library(visdat)
+beaches &lt;- rio::import('data/sydneybeaches3.csv')
+vis_dat(beaches)
+```
+]
+.pull-right[
+![](12-CleaningExploring_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## What does a dataset look like?
+
+.pull-left[
+
+```r
+brca &lt;- rio::import('data/clinical_data_breast_cancer_modified.csv')
+vis_dat(brca)
+```
+]
+.pull-right[
+![](12-CleaningExploring_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## What does a dataset look like?
+
+.pull-left[
+
+```r
+vis_dat(airquality)
+```
+
+These plots give a nice insight into 
+
+1. data types
+1. Missing data patterns (more on this later)
+
+]
+.pull-right[
+![](12-CleaningExploring_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+
+---
+class: middle, center
+
+# Let's get a bit more quantitative
+
+---
+
+## `summary` and `str`/`glimpse` are a first pass
+
+.pull-left[
+
+```r
+summary(airquality)
+```
+
+```
+#&gt;       Ozone           Solar.R           Wind             Temp      
+#&gt;   Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
+#&gt;   1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
+#&gt;   Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+#&gt;   Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
+#&gt;   3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
+#&gt;   Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+#&gt;   NA's   :37       NA's   :7                                       
+#&gt;       Month            Day      
+#&gt;   Min.   :5.000   Min.   : 1.0  
+#&gt;   1st Qu.:6.000   1st Qu.: 8.0  
+#&gt;   Median :7.000   Median :16.0  
+#&gt;   Mean   :6.993   Mean   :15.8  
+#&gt;   3rd Qu.:8.000   3rd Qu.:23.0  
+#&gt;   Max.   :9.000   Max.   :31.0  
+#&gt;  
+```
+]
+.pull-right[
+
+```r
+glimpse(airquality)
+```
+
+```
+#&gt;  Observations: 153
+#&gt;  Variables: 6
+#&gt;  $ Ozone   &lt;int&gt; 41, 36, 12, 18, NA, 28, 23, 19, 8, NA, 7, 16, 11, 14, 18…
+#&gt;  $ Solar.R &lt;int&gt; 190, 118, 149, 313, NA, NA, 299, 99, 19, 194, NA, 256, 2…
+#&gt;  $ Wind    &lt;dbl&gt; 7.4, 8.0, 12.6, 11.5, 14.3, 14.9, 8.6, 13.8, 20.1, 8.6, …
+#&gt;  $ Temp    &lt;int&gt; 67, 72, 74, 62, 56, 66, 65, 59, 61, 69, 74, 69, 66, 68, …
+#&gt;  $ Month   &lt;int&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…
+#&gt;  $ Day     &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1…
+```
+
+]
+
+---
+
+## Validating data values
+
++ We can certainly be reactive by just describing the data and looking for anomalies. 
++ For larger data or multiple data files it makes sense to be proactive and catch errors that you want to avoid, before exploring for new errors. 
++ The `assertthat` package provides nice tools to do this
+
+--
+
+&gt; **Note to self:** I don't do this enough. This is a good defensive programming technique that can catch crucial problems that aren't always automatically flagged as errors
+
+---
+
+## Being assertive
+
+
+```r
+library(assertthat)
+```
+
+```
+#&gt;  
+#&gt;  Attaching package: 'assertthat'
+```
+
+```
+#&gt;  The following object is masked from 'package:tibble':
+#&gt;  
+#&gt;      has_name
+```
+
+```r
+assert_that(all(between(airquality$Day, 1, 31) ))
+```
+
+```
+#&gt;  [1] TRUE
+```
+
+```r
+assert_that(is.factor(mpg$manufacturer))
+```
+
+```
+#&gt;  Error: mpg$manufacturer is not a factor
+```
+
+```r
+assert_that(all(beaches$season_name %in% c('Summer','Winter','Spring', 'Fall')))
+```
+
+```
+#&gt;  Error: Elements 11, 12, 13, 14, 15, ... of beaches$season_name %in% c("Summer", "Winter", "Spring", "Fall") are not true
+```
+
+---
+
+## Being assertive
+
++ `assert_that` generates an error, which will stop things
++ `see_if` does the same validation, but just generates a `TRUE/FALSE`, which you can capture
+
+
+```r
+see_if(is.factor(mpg$manufacturer))
+```
+
+```
+#&gt;  [1] FALSE
+#&gt;  attr(,"msg")
+#&gt;  [1] "mpg$manufacturer is not a factor"
+```
+
++ `validate_that` generates `TRUE` if the assertion is true, otherwise generates a string explaining the error
+
+
+```r
+validate_that(is.factor(mpg$manufacturer))
+```
+
+```
+#&gt;  [1] "mpg$manufacturer is not a factor"
+```
+
+```r
+validate_that(is.character(mpg$manufacturer))
+```
+
+```
+#&gt;  [1] TRUE
+```
+
+---
+
+## Being assertive
+
+You can even write your own validation functions and custom messages
+
+
+```r
+is_odd &lt;- function(x){
+    assert_that(is.numeric(x), length(x)==1)
+    x %% 2 == 1
+}
+assert_that(is_odd(2))
+```
+
+```
+#&gt;  Error: is_odd(x = 2) is not TRUE
+```
+
+```r
+on_failure(is_odd) &lt;- function(call, env) {
+  paste0(deparse(call$x), " is even") # This is a R trick
+}
+assert_that(is_odd(2))
+```
+
+```
+#&gt;  Error: 2 is even
+```
+
+```r
+is_odd(1:2)
+```
+
+```
+#&gt;  Error: length(x) not equal to 1
+```
+
+---
+class: middle,center
+
+# Missing data
+
+---
+
+## Missing data
+
+R denotes missing data as `NA`, and supplies several functions to deal with missing data.
+
+The most fundamental is `is.na`, which gives a TRUE/FALSE answer
+
+
+```r
+is.na(NA)
+```
+
+```
+#&gt;  [1] TRUE
+```
+
+```r
+is.na(25)
+```
+
+```
+#&gt;  [1] FALSE
+```
+
+---
+
+## Missing data
+
+When we get a new dataset, it's useful to get a sense of the missingness
+
+
+```r
+mpg %&gt;% summarize_all(function(x) sum(is.na(x)))
+```
+
+```
+#&gt;  # A tibble: 1 x 11
+#&gt;    manufacturer model displ  year   cyl trans   drv   cty   hwy    fl class
+#&gt;           &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+#&gt;  1            0     0     0     0     0     0     0     0     0     0     0
+```
+
+---
+
+## Missing data
+
+The `naniar` package allows a tidyverse-compatible way to deal with missing data
+
+
+```r
+library(naniar)
+weather &lt;- rio::import('data/weather.csv')
+all_complete(mpg)
+```
+
+```
+#&gt;  [1] TRUE
+```
+
+```r
+all_complete(weather)
+```
+
+```
+#&gt;  [1] FALSE
+```
+
+```r
+weather %&gt;% summarize_all(pct_complete)
+```
+
+```
+#&gt;     id year month element       d1       d2       d3       d4       d5
+#&gt;  1 100  100   100     100 9.090909 18.18182 18.18182 9.090909 36.36364
+#&gt;          d6       d7       d8 d9      d10      d11 d12      d13      d14
+#&gt;  1 9.090909 9.090909 9.090909  0 9.090909 9.090909   0 9.090909 18.18182
+#&gt;         d15      d16      d17 d18 d19 d20 d21 d22      d23 d24      d25
+#&gt;  1 9.090909 9.090909 9.090909   0   0   0   0   0 18.18182   0 9.090909
+#&gt;         d26      d27      d28      d29      d30      d31
+#&gt;  1 9.090909 27.27273 9.090909 18.18182 9.090909 9.090909
+```
+
+---
+
+
+## Missing data
+
+
+```r
+gg_miss_case(weather, show_pct = T)
+```
+
+![](12-CleaningExploring_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+
+## Missing data
+
+
+```r
+gg_miss_var(weather, show_pct=T)
+```
+
+![](12-CleaningExploring_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+## Are there patterns to the missing data
+
++ Most analyses assume that data is either 
+    - Missing completely at random (MCAR)
+    - Missing at random (MAR)
++ MCAR means
+    - The missing data is just a random subset of the data
++ MAR means
+    - Whether data is missing is related to values of some other variable(s)
+    - If we control for those variable(s), the missing data would form a random subset of each of those data subsets defined by unique values of these variables
+
+---
+
+## Are there patterns to the missing data
+
+#### MAR or MCAR allows us to ignore the missing data, since it doesn't bias our analyses
+#### If data are **not** MCAR or MAR, we really need to understand the issing data mechanism and how that might affect our results. 
+---
+
+## Co-patterns of missingness
+
+.pull-left[
+
+```r
+gg_miss_upset(airquality)
+```
+
+![](12-CleaningExploring_files/figure-html/v4-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+
+```r
+gg_miss_upset(riskfactors)
+```
+
+![](12-CleaningExploring_files/figure-html/v5-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Co-patterns of missingness
+
+.pull-left[
+
+```r
+ggplot(airquality,
+       aes(x = Ozone,
+           y = Solar.R)) +
+geom_point()
+```
+
+```
+#&gt;  Warning: Removed 42 rows containing missing values (geom_point).
+```
+
+![](12-CleaningExploring_files/figure-html/d1-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+
+```r
+ggplot(airquality,
+       aes(x = Ozone,
+           y = Solar.R)) +
+ geom_miss_point()
+```
+
+![](12-CleaningExploring_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Co-patterns of missingness
+
+
+```r
+gg_miss_fct(x = riskfactors, fct = marital)
+```
+
+![](12-CleaningExploring_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+
+## Replacing missing data
+
+`tidyr` has  a function `replace_na` which will replace all missing values with some particular value. 
+
+In the weather dataset, values are missing generally because there wasn't recorded rainfall on a day. So these values should really be 0
+
+
+```r
+weather1 &lt;- weather %&gt;% mutate(d1 = replace_na(d1, 0))
+pct_miss(weather1$d1)
+```
+
+```
+#&gt;  [1] 0
+```
+
+---
+
+### Question: How would you replace all the missing values with 0?
+
+--
+
+
+```r
+weather %&gt;% mutate_all(function(x) replace_na(x, 0))
+```
+
+--
+
+### How would you replace the missing values with the mean of the variable?
+
+--
+
+
+```r
+weather %&gt;% mutate_if(is.numeric, function(x) replace_na(x, mean(x, na.rm=T)))
+```
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
