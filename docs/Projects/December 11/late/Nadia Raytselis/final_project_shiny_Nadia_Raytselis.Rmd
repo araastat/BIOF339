@@ -3,10 +3,10 @@ title: "Reported Confirmed Malaria Cases and Deaths Worldwide from 2000-2017"
 author: "Nadia Raytselis" 
 abstract: "The following report contains two data sets from the World Health Organization (WHO). The datasets are titled: Reported indigenous confirmed cases Data by country AND Reported deaths Data by country."
 output: 
-flexdashboard::flex_dashboard:
-vertical_layout: scroll
-orientation: columns 
-# runtime: shiny 
+  flexdashboard::flex_dashboard:
+    vertical_layout: scroll
+    orientation: columns 
+#   runtime: shiny 
 ---
 
 ```{r setup, include=FALSE, warning=FALSE}
@@ -40,6 +40,11 @@ malaria_deaths_select <- tidyr::gather( malaria_deaths, key = "Year", value = "D
 
 
 -----------------------------------------------------------------------
+
+### Abstract
+
+The following report contains two data sets from the World Health Organization (WHO). The datasets are titled: Reported indigenous confirmed cases Data by country AND Reported deaths Data by country.
+
 ### Chart A
 
 ```{r, warning=FALSE, echo=F}
