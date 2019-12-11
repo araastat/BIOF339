@@ -234,6 +234,8 @@ gg_miss_case(weather, show_pct = T)
 gg_miss_var(weather, show_pct=T)
 ```
 
+---
+
 ## Are there patterns to the missing data
 
 + Most analyses assume that data is either 

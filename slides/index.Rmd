@@ -71,3 +71,7 @@ Data: [link](lectures/data/Dataset_spine.csv)
 
 The annotated R file is [here](notes/Supplement_06.R). There are also nicely 
 formated documents ([HTML](notes/Supplement_06.html)|[PDF](notes/Supplement_06.pdf))
+
+## Dashboard example
+
+See link [here](dashboard2.Rmd). You need to download and run locally since Shiny is being used
