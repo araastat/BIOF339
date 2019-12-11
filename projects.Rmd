@@ -1,0 +1,85 @@
+---
+title: Contents
+output: html_document
+---
+
+```{r, include=F}
+library(tidyverse)
+library(glue)
+library(fs)
+library(here)
+library(knitr)
+library(kableExtra)
+knitr::opts_chunk$set(echo=FALSE, warning=F, message=F)
+mk_tbl <- function(glob){
+  dirs <- dir_ls('Projects', recurse=T, type = 'file', glob=glob)
+  bl <- dirs %>% str_split('/') %>% map(~as_tibble(t(.))) %>% 
+    bind_rows() %>% 
+    select(V2:V5) %>% 
+    set_names(c('Date','Session','Name','File')) %>% 
+    mutate(full_url = dirs)
+  return(bl)
+}
+```
+
+```{r}
+t1 = mk_tbl('*.Rmd') %>% 
+  mutate(Source = as.character(glue('[Rmd]({full_url})'))) %>% 
+  select(Date, Session, Name, Source)
+t2 <- mk_tbl('*.html') %>% 
+  mutate(Presentation = as.character(glue('[HTML]({full_url})'))) %>% 
+  select(Date, Session, Name, Presentation)
+t3 <- mk_tbl('*.pdf') %>% 
+  mutate(Presentation = as.character(glue('[PDF]({full_url})'))) %>% 
+  select(Date, Session, Name, Presentation) %>% 
+  rbind(t2)
+full <- t1 %>% left_join(t3)
+```
+
+## December 11
+### 5pm session
+
+```{r}
+full %>% filter(Date == 'December 11', Session=='early') %>% select(-Session) %>% 
+  kable(., 'html') %>% 
+  kable_styling(full_width=F, 
+                bootstrap_options = 'striped',
+                position='left'
+  )
+```
+
+### 7pm session
+
+```{r}
+full %>% filter(Date == 'December 11', Session=='late') %>% select(-Session) %>% 
+  knitr::kable(.) %>% 
+  kable_styling(full_width = F,
+                bootstrap_options = 'striped',
+                position='left')
+```
+
+## December 18
+### 5pm session
+
+
+```{r}
+full %>% filter(Date == 'December 18', Session=='early') %>% select(-Session) %>% 
+  kable(., 'html') %>% 
+  kable_styling(full_width=F, 
+                bootstrap_options = 'striped',
+                position='left'
+  )
+```
+
+### 7pm session
+
+```{r}
+full %>% filter(Date == 'December 18', Session=='late') %>% select(-Session) %>% 
+  knitr::kable(.) %>% 
+  kable_styling(full_width = F,
+                bootstrap_options = 'striped',
+                position='left')
+```
+
+
+

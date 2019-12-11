@@ -1,0 +1,281 @@
+---
+title: "BIOF 339 Final Project"
+author: "Nathan Fons"
+date: "December 9, 2019"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(rio)
+library(readxl)
+library(ggplot2)
+library(dplyr)
+library(stats)
+library(tableone)
+library(broom)
+```
+
+
+## Project Intro
+
+### <b> Goal: </b> 
+Identify genes involved in Human Papillomavirus (HPV) infection.
+
+<b> Datasets: </b>
+
+* Published dataset from the lab (_Kines et al. 2016_) of relative infectivity across NCI-60 panel of cancer cell lines
+
+* Expression data (Affy HG-U133 microarray) from the NCI-CellMiner webpage
+
+<b> Methods: </b> 
+
+* Compare expression level differences in highly infected vs poorly infected cell line groups; create heatmap with probes reaching p < 0.01.
+
+## Import and tidy expression data {.smaller}
+
+```{r echo = TRUE}
+#import gene expression dataset
+NCI60_Expression_dataset <- read_excel('RNA__Affy_HG_U133_Plus_2.0_GCRMA.xls', 
+  range = cell_rows(11:53064))
+
+#tidy expression data
+NCI60_expression_clean <- NCI60_Expression_dataset %>% 
+  rename("ProbeID"= "Identifier c", "Gene" = "Gene name d",
+         "GeneID" = "Entrez gene id e") %>%
+  select(-contains(c('Chromosome f'))) %>% 
+  select(-contains('Start')) %>% 
+  select(-contains('End')) %>% 
+  select(-contains('Cytoband'))
+```
+
+```{r, echo = FALSE}
+#add 0.000001 to MCF7 for t.test error elimination
+NCI60_expression_clean <- mutate(mutate(NCI60_expression_clean,
+  'BR:MCF7'= NCI60_expression_clean[[4]] + 0.000001))
+
+```
+
+## Import and tidy expression data (cont.) {.smaller}
+
+```{r, echo = TRUE, warning = FALSE}
+#just take the probes with a gene name
+NCI60_Genes <- filter(NCI60_expression_clean, GeneID !=0)
+
+#gather cell lines/ separate based on cell name
+gathered_NCI60 <- gather(NCI60_Genes, key = Cell.Name, value = Expression, 4:63)
+cell_name_NCI60 <- gathered_NCI60 %>% 
+  separate(col = Cell.Name, into = c("Cancer_Type", "Cell_Name"), sep = ":")
+
+#convert type to factor, expression to number, and name cacer types
+cell_name_NCI60$Cancer_Type <- as.factor(cell_name_NCI60$Cancer_Type)
+cell_name_NCI60$Expression <- as.numeric(cell_name_NCI60$Expression)
+cell_name_NCI60$Cancer_Type <- recode(cell_name_NCI60$Cancer_Type,
+"BR" = 'Breast', 'CO' = 'Colon', 'LE' = 'Lymphoid',
+'ME' = 'Melanoma', 'LC' = 'Lung', 'OV' = 'Ovarian',
+'PR' = 'Prostate', 'RE' = 'Renal')
+
+
+```
+
+## Import and tidy HPV infectivity data {.smaller}
+
+```{r, echo = TRUE, warning = FALSE}
+#import cell infectivity dataset
+CellData <- import('Cell Line infectivity dataset.xlsx')
+
+#tidy cell infectivity dataset
+CellData$HPV16.infecitivty <- as.numeric(CellData$HPV16.infecitivty)
+
+#Plot histogram of cell line infectivity
+
+Fig1 <- ggplot(CellData, mapping = aes(x = CellData$HPV16.infecitivty))+
+        geom_histogram(bins = 45, color = 'black', fill = 'red')+
+        scale_x_log10()+
+        geom_vline(xintercept = 0.5,linetype = 'dashed',color = 'blue')+
+        geom_vline(xintercept = 0.01,linetype = 'dashed',color = 'darkgreen')+
+        labs(title="Relative Infectivity of NCI60 cell lines",
+         x ='Relative Infectivity', y = "No. of Cell lines")+
+        theme_bw()
+
+```
+
+
+## Figure 1:
+
+```{r, echo = FALSE, warning = FALSE}
+Fig1
+
+```
+
+## Add infectivity groups and join datasets {.smaller}
+
+```{r, echo = TRUE, warning = FALSE}
+#Add Infectivity groups
+CellData2 <- CellData %>% 
+  mutate(High = ifelse(HPV16.infecitivty > 0.5,1, 0),
+         Med = ifelse(HPV16.infecitivty < 0.5 & HPV16.infecitivty > 0.01,1, 0),
+         Low = ifelse(HPV16.infecitivty < 0.01,1, 0)) %>% 
+  mutate(Infectivity.Group = case_when(High == 1 ~ 'HIGH', 
+                                       Med == 1 ~ 'MED',
+                                       Low == 1 ~ 'LOW')) %>% 
+  select(-c(High, Med, Low))
+
+#Join datasets
+NCI60_join <- left_join(CellData2, cell_name_NCI60, by = 'Cell_Name')
+```
+
+## Calculate expression differences and p values {.smaller}
+
+```{r, echo = TRUE, warning = FALSE}
+##split and analyze infectivity group stats
+HvLstats <- NCI60_join %>%
+  filter(Infectivity.Group != 'MED') %>%
+  split(.$ProbeID) %>%
+  map(~tidy(t.test(Expression ~ Infectivity.Group, data=.))) %>%
+  bind_rows(.id='ProbeID') 
+
+#tidy HvLstats table
+HvLstats2 <- HvLstats %>% 
+  select(c('ProbeID','estimate','estimate1',
+           'estimate2','p.value'))
+
+names(HvLstats2) <- c('ProbeID','Difference',
+                      'Mean_high','Mean_low','p.value')
+
+HvLstats2 <- HvLstats2 %>% 
+  mutate('neg.log.pvalue' = -1*log10(p.value))
+
+```
+
+## Add group names for volcano plot {.smaller}
+
+``` {r, echo = TRUE, warning = FALSE}
+#Add group names
+Uppers <- HvLstats2 %>% 
+  filter((Difference >= 1) & (neg.log.pvalue >= 2)) %>% 
+  mutate(Group = 'Increased')
+
+Mids <- HvLstats2 %>% 
+  filter((Difference < 1) & (Difference >-1) | (neg.log.pvalue < 2)) %>% 
+  mutate(Group = 'Mids')
+
+Lowers <- HvLstats2 %>% 
+  filter((Difference <= -1) & (neg.log.pvalue >= 2)) %>%
+  mutate(Group = 'Decreased')
+
+#join groupings list
+HvLstats3 <- rbind(Uppers,Mids)
+HvLstats4 <- rbind(HvLstats3,Lowers)
+
+#add gene names to stats dataset
+GeneList <- NCI60_join %>% 
+  select(c(`ProbeID`,`Gene`)) %>% 
+  distinct(ProbeID, .keep_all = TRUE)
+
+#join datasets
+HvLstats5 <- left_join(HvLstats4,GeneList, by = 'ProbeID')
+```
+
+## Make volcano plot {.smaller}
+``` {r, echo = TRUE, warning= FALSE}
+#make volcano plot
+p1 <- ggplot(HvLstats5,
+       mapping = aes(x = Difference, y = neg.log.pvalue))+
+  geom_point(mapping = aes(color = Group))+
+  scale_color_manual(values=c('#f20505','#05f215', '#393a3a'))+
+  theme_bw()
+```
+
+``` {r, echo = FALSE, warning = FALSE, message = FALSE}
+#make interactive volcano plot
+library(plotly)
+library(fs)
+```
+
+``` {r, echo = TRUE, warning = FALSE}
+mytext=paste("Gene = ", HvLstats5$Gene, "\n" , "ProbeID = ",
+    HvLstats5$ProbeID, "\n", "Difference = ", HvLstats5$Difference,
+    "\n", "neg.log.pvalue = ", HvLstats5$neg.log.pvalue, "\n")    
+pp=plotly_build(p1)   
+Fig2 <- style(pp, text=mytext, hoverinfo = "text", traces = c(2))
+
+```
+
+## Figure 2:
+
+```{r, echo = FALSE, warning= FALSE}
+Fig2
+
+```
+
+
+## Prepare dataset for heatmap generation {.smaller}
+
+```{r, echo = TRUE, warning= FALSE}
+
+HeatList1 <- NCI60_join %>%
+  dplyr::filter(Infectivity.Group != 'MED') %>%
+  split(.$ProbeID) %>% 
+  map(~broom::tidy(t.test(Expression ~ Infectivity.Group, data=.))) %>% 
+  bind_rows(.id='ProbeID') %>% 
+  select(ProbeID, estimate, p.value)
+
+HeatList2 <- HeatList1 %>% 
+  left_join(GeneList, by = 'ProbeID') %>% 
+  dplyr::filter(p.value <= 0.01)
+
+Heatlist3 <- NCI60_join %>% 
+  dplyr::select(c(ProbeID,Gene, Infectivity.Group,
+                Cell_Name, Expression)) %>%
+  dplyr::filter(Infectivity.Group != 'MED') %>%
+  dplyr::select(-Infectivity.Group)
+
+Heatlist4 <-  Heatlist3 %>%
+  dplyr::group_by(ProbeID) %>%
+  dplyr::mutate('MEAN' = mean(Expression)) %>% 
+  dplyr::mutate('SD' = sd(Expression)) %>%
+  dplyr::ungroup() %>% 
+  dplyr::mutate('zscore' = ((Expression-MEAN)/SD))
+```
+
+## Calculate z-scores {.smaller}
+
+```{r, echo = TRUE, warning= FALSE}
+Zlist <- Heatlist4 %>%
+  dplyr::select(-c(Gene,Expression,MEAN,SD)) %>% 
+  spread(key = Cell_Name, value = zscore)
+zscorelist <- left_join(HeatList2,Zlist, by = 'ProbeID')
+
+Zlist2 <- zscorelist %>%
+  dplyr::select(-c(ProbeID, Gene, estimate, p.value))
+row.names(Zlist2) <- zscorelist$ProbeID
+
+Col_annotate <- CellData2 %>% 
+  dplyr::filter(!is.na(Infectivity.Group)) %>% 
+  dplyr::filter(Infectivity.Group != 'MED') %>% 
+  dplyr::select(c(Cell_Name,Infectivity.Group))
+
+Col_annotate2 <- Col_annotate %>% 
+  select(Infectivity.Group)
+
+row.names(Col_annotate2) <- Col_annotate$Cell_Name
+  
+```
+
+## Generate heatmaps {.smaller}
+
+```{r, echo = TRUE, warning= FALSE}
+library(pheatmap)
+Fig3<-pheatmap(Zlist2,show_rownames = FALSE, annotation_col = Col_annotate2)
+```
+
+
+## Conclusions:
+
+* 10 cell lines were classified as "LOW" or poorly infectable cells; 12 cell lines were classified as "HIGH" or highly infectable cells. 
+
+* Volcano plot depicts statistically significant probes, and useful for examining differentially expressed genes
+
+* Heatmap of statistically significant Affy probes, clusters HIGH and LOW cell lines successfully, and demonstrates clear expression level differences

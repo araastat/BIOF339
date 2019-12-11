@@ -1,0 +1,108 @@
+library(rio)
+library(tidyverse)
+library(rlist)
+library(effsize)
+
+#end goal is to create graphs for all genes, cluster the results from all experiments to find similarities in SLC responsiveness 
+#try and grab data for lo stim as well and create faceted graphs (maybe for next lab meeting?)
+
+
+files <- dir('K:/5_brainscan_data', recursive=TRUE, full.names=T, pattern = 'c1_analysis.trk') #Don't want all c1_analysis files from all subdirectories...
+
+
+files <- files[grepl("SetA", files)] #extract all items from list which contain string 
+dats <- lapply(files, read.table, fill = TRUE, skip = 1, header = TRUE) #all data frames for hi stim
+
+dats_combined <- bind_rows(dats, .id = 'Gene_name')
+
+
+dats_combined <- dats_combined %>% separate(File, c("track", "gene", "genotype", "fish#"), sep = "_")
+dats_combined$track <- NULL
+dats_combined$Gene_name <- NULL
+dats_combined <- dats_combined[-c(1:81),]
+
+  
+dats_combined <- dats_combined %>%
+  mutate(genotype = substr(dats_combined$genotype, 1, nchar(dats_combined$genotype)-3)) #remove group numbers from genotype
+
+dats_combined$genotype <- dats_combined$genotype %>% str_replace("m(?!u)", "mut") %>% str_replace("w", "con")
+
+dats_combined$genotype <- str_replace(dats_combined$genotype, "knd", "mut") #replacing any incorrect factor names 
+
+gene_list <- split(dats_combined, dats_combined$gene)
+
+gene_list[["trip12"]][["genotype"]] <- str_replace(gene_list[["trip12"]][["genotype"]], "mun", "mut") #fixing somebody's weird typo  
+names(gene_list)[29] <- "tlk2" #fixing incorrectly named gene 
+
+
+#plots and statistics 
+
+cohen_d_all_genes <- data.frame("gene","d", stringsAsFactors = FALSE) 
+colnames(cohen_d_all_genes) <- as.character(unlist(cohen_d_all_genes[1,]))
+cohen_d_all_genes = cohen_d_all_genes[-1, ]
+
+
+n <- 1
+for (d in gene_list){
+cohen_d_all_genes[n,"gene"] = ( names(gene_list[n])) 
+cohen_d <- cohen.d.default(gene_list[[n]][["SLC"]], gene_list[[n]][["genotype"]], na.rm = TRUE)
+cohen_d_all_genes[n,"d"] = cohen_d$estimate
+n = n + 1
+} 
+
+
+
+cohen_d_all_genes$d <- as.numeric(cohen_d_all_genes$d) %>% round(3) 
+cohen_d_all_genes$d <- abs(cohen_d_all_genes$d) #change negative values to positive
+cohen_d_all_genes <- cohen_d_all_genes[with(cohen_d_all_genes, order(cohen_d_all_genes$d)),]
+cohen_d_all_genes$category <- c(NA)
+cohen_d_all_genes$category <- cut(cohen_d_all_genes$d, c(0,0.2,0.5,0.8,1.30)) #make cutoff categories
+
+#sort by cohen's d value
+
+levels(cohen_d_all_genes$category) <- c("very small", "small", "medium", "large", "very large")
+
+
+cohen_d_all_genes$gene = with(cohen_d_all_genes, reorder(gene, d)) #change factor levels to that genes are sorted by d value in ggplot
+
+
+
+
+
+
+plot <- ggplot(
+  data = cohen_d_all_genes,
+  mapping = aes(
+    x = d,
+    y = gene,
+    color = factor(category)
+  )
+) +
+  geom_point() + 
+  theme_classic() + 
+  labs(title = "Comparing SLC Responsiveness in ASD Gene CRISPR Knockouts",  
+           x = "Cohen's D Value (Control vs Knockdown)", y = "ASD Gene") +  #show thresholds that determined size category  
+  theme(plot.title = element_text(size = 12)) 
+ 
+
+
+plot$labels$colour <- "Effect Size"
+ 
+   #0,0.2,0.5,0.8,1.30
+
+
+
+  
+  geom_boxplot() +
+  geom_jitter(width = 0.25) +
+  ggtitle("SLC Responsiveness for High Stimulus") +
+  theme_classic() #gets rid of grey background
+  
+  #dendrogram is not really helpful...
+  library(stats)
+  library(graphics)
+  dd <- dist(scale(cohen_d_all_genes$d), method = "euclidean")
+  hc <- hclust(dd)
+  plot(hc, labels = cohen_d_all_genes$gene)
+
+

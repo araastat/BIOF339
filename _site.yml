@@ -14,6 +14,8 @@ navbar:
       href: slides/index.html
     - text: Homework
       href: assignments/index.html
+    - text: Projects
+      href: projects.html
     - text: Resources
       href: resources.html
   right:

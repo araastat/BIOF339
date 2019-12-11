@@ -1,0 +1,159 @@
+---
+title: "Anisotropy measurement report"
+author: "Tomas Kroupa"
+date: "2019-12-09"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=F}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(comment = '')
+```
+
+```{r, results='hide'}
+library(tidyverse)
+library(mixtox)
+library(minpack.lm)
+source('r-scripts/my_curveFit.R')
+
+## import data file
+anisotropy <- rio::import('data/dataset_final_project.xlsx')
+
+
+## tydying of data, gather the experiments and set factors and normalizing data (on scale from 0 to 1)
+anisotropy <- anisotropy %>% 
+  gather(key = 'proteinRNA', value = 'anisotropy', -c(protein_concentration, replicate)) %>%
+  drop_na() %>% 
+  mutate(replicate = as.factor(replicate), proteinRNA = as.factor(proteinRNA)) %>% 
+  group_by(proteinRNA) %>% 
+  mutate(anisotropy_norm = (anisotropy-min(anisotropy))/(max(anisotropy)-min(anisotropy))) %>%                                          ## calculation of normalized anisotropy (everything adjusted to scale from 0 to 1)
+  group_by(proteinRNA, protein_concentration) %>% 
+  mutate(average_norm = mean(anisotropy_norm), sd_norm = sd(anisotropy_norm), average = mean(anisotropy), sd = sd(anisotropy)) %>%      ## calculation of averages and standard deviations
+  separate(col = proteinRNA, into = c('protein','RNA'), sep ='-', remove = FALSE) %>%                                                   ## separating the column 'proteinRNA' into columns 'protein' adn 'RNA'
+  ungroup() %>% 
+  mutate(protein = as.factor(protein), RNA = as.factor(RNA))
+ 
+## inicialize new list called 'dats'
+dats <- list()
+
+## creates list of data frames for each experiment
+for(n in levels(anisotropy$proteinRNA)){
+  dats[[n]] <- anisotropy %>% 
+    select(-c(anisotropy_norm)) %>% 
+    filter(proteinRNA == n) %>% 
+    spread(key = 'replicate', value = 'anisotropy')
+}
+
+
+## calculates EC50 values and prints them in a report
+output <- list()
+
+for(n in levels(anisotropy$proteinRNA)){
+  output[[n]]<-my_curveFit(dats[[n]]$protein_concentration, data.matrix(dats[[n]][-(1:10)]), eq = 'Hill_four', param = c(100,1,400,225), effv = 0.5, sigLev = 0.05) 
+}
+
+
+## creates data.frame with the fitted parameters
+table_EC50 <- lapply(output, `[[`, 3)
+
+combined_EC50 <- table_EC50 %>% 
+  bind_rows %>% 
+  mutate('value' = c('EC50','hill','maximum','minimum')) %>% 
+  gather(key = 'proteinRNA', value = 'fit', -value) %>% 
+  spread(key = value, value = fit) %>% 
+  mutate(proteinRNA = as.factor(proteinRNA))
+
+## joining the fit values to main dataset
+anisotropy_with_fit <- right_join(anisotropy, combined_EC50, by = 'proteinRNA')
+
+
+## calculate the points of the fit curve based on the fit parameters
+anisotropy_with_fit <- anisotropy_with_fit %>% 
+  mutate(average_norm_delta = average - minimum) %>% 
+  mutate(fit_curve = (minimum+(maximum-minimum)/(1+(EC50/protein_concentration)^hill))) %>% 
+  mutate(fit_curve_delta = fit_curve - minimum)
+
+```
+### Interaction of proteins with RNA
+#### Buffer composition 
+
+#### **Experiments**
+##### `r levels(factor(anisotropy$protein))` proteins and 
+##### `r levels(factor(anisotropy$RNA))` RNAs used in the following experiments.
+
+```{r}
+cat(levels(anisotropy$proteinRNA), sep = '\n')
+```
+
+#### **Calculation of EC50 values**
+```{r}
+for(n in levels(anisotropy$proteinRNA)){
+  cat('-------------------------------------------------------------------------------------------------\n')
+  cat('\n')
+  cat(n)
+  cat('\n')
+  print(output[[n]]$fitInfo)
+  cat('\n')
+  }
+```
+
+#### **Plots**
+```{r plot, fig.height = 25, fig.width = 20, fig.align = "center"}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)
+library(lemon)
+library(bsts)
+
+## creates pallete with 16 colors in pairs
+my_palette <- c("#1F78B4", "#A6CEE3", "#33A02C", "#B2DF8A", "#E31A1C", "#FB9A99", "#FF7F00", "#FDBF6F", "#6A3D9A", "#CAB2D6", "#B15928", "#b58970", "#6F8444", "#AFCF6D", "#000000", "#918E8E")
+
+## Creates min and max for axis in charts based on the used protein concentration 
+max_conc_chart <- max(anisotropy$protein_concentration*2)
+min_conc_chart <- min(anisotropy[anisotropy$protein_concentration>0,1]/2)
+
+## Sets breaks for charts
+breaks_set <- GeometricSequence(nchar(max_conc_chart), ifelse(min_conc_chart>1,10,1), discount.factor = 10)
+v <- c()
+for(n in c(0:length(breaks_set))){
+  v[[(n+1)]] <- c(2:9) * 10^n
+}
+minor_breaks_set <- as_vector(v)
+
+
+## Plot with actual values of ansotropy
+plot1 <- anisotropy_with_fit %>%
+  filter(protein_concentration != 0) %>%
+  ggplot(aes(x = protein_concentration, y = average_norm_delta)) + 
+  geom_point(aes (color = proteinRNA), size = 3.5) +
+  scale_x_log10(limits = c(min_conc_chart, max_conc_chart), 
+                breaks = breaks_set, 
+                minor_breaks = minor_breaks_set) +
+  scale_y_continuous(breaks = c(0, 20, 40, 60, 80, 100, 120, 140), 
+                     minor_breaks =  c(), 
+                     labels = waiver(), 
+                     limits = NULL) +
+  theme_light() + 
+  labs (y = "\u0394 Anisotropy", 
+        x = "Protein Concentration [nM]", 
+        title = "Bindign curves of the studied proteins", 
+        subtitle = "Buffer composition") +
+  theme(text = element_text(size=14), 
+        legend.text = element_text(size=14, face = "bold"), 
+        legend.title = element_blank(),
+        panel.grid.minor = element_line(linetype="dashed",size=0.1),
+        strip.text.x = element_text(size = 14, color = "black", face = "bold")) +
+  geom_errorbar(aes(ymin = average_norm_delta - sd, ymax = average_norm_delta + sd, color = proteinRNA), width = 0.1) +
+  scale_colour_manual(values = my_palette) +
+  geom_line(aes(x = protein_concentration, y = fit_curve_delta, color = proteinRNA), size = 1) +
+  facet_wrap(~ protein, ncol = 2)
+  
+plot1
+
+```
+

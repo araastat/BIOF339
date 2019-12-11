@@ -1,0 +1,232 @@
+---
+title: "BIOF 339 Final Presentation:      Running an Easier 5k"
+author: Kevin Oakley
+date: December 11, 2019
+output: ioslides_presentation
+incremental: true
+widescreen: true
+smaller: true
+logo: ./img/FA_logo.png
+---
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rio)
+library(jpeg)
+library(png)
+library(visdat)
+library(gmailr)
+
+```
+
+
+## Putting R to Practical Use
+
+<div class="centered"> 
+Goal of helping a high school Music Educator use R code to better serve the needs of managing a 5k fundraiser to support Arts Education. 
+</div>
+<div class="centered">
+Requiring quick analysis of current data and a customizable output in the form of an email for registered fundraisers to continue their work and boost the overall donation totals.
+</div> 
+<div class="centered">
+![](./img/FA2_logo.png "Logo")
+</div>
+
+## Current Data Collection Formats
+
+- Google Forms output  (Student Registration)
+- Downloaded online donor data to Excel file  
+- Used Google Add-ons (Autocrat and Form Mule) to generate reports
+
+<div class="centered">
+![](./img/icons.png "icon")
+</div> 
+
+##  Spreadsheets Requires Time and Energy {.build}
+
+The 2019 annual campaign was effective this year because of the diligence of the administrator taking time to learn manipulation of Google sheets by joining tables and manually reconstructing datasets at periodic timepoints that generated e-mail merges of current totals for the student fundraisers. 
+
+Since this is an annual event, my hope was to create a foundation in R code for future events to run just as well, but without needing as much manual attention.
+
+> - Functions written in R to pull current data
+> - Using library(gmailr) to report back to fundraisers
+
+
+## Dataset Built From Google Form Results
+
+<div class="centered">
+![](./img/gform_screenshot.png "icon")
+</div> 
+
+
+
+# Tedious Manual Labor
+
+## Merge Data Across Multiple Spreadsheets
+
+![](./img/sreg_join_code.png "join")
+
+
+## Multiple Reconstruction of Current Data
+
+![](./img/sreg_multiple_mailer.png "mailer")
+
+
+
+## Presentation Goals {.larger}
+
+> - Data ingestion
+> - Data Munging and Analysis
+> - Graphical output
+> - Eventual alignment with gmailr to report
+
+# Data
+
+
+## Dataset of Registered Students
+
+```{r include= F, message= TRUE }
+Nov10data <-  rio::import('data/RegistrationForm.csv')
+summary(Nov10data)
+```
+
+```{r include= T, message= T}
+str(Nov10data)
+```
+
+##
+<div class="centered">
+```{r}
+vis_dat(Nov10data)
+```
+</div>
+
+## Dataset of Online Donations
+
+```{r include= F, message= TRUE }
+dondat <-  rio::import('data/OnlineDonorDownload.csv')
+summary(dondat)
+```
+
+```{r include= T, message= T}
+str(dondat)
+```
+
+## 
+<div class="centered">
+```{r include= T, message= T}
+vis_dat(dondat)
+```
+</div>
+
+## Munging the Data {.build}
+
+ - Review Variables to determine which are relevant for future questions regarding student donation totals
+ - Convert status of those variables to numeric
+ - Clean data 
+ - Write functions to simplify parsing information from repetative tasks
+
+## Variables of Interest 
+
+Student Registration Data
+<div class="red">
+- $ Email Address
+- $ First Name
+- $ Last Name
+</div>
+
+Donation Data
+<div class="green">
+ - $ BMHS_Student_First
+ - $ BMHS_Student_Last
+ - $ Payment Status
+ - $ Transaction Total
+ - $ Amount_of_Donation 
+</div>
+
+## Create Datasets of Selected Variables
+
+```{r Create datasets of only student and donations}
+students <- select(Nov10data, 'Email Address', ends_with('Name'))
+donor <- select(dondat, 'BMHS_Student_First', 'BMHS_Student_Last', 'Payment Status','Transaction Total', 'Amount_of_Donat')
+str(students)
+str(unique(students$`Email Address`))
+str(donor)
+```
+
+## Convert Values
+
+```{r}
+donor$`Payment Status` <-  as.factor(donor$`Payment Status`)
+donor$`Transaction Total` <- as.numeric(donor$`Transaction Total`)
+donor$Amount_of_Donat <-  as.numeric(donor$Amount_of_Donat)
+str(donor) 
+
+```
+
+## Where are the NAs {.smaller}
+```{r include= T, echo= F}
+vis_dat(donor)
+
+# library(naniar)
+# gg_miss_upset(donor)
+```
+
+## Check for "Completed" Donations
+
+```{r Check the factors for Payment Status, echo= T, include= T, message= T}
+summary(donor$`Payment Status`)
+```
+
+```{r Select only the values that are associated with a Completed Donation}
+donates <- donor %>% filter(`Payment Status` == 'Completed')
+summary(donates$`Payment Status`)
+str(donates)
+```
+
+##
+
+```{r}
+donates2 <-  filter(donates, 
+                    !is.na('Transaction Total') & !is.na("Amount_of_Donat"))
+head(donates2)
+```
+
+
+
+##
+```{r}
+library(tableone)
+tab1 <- CreateTableOne(data=donates2[,-1])
+tab1
+```
+
+
+## Use Regular Expressions for Strings
+
+Emplore the use of grep() for pattern matching to discover the donatations belonging to students whom had their name abbreviated or altered by case when donors filled out their pledges.
+
+```{r}
+# Insert code here for a function that creates a list of last names from the students dataset (193 observations)
+# Use that list to write another function that will use grep() to look for that pattern "ignore.case= T" to compile all actual donations belonging to the student.
+# Then write a function to sum the donations per student to output for reporting
+```
+
+
+
+## Pitfalls To Work On | Crediting the student with the correct donations
+
+- Mispelling First and/or Last name by Donors
+- Writing a function to account for a percentage match of spelling to guess correctly
+- Account that function to correct for potential sibling or surname matches
+
+## Conclusion....pending
+
+I will continue to work on this project to streamline the data analysis of pledges for a good cause.  Hopefully this will provide an easier way to solicit donations and boost the overall totals.
+
+## 
+<dir class="centered">
+<dir class="blue">
+<b> THANK YOU <b>
+</dir>
