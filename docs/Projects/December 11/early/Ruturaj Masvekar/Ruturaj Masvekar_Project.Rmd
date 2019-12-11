@@ -5,7 +5,7 @@ date: "11/25/2019"
 output: html_document
 ---
 # Activate required packages
-```{r, echo=T, warning=F, message=F}
+```{r include=FALSE}
 library(readr)
 library(dplyr)
 library(tidyverse)
@@ -37,7 +37,7 @@ Final$Activity <- factor(Final$Activity,
 ```
 
 # Table1: Demographics across Disease Activity
-```{r echo=T}
+```{r echo=FALSE}
 myvars=c('Age', 'Gender', 'Race')
 tab1 <- CreateTableOne(data=Final,
                        vars=myvars,
@@ -46,7 +46,7 @@ kableone(print(tab1), format = 'html')
 ```
 
 # Table2: Biomarkers across Disease Activity
-```{r echo=T}
+```{r echo=FALSE}
 Biomarkers <- Final[,c(7:25)] %>% names()
 tab2 <- CreateTableOne(data=Final,
                       vars=Biomarkers,
@@ -231,7 +231,7 @@ plot_grid(CEL_NfL, CEL_TNFa, CEL_TNFB, CEL_IL10, CEL_TGFB, CEL_IL12p40, CEL_CHI3
 ```
 
 # Figure3: Correlogram of statistically significant Biomarkers_All MS Subjects
-```{r echo=T}
+```{r echo=FALSE}
 Data <- Final[,c(7, 8, 10, 14, 15, 17, 25)]
 
 mat <- rcorr(as.matrix(Data), type = "spearman")
