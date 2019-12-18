@@ -1,0 +1,108 @@
+---
+title: "Final Project"
+author: "Lila Hoachlander-Hobby"
+date: "12/18/2019"
+output: 
+  html_document:
+      code_folding: hide
+      theme: cosmo
+      toc: true
+      toc_depth: 3
+      toc_float:
+        smooth_scroll: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(cowplot)
+```
+
+# Background on Data Set
+The original data set includes data on each player from the 31 teams in the National Hockey League from 2004-2018 (some years excluded). I focused only on the 8 teams in the Metropolitan Division to determine how player statistics contribute to their overall points.
+
+# Data import
+```{r}
+NHL_data <- rio::import('NHL_2004-2018_Player_Data.csv')
+```
+
+```{r}
+str(NHL_data)
+```
+
+# Data Tidying
+## Renaming Columns with Duplicate Names
+```{r, echo=TRUE}
+names(NHL_data) <- make.unique(names(NHL_data))
+names(NHL_data)
+```
+
+## Filter/Select and Renaming Columns
+```{r, warning=FALSE}
+NHL_data <- NHL_data %>%
+  filter(Tm == c('WSH', 'NYI', 'CAR', 'PIT', 'PHI', 'NYR', 'CBJ', 'NJD')) %>%
+  select(c('Rk', 'Player', 'Age', 'Pos', 'Tm', 'GP', 'G', 'A', 'PTS', 'GW', 'S', 'TOI', 'HIT', 'Season')) %>%
+  rename(Rank = Rk, Position = Pos, Team = Tm, Games_Played = GP, Goals = G, Assists = A, Points = PTS, Game_Win_Goals = GW, Shots_on_Goal = S, Time_on_Ice = TOI, Hits = HIT)
+str(NHL_data)
+```
+
+## Correcting Variable Types & Removing Players' Usernames
+```{r}
+NHL_data$Position <- as.factor(NHL_data$Position)
+NHL_data$Team <- as.factor(NHL_data$Team)
+NHL_data$Season <- as.factor(NHL_data$Season)
+
+NHL_data$Player <- gsub("\\\\.*", "", NHL_data$Player)
+str(NHL_data)
+```
+```{r}
+view(NHL_data)
+```
+
+# Data Visualization and Analysis
+## Q: Is there a correlation between shots on goal and points? What about time on ice and points?
+```{r, warning = FALSE}
+p1 <- ggplot(data = NHL_data,
+       mapping = aes(Shots_on_Goal, Points)) +
+  geom_point() +
+  geom_smooth(method = lm, se=F) + 
+  labs(x = 'Shots on Goal')
+
+p2 <- ggplot(data = NHL_data,
+       mapping = aes(Time_on_Ice, Points)) +
+  geom_point() +
+  geom_smooth(method = lm, se=F) +
+  labs(x = 'Time on Ice (min)')
+
+plot_grid(p1, p2)
+```
+
+
+```{r}
+LinearModel_sog <- lm(Shots_on_Goal ~ Points, NHL_data)
+summary(LinearModel_sog)
+
+LinearModel_toi <- lm(Time_on_Ice ~ Points, NHL_data)
+summary(LinearModel_toi)
+```
+* Both graphs show a relatively strong positive correlation. However, there is a stronger correlation between shots-on-goal and points (R-squared = 0.8707) than there is between time-on-ice and points (R-squared = 0.627)
+
+## Q: Which team has the most cumulative player points, and how does Position contribute to overall points?
+
+``` {r}
+ggplot(data = NHL_data,
+       mapping = aes(x = Team, y = Points, fill = Position)) +
+  geom_bar(stat = "identity")
+```
+
+
+* Based on this graph, PIT (Pittsburgh Penguins) had the most cumulative points from 2004-2018
+* It is also evident that the C (center) position consistently contributes most to points earned
+
+
+
+
+
+
+

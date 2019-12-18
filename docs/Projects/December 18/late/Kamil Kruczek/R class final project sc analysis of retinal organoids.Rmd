@@ -1,0 +1,156 @@
+---
+title: "Single cell RNA sequencing analysis of retinal organoids"
+author: "Kamil Kruczek"
+date: "12/14/2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Single cell RNA sequencing analysis of retinal organoids
+
+Retinal organoids are small pieces of retinal tissue differentiated from pluripotent stem cells.
+
+They might represent useful *in vitro* model to study human retinal development and disease conditions.
+
+Cell type composition of organoids is not well characterized.
+
+Here retinal organoids at 6 months of differentiation were dissociated and single cell suspension processed through 10X Genomics platform for single cell transcriptomic analysis.
+
+# Initial processing and quality control
+
+Seurat package was used following Guided Clustering Tutorial.
+
+```{r}
+library(dplyr)
+library(Seurat)
+library(hdf5r)
+
+organoidsc.data <- Read10X_h5("C:/Users/kamil/OneDrive/Desktop/R class organoid sc project/data/filtered_feature_bc_matrix.h5")
+
+organoidsc <- CreateSeuratObject(counts = organoidsc.data, project = "retinalorganoidsc", min.cells = 3, min.features = 200)
+
+organoidsc
+```
+
+Presence of excessive mitochondrial gene reads might signal low quality cells. However retina is one of the most metabolically active tissues therefore the suggested cutoff of 5% used for blood cells was raised to 20% based on mitochondrial reads distribution.
+
+```{r}
+organoidsc[["percent.mt"]] <- PercentageFeatureSet(organoidsc, pattern = "^MT-")
+```
+
+Plot of mitochondrial gene reads in the analyzed assay.
+
+```{r, echo=FALSE}
+VlnPlot(organoidsc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+```
+
+Too low transcript reads number suggests cell debris whereas very high number can mean multiple cells caught in the seqencing droplet. The data is subset to remove both low read number (<200) and very high (>3000) as well as excessive mitochondrial gene content.
+
+```{r}
+organoidsc <- subset(organoidsc, subset = nFeature_RNA > 200 & nFeature_RNA < 3000 & percent.mt < 20)
+```
+
+Normalization is performed and variable gene expression identified, then scaling is applied so that highly expressed genes don't overwhelm downstream analysis.
+
+```{r}
+organoidsc <- NormalizeData(organoidsc)
+organoidsc <- FindVariableFeatures(organoidsc, selection.method = "vst", nfeatures = 2000)
+all.genes <- rownames(organoidsc)
+organoidsc <- ScaleData(organoidsc, features = all.genes)
+```
+
+Running principal component analysis.
+
+```{r}
+organoidsc <- RunPCA(organoidsc, features = VariableFeatures(object = organoidsc))
+```
+
+Determining dimensionality of the data.
+
+```{r}
+ElbowPlot(organoidsc)
+```
+
+Based on the graph all 20 PCs could be included in subsequent processing, although they become less significant beyond PC15.
+
+# Clustering transcriptomic profiles and projection onto a 2-dimentional space
+
+```{r}
+organoidsc <- FindNeighbors(organoidsc, dims = 1:20)
+organoidsc <- FindClusters(organoidsc, resolution = 0.5)
+organoidsc <- RunUMAP(organoidsc, dims = 1:20)
+```
+
+Graph below shows resulting cell clusters.
+
+```{r, echo = FALSE}
+DimPlot(organoidsc, reduction = "umap", label = TRUE)
+```
+
+Saving the results in an RDS file for easier loading and sharing.
+
+```{r}
+saveRDS(organoidsc, file = "C:/Users/kamil/OneDrive/Desktop/R class organoid sc project/output files/organoidsc.rds")
+
+organoidsc <- readRDS(file = "C:/Users/kamil/OneDrive/Desktop/R class organoid sc project/output files/organoidsc.rds")
+```
+
+Finding marker transcripts for cell clusters.
+
+```{r}
+organoidsc.markers <- FindAllMarkers(organoidsc, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+topclustermarkers <- organoidsc.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
+```
+
+Expression of indentified top 3 markers of each cluster is visualized in a heatmap.
+
+```{r, echo = FALSE}
+top3 <- organoidsc.markers %>% group_by(cluster) %>% top_n(n = 3, wt = avg_logFC)
+DoHeatmap(organoidsc, features = top3$gene) + NoLegend()
+```
+
+Based on known molecular markers of retinal cell types, cell type identity can be assigned to clusters. Many cell types form multiple clusters, which may represent less developed precursors or cell subtypes with distinct transcriptional profiles.
+
+```{r}
+new.cluster.ids <- c("Rod 1", "Cone 1", "Muller glia 1", "Ganglion and Amacrine", "Bipolar 1", "Undifferentiated", "Rod 2",
+                     "Muller glia 2", "Cone 2", "Cone precursor", "Bipolar 2", "Bipolar 3", "Cone 3", "Horizontal")
+names(new.cluster.ids) <- levels(organoidsc)
+organoidsc <- RenameIdents(organoidsc, new.cluster.ids)
+```
+
+Clusters can now be renamed to reflect cell type identity.
+
+```{r, echo = FALSE}
+DimPlot(organoidsc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
+```
+
+# Photoreceptor types in retinal organoids
+
+We humans are trichromatic animals meaning that we possess three color opsin visual pigments allowing us for a wider color discrimination than, for instance, dicromatic mice having just two color opsins. 
+
+Color opsins are present in cone photoreceptors. These cells allow us to see in color during the day and have sharp vision for reading or driving.
+
+Rod cells allow us to see at night thanks to Rhodopsin visual pigment sensitive to low light.
+
+Are all opsins expressed in photoreceptors in retinal organoids?
+
+The graph below shows expression of opsin transcripts in cell type clusters.
+
+```{r, echo = FALSE}
+DotPlot(organoidsc, features = c("RHO", "OPN1SW", "OPN1MW", "OPN1MW3"), cols = c("white", "red")) + RotatedAxis()
+```
+
+# Conclusions
+
+Analysis of single cell RNA sequencing data set after quality control and processing yielded profiles of 3350 individual cells from retinal organoids.
+
+Retinal cell type identity could be assigned to clusters found in an unbiased manner.
+
+Photoreceptor cells in organoids express main opsins, especially red and green color opsins used for day vision.
+
+Therefore retinal organoids can be useful for in vitro modeling diseases affecting useful human vision.

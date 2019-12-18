@@ -1,0 +1,132 @@
+---
+title: "TB Project"
+author: "James Mancuso"
+date: "12/9/2019"
+output: html_document
+
+##output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Input dataset
+
+```{r TB data analysis}
+library(readxl)
+library(tableone)
+library(dplyr)
+
+TBdata <- read_excel("C:/Users/james/Desktop/NIH R Class/Project/TBdata.xlsx") 
+
+##rename(TBdata, Study ID = Study_ID)     ## Can't figure this out so I just changed it in Excel
+TBdata<-select(TBdata, 1,5:8,22,24,26,28,38,43) %>%
+    mutate(include=ifelse(is.na(include)==TRUE,1,0)) %>%
+    mutate(Foreign_born=ifelse(Country_of_Birth=="US","no","yes")) %>%
+    filter(include==1) %>%
+    mutate(include=as.factor(include))  %>%
+    mutate(Race=paste(toupper(substring(Race,1,1)), substring(Race,2), sep="")) %>%
+    mutate_if(is.character,as.factor) %>%
+    mutate(Recommended=as.factor(Recommendation)) %>%
+    mutate(Referred=as.factor(Referral_documented)) %>%
+    mutate(Retained=as.factor(PCS_followup)) %>%
+ ##   mutate(Referred=as.factor(Referral)) %>%
+ ##   mutate(Followup=as.factor(PCS)) %>%
+    mutate(Completed=as.factor(Completed))
+
+
+str(TBdata)
+
+TBdata <- select(TBdata, -5,-6,-8,-9,-11)    ##drop Variables
+
+str(TBdata)
+
+## level_key <- c("1" = "yes", "0" = "no")
+##    recode_factor(Completed, !!!yesnovar)  ## can't figure out how to recode factor variables
+
+str(TBdata)
+
+catvars <- TBdata %>% select_if(is.factor) %>% names()
+ctsvars <- TBdata %>% select_if(is.numeric) %>% names()
+
+##TBdata
+
+ 
+str(TBdata)
+
+head(TBdata)
+
+```
+
+## Table 1
+
+```{r}
+##tab1 <- CreateTableOne(data=TBdata[,-c(1,5)])
+##tab1
+
+
+CreateCatTable(vars = catvars, data = TBdata)
+CreateContTable(vars = ctsvars, data = TBdata)
+CreateTableOne(vars = c(catvars, ctsvars), data = TBdata)
+
+CreateTableOne(data = TBdata[,-1])
+
+```
+
+## Group Table 1 by completion status
+```{r}
+TBdata %>% 
+  filter(!is.na(Completed)) %>%
+  group_by(Completed) %>% 
+  summarize_at(3, mean, na.rm=T)  %>% 
+  tidyr::gather(ID, value, -Completed) %>%
+  tidyr::spread(Completed, value)
+
+CreateTableOne(
+  data = TBdata %>% filter(!is.na(Completed)),
+  vars = TBdata[,-c(1,8)] %>% 
+    names(),
+  strata = 'Completed',
+  test = F)
+
+
+```
+## Statistical tests
+
+``` {r}
+
+t.test(Age ~ Completed, data =TBdata) %>% 
+  broom::tidy()
+
+fisher.test(table(TBdata$Completed, TBdata$Sex)) %>% 
+  broom::tidy()
+
+c1 <- CreateCatTable(vars = c('Sex','Race'),
+               data = filter(TBdata, !is.na(Completed)),
+               strata = 'Completed',
+               test = T)
+print(c1, exact = c('Sex','Race')) # fisher.test
+```
+
+
+## Try regression analysis
+```{r regression model}
+glm_TB <- glm(TBdata$Completed ~ TBdata$Sex + TBdata$Age + TBdata$Race, family = binomial())
+summary(glm_TB)
+
+```
+
+##  Barplot of Cascade of Care
+
+``` {r cascade}
+
+# Grouped Bar Plot
+
+
+## counts <- table(TBdata%Recommended, TBdata$Completed)
+## barplot(counts, main="Cascade of Care",
+##  xlab="Step in the Cascade", col=c("darkblue","red"),
+##  legend = rownames(counts), beside=TRUE)
+
+```

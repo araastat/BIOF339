@@ -1,0 +1,84 @@
+---
+title: "Final Project"
+author: "Matt Stinson"
+date: "12/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## TrackMate File Conversion for Chemotaxis Tool
+
+In my lab, live cell migration assays are utilized to compare macrophage motility (velocity and persistence measurements, primarily) on different extracellular membrane componenets in 2-D. After video files are made by compiling individual frames, I have analyze the data using an ImageJ plugin called "TrackMate." I noticed that exporting the data created tidy csv files, but we had just been copying and pasting certain columns into excel, manually adding row numbers (these can be thousands of frames, dragging to the bottom) and, finally, saving them as .txt files to import into a different plugin, "Chemotaxis Tool." I decided to automate.
+
+```{r}
+library(tidyverse)
+library(readr)
+library(dplyr)
+
+mac_files <- list.files(path = "Motility Data", pattern = "*.csv", full.names = T)
+#imports all position data for specified condition folder
+
+convert_files = function(mac_files){
+  lapply(mac_files, read.csv) 
+}
+
+#function converts csv file data (lists) into S3 dataframes
+
+mac_files1 <-convert_files(mac_files)
+
+pos_01 <- select(mac_files1[[1]],c(3,9,5,6))
+pos_02 <- select(mac_files1[[2]],c(3,9,5,6))
+pos_03 <- select(mac_files1[[3]],c(3,9,5,6))
+pos_04 <- select(mac_files1[[4]],c(3,9,5,6))
+pos_05 <- select(mac_files1[[5]],c(3,9,5,6))
+pos_06 <- select(mac_files1[[6]],c(3,9,5,6))
+pos_07 <- select(mac_files1[[7]],c(3,9,5,6))
+
+#separates individual data frames into each position and orders the columns, keeping only row number, track id, frame number, and X and Y position data
+
+
+write.table(pos_01, "F10L0_01.txt", sep="\t")
+
+write.table(pos_02, "F10L0_02.txt", sep="\t")
+
+write.table(pos_03, "F10L0_03.txt", sep="\t")
+
+write.table(pos_04, "F10L0_04.txt", sep="\t")
+
+write.table(pos_05, "F10L0_05.txt", sep="\t")
+
+write.table(pos_06, "F10L0_06.txt", sep="\t")
+
+write.table(pos_07, "F10L0_07.txt", sep="\t")
+
+#creates text files of each data frame. These, too, will have to be updated based on the experiment
+```
+
+##Data Analysis of Chemotaxis Tool
+
+After the .txt files have been loaded into the Chemotaxis Tool in ImageJ, it can export velocity data for each cell in each position and the persistence of each cell. For the purposes of this project, I will just analzye the velocity and create a graphic for the data of this one condition.
+
+```{r}
+library(ggplot2)
+
+velocity_data <-list.files(path = "Chemotaxis Data", pattern = "*.csv", full.names = T)
+
+velocity_tbl <- sapply(velocity_data, read_csv, simplify=FALSE) %>%
+bind_rows(.id = "id") %>% 
+  select(contains("Track"), contains("Velocity"))
+#binds all data into single table, called "velocity_tbl"
+
+names(velocity_tbl)[2] <- "V"
+
+ggplot(
+  data = velocity_tbl,
+  mapping = aes(x="FN 10 L 0", y= V)
+)+ geom_violin() +
+  ggtitle("Average Velocity of Macrophages on 10 ug/mL FN, 0 ug/mL Lam") +
+  xlab("Velocity (microns per minute)") +
+  ylab("ECM Concentrations")
+```
+

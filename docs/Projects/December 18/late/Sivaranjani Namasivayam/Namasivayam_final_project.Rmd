@@ -1,0 +1,177 @@
+---
+title: "Final Project"
+author: "Ranjani Namasivayam"
+date: "12/18/2019"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+##The Microbiome and Tuberculosis
+
+The project compares the clinical characteristics and microbiome of patients infected with different mycobacterial species (MTB and MAF) with that of healthy controls 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Loading required R packages
+
+```{r message=FALSE, warning=FALSE}
+library(tidyr)
+library(tibble)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(tableone)
+library(cowplot)
+library(microbiome)
+```
+
+Loading the clinical paramters dataset
+
+```{r message=FALSE, warning=FALSE}
+TB_clinical<-read_csv("/Volumes/namasivayams$/FAES_course/BIOF339/BIOF339_class/final_project/TB_clinical.csv")
+kableone(head(TB_clinical))
+```
+
+Converting categorical variables to factors
+
+```{r message=FALSE, warning=FALSE}
+TB_clinical <- TB_clinical %>% 
+  mutate(Group = as.factor(Group),
+         Sex = as.factor(Sex),
+         Smoking = as.factor(Smoking),
+         Night_Sweats = as.factor(Night_Sweats))
+```
+
+Some data munging to easily plot the factor and numerical variables
+
+```{r message=FALSE, warning=FALSE}
+TB_clinical_gathered1 <- gather(TB_clinical, key = Factor, value = Factor_value, -Participants, -Group, -Hb, -Temperature, -Age)
+TB_clinical_gathered2 <- gather(TB_clinical, key = Numerical, value = Numerical_value, -Participants, -Group, -Sex, -Night_Sweats, -Smoking)
+```
+
+Visualizing the clinical data
+
+```{r message=FALSE, warning=FALSE}
+TB_clinical_gathered1 %>% 
+  ggplot(mapping = aes(x=Group))+
+  geom_bar(aes(fill=Factor_value), position = "fill") +
+  facet_wrap(~ Factor, labeller= "label_value") +
+  theme_bw()+
+  labs(y= "Relative Frequency")
+
+
+TB_clinical_gathered2 %>% 
+  ggplot(mapping=aes(x=Group,y=Numerical_value,color=Group)) +
+  geom_boxplot() +
+  facet_wrap(~ Numerical, scales = "free_y") +
+  theme(legend.position = "none") +
+  panel_border() +
+  labs(y= "Value")
+```
+
+Creating table one that displays statistical significance between healthy, MAF and MTB group
+
+```{r message=FALSE, warning=FALSE}
+Table1<-CreateTableOne(
+  data = TB_clinical,
+  vars = TB_clinical %>% 
+    select(-contains("Participants"),-contains("Group")) %>% 
+    names(),
+  strata = 'Group',
+  test = TRUE)
+kableone(Table1)
+
+
+```
+
+
+
+Loading microbiome data for subset of subjects and merging using inner join to retain participants who have both clinical and microbiota data available. Also converting microbiota relative abudance to percent.
+
+```{r message=FALSE, warning=FALSE}
+TB_micro<-read_csv("/Volumes/namasivayams$/FAES_course/BIOF339/BIOF339_class/final_project/TB_microbiota.csv")
+kableone(head(TB_micro))
+TB_clinical_micro<-inner_join(TB_clinical, TB_micro, by=c('Participants'='SampleID'))
+TB_clinical_micro<-TB_clinical_micro %>% 
+  mutate_at(vars(9:14), .funs = funs(. *100))
+kableone(head(TB_clinical_micro))
+```
+
+Some data munging to visualize a stacked bar chart of phyla for each group
+
+```{r message=FALSE, warning=FALSE}
+
+TB_clinical_micro_gathered <- TB_clinical_micro %>% 
+  select(1:2, 9:14) %>% 
+  gather(key = Phyla, value = Abundance, -Participants, -Group)
+
+TB_clinical_micro_gathered %>% 
+  ggplot(mapping=aes(fill=Phyla, x=Group, y=Abundance)) +
+  geom_bar(position = "fill", stat = "identity") +
+  labs(y= "Relative Abundance")
+```
+
+Calculating the statistical significance between the 3 groups for the microbiota data and displaying as table
+
+```{r message=FALSE, warning=FALSE}
+Table2<-CreateTableOne(
+  data = TB_clinical_micro,
+  vars = TB_clinical_micro %>% 
+    select(9:14) %>% 
+    names(),
+  strata = 'Group',
+  test = TRUE)
+
+kableone(Table2)
+```
+
+
+
+Visualizing the abundance of taxa significantly different between groups stratified by the clinical factor that was significantly different (night sweats)
+
+```{r message=FALSE, warning=FALSE}
+TB_clinical_micro_gathered2 <- TB_clinical_micro %>% 
+  select(1:2, 9:14, contains("Sex"), contains("Night_Sweats"), contains("Smoking")) %>% 
+  gather(key = Phyla, value = Abundance, -Participants, -Group, -Sex, -Night_Sweats, -Smoking)
+
+TB_clinical_micro_gathered2 %>% 
+  filter(Phyla == "Actinobacteria" | Phyla == "Proteobacteria") %>% 
+  ggplot(mapping=aes(x=Night_Sweats,y=Abundance,color=Night_Sweats)) +
+  geom_boxplot() +
+  facet_wrap(~ Phyla, scales = "free_y") +
+  theme(legend.position = "none") +
+  labs(y= "Relative abundance") +
+  stat_compare_means()
+```
+
+Performing correlation analysis between numerical clinical paramters and relative abundance of phyla
+
+```{r message=FALSE, warning=FALSE}
+data_x1<- TB_clinical_micro %>% 
+  select(contains("Age"), contains("Hb"), contains("Temperature")) %>% 
+  as.matrix()
+
+data_x2<- TB_clinical_micro %>% 
+  select(9:14) %>% 
+  as.matrix()
+
+data_x1_vs_x2 <- associate(data_x1, data_x2, method = "spearman", mode = "table")
+
+heat(data_x1_vs_x2, "X2", "X1", fill = "Correlation") +
+  labs(x = "Phyla", y = "Clinical Parameter") +
+  theme_bw() +
+  theme(aspect.ratio = 1) +
+  theme(axis.text.y = element_text(size = 10)) +
+  theme(axis.text.x = element_text(size = 10, angle = 90, hjust = 1)) +
+  theme(axis.title = element_text(size = 16)) +
+  scale_fill_gradientn("Correlation", breaks = seq(from = -1, to = 1, by = 0.5), colours = c("darkblue", "blue", "white", "red", "darkred"), limits = c(-1,1)) 
+```
+
+
+
+
+

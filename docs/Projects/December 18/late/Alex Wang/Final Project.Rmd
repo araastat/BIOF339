@@ -1,0 +1,165 @@
+---
+title: "Final Project"
+author: "Alex Wang"
+date: "12/17/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**Background**
+
+- Prostate Cancer is the second most common cancer in males
+- Many cases take years to progress to malignancy
+- Active Surveillance (AS) is a well-accepted alternative to definitive therapy in patients with low-favorable intermediate prostate cancer (PCa)
+
+
+```{r cars}
+knitr::include_graphics('./prostate_management.jpg')
+```
+
+**Methods**
+
+- Institutional database of patients on AS from 11/2003-5/2019 
+- ≥ 2 mpMRIs, ≥ 2 prostate biopsies, and a diagnosis of prostate cancer
+
+
+**Patient data**
+
+- 480 patients on AS
+- Prostate Imaging Reporting and Data System (PIRADS) score is a score from 1 to 5 and shown to be related to the probability of finding a diagnosis of prostate cancer on prostate biopsy
+- First started being used at NIH in 2014
+
+```{r, echo=T, warning=FALSE}
+library(tidyr)
+library(dplyr)
+library(rio)
+library(survival)
+library(ggplot2)
+library(readxl)
+patients <- read_excel("C:/Users/wangalz/OneDrive - National Institutes of Health/Databases/AS Manipulations/patients_tab.xlsx", 
+                       col_types = c("numeric", "text", "text", 
+                                     "text", "date", "text", "date", "numeric", 
+                                     "date", "date", "numeric", "numeric", 
+                                     "numeric", "text", "date", "text", 
+                                     "text", "text", "text", "numeric", 
+                                     "numeric"))
+mri <- read_excel("C:/Users/wangalz/OneDrive - National Institutes of Health/Databases/R analyses/mri.xlsx",
+                  col_types = c("numeric", "numeric", "numeric", 
+                                "numeric", "numeric", "numeric", 
+                                "numeric", "numeric", "numeric", "text", 
+                                "text", "text", "text", "text", "numeric", 
+                                "numeric", "text", "text", "text", 
+                                "text", "text", "text", "text", "text", 
+                                "text", "text", "text"))
+
+#Finding first MRI with PI-RADs information
+
+mri_pirads <- subset(mri, `PI-RADS` != "NA")
+
+#Finding the first MRI with PI-RADS information
+
+pirads_first <- mri_pirads %>% 
+  group_by(MRN) %>% 
+  filter(`MRI No.` == min(`MRI No.`))
+
+#Combining first PIRADS score data with outcome data
+
+pirads_left <- left_join(pirads_first, patients[,c(1, 20:21)],  by=c('MRN'='MRN'))
+
+pirads_plot <- ggplot(pirads_first,
+                         aes(x = `PI-RADS`)) +
+  geom_histogram()
+
+pirads_plot
+```
+
+
+**Results**
+
+```{r, echo=T, warning=FALSE}
+#Grouping by PI-RADS scores (372 total observations)
+
+
+#14 patients with PIRADS 1 lesion but is essentially a negative MRI
+
+
+pirads_2 <- pirads_left %>% 
+  filter(`PI-RADS` == 2 & DC ==1) 
+
+#50 patients; 9 came off #Median off time = 57 months (4.75 years); 18% chance of progressing 
+#57 months (1734 days) from MRI
+
+
+pirads_3 <- pirads_left %>% 
+  filter(`PI-RADS` == 3 & DC ==1) 
+
+#80 patients; 27 patients came off #Median off time = 44 months (3.67 years); 33.75% chance of progressing
+#44 months (1338 days) from MRI
+
+
+pirads_4 <- pirads_left %>% 
+  filter(`PI-RADS` == 4 & DC ==1)
+
+
+#172 patients; 55 patients came off #Median off time = 42 months (3.5 years); 31.9% chance of progressing
+#42 months (1278 days) from MRI
+
+
+pirads_5 <- pirads_left %>% 
+  filter(`PI-RADS` == 5 & DC ==1)
+
+
+#56 patients; 26 patients came off #Median off time = 30.5 months (2.54 years); 46.4% chance of progressing
+#30.5 months (928 days)
+```
+
+**Results Pt. 2**
+
+- Is there a PI-RADS score that is associated with a higher chance of progression?
+- Should certain PI-RADS scores be considered high risk? 
+- Suspicion is PI-RADS 4 or higher
+
+```{r}
+#Creating new columns for PI-RADS 3, 4, and 5 lesions
+pirads_left <- pirads_left %>%
+  mutate(ifpirads_3 = 
+           ifelse(`PI-RADS` == 3, 1,
+                  ifelse(`PI-RADS` != 3, 0, "Other")
+           )
+  )
+
+pirads_left <- pirads_left %>%
+  mutate(ifpirads_4 = 
+           ifelse(`PI-RADS` == 4, 1,
+                  ifelse(`PI-RADS` != 4, 0, "Other")
+           )
+  )
+
+pirads_left <- pirads_left %>%
+  mutate(ifpirads_5 = 
+           ifelse(`PI-RADS` == 5, 1,
+                  ifelse(`PI-RADS` != 5, 0, "Other")
+           )
+  )
+
+
+#Creating Cox model 
+
+pirads_model <- coxph(Surv(`Duration on AS`, DC) ~
+                       PSAD +
+                       PSA +
+                       ifpirads_3 +
+                       ifpirads_4 +
+                       ifpirads_5,
+                     data = pirads_left)
+
+summary(pirads_model)
+```
+
+**Conclusion**
+
+- Patients with PIRADS 4 lesions should be considered high risk in any AS protocol whereas patients with PI-RADS 3 lesions or lower can likely safely continue AS

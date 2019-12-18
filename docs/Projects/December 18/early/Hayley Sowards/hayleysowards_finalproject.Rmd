@@ -1,0 +1,254 @@
+---
+title: "Spotify Wrapped (Apple Music Style)"
+author: "Hayley Sowards"
+output: ioslides_presentation
+---
+
+```{r setup, include = F}
+knitr::opts_chunk$set(message = F, warning = F)
+library(readr)
+library(tidyverse)
+library(knitr)
+library(rjson)
+
+df <- read_csv("data/Apple Music Play Activity.csv")
+```
+
+## The Data
+
+- [Apple has a way to request your listening data ](https://privacy.apple.com/) 
+- Comes with all of these variables: `r colnames(df)`
+
+## Spotify's Wrapped Includes:
+
+- Top 5 songs
+- Top 5 artists 
+- Total time listened (minutes)
+- Top genre
+- Decade wrapped (minutes listened, top song, and top artist)
+
+## Clean Data
+
+```{r, echo = F}
+music <- df %>% 
+  mutate(artist = `Artist Name`, song = `Content Name`, genre = `Genre`, media_duration = `Media Duration In Milliseconds`, play_duration = `Play Duration Milliseconds`, time_start = `Event Start Timestamp`) %>% #renaming all of these for ease of analysis down the line
+  select(artist, song, genre, media_duration, play_duration, time_start) %>% #pulling only needed vars
+  mutate_if(is.character, as.factor) %>% #you know, the usual
+  mutate(media_duration = media_duration/1000, play_duration = play_duration/1000) %>% #conversion of milliseconds to seconds
+  filter(!is.na(artist), !is.na(song)) #remove songs without a title or artist
+
+music2 <- music %>% #cleaning dates and finalizing dataset, using this dataset for decades analysis
+  separate(time_start, into = c("year", "month", "datetime"), sep = "-") %>% 
+  separate(datetime, into = c("date", "time"), sep = " ") %>% 
+  mutate_if(is.character, as.numeric) %>% 
+  filter(artist != "GentleWhispering")  #this is an artist I have in my library that posts videos as audio, I'm taking her out
+
+head(music2)
+
+music2019 <- music2 %>% #used for 2019 analyses
+  filter(year == 2019)
+```
+
+- `dplyr::select` out relevant variables
+- `dplyr::separate` out date variable
+- `dplyr::filter` out songs from this year
+
+## Top Genre
+
+```{r}
+genre <- music2019 %>% 
+  group_by(genre) %>% 
+  summarise(Total.Play = (sum(play_duration, na.rm = T)%/%60)) %>% 
+  #using %/% when I want the minutes displayed to avoid decimals
+  arrange(desc(Total.Play))
+kable(genre[1,1:2])
+```
+
+## Minutes Listened
+
+```{r}
+time2019 <- sum(music2019$play_duration, na.rm = T)%/%60
+time2019 <- as.character(time2019)
+```
+
+`r time2019` minutes
+
+## Top 5 Artists
+
+```{r}
+artistbytime <- music2019 %>% 
+  group_by(artist) %>% 
+  summarise(Total.Play = (sum(play_duration, na.rm = T)%/%60)) %>% 
+  arrange(desc(Total.Play))
+```
+```{r, echo = F}
+kable(artistbytime[1:5,1:2])
+```
+
+## Top 5 Songs
+
+```{r}
+songbytime <- music2019 %>% 
+  group_by(song, artist) %>% 
+  summarise(Total.Play = (sum(play_duration, na.rm = T)%/%60)) %>% 
+  arrange(desc(Total.Play))
+```
+```{r, echo = F}
+kable(songbytime[1:5,1:3])
+```
+
+## Decade Wrapped: Artist of the Decade
+
+```{r}
+artistsdecade <- music2 %>%
+  group_by(artist) %>% 
+  summarise(Total.Play = (sum(play_duration, na.rm = T)/60)) %>% 
+  arrange(desc(Total.Play))
+```
+
+```{r, echo = F}
+kable(artistsdecade[1,])
+```
+
+
+- `r artistsdecade[1,2]%/%60` hours and `r artistsdecade[1,2]/1440` days
+
+## Decade Wrapped: Song of the Decade
+
+```{r}
+songsdecade <- music2 %>%
+  group_by(song, artist) %>%
+  summarise(Total.Play = (sum(play_duration, na.rm = T)/60)) %>% 
+  arrange(desc(Total.Play))
+```
+
+```{r, echo = F}
+kable(songsdecade[1,])
+```
+
+## Decade Wrapped: Time Each Year
+
+```{r}
+musicyearly <- music2 %>% 
+  group_by(year) %>% 
+  summarize(Total.Play = (sum(play_duration, na.rm = T)%/%60)) %>% 
+  filter(!is.na(year)) %>% 
+  arrange(desc(year))
+```
+```{r, echo = F}
+kable(musicyearly)
+```
+
+## Play Duration Each Year
+
+```{r}
+p_yearly <- ggplot(musicyearly, aes(x = year, y = Total.Play)) +
+  geom_point() +
+  geom_segment(aes(x = year, xend = year, y = 0, yend = Total.Play)) +
+  labs(x = "Year", y = "Play Duration in Minutes") +
+  theme_minimal()
+```
+
+## Play Duration Each Year
+
+```{r, echo = F}
+p_yearly
+```
+
+## Decade Wrapped: Top Artist Each Year
+```{r}
+artistyearly <- music2 %>% 
+  group_by(year, artist) %>% 
+  summarize(Total.Play = (sum(play_duration, na.rm = T)%/%60)) %>% 
+  filter(!is.na(year)) %>% 
+  top_n(1, Total.Play) %>% 
+  arrange(desc(year))
+```
+```{r, echo = F}
+kable(artistyearly)
+```
+
+## Decade Wrapped: Top Song Each Year
+```{r}
+songyearly <- music2 %>% 
+  group_by(year, song, artist) %>% 
+  summarize(Total.Play = (sum(play_duration, na.rm = T)%/%60)) %>% 
+  filter(!is.na(year)) %>% ungroup() %>% group_by(year) %>% 
+  top_n(1, Total.Play) %>% 
+  arrange(desc(year))
+```
+```{r, echo = F}
+kable(songyearly)
+```
+
+##
+
+```{r}
+songs <- music2 %>%
+  group_by(song, artist, genre) %>% 
+  filter(!is.na(song), !is.na(genre), !is.na((artist))) %>% 
+  summarize(Total.Play = (sum(play_duration, na.rm = T)/3600)) %>%
+  arrange(desc(Total.Play))
+
+id <- 1:20
+
+top20 <- songs[1:20,] %>% 
+  arrange(song) %>% 
+  add_column(id)
+
+# Get the name and the y position of each label
+label_top20 <- top20
+# calculate the ANGLE of the labels
+number_of_bar <- nrow(label_top20)
+angle <-  90 - 360 * (label_top20$id-0.5) /number_of_bar
+# calculate the alignment of labels: right or left
+# flip angle BY to make them readable
+label_top20$hjust<-ifelse( angle < -90, 1, 0)
+label_top20$angle<-ifelse(angle < -90, angle+180, angle)
+```
+
+##
+
+```{r}
+p_songs <- ggplot(top20, aes(x=as.factor(song), y=Total.Play)) +
+  geom_col(aes(fill = artist)) +
+  ylim(0,50) + #first number changes inner circle (0, no inner circle, negative = larger), second number changes outer circle
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-2,4), "cm")) +
+  coord_polar(start = 0) +
+  geom_text(data=label_top20, aes(x=id, y=Total.Play+5, label=song, hjust=hjust), 
+            color="black", fontface="bold",alpha=0.6, size=3.5, angle= label_top20$angle, inherit.aes = FALSE )
+```
+
+## Top 20 Songs of the Decade (but Circular)
+
+```{r, echo = F}
+p_songs
+```
+
+
+## Hours of Music Everyday (but in a Manhattan Plot)
+
+```{r}
+p_manhattan <- music2 %>% 
+  mutate(year = as.factor(year)) %>% 
+  group_by(year, month, date) %>% 
+  arrange(year, month, date) %>%
+  mutate(chron = paste(year,month, date, sep = "-")) %>% 
+  mutate(Daily.Play = sum(play_duration)) %>%
+  filter(!is.na(year)) %>% 
+  ggplot(aes(x = chron, y = (Daily.Play/60), group = year, color = year)) +
+  geom_point() +
+  labs(x = "Date", y = "Duration in Minutes") +
+  theme(axis.text.x = element_blank())
+```
+
+
+## Hours of Music Everyday (but in a Manhattan Plot)
+```{r,echo=F}
+p_manhattan
+```
