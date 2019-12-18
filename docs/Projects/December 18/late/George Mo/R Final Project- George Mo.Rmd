@@ -4,8 +4,9 @@ author: "George Mo"
 date: "12/16/2019"
 output: html_document
 ---
-# Visualizing 2019-2020 Season Stats
-For my R final project, I look at some data from this year's NBA season. 
+# Visualizing 2019-2020 NBA Season Stats
+
+Introduction: For my R final project, I look at some data from this year's NBA season using various visualization techniques available through R. I then look at various stats of players and see whether or not there is any correlation between them. 
 
 ```{r start, warning = FALSE, message = FALSE}
 library(plotly)
@@ -58,6 +59,7 @@ WinningLinear <- lm(total_ppg ~ `Win%`, data = Winning)
 broom::tidy(WinningLinear)
 broom::glance(WinningLinear)
 autoplot(WinningLinear)
+cor(Winning$`total_ppg`, Winning$`Win%`)
 ```
 
 I wanted to look at some of the stats of the top 50 scoring NBA players and see how their other stats compared. 
@@ -116,14 +118,20 @@ TwoPALinear <- lm(`2P%` ~ PPG, data = TwoPA)
 broom::tidy(TwoPALinear)
 broom::glance(TwoPALinear)
 autoplot(TwoPALinear)
+cor(TwoPA$`2P%`, TwoPA$`PPG`)
 
 ThreePALinear <- lm(`3P%` ~ `PPG`, data = ThreePA)
 broom::tidy(ThreePALinear)
 broom::glance(ThreePALinear)
 autoplot(ThreePALinear)
+cor(ThreePA$`3P%`, ThreePA$`PPG`)
 
 FTALinear <- lm(`FT%` ~ `PPG`, data = FTA)
 broom::tidy(FTALinear)
 broom::glance(FTALinear)
 autoplot(FTALinear)
+cor(FTA$`FT%`, FTA$`PPG`)
 ```
+
+
+Conclusion: Overall, FT% seemed to have the largest correlation coefficient with PPG (0.34) whereas 2P% and 3P% did not. In addition, there was not really any correlation between total points per game scored by a team and their winning percentage.
