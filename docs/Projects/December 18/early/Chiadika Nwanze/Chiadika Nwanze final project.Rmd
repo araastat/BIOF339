@@ -1,0 +1,151 @@
+---
+title: "Transmission Intensity of Malaria in West African countries"
+author: "Chiadika Nwanze"
+date: "12/16/2019"
+# output: ioslides_presentation
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=F}
+knitr::opts_chunk$set(message =F, warning=F)
+```
+
+## Introduction
+
+- Using publicly available data from the Malaria Atlas project (MAP) which contains global malaria data for countries in which malaria is endemic
+- MAP's primary goal is to disseminate accurate information on geographical information regarding malaria and its associated topics
+
+```{r out.width="70%", out.height="70%", echo=TRUE}
+# knitr::include_graphics('MAP-WHO-CC.jpg')
+```
+
+```{r echo=TRUE, eval=TRUE}
+#Installing and loading packages
+suppressPackageStartupMessages(library(tidyverse))
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+library(rio)
+library(tableone)
+library(broom)
+# install.packages('malariaAtlas')
+library(malariaAtlas)
+malariaAtlas::listData( datatype = "pr points")
+
+```
+
+## Data Import
+- Imported MAP data for West African countries
+- Parasitic rate (PR) is a commonly reported index of malaria transmission intensity
+- It is the proportion of the population carrying asexual blood-stage parasites
+
+```{r, echo=T, eval=T, message=FALSE}
+NGA_pr_data <- getPR(country="Nigeria", ISO = "NGA", continent = "Africa", species = "BOTH")
+GHA_pr_data <- getPR(country="Ghana", ISO = "GHA", continent = "Africa", species = "BOTH")
+NER_pr_data <- getPR(country="Niger", ISO = "NER", continent = "Africa", species = "BOTH")
+SEN_pr_data <- getPR(country="Senegal", ISO = "SEN", continent = "Africa", species = "BOTH")
+TGO_pr_data <- getPR(country="Togo", ISO = "TGO", continent = "Africa", species = "BOTH")
+GIN_pr_data <- getPR(country="Guinea", ISO = "GIN", continent = "Africa", species = "BOTH")
+GMB_pr_data <- getPR(country="Gambia", ISO = "GMB", continent = "Africa", species = "BOTH")
+GNB_pr_data <- getPR(country="Guinea-Bissau", ISO = "GNB", continent = "Africa", species = "BOTH")
+CIV_pr_data <- getPR(country="Côte d'Ivoire", ISO = "CIV", continent = "Africa", species = "BOTH")
+CMR_pr_data <- getPR(country="Cameroon", ISO = "CMR", continent = "Africa", species = "BOTH")
+BEN_pr_data <- getPR(country="Benin", ISO = "BEN", continent = "Africa", species = "BOTH")
+CPV_pr_data <- getPR(country="Cape Verde", ISO = "CPV", continent = "Africa", species = "BOTH")
+TCD_pr_data <- getPR(country="Chad", ISO = "TCD", continent = "Africa", species = "BOTH")
+```
+
+```{r, eval=T, echo=T}
+head(TCD_pr_data)
+```
+
+```{r, echo=TRUE, eval=T, message=FALSE}
+# Extracting relevant columns for each country
+GHA_pr <- select(GHA_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+NGA_pr <-  select(NGA_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+NER_pr <-  select(NER_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+SEN_pr <-  select(SEN_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+TGO_pr <-  select(TGO_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+GIN_pr <-  select(GIN_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+GMB_pr <-  select(GMB_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+GNB_pr <-  select(GNB_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+CIV_pr <-  select(CIV_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+CMR_pr <-  select(CMR_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+BEN_pr <-  select(BEN_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+CPV_pr <-  select(CPV_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+TCD_pr <-  select(TCD_pr_data, starts_with("site"), contains("country"), contains("rural"), contains("pr"), contains("age"))
+```
+
+```{r, eval=T, echo=T}
+head(NGA_pr)
+```
+
+```{r, eval=T, echo=T}
+# Combine individual West African countries into one dataset
+WA_pr <- rbind(GHA_pr, NGA_pr, NER_pr, SEN_pr, TGO_pr, GIN_pr, GMB_pr, GNB_pr, CIV_pr, CMR_pr, BEN_pr, CPV_pr, TCD_pr)
+```
+
+```{r, eval=T, echo=T, include=TRUE}
+str(WA_pr)
+```
+
+```{r, eval=T, echo=T}
+# Cleaning combined dataset to only include  rural and urban areas
+WA_pr_cleaned<-WA_pr %>% 
+  mutate(rural_urban=na_if(rural_urban, 'UNKNOWN'))
+
+WA_pr_cleaned<-WA_pr_cleaned %>%
+  mutate(rural_urban=na_if(rural_urban, 'PERI_URBAN'))
+
+# Converting site ID from integer to factor
+  WA_pr_cleaned$site_id<-as.factor(WA_pr_cleaned$site_id)
+
+```
+
+```{r, eval=T, echo=T}
+head(WA_pr_cleaned)
+```
+
+# Geographical Data
+
+## Malaria parasite rate for Plasmodium falciparum in West African countries
+- PR rises after birth before settling to a plateau in older children and then declines in adolescents and adults, a phenomenon thought to be due to development of immunity 
+```{r out.width="75%", echo=T}
+# knitr::include_graphics('Malaria death.png')
+```
+
+## Malaria PR in Geographical regions
+```{r, echo=T, eval=T}
+(PR_regional_plot <- ggplot(subset(WA_pr_cleaned, rural_urban!='NA'), aes(x=rural_urban, y=pr))+
+  geom_col(aes(fill=country))+
+  labs(title = 'Malaria transmission intensity in West African countries', subtitle = 'Plasmodium falciparum parasitic rate data', caption = 'p=4.031531e-06')+
+  ylab("Plasmodium falciparum parasite rate")+
+  xlab("Geographical classification"))
+```
+
+
+```{r}
+t.test(pr~rural_urban, data = WA_pr_cleaned) %>%
+  broom::tidy()
+```
+
+# PR correlation with age
+
+## PR correlation with age
+
+```{r, echo=T, eval=T, message=FALSE}
+(PR_Age_plot<-ggplot(WA_pr_cleaned, aes(x=upper_age, y=pr))+
+  geom_point(aes(color=country))+
+  theme_light()+
+  ylab("Plasmodium falciparum parasite rate")+
+  xlab("Age")+
+    labs(title = 'Malaria parasite rate declines with age', subtitle = 'Plasmodium falciparum parasitic rate data')
+)
+```
+
+## Conclusions
+- Rural areas have higher rates of malaria transmission, likely due to less improved housing, lower socioeconomic status and higher number of breeding sites for mosquitoes
+- Parasite rate falls with age, and thought to be due to development of immunity against Plasmodium falciparum

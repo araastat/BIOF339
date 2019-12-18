@@ -1,0 +1,139 @@
+---
+title: "Final_project"
+author: "Bharati"
+date: "12/17/2019"
+output: html_document
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Survival analysis of TCGA Glioma Patients
+
+Here we used TCGA clinical data for glioma patients (including both GBM and LGG) and evaluated their prognosis based on their age, mutation status, Grade, Gender, Histology of the cancer.
+
+```{r cars,eval=TRUE,echo=TRUE}
+library(TCGAbiolinks)
+library(flexsurv)
+library(survival)
+library(survminer)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+##selecting data from cancer of interest
+lgg <- TCGAquery_subtype(tumor = "lgg")
+gbm <- TCGAquery_subtype(tumor = "gbm")
+glioma<-rbind(lgg,gbm)
+
+glioma_new<-glioma %>%
+  dplyr::rename(time=Survival..months.,event=Vital.status..1.dead.,age=Age..years.at.diagnosis.,codel=IDH.codel.subtype, Hist = Histology) %>%
+  select("Grade","age","Gender","time","event","IDH.status","codel","Hist")
+  
+attach(glioma_new)
+time=as.numeric(time)
+event=as.numeric(event)
+age=as.numeric(age)
+age = factor ( with 
+               ( glioma_new, 
+               ifelse ( ( age <=50 ), "<=50 years" ,  ifelse((age >50), ">50 years", 3)) ) )
+mySurv<-Surv(time,event)
+myfit1<-survfit(mySurv~Grade)
+myfit2<-survfit(mySurv~age)
+myfit3<-survfit(mySurv~IDH.status)
+myfit4<-survfit(mySurv~codel)
+myfit5<-survfit(mySurv~Gender)
+myfit6<-survfit(mySurv~Hist)
+
+survp1<-ggsurvplot(myfit1,data=glioma_new,
+pval = TRUE, conf.int = TRUE,
+risk.table = TRUE, # Add risk table
+risk.table.col = "strata", # Change risk table color by groups,
+abs_pct= TRUE,
+linetype = "strata", # Change line type by groups
+surv.median.line = "hv", # Specify median survival
+ggtheme = theme_bw() # Change ggplot2 theme
+)
+
+survp2<-ggsurvplot(myfit2,data=glioma_new,
+pval = TRUE, conf.int = TRUE,
+risk.table = TRUE, # Add risk table
+risk.table.col = "strata", # Change risk table color by groups,
+abs_pct= TRUE,
+linetype = "strata", # Change line type by groups
+surv.median.line = "hv", # Specify median survival
+ggtheme = theme_bw() # Change ggplot2 theme
+)
+
+survp3<-ggsurvplot(myfit3,data=glioma_new,
+pval = TRUE, conf.int = TRUE,
+risk.table = TRUE, # Add risk table
+risk.table.col = "strata", # Change risk table color by groups,
+abs_pct= TRUE,
+linetype = "strata", # Change line type by groups
+surv.median.line = "hv", # Specify median survival
+ggtheme = theme_bw() # Change ggplot2 theme
+)
+
+survp4<-ggsurvplot(myfit4,data=glioma_new,
+pval = TRUE, conf.int = TRUE,
+risk.table = TRUE, # Add risk table
+risk.table.col = "strata", # Change risk table color by groups,
+abs_pct= TRUE,
+linetype = "strata", # Change line type by groups
+surv.median.line = "hv", # Specify median survival
+ggtheme = theme_bw() # Change ggplot2 theme
+)
+
+survp5<-ggsurvplot(myfit5,data=glioma_new,
+pval = TRUE, conf.int = TRUE,
+risk.table = TRUE, # Add risk table
+risk.table.col = "strata", # Change risk table color by groups,
+abs_pct= TRUE,
+linetype = "strata", # Change line type by groups
+surv.median.line = "hv", # Specify median survival
+ggtheme = theme_bw() # Change ggplot2 theme
+)
+
+survp6<-ggsurvplot(myfit6,data=glioma_new,
+pval = TRUE, conf.int = TRUE,
+risk.table = TRUE, # Add risk table
+risk.table.col = "strata", # Change risk table color by groups,
+abs_pct= TRUE,
+linetype = "strata", # Change line type by groups
+surv.median.line = "hv", # Specify median survival
+ggtheme = theme_bw() # Change ggplot2 theme
+)
+
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+#load("glioma_survival.RData")
+
+#library(ggplot2)
+#require("survival")
+#library(survival)
+#library(survminer)
+#ggsurvplot(myfit1,data=glioma_new,pval = TRUE)
+par(mfrow=c(3,2))
+survp1
+survp2
+survp3
+survp4
+survp5
+survp6
+
+
+###Multivariate cox regression
+coxph=coxph(Surv(time,event)~age+Grade+Gender+IDH.status+codel+Hist,data=glioma_new)
+summary(coxph)
+ggforest(coxph, data = glioma_new)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -1,0 +1,126 @@
+---
+title: "Respiratory Virus Detections in Canada"
+author: "Samuel Kouatcheu"
+subtitle: Analysis of data collected on Week ending December 7,2019
+output:
+  ioslides_presentation: default
+  widescreen: yes
+---
+
+
+
+# Using R to scrab data from the web and perform statistical analysis on the table collected
+
+## Introduction
+
+The Respiratory Virus Detection Surveillance System collects data from select laboratories across Canada on the number of tests performed and the number of tests positive for influenza and other respiratory viruses. Data are reported on a weekly basis year-round to the Centre for Immunization and Respiratory Infectious Diseases (CIRID), Public Health Agency of Canada. These data can be found at https://www.canada.ca/en/public-health/services/diseases/flu-influenza/influenza-surveillance/weekly-influenza-reports.html
+
+
+---
+
+The data report used for this analysis was obtained from https://www.canada.ca/en/public-health/services/surveillance/respiratory-virus-detections-canada/2019-2020/respiratory-virus-detections-isolations-week-49-ending-december-7-2019.html
+
+## To extract data;
+```{r, echo=T, warning=F, message=F}
+library(rvest)
+library(tidyverse)
+
+url <- "https://www.canada.ca/en/public-health/services/surveillance/respiratory-virus-detections-canada/2019-2020/respiratory-virus-detections-isolations-week-49-ending-december-7-2019.html"
+# download and read table into flu_dat 
+flu_dat <- url %>% 
+  read_html() %>% 
+  html_nodes(xpath = '/html/body/main/div[3]/details[1]/div[1]/table') %>% 
+  html_table()
+# clean up the file
+fludat <- flu_dat[[1]]
+dat <- as.data.frame(sapply(select(fludat,2:23), as.numeric))
+fludat <- cbind(`Reporting Laboratory` = fludat[,1],dat)
+```
+---
+
+Glimpse of the fludat data set
+
+```{r, echo=TRUE, message= FALSE, warning= FALSE}
+names(fludat)
+
+```
+
+## Glimpse of data set
+
+```{r, echo=TRUE, message= FALSE, warning= FALSE}
+glimpse(fludat)
+
+```
+
+## View first few observations of the data set
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+head(fludat)
+```
+
+---
+
+Laboratories with the highest positive rates for Flu A 
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE, fig.height=3}
+fludat_rateA <- fludat %>% 
+  mutate(rate_A = round((`Total Flu A Positive` / `Flu Tested`), 2), 
+         rate_B = round((`Total Flu B Positive` / `Flu Tested`), 2)) %>% 
+           arrange(desc(rate_A)) %>% 
+           select(`Reporting Laboratory`, rate_A)
+fludat_rateA <- as_tibble(fludat_rateA)
+fludat_rateA
+```
+
+## Laboratories with the highest positive rates for Flu B 
+```{r, echo=TRUE, message=FALSE, warning=FALSE, fig.height=3}
+fludat_rateB <- fludat %>% 
+  mutate(rate_A = round((`Total Flu A Positive` / `Flu Tested`), 2), 
+         rate_B = round((`Total Flu B Positive` / `Flu Tested`), 2)) %>% 
+           arrange(desc(rate_A)) %>% 
+           select(`Reporting Laboratory`, rate_B)
+fludat_rateB <- as_tibble(fludat_rateB)
+fludat_rateB
+```
+
+
+## Calculation of the odds ratio for testing positive for Flu A in each province versus Ontario
+
+An odds ratio greater than 1 means that a province has a greater odds of Flu A compared to Ontario.
+
+An odds ratio less than 1 means that a province has a smaller odds of Flu A compared to Ontario.
+
+An odds ratio equal to 1 means that a province has the same odds of Flu A as Ontario.
+# Headings you should include in your project
+
+## Odds ratio in each province versus Ontario
+
+```{r, echo = TRUE, message= FALSE, warning=TRUE}
+ont_odds <- fludat %>% 
+  filter(`Reporting Laboratory` == "Province of Ontario") %>%
+  mutate(rate = (`Total Flu A Positive` / `Flu Tested`), oddsR = (rate / (1 - rate))) %>%
+  select(oddsR)
+
+odds_fludat <- fludat %>% 
+  mutate(rate = (`Total Flu A Positive` / `Flu Tested`), 
+         odds = (rate / (1 - rate)), oddsR = (odds / ont_odds$oddsR)) %>%
+  select(`Reporting Laboratory`, oddsR) %>% 
+  arrange(desc(oddsR))
+odds_fludat <- as_tibble(odds_fludat)
+odds_fludat
+```
+
+
+
+## Number of provicnes with a an odds ratio above 1
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+odds_fludat %>% 
+  filter(oddsR>1) %>% 
+  summarize(n=n())
+```
+
+# THANK YOU!
+
+
+
