@@ -27,10 +27,10 @@ t1 = mk_tbl('*.Rmd') %>%
   mutate(Source = as.character(glue('[Rmd]({full_url})'))) %>% 
   select(Date, Session, Name, Source)
 t2 <- mk_tbl('*.html') %>% 
-  mutate(Presentation = as.character(glue('[HTML]({full_url})'))) %>% 
+  mutate(Presentation = as.character(glue('[HTML]({full_url}){{target="_blank"}}'))) %>% 
   select(Date, Session, Name, Presentation)
 t3 <- mk_tbl('*.pdf') %>% 
-  mutate(Presentation = as.character(glue('[PDF]({full_url})'))) %>% 
+  mutate(Presentation = as.character(glue('[PDF]({full_url}{{target="_blank"}})'))) %>% 
   select(Date, Session, Name, Presentation) %>% 
   rbind(t2)
 full <- t1 %>% left_join(t3)
