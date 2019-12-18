@@ -1,0 +1,95 @@
+---
+title: "Analysis of CRISPR/Cas9 Activation Screen Results"
+author: "Vienna Huso"
+date: "December 18, 2019"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float:
+        toc_collapsed: true
+    theme: lumen
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(magrittr)
+library(MAGeCKFlute)
+library(ggrepel)
+```
+
+##Introduction
+![Overview of experiment.](experiment_overview.png)
+
+##Data 
+The MAGeck analysis resulted in several .txt files.
+
+```{r}
+knitr::include_graphics("data_1.png")
+```
+
+Initially, analysis was done via Excel and limited Python/R analysis.
+```{r out.width="45%"}
+knitr::include_graphics((c("data_gene_summary.png", "data_sgRNA_summary.png")))
+```
+
+
+##Data Ingestion and Munging
+1. Imported data sets.
+
+```{r}
+gene_summary <- rio::import("mageck.gene_summary.txt")
+```
+2. Replaced "|" with "_" in column names.
+```{r}
+gene_summary_clean <- gene_summary 
+colnames(gene_summary_clean) <- gsub('\\|', "_", colnames(gene_summary_clean))
+```
+3. Made new data set with the variables for positive selection.
+```{r}
+gene_summary_pos <- gene_summary_clean %>% select(1, 2, 9:14) 
+
+```
+
+
+##Analysis and Visualization
+
+###Count Summary
+
+```{r}
+count_summary <- rio::import("mageck.countsummary.txt")
+
+knitr::kable(head(count_summary[c(2:4,6:8)]), format='html', align='c', caption='Screen Results: MAGeck Count Summary', padding = 9, label = NULL, escape = TRUE)
+
+```
+
+
+
+```{r}
+
+P1_MapRates <- MapRatesView(count_summary) 
+P2_sgRNA_reads <- IdentBarView(count_summary, x = "Label", y = "GiniIndex", ylab = "Gini index", main = "Evenness of sgRNA reads") 
+
+cowplot::plot_grid(P1_MapRates, P2_sgRNA_reads, labels = c('A', 'B'), label_size = 12)
+```
+
+
+###Potential lncRNAs
+```{r}
+
+
+P3_pos_sel <- VolcanoView(gene_summary_pos, x = "pos_lfc", y = "pos_fdr", Label = "id", main = "Overview of lncRNA selection", force = 10)
+
+print(P3_pos_sel)
+
+```
+
+
+
+##Conclusion
+Able to visualize top potential lncRNAs that influenced toxin resistant genes of interest. 
+
+##Project next steps
+1. Normalization of data.
+2. Selection of lncRNA genes for further study/characterization.
