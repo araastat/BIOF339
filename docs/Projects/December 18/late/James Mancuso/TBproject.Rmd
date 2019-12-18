@@ -1,9 +1,9 @@
 ---
 title: "TB Project"
 author: "James Mancuso"
-date: "12/9/2019"
+date: "12/18/2019"
 output: html_document
-
+##output: pdf_document
 ##output: ioslides_presentation
 ---
 
@@ -33,7 +33,8 @@ TBdata<-select(TBdata, 1,5:8,22,24,26,28,38,43) %>%
     mutate(Retained=as.factor(PCS_followup)) %>%
  ##   mutate(Referred=as.factor(Referral)) %>%
  ##   mutate(Followup=as.factor(PCS)) %>%
-    mutate(Completed=as.factor(Completed))
+    mutate(Completed=as.factor(Completed)) %>%
+    mutate(Race= relevel(Race, ref = 5))
 
 
 str(TBdata)
@@ -112,7 +113,7 @@ print(c1, exact = c('Sex','Race')) # fisher.test
 
 ## Try regression analysis
 ```{r regression model}
-glm_TB <- glm(TBdata$Completed ~ TBdata$Sex + TBdata$Age + TBdata$Race, family = binomial())
+glm_TB <- glm(TBdata$Completed ~ TBdata$Sex + TBdata$Age + TBdata$Race + TBdata$Foreign_born, family = binomial())
 summary(glm_TB)
 
 ```
@@ -123,10 +124,21 @@ summary(glm_TB)
 
 # Grouped Bar Plot
 
+#setwd("C:/Users/james/Desktop/NIH R Class/Project")
+# Create the data for the chart
+y <- c(7600/90,7200/90,6200/90,3800/90)
+x <- c("Recommended","Referred","Retained","Completed")
 
-## counts <- table(TBdata%Recommended, TBdata$Completed)
-## barplot(counts, main="Cascade of Care",
-##  xlab="Step in the Cascade", col=c("darkblue","red"),
-##  legend = rownames(counts), beside=TRUE)
+# Give the chart file a name
+#png(file = "barchart_months_revenue.png")
+
+# Plot the bar chart 
+barplot(y,names.arg=x,xlab="Step in the Cascade",ylab="% attained",col="blue",
+main="Cascade of LTBI Care among Army Recruits from Fort Jackson, SC",border="red", ylim=c(0,100))
+
+# Save the file
+#dev.off()
+
+
 
 ```
