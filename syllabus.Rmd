@@ -1,6 +1,7 @@
 ---
 title: "BIOF 339: Practical R"
 output:
+  pdf_document: default
   html_document:
     toc: yes
     toc_float: yes
