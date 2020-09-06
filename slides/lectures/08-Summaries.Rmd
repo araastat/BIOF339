@@ -7,6 +7,7 @@ date: Fall, 2019
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+library(tidyverse)
 ```
 
 layout: true
@@ -89,7 +90,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="s1"}
+```{r 08-Summaries-1, eval=T, echo = F, ref.label="s1"}
 ```
 ]
 
@@ -105,7 +106,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="s2"}
+```{r 08-Summaries-2, eval=T, echo = F, ref.label="s2"}
 ```
 ]
 
@@ -121,7 +122,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="s3"}
+```{r 08-Summaries-3, eval=T, echo = F, ref.label="s3"}
 ```
 ]
 
@@ -139,7 +140,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="s4"}
+```{r 08-Summaries-4, eval=T, echo = F, ref.label="s4"}
 ```
 ]
 
@@ -157,7 +158,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="s5"}
+```{r 08-Summaries-5, eval=T, echo = F, ref.label="s5"}
 ```
 ]
 
@@ -182,7 +183,7 @@ brca %>%
 The highlighted part is to format the output
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="s7"}
+```{r 08-Summaries-6, eval=T, echo = F, ref.label="s7"}
 ```
 ]
 
@@ -198,7 +199,7 @@ summary(brca[,-1])
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="s8"}
+```{r 08-Summaries-7, eval=T, echo = F, ref.label="s8"}
 ```
 ]
 
@@ -227,7 +228,7 @@ tab1
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="t1"}
+```{r 08-Summaries-8, eval=T, echo = F, ref.label="t1"}
 ```
 ]
 
@@ -245,7 +246,7 @@ print(tab1, nonnormal = names(brca)[-1])
 You have to give the variable names of those you think are non-normally distributed and need to be summarized by the median
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="t2"}
+```{r 08-Summaries-9, eval=T, echo = F, ref.label="t2"}
 ```
 ]
 
@@ -262,7 +263,7 @@ kableone(print(tab1, nonnormal = names(brca)[-1]),
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="t3"}
+```{r 08-Summaries-10, eval=T, echo = F, ref.label="t3"}
 ```
 ]
 
@@ -275,7 +276,7 @@ class: middle, center
 
 Let's first put the expression and clinical data together
 
-```{r}
+```{r 08-Summaries-11}
 library(rio)
 brca1 <- import('data/clinical_data_breast_cancer_hw.csv')
 brca2 <- import('data/BreastCancer_Expression.csv')
@@ -292,7 +293,7 @@ summary(brca)
 
 Let's first put the expression and clinical data together
 
-```{r}
+```{r 08-Summaries-12}
 library(rio)
 brca1 <- import('data/clinical_data_breast_cancer_hw.csv')
 brca2 <- import('data/BreastCancer_Expression.csv')
@@ -313,7 +314,7 @@ str(brca)
 
 Identify which variables are categorical (factors) and which are continuous (numeric)
 
-```{r}
+```{r 08-Summaries-13}
 catvars <- brca %>% select_if(is.factor) %>% names()
 ctsvars <- brca %>% select_if(is.numeric) %>% names()
 ```
@@ -326,7 +327,7 @@ CreateCatTable(vars = catvars, data = brca)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="tab1"}
+```{r 08-Summaries-14, eval=T, echo = F, ref.label="tab1"}
 ```
 ]
 
@@ -338,7 +339,7 @@ CreateContTable(vars = ctsvars, data = brca)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="tab2"}
+```{r 08-Summaries-15, eval=T, echo = F, ref.label="tab2"}
 ```
 ]
 
@@ -358,7 +359,7 @@ CreateContTable(vars = ctsvars, data = brca)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="tab2a"}
+```{r 08-Summaries-16, eval=T, echo = F, ref.label="tab2a"}
 ```
 ]
 
@@ -373,7 +374,7 @@ CreateTableOne(vars = c(catvars, ctsvars),
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="tab3"}
+```{r 08-Summaries-17, eval=T, echo = F, ref.label="tab3"}
 ```
 ]
 
@@ -387,7 +388,7 @@ CreateTableOne(data = brca[,-1])
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="tab4"}
+```{r 08-Summaries-18, eval=T, echo = F, ref.label="tab4"}
 ```
 ]
 
@@ -411,7 +412,7 @@ brca %>%
 There are missing values now, so we have to use `na.rm=T`.
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="grp1", warning=F, message=F}
+```{r 08-Summaries-19, eval=T, echo = F, ref.label="grp1", warning=F, message=F}
 ```
 ]
 
@@ -428,7 +429,7 @@ brca %>%
 We still have a row for the missing values of ER.Status
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="grp1a", warning=F, message=F}
+```{r 08-Summaries-20, eval=T, echo = F, ref.label="grp1a", warning=F, message=F}
 ```
 ]
 
@@ -447,7 +448,7 @@ How about reversing the rows and columns for readability
 
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="grp1b"}
+```{r 08-Summaries-21, eval=T, echo = F, ref.label="grp1b"}
 ```
 ]
 
@@ -465,7 +466,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="grp1c"}
+```{r 08-Summaries-22, eval=T, echo = F, ref.label="grp1c"}
 ```
 ]
 
@@ -482,7 +483,7 @@ CreateTableOne(
   strata = 'ER.Status',
   test = F)
 ```
-```{r, eval=T, echo = F, ref.label="grp1d"}
+```{r 08-Summaries-23, eval=T, echo = F, ref.label="grp1d"}
 ```
 
 ---
@@ -506,7 +507,7 @@ Do **not** test for normality before doing the t-test. It isn't necessary and sc
 
 In R, there is a convenient function `t.test`
 
-```{r}
+```{r 08-Summaries-24}
 t.test(NP_958782 ~ ER.Status, data = brca)
 ```
 
@@ -524,14 +525,14 @@ You can read the `~` as "by", as in "t-test of NP_958782 by ER.Status"
 The packge `broom` provides a function `tidy` that makes the results of these
 statistical tests tidy.
 
-```{r}
+```{r 08-Summaries-25}
 t.test(NP_958782 ~ ER.Status, data=brca) %>% 
   broom::tidy()
 ```
 
 --
 
-```{r, echo=F}
+```{r 08-Summaries-26, echo=F}
 t.test(NP_958782 ~ ER.Status, data=brca)
 ```
 
@@ -550,7 +551,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="test1"}
+```{r 08-Summaries-27, eval=T, echo = F, ref.label="test1"}
 ```
 ]
 
@@ -570,7 +571,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="test2"}
+```{r 08-Summaries-28, eval=T, echo = F, ref.label="test2"}
 ```
 ]
 
@@ -592,7 +593,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="test2a"}
+```{r 08-Summaries-29, eval=T, echo = F, ref.label="test2a"}
 ```
 ]
 
@@ -615,7 +616,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="test2b"}
+```{r 08-Summaries-30, eval=T, echo = F, ref.label="test2b"}
 ```
 ]
 
@@ -639,7 +640,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="test2c"}
+```{r 08-Summaries-31, eval=T, echo = F, ref.label="test2c"}
 ```
 ]
 
@@ -652,14 +653,14 @@ class: center, middle
 
 ## Wilcoxon test, nonparametric t-test
 
-```{r}
+```{r 08-Summaries-32}
 wilcox.test(NP_958782 ~ ER.Status, data=brca) %>% 
   broom::tidy()
 ```
 
 --
 
-```{r, echo=F}
+```{r 08-Summaries-33, echo=F}
 wilcox.test(NP_958782 ~ ER.Status, data=brca)
 ```
 
@@ -680,7 +681,7 @@ brca %>%
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="test3"}
+```{r 08-Summaries-34, eval=T, echo = F, ref.label="test3"}
 ```
 ]
 
@@ -700,7 +701,7 @@ CreateTableOne(
   testNormal = t.test
 )
 ```
-```{r, eval=T, echo = F, ref.label="table4"}
+```{r 08-Summaries-35, eval=T, echo = F, ref.label="table4"}
 ```
 
 --
@@ -724,7 +725,7 @@ CreateTableOne(
   argsNormal = list(var.equal=F) #<<
 )
 ```
-```{r, eval=T, echo = F, ref.label="table4a"}
+```{r 08-Summaries-36, eval=T, echo = F, ref.label="table4a"}
 ```
 
 ---
@@ -734,7 +735,7 @@ CreateTableOne(
 Testing whether the distribution of a categorical variable differs by levels of 
 another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
 
-```{r}
+```{r 08-Summaries-37}
 fisher.test(table(brca$Tumor, brca$ER.Status))
 ```
 
@@ -745,7 +746,7 @@ fisher.test(table(brca$Tumor, brca$ER.Status))
 Testing whether the distribution of a categorical variable differs by levels of 
 another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
 
-```{r}
+```{r 08-Summaries-38}
 chisq.test(table(brca$Tumor, brca$ER.Status))
 ```
 
@@ -755,7 +756,7 @@ chisq.test(table(brca$Tumor, brca$ER.Status))
 
 We can use `broom::tidy` for either of these
 
-```{r}
+```{r 08-Summaries-39}
 chisq.test(table(brca$Tumor, brca$ER.Status)) %>% 
   broom::tidy()
 ```
@@ -764,7 +765,7 @@ chisq.test(table(brca$Tumor, brca$ER.Status)) %>%
 
 ## Using `tableone`
 
-```{r}
+```{r 08-Summaries-40}
 CreateCatTable(vars = c('Tumor','Node','Metastasis'),
                data = filter(brca, !is.na(ER.Status)),
                strata = 'ER.Status',
@@ -775,7 +776,7 @@ CreateCatTable(vars = c('Tumor','Node','Metastasis'),
 
 ## Using `tableone`
 
-```{r}
+```{r 08-Summaries-41}
 c1 <- CreateCatTable(vars = c('Tumor','Node','Metastasis'),
                data = filter(brca, !is.na(ER.Status)),
                strata = 'ER.Status',

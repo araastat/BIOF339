@@ -7,6 +7,7 @@ date: Fall, 2019
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+library(tidyverse)
 ```
 
 layout: true
@@ -48,7 +49,7 @@ repeatedly over a loop with some index.
 
 The basic structure is
 
-```{r, eval=F}
+```{r 07-Maps-Table1-1, eval=F}
 for (variable in vector) {
   <code to execute for each iteration>
 }
@@ -61,7 +62,7 @@ for (variable in vector) {
 .pull-left[
 Using numeric indices
 
-```{r , eval = F, echo = T}
+```{r 07-Maps-Table1-2, eval = F, echo = T}
 library(fs)
 sites <- c('Brain','Colon','Esophagus','Lung','Oral')
 dats <- list() # Initialize empty list
@@ -76,7 +77,7 @@ for(i in 1:length(sites)){
 .pull-right[
 Using names
 
-```{r, eval=T, echo = T, message=F, warning=F}
+```{r 07-Maps-Table1-3, eval=T, echo = T, message=F, warning=F}
 library(fs)
 sites <- c('Brain','Colon','Esophagus','Lung','Oral')
 dats <- list() # Initialize empty list
@@ -96,7 +97,7 @@ for(n in sites){
 Directly using lists has efficiency advantages. `rio` can load all the datasets
 into a list, for example.
 
-```{r}
+```{r 07-Maps-Table1-4}
 dats <- rio::import_list(path('data', paste0(sites,'.csv')))
 names(dats)
 str(dats[['Brain']])
@@ -112,14 +113,14 @@ To use `map` it's best that each element of the input list be of the same type
 
 `map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
 
-```{r, eval=F}
+```{r 07-Maps-Table1-5, eval=F}
 map(<list>, <function>, <function arguments>)
 ```
 
 For example, if we want to take out the first row of each dataset and make sure all 
 the variables are numeric, we could do:
 
-```{r, warning=F}
+```{r 07-Maps-Table1-6, warning=F}
 dats <- map(dats, function(d){
   d %>% slice(-1) %>%  # remove first row
     mutate_all( as.numeric)
@@ -133,14 +134,14 @@ str(dats[['Brain']])
 
 `map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
 
-```{r, eval=F}
+```{r 07-Maps-Table1-7, eval=F}
 map(<list>, <function>, <function arguments>)
 ```
 
 For example, if we want to take out the first row of each dataset and make sure all 
 the variables are numeric, we could do:
 
-```{r, warning=F, eval=F}
+```{r 07-Maps-Table1-8, warning=F, eval=F}
 dats <- map(dats, function(d){
   d %>% slice(-1) %>%  # remove first row
     mutate_all( as.numeric)
@@ -158,7 +159,7 @@ The output of `map` is a list the same length as the input list.
 
 I don't like the names with spaces, so I can just apply a function to each data set to fix that.
 
-```{r}
+```{r 07-Maps-Table1-9}
 dats <- map(dats, janitor::clean_names)
 str(dats[['Oral']])
 ```
@@ -169,7 +170,7 @@ str(dats[['Oral']])
 
 Now let's split up by sexes
 
-```{r}
+```{r 07-Maps-Table1-10}
 dats_all <- map(dats, select, year_of_diagnosis, ends_with('sexes'))
 dats_male <- map(dats, select, year_of_diagnosis, ends_with('_males'))
 dats_female <- map(dats, select, year_of_diagnosis, ends_with('females'))
@@ -189,7 +190,7 @@ Earlier I had used `map(<list>,<function definition>)` and `map(<list>, <functio
 Let's make the column headers of each dataset reflect the site, so that when we join we can keep the 
 sites separate
 
-```{r}
+```{r 07-Maps-Table1-11}
 for(n in sites){
   names(dats_all[[n]]) <- str_replace(names(dats_all[[n]]), 'both_sexes',n)
   names(dats_male[[n]]) <- str_replace(names(dats_male[[n]]), 'male',n)
@@ -204,7 +205,7 @@ names(dats_all[['Esophagus']])
 
 When we joined these data sets, we had to repeatedly use `left_join` to create the final data set. There is a shortcut to this repeated operation of a function with two inputs as applied to a list successively.
 
-```{r, message=F}
+```{r 07-Maps-Table1-12, message=F}
 dats2_all <- Reduce(left_join, dats_all)
 dats2_male <- Reduce(left_join, dats_male)
 dats2_female <- Reduce(left_join, dats_female)
@@ -214,7 +215,7 @@ dats2_female <- Reduce(left_join, dats_female)
 > Could we have used a for loop or map here? Sure, but it makes it harder to read IMO.
 
 --
-```{r}
+```{r 07-Maps-Table1-13}
 str(dats2_all)
 ```
 
@@ -224,7 +225,7 @@ str(dats2_all)
 
 Next, we want to separate the races from the sites, after a `gather`. The `all_races` will pose a problem if we split on `_`. Let's fix that.
 
-```{r}
+```{r 07-Maps-Table1-14}
 names(dats2_all) <- str_replace(names(dats2_all), 'all_races','allraces')
 names(dats2_male) <- str_replace(names(dats2_male), 'all_races','allraces')
 names(dats2_female) <- str_replace(names(dats2_female), 'all_races','allraces')
@@ -236,7 +237,7 @@ names(dats2_female) <- str_replace(names(dats2_female), 'all_races','allraces')
 
 Now, for each of these , we need to gather then separate. We'll put the data sets in a list first
 
-```{r}
+```{r 07-Maps-Table1-15}
 dats2 <- list('both'=dats2_all, 'male'=dats2_male, 'female'=dats2_female)
 dats2 <- map(dats2,
              function(d){
@@ -271,10 +272,10 @@ I'm using quite advanced R here, but hopefully you'll learn by example.
 (Yes, your homework asked for a different panel placement)
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="plt1"}
+```{r 07-Maps-Table1-16, eval=T, echo = F, ref.label="plt1"}
 ```
 ]
-```{r}
+```{r 07-Maps-Table1-17}
 
 ```
 

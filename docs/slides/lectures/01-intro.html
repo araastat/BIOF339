@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Practical R: Introductions</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
+    <script src="01-intro_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="01-intro_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="robot.css" type="text/css" />
     <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
@@ -480,22 +481,22 @@ class: middle, center, inverse
 # Plan
 
 
-Date                 Topic                                                                                               
--------------------  ----------------------------------------------------------------------------------------------------
-September 11, 2019   Introduction to R, RStudio and RMarkdown                                                            
-September 18, 2019   Data Structures in R .fatinline[(classes 5:30-7, 7-8:30)]                                           
-September 25, 2019   R packages, data import/export                                                                      
-October 02, 2019     Towards analytic data: Data Munging                                                                 
-October 09, 2019     Data exploration through visualization                                                              
-October 16, 2019     Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot                 
-October 23, 2019     Statistical analyses: Classical hypothesis testing and computational inference                      
-October 30, 2019     Statistical learning: Regression models                                                             
-November 06, 2019    Statistical learning: Cluster analysis and pattern recognition .fatinline[(classes 5:30-7, 7-8:30)] 
-November 13, 2019    More data munging with `purrr`: grouping, mapping and functional programming                        
-November 20, 2019    Basic bioinformatics: Bioconductor and friends                                                      
-November 27, 2019    .heatinline[No class (Thanksgiving)]                                                                
-December 04, 2019    More complex visualizations and RMarkdown                                                           
-December 11, 2019    Project presentations                                                                               
+|Date               |Topic                                                                                               |
+|:------------------|:---------------------------------------------------------------------------------------------------|
+|September 11, 2019 |Introduction to R, RStudio and RMarkdown                                                            |
+|September 18, 2019 |Data Structures in R .fatinline[(classes 5:30-7, 7-8:30)]                                           |
+|September 25, 2019 |R packages, data import/export                                                                      |
+|October 02, 2019   |Towards analytic data: Data Munging                                                                 |
+|October 09, 2019   |Data exploration through visualization                                                              |
+|October 16, 2019   |Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot                 |
+|October 23, 2019   |Statistical analyses: Classical hypothesis testing and computational inference                      |
+|October 30, 2019   |Statistical learning: Regression models                                                             |
+|November 06, 2019  |Statistical learning: Cluster analysis and pattern recognition .fatinline[(classes 5:30-7, 7-8:30)] |
+|November 13, 2019  |More data munging with `purrr`: grouping, mapping and functional programming                        |
+|November 20, 2019  |Basic bioinformatics: Bioconductor and friends                                                      |
+|November 27, 2019  |.heatinline[No class (Thanksgiving)]                                                                |
+|December 04, 2019  |More complex visualizations and RMarkdown                                                           |
+|December 11, 2019  |Project presentations                                                                               |
 
 
 ---
@@ -533,7 +534,7 @@ We'll talk about RMarkdown later today
 
 # Communication
 
-- Primarily via &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/&gt;&lt;/svg&gt; [Slack](http://www.slack.com). 
+- Primarily via &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M244.2 217.5l19.3 57.7-59.8 20-19.3-57.7 59.8-20zm41.4 243.7C131.6 507.4 65 471.6 18.8 317.6S8.4 97 162.4 50.8C316.4 4.6 383 40.4 429.2 194.4c46.2 154 10.4 220.6-143.6 266.8zM366.2 265c-3.9-12.2-17.2-18.6-29.4-14.7l-29 9.7-19.3-57.7 29-9.7c12.2-3.9 18.6-17.2 14.7-29.4-3.9-12.2-17.2-18.6-29.4-14.7l-29 9.7-10-30.1c-3.9-12.2-17.2-18.6-29.4-14.7-12.2 3.9-18.6 17.2-14.7 29.4l10 30.1-59.8 20.1-10-30.1c-3.9-12.2-17.2-18.6-29.4-14.7-12.2 3.9-18.6 17.2-14.7 29.4l10 30.1-29 9.7c-12.2 3.9-18.6 17.2-14.7 29.4 3.2 9.3 12.2 15.4 21.5 15.8 4.3.6 7.7-1 36.9-10.7l19.3 57.7-29 9.7c-12.2 3.9-18.6 17.2-14.7 29.4 3.2 9.3 12.2 15.4 21.5 15.8 4.3.6 7.7-1 36.9-10.7l10 30.1c3.7 10.8 15.8 18.6 29.4 14.7 12.2-3.9 18.6-17.2 14.7-29.4l-10-30.1 59.8-20.1 10 30.1c3.7 10.8 15.8 18.6 29.4 14.7 12.2-3.9 18.6-17.2 14.7-29.4l-10-30.1 29-9.7c12.2-4.2 18.6-17.5 14.7-29.6z"/&gt;&lt;/svg&gt; [Slack](http://www.slack.com). 
   - Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/enQtNzU1Njk5NDc2MDMyLWU5MjkwNzNlMmRlYTAwNDg2MGZjYWQ1YzEzMDUxMzc0MzE1NjZkMDFlY2Y0NTIyMGI2Y2VkODBiYmY0MjBiMzE).
   - You will see two channels named &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M446.2 270.4c-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-30.3-90 45.4-15.1c19.1-6.2 29.1-26.8 23-45.9-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-93.4 31.2-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-45.3 15c-19.1 6.2-29.1 26.8-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l30.3 90L78 354.8c-19 6.2-29.1 26.9-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 93.6-31.3 15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 45.4-15.1c19-6 29.1-26.7 22.9-45.7zm-254.1 47.2l-30.3-90.2 93.5-31.3 30.3 90.2-93.5 31.3z"/&gt;&lt;/svg&gt;*wed5-7_2019* and &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M446.2 270.4c-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-30.3-90 45.4-15.1c19.1-6.2 29.1-26.8 23-45.9-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-93.4 31.2-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-45.3 15c-19.1 6.2-29.1 26.8-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l30.3 90L78 354.8c-19 6.2-29.1 26.9-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 93.6-31.3 15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 45.4-15.1c19-6 29.1-26.7 22.9-45.7zm-254.1 47.2l-30.3-90.2 93.5-31.3 30.3 90.2-93.5 31.3z"/&gt;&lt;/svg&gt;*wed7-9_2019*. Please join the channel corresponding to your section. 
 - Slack for broadcasting messages, answering questions and the like. 
@@ -913,8 +914,8 @@ runif(10, 0, 10)
 ```
 
 ```
-#&gt;   [1] 9.6383786 2.7689373 2.4291854 1.7018136 4.8812344 0.5893566 1.9033637 9.7952480
-#&gt;   [9] 2.1012500 5.6648043
+#&gt;   [1] 9.6383786 2.7689373 2.4291854 1.7018136 4.8812344 0.5893566 1.9033637
+#&gt;   [8] 9.7952480 2.1012500 5.6648043
 ```
 
 ---
@@ -979,21 +980,21 @@ summary(airquality)
 ```
 
 ```
-#&gt;       Ozone           Solar.R           Wind             Temp           Month      
-#&gt;   Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00   Min.   :5.000  
-#&gt;   1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00   1st Qu.:6.000  
-#&gt;   Median : 31.50   Median :205.0   Median : 9.700   Median :79.00   Median :7.000  
-#&gt;   Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88   Mean   :6.993  
-#&gt;   3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00   3rd Qu.:8.000  
-#&gt;   Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00   Max.   :9.000  
-#&gt;   NA's   :37       NA's   :7                                                       
-#&gt;        Day      
-#&gt;   Min.   : 1.0  
-#&gt;   1st Qu.: 8.0  
-#&gt;   Median :16.0  
-#&gt;   Mean   :15.8  
-#&gt;   3rd Qu.:23.0  
-#&gt;   Max.   :31.0  
+#&gt;       Ozone           Solar.R           Wind             Temp      
+#&gt;   Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
+#&gt;   1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
+#&gt;   Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+#&gt;   Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
+#&gt;   3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
+#&gt;   Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+#&gt;   NA's   :37       NA's   :7                                       
+#&gt;       Month            Day      
+#&gt;   Min.   :5.000   Min.   : 1.0  
+#&gt;   1st Qu.:6.000   1st Qu.: 8.0  
+#&gt;   Median :7.000   Median :16.0  
+#&gt;   Mean   :6.993   Mean   :15.8  
+#&gt;   3rd Qu.:8.000   3rd Qu.:23.0  
+#&gt;   Max.   :9.000   Max.   :31.0  
 #&gt;  
 ```
 ]
@@ -1096,7 +1097,7 @@ median(airquality$Temp)
 hist(airquality$Temp)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-17-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -1109,7 +1110,7 @@ hist(airquality$Temp)
 plot(Ozone ~ Month, data = airquality)
 ```
 
-&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-18-1.png" height="400" /&gt;
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-18-1.png" height="400" /&gt;
 ]
 .pull-right[
 
@@ -1121,7 +1122,7 @@ ggplot(airquality) +
   theme_bw()
 ```
 
-&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/unnamed-chunk-19-1.png" height="400" /&gt;
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-19-1.png" height="400" /&gt;
 
 ]
 
@@ -1416,6 +1417,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -1433,17 +1460,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

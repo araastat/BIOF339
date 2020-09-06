@@ -1,6 +1,6 @@
 ## Some example data
 
-```{r}
+```{r heatmap-1}
 library(Biobase)
 library(d3heatmap)
 data(sample.ExpressionSet)

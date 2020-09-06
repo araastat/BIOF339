@@ -1,5 +1,6 @@
 name: BIOF339
 output_dir: "../docs/slides"
+exclude: ["lectures/*"]
 navbar:
   title: Practical R
   left:
@@ -11,16 +12,16 @@ navbar:
       href: ../bio.html
     - text: Lectures
       href: index.html
-    - text: Homework
-      href: ../assignments/index.html
+#    - text: Homework
+#      href: ../assignments/index.html
     - text: Resources
       href: ../resources.html
   right:
-    - text: Course Notes
-      href: ../notes/index.html
+    #    - text: Course Notes
+    #      href: ../notes/index.html
     - icon: fa-slack
       text: Slack
-      href: https://.slack.com
+      href: https://www.slack.com
     - icon: fa-github
       text: GitHub
       href: https://www.github.com/araastat/BIOF339

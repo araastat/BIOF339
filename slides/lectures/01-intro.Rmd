@@ -569,7 +569,7 @@ R is the scripting language we will use for statistical analysis
 It comes with a very basic GUI and is not very user-friendly as is
 
 .center[
-```{r, echo = F, out.height='350px', out.width='350px'}
+```{r 01-intro-1, echo = F, out.height='350px', out.width='350px'}
 knitr::include_graphics('img/R1.png')
 ```
 ]
@@ -586,7 +586,7 @@ RStudio is a much nicer Integrated Development Environment (IDE) that runs R
 - We'll go through the features of RStudio in a minute
 ]
 .right-column30[
-```{r, echo = F, out.width = "600px", out.height="400px"}
+```{r 01-intro-2, echo = F, out.width = "600px", out.height="400px"}
 knitr::include_graphics('img/RStudioScreen.png')
 ```
 ]
@@ -600,7 +600,7 @@ knitr::include_graphics('img/RStudioScreen.png')
 .right-column30[
 
 When you start R, this is what shows up
-```{r, eval=F, echo = T}
+```{r 01-intro-3, eval=F, echo = T}
 R version 3.6.0 (2019-04-26) -- "Planting of a Tree" #<<
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
@@ -636,7 +636,7 @@ Type 'q()' to quit R.
 .right-column30[
 
 When you start R, this is what shows up
-```{r, eval=F, echo = T}
+```{r 01-intro-4, eval=F, echo = T}
 R version 3.6.0 (2019-04-26) -- "Planting of a Tree" 
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin15.6.0 (64-bit) #<<
@@ -673,7 +673,7 @@ Type 'q()' to quit R.
 .right-column30[
 
 When you start R, this is what shows up
-```{r, eval=F, echo = T}
+```{r 01-intro-5, eval=F, echo = T}
 R version 3.6.0 (2019-04-26) -- "Planting of a Tree" 
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin15.6.0 (64-bit) 
@@ -712,7 +712,7 @@ Type 'q()' to quit R.
 .right-column30[
 
 When you start R, this is what shows up
-```{r, eval=F, echo = T}
+```{r 01-intro-6, eval=F, echo = T}
 R version 3.6.0 (2019-04-26) -- "Planting of a Tree" 
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin15.6.0 (64-bit) 
@@ -899,13 +899,13 @@ class: middle, center, inverse
 
 ### A calculator
 
-```{r, echo = T}
+```{r 01-intro-7, echo = T}
 2 + (3 * 5) / 1.75
 ```
 
 ### A random number generator
 
-```{r, echo=T}
+```{r 01-intro-8, echo=T}
 set.seed(2085)
 runif(10, 0, 10)
 ```
@@ -917,14 +917,14 @@ runif(10, 0, 10)
 The `airquality` dataset, built in to R, provides daily air quality measurements in New York, May to September 1973.
 
 
-```{r, echo = T, eval=F}
+```{r 01-intro-9, echo = T, eval=F}
 airquality
 ```
 
 This automatically prints out the full data set, but that's not really useful
 
 .pull-left[
-```{r, echo = T}
+```{r 01-intro-10, echo = T}
 str(airquality)
 ```
 Note the missing values, denoted `NA`
@@ -933,7 +933,7 @@ Note the missing values, denoted `NA`
 --
 
 .pull-right[
-```{r, echo = T}
+```{r 01-intro-11, echo = T}
 head(airquality)
 ```
 ]
@@ -943,12 +943,12 @@ head(airquality)
 # Exploring a data set
 
 .pull-left[
-```{r, echo = T}
+```{r 01-intro-12, echo = T}
 summary(airquality)
 ```
 ]
 .pull-right[
-```{r, echo=T} 
+```{r 01-intro-13, echo=T }
 library(tableone) # Use a package
 kableone(CreateTableOne(data=airquality), 
          format='html')
@@ -965,7 +965,7 @@ We'll talk more about this in Week 3 & 6
 
 # Sidebar: Installing packages
 
-```{r, echo=T, eval = F}
+```{r 01-intro-14, echo=T, eval = F}
 install.packages('tableone')
 ```
 
@@ -981,16 +981,16 @@ Windows folk, it will take a little bit of work
 # Exploring one variable
 
 .pull-left[
-```{r, echo = T}
+```{r 01-intro-15, echo = T}
 mean(airquality$Temp)
 ```
 
-```{r, echo = T}
+```{r 01-intro-16, echo = T}
 median(airquality$Temp)
 ```
 ]
 .pull-right[
-```{r, echo=T}
+```{r 01-intro-17, echo=T}
 hist(airquality$Temp)
 ```
 ]
@@ -1000,12 +1000,12 @@ hist(airquality$Temp)
 # Exploring two variables
 
 .pull-left[
-```{r, echo = T, out.height=400}
+```{r 01-intro-18, echo = T, out.height=400}
 plot(Ozone ~ Month, data = airquality)
 ```
 ]
 .pull-right[
-```{r, echo = T, out.height=400}
+```{r 01-intro-19, echo = T, out.height=400}
 library(ggplot2)
 ggplot(airquality) + 
   geom_point(aes(x = Month, y = Ozone)) + 
@@ -1020,7 +1020,7 @@ ggplot(airquality) +
 # Is there a difference in ozone between months
 
 .pull-left[
-```{r, echo=T}
+```{r 01-intro-20, echo=T}
 summary(aov(Ozone ~ Month, data=airquality))
 ```
 
@@ -1032,7 +1032,7 @@ This is doing ANCOVA/Regression
 --
 
 .pull-right[
-```{r, echo=T}
+```{r 01-intro-21, echo=T}
 summary(aov(Ozone~factor(Month), data=airquality))
 ```
 
@@ -1117,7 +1117,7 @@ summary(cars)
 .pull-right[
 ### Results
 
-```{r}
+```{r 01-intro-22}
 summary(cars)
 ```
 ]
@@ -1138,7 +1138,7 @@ kableone(CreateTableOne(data=airquality),
 .pull-right[
 ### Results
 
-```{r}
+```{r 01-intro-23}
 library(tableone) # Use a package
 kableone(CreateTableOne(data=airquality), 
          format='html')

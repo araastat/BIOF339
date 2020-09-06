@@ -111,7 +111,7 @@ Every time R starts, it will look at this file and load things if you so specify
 
 Some examples you could put in there to be available every time
 
-```{r, eval=F}
+```{r 13-Misc-1, eval=F}
 ## ht == headtail
 ht = function(d, n=6) rbind(head(d, n), tail(d, n))
 
@@ -133,7 +133,7 @@ See this [chapter](https://csgillespie.github.io/efficientR/3-3-r-startup.html#r
 
 R uses what is called the *S3* system for object oriented programming. It is a simplistic system where you create a default function and then specify functions for different classes. For example:
 
-```{r, eval=F}
+```{r 13-Misc-2, eval=F}
 format_output <- function(x,...){
   # Make a S3 class
   UseMethod('format_output',x)
@@ -160,7 +160,7 @@ So class-specific functions just need the name of the class after the dot.
 
 Sometimes, there already is a default that you want to change. Then you don't need to create the generic first since it already exists
 
-```{r}
+```{r 13-Misc-3}
 print.lm <- function(x){
   suppressPackageStartupMessages(require(tidyverse))
   require(broom)
@@ -172,7 +172,7 @@ print.lm <- function(x){
 
 So now:
 
-```{r, message=F, warning=F}
+```{r 13-Misc-4, message=F, warning=F}
 m <- lm(mpg ~ wt, data = mtcars)
 print(m)
 ```

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Practical R: Data Ingestion and Munging</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
+    <script src="03-DataIngestionMunging_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="03-DataIngestionMunging_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="03-DataIngestionMunging_files/countdown-0.3.3/countdown.css" rel="stylesheet" />
-    <script src="03-DataIngestionMunging_files/countdown-0.3.3/countdown.js"></script>
+    <link href="03-DataIngestionMunging_files/countdown-0.3.5/countdown.css" rel="stylesheet" />
+    <script src="03-DataIngestionMunging_files/countdown-0.3.5/countdown.js"></script>
     <link rel="stylesheet" href="robot.css" type="text/css" />
     <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
     <link rel="stylesheet" href="sfah.css" type="text/css" />
@@ -275,37 +276,37 @@ str(brca_clinical)
 ```
 
 ```
-#&gt;  Classes 'spec_tbl_df', 'tbl_df', 'tbl' and 'data.frame':	77 obs. of  30 variables:
-#&gt;   $ Complete TCGA ID                   : chr  "TCGA-A2-A0CM" "TCGA-BH-A18Q" "TCGA-A7-A0CE" "TCGA-D8-A142" ...
-#&gt;   $ Gender                             : chr  "FEMALE" "FEMALE" "FEMALE" "FEMALE" ...
-#&gt;   $ Age at Initial Pathologic Diagnosis: num  40 56 57 74 61 67 45 48 59 36 ...
-#&gt;   $ ER Status                          : chr  "Negative" "Negative" "Negative" "Negative" ...
-#&gt;   $ PR Status                          : chr  "Negative" "Negative" "Negative" "Negative" ...
-#&gt;   $ HER2 Final Status                  : chr  "Negative" "Negative" "Negative" "Negative" ...
-#&gt;   $ Tumor                              : chr  "T2" "T2" "T2" "T3" ...
-#&gt;   $ Tumor--T1 Coded                    : chr  "T_Other" "T_Other" "T_Other" "T_Other" ...
-#&gt;   $ Node                               : chr  "N0" "N1" "N0" "N0" ...
-#&gt;   $ Node-Coded                         : chr  "Negative" "Positive" "Negative" "Negative" ...
-#&gt;   $ Metastasis                         : chr  "M0" "M0" "M0" "M0" ...
-#&gt;   $ Metastasis-Coded                   : chr  "Negative" "Negative" "Negative" "Negative" ...
-#&gt;   $ AJCC Stage                         : chr  "Stage IIA" "Stage IIB" "Stage IIA" "Stage IIB" ...
-#&gt;   $ Converted Stage                    : chr  "Stage IIA" "No_Conversion" "Stage IIA" "Stage IIB" ...
-#&gt;   $ Survival Data Form                 : chr  "followup" "enrollment" "followup" "followup" ...
-#&gt;   $ Vital Status                       : chr  "DECEASED" "DECEASED" "LIVING" "LIVING" ...
-#&gt;   $ Days to Date of Last Contact       : num  754 1692 309 425 775 ...
-#&gt;   $ Days to date of Death              : num  754 1692 NA NA NA ...
-#&gt;   $ OS event                           : num  1 1 0 0 0 0 0 0 0 0 ...
-#&gt;   $ OS Time                            : num  754 1692 309 425 775 ...
-#&gt;   $ PAM50 mRNA                         : chr  "Basal-like" "Basal-like" "Basal-like" "Basal-like" ...
-#&gt;   $ SigClust Unsupervised mRNA         : num  -12 -12 0 0 -12 -12 -12 -12 0 0 ...
-#&gt;   $ SigClust Intrinsic mRNA            : num  -13 -13 -13 -13 -13 -13 -13 -13 -13 -13 ...
-#&gt;   $ miRNA Clusters                     : num  4 5 5 3 2 5 4 4 5 5 ...
-#&gt;   $ methylation Clusters               : num  4 5 5 5 5 5 5 5 5 5 ...
-#&gt;   $ RPPA Clusters                      : chr  "Basal" "Basal" "Basal" "X" ...
-#&gt;   $ CN Clusters                        : num  4 1 1 1 1 3 3 1 3 1 ...
-#&gt;   $ Integrated Clusters (with PAM50)   : num  2 2 2 2 2 2 2 2 2 2 ...
-#&gt;   $ Integrated Clusters (no exp)       : num  1 2 2 2 2 2 2 2 2 2 ...
-#&gt;   $ Integrated Clusters (unsup exp)    : num  1 2 2 2 2 2 2 2 2 2 ...
+#&gt;  tibble [77 × 30] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+#&gt;   $ Complete TCGA ID                   : chr [1:77] "TCGA-A2-A0CM" "TCGA-BH-A18Q" "TCGA-A7-A0CE" "TCGA-D8-A142" ...
+#&gt;   $ Gender                             : chr [1:77] "FEMALE" "FEMALE" "FEMALE" "FEMALE" ...
+#&gt;   $ Age at Initial Pathologic Diagnosis: num [1:77] 40 56 57 74 61 67 45 48 59 36 ...
+#&gt;   $ ER Status                          : chr [1:77] "Negative" "Negative" "Negative" "Negative" ...
+#&gt;   $ PR Status                          : chr [1:77] "Negative" "Negative" "Negative" "Negative" ...
+#&gt;   $ HER2 Final Status                  : chr [1:77] "Negative" "Negative" "Negative" "Negative" ...
+#&gt;   $ Tumor                              : chr [1:77] "T2" "T2" "T2" "T3" ...
+#&gt;   $ Tumor--T1 Coded                    : chr [1:77] "T_Other" "T_Other" "T_Other" "T_Other" ...
+#&gt;   $ Node                               : chr [1:77] "N0" "N1" "N0" "N0" ...
+#&gt;   $ Node-Coded                         : chr [1:77] "Negative" "Positive" "Negative" "Negative" ...
+#&gt;   $ Metastasis                         : chr [1:77] "M0" "M0" "M0" "M0" ...
+#&gt;   $ Metastasis-Coded                   : chr [1:77] "Negative" "Negative" "Negative" "Negative" ...
+#&gt;   $ AJCC Stage                         : chr [1:77] "Stage IIA" "Stage IIB" "Stage IIA" "Stage IIB" ...
+#&gt;   $ Converted Stage                    : chr [1:77] "Stage IIA" "No_Conversion" "Stage IIA" "Stage IIB" ...
+#&gt;   $ Survival Data Form                 : chr [1:77] "followup" "enrollment" "followup" "followup" ...
+#&gt;   $ Vital Status                       : chr [1:77] "DECEASED" "DECEASED" "LIVING" "LIVING" ...
+#&gt;   $ Days to Date of Last Contact       : num [1:77] 754 1692 309 425 775 ...
+#&gt;   $ Days to date of Death              : num [1:77] 754 1692 NA NA NA ...
+#&gt;   $ OS event                           : num [1:77] 1 1 0 0 0 0 0 0 0 0 ...
+#&gt;   $ OS Time                            : num [1:77] 754 1692 309 425 775 ...
+#&gt;   $ PAM50 mRNA                         : chr [1:77] "Basal-like" "Basal-like" "Basal-like" "Basal-like" ...
+#&gt;   $ SigClust Unsupervised mRNA         : num [1:77] -12 -12 0 0 -12 -12 -12 -12 0 0 ...
+#&gt;   $ SigClust Intrinsic mRNA            : num [1:77] -13 -13 -13 -13 -13 -13 -13 -13 -13 -13 ...
+#&gt;   $ miRNA Clusters                     : num [1:77] 4 5 5 3 2 5 4 4 5 5 ...
+#&gt;   $ methylation Clusters               : num [1:77] 4 5 5 5 5 5 5 5 5 5 ...
+#&gt;   $ RPPA Clusters                      : chr [1:77] "Basal" "Basal" "Basal" "X" ...
+#&gt;   $ CN Clusters                        : num [1:77] 4 1 1 1 1 3 3 1 3 1 ...
+#&gt;   $ Integrated Clusters (with PAM50)   : num [1:77] 2 2 2 2 2 2 2 2 2 2 ...
+#&gt;   $ Integrated Clusters (no exp)       : num [1:77] 1 2 2 2 2 2 2 2 2 2 ...
+#&gt;   $ Integrated Clusters (unsup exp)    : num [1:77] 1 2 2 2 2 2 2 2 2 2 ...
 #&gt;   - attr(*, "spec")=
 #&gt;    .. cols(
 #&gt;    ..   `Complete TCGA ID` = col_character(),
@@ -392,22 +393,23 @@ A `tibble`
 
 ```
 #&gt;  # A tibble: 6 x 30
-#&gt;    `Complete TCGA … Gender `Age at Initial… `ER Status` `PR Status` `HER2 Final Sta…
-#&gt;    &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;           
-#&gt;  1 TCGA-A2-A0CM     FEMALE               40 Negative    Negative    Negative        
-#&gt;  2 TCGA-BH-A18Q     FEMALE               56 Negative    Negative    Negative        
-#&gt;  3 TCGA-A7-A0CE     FEMALE               57 Negative    Negative    Negative        
-#&gt;  4 TCGA-D8-A142     FEMALE               74 Negative    Negative    Negative        
-#&gt;  5 TCGA-AO-A0J6     FEMALE               61 Negative    Negative    Negative        
-#&gt;  6 TCGA-A2-A0YM     FEMALE               67 Negative    Negative    Negative        
-#&gt;  # … with 24 more variables: Tumor &lt;chr&gt;, `Tumor--T1 Coded` &lt;chr&gt;, Node &lt;chr&gt;,
-#&gt;  #   `Node-Coded` &lt;chr&gt;, Metastasis &lt;chr&gt;, `Metastasis-Coded` &lt;chr&gt;, `AJCC
-#&gt;  #   Stage` &lt;chr&gt;, `Converted Stage` &lt;chr&gt;, `Survival Data Form` &lt;chr&gt;, `Vital
-#&gt;  #   Status` &lt;chr&gt;, `Days to Date of Last Contact` &lt;dbl&gt;, `Days to date of
-#&gt;  #   Death` &lt;dbl&gt;, `OS event` &lt;dbl&gt;, `OS Time` &lt;dbl&gt;, `PAM50 mRNA` &lt;chr&gt;, `SigClust
-#&gt;  #   Unsupervised mRNA` &lt;dbl&gt;, `SigClust Intrinsic mRNA` &lt;dbl&gt;, `miRNA Clusters` &lt;dbl&gt;,
-#&gt;  #   `methylation Clusters` &lt;dbl&gt;, `RPPA Clusters` &lt;chr&gt;, `CN Clusters` &lt;dbl&gt;,
-#&gt;  #   `Integrated Clusters (with PAM50)` &lt;dbl&gt;, `Integrated Clusters (no exp)` &lt;dbl&gt;,
+#&gt;    `Complete TCGA … Gender `Age at Initial… `ER Status` `PR Status`
+#&gt;    &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      
+#&gt;  1 TCGA-A2-A0CM     FEMALE               40 Negative    Negative   
+#&gt;  2 TCGA-BH-A18Q     FEMALE               56 Negative    Negative   
+#&gt;  3 TCGA-A7-A0CE     FEMALE               57 Negative    Negative   
+#&gt;  4 TCGA-D8-A142     FEMALE               74 Negative    Negative   
+#&gt;  5 TCGA-AO-A0J6     FEMALE               61 Negative    Negative   
+#&gt;  6 TCGA-A2-A0YM     FEMALE               67 Negative    Negative   
+#&gt;  # … with 25 more variables: `HER2 Final Status` &lt;chr&gt;, Tumor &lt;chr&gt;, `Tumor--T1
+#&gt;  #   Coded` &lt;chr&gt;, Node &lt;chr&gt;, `Node-Coded` &lt;chr&gt;, Metastasis &lt;chr&gt;,
+#&gt;  #   `Metastasis-Coded` &lt;chr&gt;, `AJCC Stage` &lt;chr&gt;, `Converted Stage` &lt;chr&gt;,
+#&gt;  #   `Survival Data Form` &lt;chr&gt;, `Vital Status` &lt;chr&gt;, `Days to Date of Last
+#&gt;  #   Contact` &lt;dbl&gt;, `Days to date of Death` &lt;dbl&gt;, `OS event` &lt;dbl&gt;, `OS
+#&gt;  #   Time` &lt;dbl&gt;, `PAM50 mRNA` &lt;chr&gt;, `SigClust Unsupervised mRNA` &lt;dbl&gt;,
+#&gt;  #   `SigClust Intrinsic mRNA` &lt;dbl&gt;, `miRNA Clusters` &lt;dbl&gt;, `methylation
+#&gt;  #   Clusters` &lt;dbl&gt;, `RPPA Clusters` &lt;chr&gt;, `CN Clusters` &lt;dbl&gt;, `Integrated
+#&gt;  #   Clusters (with PAM50)` &lt;dbl&gt;, `Integrated Clusters (no exp)` &lt;dbl&gt;,
 #&gt;  #   `Integrated Clusters (unsup exp)` &lt;dbl&gt;
 ```
 ]
@@ -416,55 +418,62 @@ A `data.table`
 
 
 ```
-#&gt;     Complete TCGA ID Gender Age at Initial Pathologic Diagnosis ER Status PR Status
-#&gt;  1:     TCGA-A2-A0CM FEMALE                                  40  Negative  Negative
-#&gt;  2:     TCGA-BH-A18Q FEMALE                                  56  Negative  Negative
-#&gt;  3:     TCGA-A7-A0CE FEMALE                                  57  Negative  Negative
-#&gt;  4:     TCGA-D8-A142 FEMALE                                  74  Negative  Negative
-#&gt;  5:     TCGA-AO-A0J6 FEMALE                                  61  Negative  Negative
-#&gt;  6:     TCGA-A2-A0YM FEMALE                                  67  Negative  Negative
-#&gt;     HER2 Final Status Tumor Tumor--T1 Coded Node Node-Coded Metastasis Metastasis-Coded
-#&gt;  1:          Negative    T2         T_Other   N0   Negative         M0         Negative
-#&gt;  2:          Negative    T2         T_Other   N1   Positive         M0         Negative
-#&gt;  3:          Negative    T2         T_Other   N0   Negative         M0         Negative
-#&gt;  4:          Negative    T3         T_Other   N0   Negative         M0         Negative
-#&gt;  5:          Negative    T2         T_Other   N0   Negative         M0         Negative
-#&gt;  6:          Negative    T2         T_Other   N0   Negative         M0         Negative
-#&gt;     AJCC Stage Converted Stage Survival Data Form Vital Status
-#&gt;  1:  Stage IIA       Stage IIA           followup     DECEASED
-#&gt;  2:  Stage IIB   No_Conversion         enrollment     DECEASED
-#&gt;  3:  Stage IIA       Stage IIA           followup       LIVING
-#&gt;  4:  Stage IIB       Stage IIB           followup       LIVING
-#&gt;  5:  Stage IIA       Stage IIA           followup       LIVING
-#&gt;  6:  Stage IIA       Stage IIA           followup       LIVING
-#&gt;     Days to Date of Last Contact Days to date of Death OS event OS Time PAM50 mRNA
-#&gt;  1:                          754                   754        1     754 Basal-like
-#&gt;  2:                         1692                  1692        1    1692 Basal-like
-#&gt;  3:                          309                    NA        0     309 Basal-like
-#&gt;  4:                          425                    NA        0     425 Basal-like
-#&gt;  5:                          775                    NA        0     775 Basal-like
-#&gt;  6:                          964                    NA        0     964 Basal-like
-#&gt;     SigClust Unsupervised mRNA SigClust Intrinsic mRNA miRNA Clusters
-#&gt;  1:                        -12                     -13              4
-#&gt;  2:                        -12                     -13              5
-#&gt;  3:                          0                     -13              5
-#&gt;  4:                          0                     -13              3
-#&gt;  5:                        -12                     -13              2
-#&gt;  6:                        -12                     -13              5
-#&gt;     methylation Clusters RPPA Clusters CN Clusters Integrated Clusters (with PAM50)
-#&gt;  1:                    4         Basal           4                                2
-#&gt;  2:                    5         Basal           1                                2
-#&gt;  3:                    5         Basal           1                                2
-#&gt;  4:                    5             X           1                                2
-#&gt;  5:                    5         Basal           1                                2
-#&gt;  6:                    5         Basal           3                                2
-#&gt;     Integrated Clusters (no exp) Integrated Clusters (unsup exp)
-#&gt;  1:                            1                               1
-#&gt;  2:                            2                               2
-#&gt;  3:                            2                               2
-#&gt;  4:                            2                               2
-#&gt;  5:                            2                               2
-#&gt;  6:                            2                               2
+#&gt;     Complete TCGA ID Gender Age at Initial Pathologic Diagnosis ER Status
+#&gt;  1:     TCGA-A2-A0CM FEMALE                                  40  Negative
+#&gt;  2:     TCGA-BH-A18Q FEMALE                                  56  Negative
+#&gt;  3:     TCGA-A7-A0CE FEMALE                                  57  Negative
+#&gt;  4:     TCGA-D8-A142 FEMALE                                  74  Negative
+#&gt;  5:     TCGA-AO-A0J6 FEMALE                                  61  Negative
+#&gt;  6:     TCGA-A2-A0YM FEMALE                                  67  Negative
+#&gt;     PR Status HER2 Final Status Tumor Tumor--T1 Coded Node Node-Coded Metastasis
+#&gt;  1:  Negative          Negative    T2         T_Other   N0   Negative         M0
+#&gt;  2:  Negative          Negative    T2         T_Other   N1   Positive         M0
+#&gt;  3:  Negative          Negative    T2         T_Other   N0   Negative         M0
+#&gt;  4:  Negative          Negative    T3         T_Other   N0   Negative         M0
+#&gt;  5:  Negative          Negative    T2         T_Other   N0   Negative         M0
+#&gt;  6:  Negative          Negative    T2         T_Other   N0   Negative         M0
+#&gt;     Metastasis-Coded AJCC Stage Converted Stage Survival Data Form Vital Status
+#&gt;  1:         Negative  Stage IIA       Stage IIA           followup     DECEASED
+#&gt;  2:         Negative  Stage IIB   No_Conversion         enrollment     DECEASED
+#&gt;  3:         Negative  Stage IIA       Stage IIA           followup       LIVING
+#&gt;  4:         Negative  Stage IIB       Stage IIB           followup       LIVING
+#&gt;  5:         Negative  Stage IIA       Stage IIA           followup       LIVING
+#&gt;  6:         Negative  Stage IIA       Stage IIA           followup       LIVING
+#&gt;     Days to Date of Last Contact Days to date of Death OS event OS Time
+#&gt;  1:                          754                   754        1     754
+#&gt;  2:                         1692                  1692        1    1692
+#&gt;  3:                          309                    NA        0     309
+#&gt;  4:                          425                    NA        0     425
+#&gt;  5:                          775                    NA        0     775
+#&gt;  6:                          964                    NA        0     964
+#&gt;     PAM50 mRNA SigClust Unsupervised mRNA SigClust Intrinsic mRNA miRNA Clusters
+#&gt;  1: Basal-like                        -12                     -13              4
+#&gt;  2: Basal-like                        -12                     -13              5
+#&gt;  3: Basal-like                          0                     -13              5
+#&gt;  4: Basal-like                          0                     -13              3
+#&gt;  5: Basal-like                        -12                     -13              2
+#&gt;  6: Basal-like                        -12                     -13              5
+#&gt;     methylation Clusters RPPA Clusters CN Clusters
+#&gt;  1:                    4         Basal           4
+#&gt;  2:                    5         Basal           1
+#&gt;  3:                    5         Basal           1
+#&gt;  4:                    5             X           1
+#&gt;  5:                    5         Basal           1
+#&gt;  6:                    5         Basal           3
+#&gt;     Integrated Clusters (with PAM50) Integrated Clusters (no exp)
+#&gt;  1:                                2                            1
+#&gt;  2:                                2                            2
+#&gt;  3:                                2                            2
+#&gt;  4:                                2                            2
+#&gt;  5:                                2                            2
+#&gt;  6:                                2                            2
+#&gt;     Integrated Clusters (unsup exp)
+#&gt;  1:                               1
+#&gt;  2:                               2
+#&gt;  3:                               2
+#&gt;  4:                               2
+#&gt;  5:                               2
+#&gt;  6:                               2
 ```
 ]
 
@@ -603,7 +612,7 @@ load the clinical breast cancer data into R
 - Note, you have to "activate" the `rio` package in the chunk
 - You have to save the imported object by giving it a name
 
-<div class="countdown" id="timer_5dd59db9" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5f547b42" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -987,7 +996,7 @@ Load the data from [this link](data/pew.csv). You can look the structure by `hea
 
 What do you think you would need to do to make this data tidy? (Hint: look at the column headers)
 
-<div class="countdown" id="timer_5dd59c6f" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5f547ab0" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1089,12 +1098,12 @@ head(weather, 2)
 ```
 
 ```
-#&gt;         id year month element d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 d11 d12 d13 d14 d15 d16
-#&gt;  1 MX17004 2010     1    tmax NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA
-#&gt;  2 MX17004 2010     1    tmin NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA
-#&gt;    d17 d18 d19 d20 d21 d22 d23 d24 d25 d26 d27 d28 d29  d30 d31
-#&gt;  1  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 27.8  NA
-#&gt;  2  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 14.5  NA
+#&gt;         id year month element d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 d11 d12 d13 d14 d15
+#&gt;  1 MX17004 2010     1    tmax NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA
+#&gt;  2 MX17004 2010     1    tmin NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA
+#&gt;    d16 d17 d18 d19 d20 d21 d22 d23 d24 d25 d26 d27 d28 d29  d30 d31
+#&gt;  1  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 27.8  NA
+#&gt;  2  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 14.5  NA
 ```
 
 How would you just select the columns with the daily data?
@@ -1187,18 +1196,18 @@ filter(mpg, cyl == 4)
 
 ```
 #&gt;  # A tibble: 81 x 11
-#&gt;     manufacturer model      displ  year   cyl trans      drv     cty   hwy fl    class  
-#&gt;     &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  
-#&gt;   1 audi         a4           1.8  1999     4 auto(l5)   f        18    29 p     compact
-#&gt;   2 audi         a4           1.8  1999     4 manual(m5) f        21    29 p     compact
-#&gt;   3 audi         a4           2    2008     4 manual(m6) f        20    31 p     compact
-#&gt;   4 audi         a4           2    2008     4 auto(av)   f        21    30 p     compact
-#&gt;   5 audi         a4 quattro   1.8  1999     4 manual(m5) 4        18    26 p     compact
-#&gt;   6 audi         a4 quattro   1.8  1999     4 auto(l5)   4        16    25 p     compact
-#&gt;   7 audi         a4 quattro   2    2008     4 manual(m6) 4        20    28 p     compact
-#&gt;   8 audi         a4 quattro   2    2008     4 auto(s6)   4        19    27 p     compact
-#&gt;   9 chevrolet    malibu       2.4  1999     4 auto(l4)   f        19    27 r     midsize
-#&gt;  10 chevrolet    malibu       2.4  2008     4 auto(l4)   f        22    30 r     midsize
+#&gt;     manufacturer model    displ  year   cyl trans   drv     cty   hwy fl    class
+#&gt;     &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+#&gt;   1 audi         a4         1.8  1999     4 auto(l… f        18    29 p     comp…
+#&gt;   2 audi         a4         1.8  1999     4 manual… f        21    29 p     comp…
+#&gt;   3 audi         a4         2    2008     4 manual… f        20    31 p     comp…
+#&gt;   4 audi         a4         2    2008     4 auto(a… f        21    30 p     comp…
+#&gt;   5 audi         a4 quat…   1.8  1999     4 manual… 4        18    26 p     comp…
+#&gt;   6 audi         a4 quat…   1.8  1999     4 auto(l… 4        16    25 p     comp…
+#&gt;   7 audi         a4 quat…   2    2008     4 manual… 4        20    28 p     comp…
+#&gt;   8 audi         a4 quat…   2    2008     4 auto(s… 4        19    27 p     comp…
+#&gt;   9 chevrolet    malibu     2.4  1999     4 auto(l… f        19    27 r     mids…
+#&gt;  10 chevrolet    malibu     2.4  2008     4 auto(l… f        22    30 r     mids…
 #&gt;  # … with 71 more rows
 ```
 
@@ -1213,6 +1222,8 @@ Other choices might be `cyl != 4`, `cyl &gt; 4`, `year == 1999`, `manufacturer==
 ## Exercise
 
 We already saw the weather data. It's not tidy. Let's work to make it tidy.
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -1263,6 +1274,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -1280,17 +1317,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

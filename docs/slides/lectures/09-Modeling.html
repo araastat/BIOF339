@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Statistical Modeling</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
     <meta name="date" content="2019-11-07" />
+    <script src="09-Modeling_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="09-Modeling_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="robot.css" type="text/css" />
     <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
@@ -106,7 +107,7 @@ hist(x) # This is the base R way to create a histogram
 ```
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-1-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -123,7 +124,7 @@ hist(x)
 ```
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-2-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -141,7 +142,7 @@ hist(x)
 ```
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-3-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -167,7 +168,7 @@ plt2 &lt;- ggplot(dd, aes( y)) + geom_histogram()
 
 cowplot::plot_grid(plt1, plt2, nrow=1)
 ```
-![](09-Modeling_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-4-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -184,7 +185,7 @@ plt2 &lt;- ggplot(dd, aes( y)) + geom_histogram()
 
 cowplot::plot_grid(plt1, plt2, nrow=1)
 ```
-![](09-Modeling_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-5-1.png)&lt;!-- --&gt;
 
 ---
 class: middle, center
@@ -252,6 +253,7 @@ visualize(sims)
 
 
 ```r
+library(infer)
 (obs_stat &lt;- pbc %&gt;% mutate(trt=as.factor(trt)) %&gt;% 
   specify(bili ~ trt) %&gt;% 
   calculate(stat='diff in means',order = c('1','2')))
@@ -266,7 +268,7 @@ visualize(sims)
 
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-8-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -305,7 +307,7 @@ sims %&gt;% get_pvalue(obs_stat, direction ='both')
 
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-10-1.png)&lt;!-- --&gt;
 
 ]
 ---
@@ -349,7 +351,7 @@ x &lt;- pbc %&gt;%
 ```
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-13-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -658,11 +660,11 @@ broom::glance(myLinearModel)
 ```
 
 ```
-# A tibble: 1 x 11
+# A tibble: 1 x 12
   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.158         0.155  213.      52.8 3.63e-12     2 -1925. 3856. 3867.
-# … with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.158         0.155  213.      52.8 3.63e-12     1 -1925. 3856. 3867.
+# … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
 ```
 
 ---
@@ -680,7 +682,7 @@ autoplot(myLinearModel)
 ```
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-21-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -699,7 +701,7 @@ ggplot(pbc, aes(x = bili))+geom_density()
 We'd like this to be a bit more "Gaussian" for better behavior
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-23-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -717,7 +719,7 @@ ggplot(pbc, aes(x = log(bili)))+geom_density()
 
 ]
 .pull-right[
-![](09-Modeling_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-25-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -757,7 +759,7 @@ F-statistic: 67.01 on 1 and 282 DF,  p-value: 9.416e-15
 
 # Our first model
 
-![](09-Modeling_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-27-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -768,7 +770,7 @@ F-statistic: 67.01 on 1 and 282 DF,  p-value: 9.416e-15
 autoplot(myLinearModel2, which=1)
 ```
 
-![](09-Modeling_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-28-1.png)&lt;!-- --&gt;
 
 --
 
@@ -780,25 +782,27 @@ autoplot(myLinearModel2, which=1)
 
 
 ```r
-d &lt;- broom::augment(myLinearModel2)
+d &lt;- broom::augment(myLinearModel2, newdata=pbc)
 d
 ```
 
 ```
-# A tibble: 284 x 10
-   .rownames  chol log.bili. .fitted .se.fit .resid    .hat .sigma .cooksd
-   &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
- 1 1           261    2.67      576.    28.1 -315.  0.0181    208. 2.13e-2
- 2 2           302    0.0953    321.    13.7  -18.9 0.00433   209. 1.79e-5
- 3 3           176    0.336     345.    12.8 -169.  0.00373   209. 1.23e-3
- 4 4           244    0.588     370.    12.4 -126.  0.00352   209. 6.41e-4
- 5 5           279    1.22      432.    14.6 -153.  0.00487   209. 1.33e-3
- 6 6           248   -0.223     289.    15.8  -41.4 0.00571   209. 1.14e-4
- 7 7           322    0         311.    14.3   10.5 0.00467   209. 5.98e-6
- 8 8           280   -1.20      193.    24.9   87.5 0.0142    209. 1.28e-3
- 9 9           562    1.16      426.    14.2  136.  0.00463   209. 9.84e-4
-10 10          200    2.53      562.    26.6 -362.  0.0162    208. 2.51e-2
-# … with 274 more rows, and 1 more variable: .std.resid &lt;dbl&gt;
+# A tibble: 418 x 22
+      id  time status   trt   age sex   ascites hepato spiders edema  bili  chol
+   &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;   &lt;int&gt;  &lt;int&gt;   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+ 1     1   400      2     1  58.8 f           1      1       1   1    14.5   261
+ 2     2  4500      0     1  56.4 f           0      1       1   0     1.1   302
+ 3     3  1012      2     1  70.1 m           0      0       0   0.5   1.4   176
+ 4     4  1925      2     1  54.7 f           0      1       1   0.5   1.8   244
+ 5     5  1504      1     2  38.1 f           0      1       1   0     3.4   279
+ 6     6  2503      2     2  66.3 f           0      1       0   0     0.8   248
+ 7     7  1832      0     2  55.5 f           0      1       0   0     1     322
+ 8     8  2466      2     2  53.1 f           0      0       0   0     0.3   280
+ 9     9  2400      2     1  42.5 f           0      0       1   0     3.2   562
+10    10    51      2     2  70.6 f           1      0       1   1    12.6   200
+# … with 408 more rows, and 10 more variables: albumin &lt;dbl&gt;, copper &lt;int&gt;,
+#   alk.phos &lt;dbl&gt;, ast &lt;dbl&gt;, trig &lt;int&gt;, platelet &lt;int&gt;, protime &lt;dbl&gt;,
+#   stage &lt;int&gt;, .fitted &lt;dbl&gt;, .resid &lt;dbl&gt;
 ```
 
 ---
@@ -811,7 +815,7 @@ ggplot(d, aes(x = .fitted, y = .resid))+geom_point()+ geom_smooth(se=F)+
   labs(x = 'Fitted values', y = 'Residual values')
 ```
 
-![](09-Modeling_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/09-Modeling_files/figure-html/09-Modeling-30-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -928,10 +932,10 @@ broom::glance(myLR)
 ```
 
 ```
-# A tibble: 1 x 7
-  null.deviance df.null logLik   AIC   BIC deviance df.residual
-          &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
-1          341.     283  -158.  323.  338.     315.         280
+# A tibble: 1 x 8
+  null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
+          &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+1          341.     283  -158.  323.  338.     315.         280   284
 ```
 
 ---
@@ -1026,7 +1030,7 @@ all_subsets
 
 ```
 Subset selection object
-Call: coursedown::slide2pdf(knitr_in("slides/lectures/09-Modeling.Rmd"))
+Call: regsubsets.formula(mpg ~ ., data = mtcars1)
 16 Variables  (and intercept)
       Forced in Forced out
 cyl6      FALSE      FALSE
@@ -1069,6 +1073,7 @@ summary(all_subsets)$which[ind,]
       carb2       carb3       carb4       carb6       carb8 
       FALSE       FALSE       FALSE       FALSE       FALSE 
 ```
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -1118,9 +1123,25 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -1129,7 +1150,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

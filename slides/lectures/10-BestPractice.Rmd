@@ -123,7 +123,7 @@ class: inverse, middle, center
 
 ## RStudio Projects
 
-```{r,  echo=F, message=F, warning=F}
+```{r 10-BestPractice-1,  echo=F, message=F, warning=F}
 library(magick)
 plt <- image_read('img/project1.png')
 image_scale(plt, "1600")
@@ -132,7 +132,7 @@ image_scale(plt, "1600")
 ---
 
 ## RStudio Projects
-```{r, echo=F, message=F, warning=F}
+```{r 10-BestPractice-2, echo=F, message=F, warning=F}
 plt <- image_read('img/project2.png')
 image_scale(plt, "1600")
 ```
@@ -140,7 +140,7 @@ image_scale(plt, "1600")
 ---
 
 ## RStudio Projects
-```{r,  echo=F, message=F, warning=F}
+```{r 10-BestPractice-3,  echo=F, message=F, warning=F}
 plt <- image_read('img/project3.png')
 image_scale(plt, "1600")
 ```
@@ -148,7 +148,7 @@ image_scale(plt, "1600")
 ---
 
 ## RStudio Projects
-```{r,  echo=F, message=F, warning=F}
+```{r 10-BestPractice-4,  echo=F, message=F, warning=F}
 plt <- image_read('img/project4.png')
 image_scale(plt, "1600")
 ```
@@ -156,7 +156,7 @@ image_scale(plt, "1600")
 ---
 
 ## RStudio Projects
-```{r,  echo=F, message=F, warning=F}
+```{r 10-BestPractice-5,  echo=F, message=F, warning=F}
 plt <- image_read('img/project5.png')
 image_scale(plt, "1600")
 ```
@@ -164,7 +164,7 @@ image_scale(plt, "1600")
 ---
 
 ## RStudio Projects
-```{r,  echo=F, message=F, warning=F}
+```{r 10-BestPractice-6,  echo=F, message=F, warning=F}
 plt <- image_read('img/project6.png')
 image_scale(plt, "1600")
 ```
@@ -172,7 +172,7 @@ image_scale(plt, "1600")
 ---
 
 ## RStudio Projects
-```{r,  echo=F, message=F, warning=F}
+```{r 10-BestPractice-7,  echo=F, message=F, warning=F}
 plt <- image_read('img/project7.png')
 image_scale(plt, "1600")
 ```
@@ -217,7 +217,7 @@ I use [Projects]() so that:
 ---
 
 ## RStudio Projects
-```{r, echo=F}
+```{r 10-BestPractice-8, echo=F}
 plt <- image_read('img/project8.png')
 image_scale(plt, "1600")
 ```
@@ -249,7 +249,7 @@ However, each project needs to maintain a file structure to know where to find t
 ---
 class: center
 
-```{r, echo=F}
+```{r 10-BestPractice-9, echo=F}
 plt <- image_read('img/best_practices_structure.png')
 image_scale(plt, '600x')
 ```
@@ -289,21 +289,21 @@ image_scale(plt, '600x')
 
 ---
 
-```{r, echo=F}
+```{r 10-BestPractice-10, echo=F}
 plt <- image_read('img/roxygen.png')
 image_scale(plt, '1700')
 ```
 
 ---
 
-```{r, echo=F}
+```{r 10-BestPractice-11, echo=F}
 plt <- image_read('img/roxygen2.png')
 image_scale(plt, '1700')
 ```
 
 ----
 
-```{r, echo=F}
+```{r 10-BestPractice-12, echo=F}
 plt <- image_read('img/roxygen3.png')
 image_scale(plt, '1700')
 ```
@@ -317,11 +317,11 @@ image_scale(plt, '1700')
 + Use scripts/functions to derive quantities you need  for other functions
 + Don't hard-code numbers
 
-```{r, echo = T, eval=F}
+```{r 10-BestPractice-13, echo = T, eval=F}
 runif(n = nrow(dat), min = min(dat$age), max = max(dat$age))
 ```
 rather than
-```{r, echo=T, eval=F}
+```{r 10-BestPractice-14, echo=T, eval=F}
 runif(n = 135, min = 18, max = 80)
 ```
 
@@ -343,7 +343,7 @@ runif(n = 135, min = 18, max = 80)
 
 ## Loading your functions
 
-```{r, echo = T, eval=T}
+```{r 10-BestPractice-15, echo = T, eval=T}
 funcfiles <- dir('lib/R', pattern = '.R')
 for(f in funcfiles){
   source(f)
@@ -358,12 +358,12 @@ Suppose you need to load a bunch of packages and aren't sure whether they
 are installed on your system or not. You can certainly look in `installed.packages`, but if you have 1000s of packages, this can be slow.
 
 You can use `require`:
-```{r echo = T, eval = T}
+```{r 10-BestPractice-16, echo = T, eval = T}
 x <- require(ggiraph)
 x
 ```
 A more elegant solution is using the `pacman` package
-```{r echo=T, eval = F}
+```{r 10-BestPractice-17, echo=T, eval = F}
 if (!require("pacman")) install.packages("pacman") # make sure pacman is installed
 pacman::p_load(ggiraph, stargazer, kableExtra)
 ```
@@ -414,7 +414,7 @@ This will install the package if it's not installed, and then load it up.
 ---
 
 ## A general pipeline
-```{r, echo=F}
+```{r 10-BestPractice-18, echo=F}
 plt <- image_read('img/tidypipeline.jpg')
 image_scale(plt, '1600x')
 ```
@@ -455,7 +455,7 @@ Take any RMarkdown document, and pass it through the function `knitr::purl`, and
 ---
 class: center
 
-```{r, echo=F}
+```{r 10-BestPractice-19, echo=F}
 plt <- image_read('img/rmd.png')
 image_scale(plt, '400x')
 ```
@@ -465,10 +465,10 @@ image_scale(plt, '400x')
 ---
 class: center
 
-```{r eval=F, echo=T}
+```{r 10-BestPractice-20, eval=F, echo=T}
 knitr::purl('finding-my-dropbox.Rmd', documentation=2)
 ```
-```{r, echo=F}
+```{r 10-BestPractice-21, echo=F}
 plt <- image_read('img/purl.png')
 image_scale(plt, '600x')
 ```
@@ -476,10 +476,10 @@ image_scale(plt, '600x')
 ---
 class:center
 
-```{r echo=T, eval=F}
+```{r 10-BestPractice-22, echo=T, eval=F}
 knitr::spin('finding-my-dropbox.R', knit = F, format='Rmd')
 ```
-```{r, echo=F}
+```{r 10-BestPractice-23, echo=F}
 plt <- image_read('img/rmd.png')
 image_scale(plt, '600x')
 ```
@@ -677,7 +677,7 @@ This is my second slide
     authoring_bibliographies_and_citations.html</a>
 ]
 .pull-right[
-```{r}
+```{r 10-BestPractice-24}
 knitr::include_graphics('img/templates.png')
 ```
 
@@ -691,7 +691,7 @@ knitr::include_graphics('img/templates.png')
 <tr>
 <td rowspan=2>
 <a href="https://bookdown.org/yihui/rmarkdown" target='_blank'>
-```{r}
+```{r 10-BestPractice-25}
 plt <- image_read('img/rmdcover.png')
 image_scale(plt, '200')
 ```
@@ -699,7 +699,7 @@ image_scale(plt, '200')
 </td>
 <td>
 <a href = "https://bookdown.org/yihui/bookdown" target='_blank'>
-```{r}
+```{r 10-BestPractice-26}
 plt = image_read("img/bookdowncover.jpg")
 image_scale(plt, "100")
 ```
@@ -708,7 +708,7 @@ image_scale(plt, "100")
 <tr>
 <td>
 <a href = "https://bookdown.org/yihui/blogdown" target='_blank'>
-```{r}
+```{r 10-BestPractice-27}
 plt = image_read("img/blogdowncover.png")
 image_scale(plt, "100")
 

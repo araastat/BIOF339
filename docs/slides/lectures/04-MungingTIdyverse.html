@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Practical R: Data Munging in the tidyverse</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
+    <script src="04-MungingTIdyverse_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="04-MungingTIdyverse_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="04-MungingTIdyverse_files/countdown-0.3.3/countdown.css" rel="stylesheet" />
-    <script src="04-MungingTIdyverse_files/countdown-0.3.3/countdown.js"></script>
+    <link href="04-MungingTIdyverse_files/countdown-0.3.5/countdown.css" rel="stylesheet" />
+    <script src="04-MungingTIdyverse_files/countdown-0.3.5/countdown.js"></script>
     <link rel="stylesheet" href="robot.css" type="text/css" />
     <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
     <link rel="stylesheet" href="sfah.css" type="text/css" />
@@ -52,20 +53,20 @@ weather_data &lt;- rio::import('data/weather.csv')
 .pull-left[
 
 ```
-#&gt;         id year month element d1   d2   d3 d4   d5 d6 d7 d8 d9  d10  d11 d12 d13 d14
-#&gt;  1 MX17004 2010     1    tmax NA   NA   NA NA   NA NA NA NA NA   NA   NA  NA  NA  NA
-#&gt;  2 MX17004 2010     1    tmin NA   NA   NA NA   NA NA NA NA NA   NA   NA  NA  NA  NA
-#&gt;  3 MX17004 2010     2    tmax NA 27.3 24.1 NA   NA NA NA NA NA   NA 29.7  NA  NA  NA
-#&gt;  4 MX17004 2010     2    tmin NA 14.4 14.4 NA   NA NA NA NA NA   NA 13.4  NA  NA  NA
-#&gt;  5 MX17004 2010     3    tmax NA   NA   NA NA 32.1 NA NA NA NA 34.5   NA  NA  NA  NA
-#&gt;  6 MX17004 2010     3    tmin NA   NA   NA NA 14.2 NA NA NA NA 16.8   NA  NA  NA  NA
-#&gt;    d15  d16 d17 d18 d19 d20 d21 d22  d23 d24 d25 d26 d27 d28 d29  d30 d31
-#&gt;  1  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 27.8  NA
-#&gt;  2  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 14.5  NA
-#&gt;  3  NA   NA  NA  NA  NA  NA  NA  NA 29.9  NA  NA  NA  NA  NA  NA   NA  NA
-#&gt;  4  NA   NA  NA  NA  NA  NA  NA  NA 10.7  NA  NA  NA  NA  NA  NA   NA  NA
-#&gt;  5  NA 31.1  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA
-#&gt;  6  NA 17.6  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA
+#&gt;         id year month element d1   d2   d3 d4   d5 d6 d7 d8 d9  d10  d11 d12 d13
+#&gt;  1 MX17004 2010     1    tmax NA   NA   NA NA   NA NA NA NA NA   NA   NA  NA  NA
+#&gt;  2 MX17004 2010     1    tmin NA   NA   NA NA   NA NA NA NA NA   NA   NA  NA  NA
+#&gt;  3 MX17004 2010     2    tmax NA 27.3 24.1 NA   NA NA NA NA NA   NA 29.7  NA  NA
+#&gt;  4 MX17004 2010     2    tmin NA 14.4 14.4 NA   NA NA NA NA NA   NA 13.4  NA  NA
+#&gt;  5 MX17004 2010     3    tmax NA   NA   NA NA 32.1 NA NA NA NA 34.5   NA  NA  NA
+#&gt;  6 MX17004 2010     3    tmin NA   NA   NA NA 14.2 NA NA NA NA 16.8   NA  NA  NA
+#&gt;    d14 d15  d16 d17 d18 d19 d20 d21 d22  d23 d24 d25 d26 d27 d28 d29  d30 d31
+#&gt;  1  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 27.8  NA
+#&gt;  2  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA 14.5  NA
+#&gt;  3  NA  NA   NA  NA  NA  NA  NA  NA  NA 29.9  NA  NA  NA  NA  NA  NA   NA  NA
+#&gt;  4  NA  NA   NA  NA  NA  NA  NA  NA  NA 10.7  NA  NA  NA  NA  NA  NA   NA  NA
+#&gt;  5  NA  NA 31.1  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA
+#&gt;  6  NA  NA 17.6  NA  NA  NA  NA  NA  NA   NA  NA  NA  NA  NA  NA  NA   NA  NA
 ```
 ]
 .pull-right[
@@ -521,7 +522,205 @@ You wouldn't want to do exactly this, of course
 #&gt;  140 MX17004 2010     5      d  23  0.0   NA
 #&gt;  141 MX17004 2010     5      d  24  0.0   NA
 #&gt;  142 MX17004 2010     5      d  25  0.0   NA
-#&gt;   [ reached 'max' / getOption("max.print") -- omitted 199 rows ]
+#&gt;  143 MX17004 2010     5      d  26  0.0   NA
+#&gt;  144 MX17004 2010     5      d  27 33.2 18.2
+#&gt;  145 MX17004 2010     5      d  28  0.0   NA
+#&gt;  146 MX17004 2010     5      d  29  0.0   NA
+#&gt;  147 MX17004 2010     5      d   3  0.0   NA
+#&gt;  148 MX17004 2010     5      d  30  0.0   NA
+#&gt;  149 MX17004 2010     5      d  31  0.0   NA
+#&gt;  150 MX17004 2010     5      d   4  0.0   NA
+#&gt;  151 MX17004 2010     5      d   5  0.0   NA
+#&gt;  152 MX17004 2010     5      d   6  0.0   NA
+#&gt;  153 MX17004 2010     5      d   7  0.0   NA
+#&gt;  154 MX17004 2010     5      d   8  0.0   NA
+#&gt;  155 MX17004 2010     5      d   9  0.0   NA
+#&gt;  156 MX17004 2010     6      d   1  0.0   NA
+#&gt;  157 MX17004 2010     6      d  10  0.0   NA
+#&gt;  158 MX17004 2010     6      d  11  0.0   NA
+#&gt;  159 MX17004 2010     6      d  12  0.0   NA
+#&gt;  160 MX17004 2010     6      d  13  0.0   NA
+#&gt;  161 MX17004 2010     6      d  14  0.0   NA
+#&gt;  162 MX17004 2010     6      d  15  0.0   NA
+#&gt;  163 MX17004 2010     6      d  16  0.0   NA
+#&gt;  164 MX17004 2010     6      d  17 28.0 17.5
+#&gt;  165 MX17004 2010     6      d  18  0.0   NA
+#&gt;  166 MX17004 2010     6      d  19  0.0   NA
+#&gt;  167 MX17004 2010     6      d   2  0.0   NA
+#&gt;  168 MX17004 2010     6      d  20  0.0   NA
+#&gt;  169 MX17004 2010     6      d  21  0.0   NA
+#&gt;  170 MX17004 2010     6      d  22  0.0   NA
+#&gt;  171 MX17004 2010     6      d  23  0.0   NA
+#&gt;  172 MX17004 2010     6      d  24  0.0   NA
+#&gt;  173 MX17004 2010     6      d  25  0.0   NA
+#&gt;  174 MX17004 2010     6      d  26  0.0   NA
+#&gt;  175 MX17004 2010     6      d  27  0.0   NA
+#&gt;  176 MX17004 2010     6      d  28  0.0   NA
+#&gt;  177 MX17004 2010     6      d  29 30.1 18.0
+#&gt;  178 MX17004 2010     6      d   3  0.0   NA
+#&gt;  179 MX17004 2010     6      d  30  0.0   NA
+#&gt;  180 MX17004 2010     6      d  31  0.0   NA
+#&gt;  181 MX17004 2010     6      d   4  0.0   NA
+#&gt;  182 MX17004 2010     6      d   5  0.0   NA
+#&gt;  183 MX17004 2010     6      d   6  0.0   NA
+#&gt;  184 MX17004 2010     6      d   7  0.0   NA
+#&gt;  185 MX17004 2010     6      d   8  0.0   NA
+#&gt;  186 MX17004 2010     6      d   9  0.0   NA
+#&gt;  187 MX17004 2010     7      d   1  0.0   NA
+#&gt;  188 MX17004 2010     7      d  10  0.0   NA
+#&gt;  189 MX17004 2010     7      d  11  0.0   NA
+#&gt;  190 MX17004 2010     7      d  12  0.0   NA
+#&gt;  191 MX17004 2010     7      d  13  0.0   NA
+#&gt;  192 MX17004 2010     7      d  14 29.9 16.5
+#&gt;  193 MX17004 2010     7      d  15  0.0   NA
+#&gt;  194 MX17004 2010     7      d  16  0.0   NA
+#&gt;  195 MX17004 2010     7      d  17  0.0   NA
+#&gt;  196 MX17004 2010     7      d  18  0.0   NA
+#&gt;  197 MX17004 2010     7      d  19  0.0   NA
+#&gt;  198 MX17004 2010     7      d   2  0.0   NA
+#&gt;  199 MX17004 2010     7      d  20  0.0   NA
+#&gt;  200 MX17004 2010     7      d  21  0.0   NA
+#&gt;  201 MX17004 2010     7      d  22  0.0   NA
+#&gt;  202 MX17004 2010     7      d  23  0.0   NA
+#&gt;  203 MX17004 2010     7      d  24  0.0   NA
+#&gt;  204 MX17004 2010     7      d  25  0.0   NA
+#&gt;  205 MX17004 2010     7      d  26  0.0   NA
+#&gt;  206 MX17004 2010     7      d  27  0.0   NA
+#&gt;  207 MX17004 2010     7      d  28  0.0   NA
+#&gt;  208 MX17004 2010     7      d  29  0.0   NA
+#&gt;  209 MX17004 2010     7      d   3 28.6 17.5
+#&gt;  210 MX17004 2010     7      d  30  0.0   NA
+#&gt;  211 MX17004 2010     7      d  31  0.0   NA
+#&gt;  212 MX17004 2010     7      d   4  0.0   NA
+#&gt;  213 MX17004 2010     7      d   5  0.0   NA
+#&gt;  214 MX17004 2010     7      d   6  0.0   NA
+#&gt;  215 MX17004 2010     7      d   7  0.0   NA
+#&gt;  216 MX17004 2010     7      d   8  0.0   NA
+#&gt;  217 MX17004 2010     7      d   9  0.0   NA
+#&gt;  218 MX17004 2010     8      d   1  0.0   NA
+#&gt;  219 MX17004 2010     8      d  10  0.0   NA
+#&gt;  220 MX17004 2010     8      d  11  0.0   NA
+#&gt;  221 MX17004 2010     8      d  12  0.0   NA
+#&gt;  222 MX17004 2010     8      d  13 29.8 16.5
+#&gt;  223 MX17004 2010     8      d  14  0.0   NA
+#&gt;  224 MX17004 2010     8      d  15  0.0   NA
+#&gt;  225 MX17004 2010     8      d  16  0.0   NA
+#&gt;  226 MX17004 2010     8      d  17  0.0   NA
+#&gt;  227 MX17004 2010     8      d  18  0.0   NA
+#&gt;  228 MX17004 2010     8      d  19  0.0   NA
+#&gt;  229 MX17004 2010     8      d   2  0.0   NA
+#&gt;  230 MX17004 2010     8      d  20  0.0   NA
+#&gt;  231 MX17004 2010     8      d  21  0.0   NA
+#&gt;  232 MX17004 2010     8      d  22  0.0   NA
+#&gt;  233 MX17004 2010     8      d  23 26.4 15.0
+#&gt;  234 MX17004 2010     8      d  24  0.0   NA
+#&gt;  235 MX17004 2010     8      d  25 29.7 15.6
+#&gt;  236 MX17004 2010     8      d  26  0.0   NA
+#&gt;  237 MX17004 2010     8      d  27  0.0   NA
+#&gt;  238 MX17004 2010     8      d  28  0.0   NA
+#&gt;  239 MX17004 2010     8      d  29 28.0 15.3
+#&gt;  240 MX17004 2010     8      d   3  0.0   NA
+#&gt;  241 MX17004 2010     8      d  30  0.0   NA
+#&gt;  242 MX17004 2010     8      d  31 25.4 15.4
+#&gt;  243 MX17004 2010     8      d   4  0.0   NA
+#&gt;  244 MX17004 2010     8      d   5 29.6 15.8
+#&gt;  245 MX17004 2010     8      d   6  0.0   NA
+#&gt;  246 MX17004 2010     8      d   7  0.0   NA
+#&gt;  247 MX17004 2010     8      d   8 29.0 17.3
+#&gt;  248 MX17004 2010     8      d   9  0.0   NA
+#&gt;  249 MX17004 2010    10      d   1  0.0   NA
+#&gt;  250 MX17004 2010    10      d  10  0.0   NA
+#&gt;  251 MX17004 2010    10      d  11  0.0   NA
+#&gt;  252 MX17004 2010    10      d  12  0.0   NA
+#&gt;  253 MX17004 2010    10      d  13  0.0   NA
+#&gt;  254 MX17004 2010    10      d  14 29.5 13.0
+#&gt;  255 MX17004 2010    10      d  15 28.7 10.5
+#&gt;  256 MX17004 2010    10      d  16  0.0   NA
+#&gt;  257 MX17004 2010    10      d  17  0.0   NA
+#&gt;  258 MX17004 2010    10      d  18  0.0   NA
+#&gt;  259 MX17004 2010    10      d  19  0.0   NA
+#&gt;  260 MX17004 2010    10      d   2  0.0   NA
+#&gt;  261 MX17004 2010    10      d  20  0.0   NA
+#&gt;  262 MX17004 2010    10      d  21  0.0   NA
+#&gt;  263 MX17004 2010    10      d  22  0.0   NA
+#&gt;  264 MX17004 2010    10      d  23  0.0   NA
+#&gt;  265 MX17004 2010    10      d  24  0.0   NA
+#&gt;  266 MX17004 2010    10      d  25  0.0   NA
+#&gt;  267 MX17004 2010    10      d  26  0.0   NA
+#&gt;  268 MX17004 2010    10      d  27  0.0   NA
+#&gt;  269 MX17004 2010    10      d  28 31.2 15.0
+#&gt;  270 MX17004 2010    10      d  29  0.0   NA
+#&gt;  271 MX17004 2010    10      d   3  0.0   NA
+#&gt;  272 MX17004 2010    10      d  30  0.0   NA
+#&gt;  273 MX17004 2010    10      d  31  0.0   NA
+#&gt;  274 MX17004 2010    10      d   4  0.0   NA
+#&gt;  275 MX17004 2010    10      d   5 27.0 14.0
+#&gt;  276 MX17004 2010    10      d   6  0.0   NA
+#&gt;  277 MX17004 2010    10      d   7 28.1 12.9
+#&gt;  278 MX17004 2010    10      d   8  0.0   NA
+#&gt;  279 MX17004 2010    10      d   9  0.0   NA
+#&gt;  280 MX17004 2010    11      d   1  0.0   NA
+#&gt;  281 MX17004 2010    11      d  10  0.0   NA
+#&gt;  282 MX17004 2010    11      d  11  0.0   NA
+#&gt;  283 MX17004 2010    11      d  12  0.0   NA
+#&gt;  284 MX17004 2010    11      d  13  0.0   NA
+#&gt;  285 MX17004 2010    11      d  14  0.0   NA
+#&gt;  286 MX17004 2010    11      d  15  0.0   NA
+#&gt;  287 MX17004 2010    11      d  16  0.0   NA
+#&gt;  288 MX17004 2010    11      d  17  0.0   NA
+#&gt;  289 MX17004 2010    11      d  18  0.0   NA
+#&gt;  290 MX17004 2010    11      d  19  0.0   NA
+#&gt;  291 MX17004 2010    11      d   2 31.3 16.3
+#&gt;  292 MX17004 2010    11      d  20  0.0   NA
+#&gt;  293 MX17004 2010    11      d  21  0.0   NA
+#&gt;  294 MX17004 2010    11      d  22  0.0   NA
+#&gt;  295 MX17004 2010    11      d  23  0.0   NA
+#&gt;  296 MX17004 2010    11      d  24  0.0   NA
+#&gt;  297 MX17004 2010    11      d  25  0.0   NA
+#&gt;  298 MX17004 2010    11      d  26 28.1 12.1
+#&gt;  299 MX17004 2010    11      d  27 27.7 14.2
+#&gt;  300 MX17004 2010    11      d  28  0.0   NA
+#&gt;  301 MX17004 2010    11      d  29  0.0   NA
+#&gt;  302 MX17004 2010    11      d   3  0.0   NA
+#&gt;  303 MX17004 2010    11      d  30  0.0   NA
+#&gt;  304 MX17004 2010    11      d  31  0.0   NA
+#&gt;  305 MX17004 2010    11      d   4 27.2 12.0
+#&gt;  306 MX17004 2010    11      d   5 26.3  7.9
+#&gt;  307 MX17004 2010    11      d   6  0.0   NA
+#&gt;  308 MX17004 2010    11      d   7  0.0   NA
+#&gt;  309 MX17004 2010    11      d   8  0.0   NA
+#&gt;  310 MX17004 2010    11      d   9  0.0   NA
+#&gt;  311 MX17004 2010    12      d   1 29.9 13.8
+#&gt;  312 MX17004 2010    12      d  10  0.0   NA
+#&gt;  313 MX17004 2010    12      d  11  0.0   NA
+#&gt;  314 MX17004 2010    12      d  12  0.0   NA
+#&gt;  315 MX17004 2010    12      d  13  0.0   NA
+#&gt;  316 MX17004 2010    12      d  14  0.0   NA
+#&gt;  317 MX17004 2010    12      d  15  0.0   NA
+#&gt;  318 MX17004 2010    12      d  16  0.0   NA
+#&gt;  319 MX17004 2010    12      d  17  0.0   NA
+#&gt;  320 MX17004 2010    12      d  18  0.0   NA
+#&gt;  321 MX17004 2010    12      d  19  0.0   NA
+#&gt;  322 MX17004 2010    12      d   2  0.0   NA
+#&gt;  323 MX17004 2010    12      d  20  0.0   NA
+#&gt;  324 MX17004 2010    12      d  21  0.0   NA
+#&gt;  325 MX17004 2010    12      d  22  0.0   NA
+#&gt;  326 MX17004 2010    12      d  23  0.0   NA
+#&gt;  327 MX17004 2010    12      d  24  0.0   NA
+#&gt;  328 MX17004 2010    12      d  25  0.0   NA
+#&gt;  329 MX17004 2010    12      d  26  0.0   NA
+#&gt;  330 MX17004 2010    12      d  27  0.0   NA
+#&gt;  331 MX17004 2010    12      d  28  0.0   NA
+#&gt;  332 MX17004 2010    12      d  29  0.0   NA
+#&gt;  333 MX17004 2010    12      d   3  0.0   NA
+#&gt;  334 MX17004 2010    12      d  30  0.0   NA
+#&gt;  335 MX17004 2010    12      d  31  0.0   NA
+#&gt;  336 MX17004 2010    12      d   4  0.0   NA
+#&gt;  337 MX17004 2010    12      d   5  0.0   NA
+#&gt;  338 MX17004 2010    12      d   6 27.8 10.5
+#&gt;  339 MX17004 2010    12      d   7  0.0   NA
+#&gt;  340 MX17004 2010    12      d   8  0.0   NA
+#&gt;  341 MX17004 2010    12      d   9  0.0   NA
 ```
 ]
 ---
@@ -859,6 +1058,10 @@ mpg %&gt;%
 ```
 
 ```
+#&gt;  `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 #&gt;  # A tibble: 4 x 2
 #&gt;      cyl difference
 #&gt;    &lt;int&gt;      &lt;dbl&gt;
@@ -883,6 +1086,13 @@ summary_mpg &lt;- mpg %&gt;%
   group_by(cyl) %&gt;% 
   summarize(difference = mean(differ)) %&gt;% 
   ungroup() 
+```
+
+```
+#&gt;  `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```r
 summary_mpg
 ```
 
@@ -902,7 +1112,7 @@ summary_mpg
 
 Transform the process of tidyfing the weather data into a pipe format
 
-<div class="countdown" id="timer_5dd59b38" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5f547c84" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -932,6 +1142,10 @@ mpg %&gt;%
 ```
 
 ```
+#&gt;  `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
 #&gt;  # A tibble: 7 x 2
 #&gt;    class      avgMPG
 #&gt;    &lt;chr&gt;       &lt;dbl&gt;
@@ -957,6 +1171,10 @@ mpg %&gt;%
   group_by(class) %&gt;% 
   summarize(avgMPG = mean(cty)) %&gt;% 
 * knitr::kable(format='html')
+```
+
+```
+#&gt;  `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 &lt;table&gt;
@@ -1014,6 +1232,10 @@ weather5 %&gt;%
   arrange(month, day) %&gt;% 
   group_by(month) %&gt;% 
   summarize(avgMin = mean(tmin, na.rm=T), avgMax = mean(tmax, na.rm=T))
+```
+
+```
+#&gt;  `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1260,6 +1482,8 @@ There are several ways of saving even large datasets so that they can be quickly
 |-----------|---------|------------------------------------------|-------------------------------------|
 | saveRDS   | base    | `saveRDS(weather, file = 'weather.rds')` | `weather &lt;- readRDS('weather.rds')` |
 | write_fst | fst     | `write_fst(weather, file='weather.fst')` | `weather &lt;- read_fst('weather.fst')` |
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -1310,6 +1534,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -1327,17 +1577,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

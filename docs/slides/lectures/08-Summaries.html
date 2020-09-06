@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Describing and summarizing data</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
+    <script src="08-Summaries_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="08-Summaries_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="robot.css" type="text/css" />
     <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
@@ -205,20 +206,20 @@ brca %&gt;%
 .pull-right[
 
 ```
-#&gt;    NP_958782_Mean NP_958785_Mean NP_958786_Mean NP_000436_Mean
-#&gt;  1      0.3202321      0.3269153      0.3264254      0.3236833
-#&gt;    NP_958781_Mean NP_958780_Mean NP_958783_Mean NP_958784_Mean
-#&gt;  1      0.3270832      0.3263382      0.3259212      0.3259995
-#&gt;    NP_112598_Mean NP_001611_Mean NP_958782_Median NP_958785_Median
-#&gt;  1     -0.3074577      0.4578748        0.3236627        0.3269726
-#&gt;    NP_958786_Median NP_000436_Median NP_958781_Median NP_958780_Median
-#&gt;  1        0.3269726        0.3302826        0.3269726        0.3269726
-#&gt;    NP_958783_Median NP_958784_Median NP_112598_Median NP_001611_Median
-#&gt;  1        0.3269726        0.3269726       -0.6021319        0.6948104
-#&gt;    NP_958782_SD NP_958785_SD NP_958786_SD NP_000436_SD NP_958781_SD
-#&gt;  1    0.9767777    0.9800721    0.9799358    0.9784656    0.9806001
-#&gt;    NP_958780_SD NP_958783_SD NP_958784_SD NP_112598_SD NP_001611_SD
-#&gt;  1    0.9796277    0.9806739    0.9807512     2.024663     1.496951
+#&gt;    NP_958782_Mean NP_958785_Mean NP_958786_Mean NP_000436_Mean NP_958781_Mean
+#&gt;  1      0.3202321      0.3269153      0.3264254      0.3236833      0.3270832
+#&gt;    NP_958780_Mean NP_958783_Mean NP_958784_Mean NP_112598_Mean NP_001611_Mean
+#&gt;  1      0.3263382      0.3259212      0.3259995     -0.3074577      0.4578748
+#&gt;    NP_958782_Median NP_958785_Median NP_958786_Median NP_000436_Median
+#&gt;  1        0.3236627        0.3269726        0.3269726        0.3302826
+#&gt;    NP_958781_Median NP_958780_Median NP_958783_Median NP_958784_Median
+#&gt;  1        0.3269726        0.3269726        0.3269726        0.3269726
+#&gt;    NP_112598_Median NP_001611_Median NP_958782_SD NP_958785_SD NP_958786_SD
+#&gt;  1       -0.6021319        0.6948104    0.9767777    0.9800721    0.9799358
+#&gt;    NP_000436_SD NP_958781_SD NP_958780_SD NP_958783_SD NP_958784_SD NP_112598_SD
+#&gt;  1    0.9784656    0.9806001    0.9796277    0.9806739    0.9807512     2.024663
+#&gt;    NP_001611_SD
+#&gt;  1     1.496951
 ```
 ]
 
@@ -468,7 +469,7 @@ brca &lt;- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %&gt;%
 ```
 
 ```
-#&gt;  Warning: NAs introduced by coercion
+#&gt;  Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion
 ```
 
 ```r
@@ -484,54 +485,54 @@ summary(brca)
 #&gt;                                         3rd Qu.:66.50                      
 #&gt;                                         Max.   :88.00                      
 #&gt;                                         NA's   :1                          
-#&gt;    ER.Status          PR.Status         HER2.Final.Status 
-#&gt;   Length:108         Length:108         Length:108        
-#&gt;   Class :character   Class :character   Class :character  
-#&gt;   Mode  :character   Mode  :character   Mode  :character  
-#&gt;                                                           
-#&gt;                                                           
-#&gt;                                                           
-#&gt;                                                           
-#&gt;      Tumor               Node            Metastasis       
-#&gt;   Length:108         Length:108         Length:108        
-#&gt;   Class :character   Class :character   Class :character  
-#&gt;   Mode  :character   Mode  :character   Mode  :character  
-#&gt;                                                           
-#&gt;                                                           
-#&gt;                                                           
-#&gt;                                                           
-#&gt;    AJCC.Stage        Vital.Status       Days.to.Date.of.Last.Contact
-#&gt;   Length:108         Length:108         Min.   :   0.0              
-#&gt;   Class :character   Class :character   1st Qu.: 237.5              
-#&gt;   Mode  :character   Mode  :character   Median : 654.0              
-#&gt;                                         Mean   : 806.4              
-#&gt;                                         3rd Qu.:1297.5              
-#&gt;                                         Max.   :2850.0              
-#&gt;                                                                     
-#&gt;   Days.to.date.of.Death   NP_958782         NP_958785      
-#&gt;   Min.   : 160.0        Min.   :-1.9478   Min.   :-1.9527  
-#&gt;   1st Qu.: 947.5        1st Qu.:-0.4831   1st Qu.:-0.4804  
-#&gt;   Median :1364.0        Median : 0.3175   Median : 0.3116  
-#&gt;   Mean   :1254.5        Mean   : 0.3201   Mean   : 0.3267  
-#&gt;   3rd Qu.:1627.5        3rd Qu.: 0.9924   3rd Qu.: 0.9962  
-#&gt;   Max.   :2483.0        Max.   : 2.7651   Max.   : 2.7797  
-#&gt;   NA's   :97            NA's   :28        NA's   :28       
-#&gt;     NP_958786         NP_000436         NP_958781         NP_958780      
-#&gt;   Min.   :-1.9552   Min.   :-1.9478   Min.   :-1.9576   Min.   :-1.9552  
-#&gt;   1st Qu.:-0.4831   1st Qu.:-0.4749   1st Qu.:-0.4832   1st Qu.:-0.4859  
-#&gt;   Median : 0.3116   Median : 0.3132   Median : 0.3116   Median : 0.3116  
-#&gt;   Mean   : 0.3262   Mean   : 0.3234   Mean   : 0.3267   Mean   : 0.3261  
-#&gt;   3rd Qu.: 0.9962   3rd Qu.: 0.9919   3rd Qu.: 1.0020   3rd Qu.: 0.9962  
-#&gt;   Max.   : 2.7797   Max.   : 2.7980   Max.   : 2.7870   Max.   : 2.7797  
+#&gt;    ER.Status          PR.Status         HER2.Final.Status     Tumor          
+#&gt;   Length:108         Length:108         Length:108         Length:108        
+#&gt;   Class :character   Class :character   Class :character   Class :character  
+#&gt;   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+#&gt;                                                                              
+#&gt;                                                                              
+#&gt;                                                                              
+#&gt;                                                                              
+#&gt;       Node            Metastasis         AJCC.Stage        Vital.Status      
+#&gt;   Length:108         Length:108         Length:108         Length:108        
+#&gt;   Class :character   Class :character   Class :character   Class :character  
+#&gt;   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+#&gt;                                                                              
+#&gt;                                                                              
+#&gt;                                                                              
+#&gt;                                                                              
+#&gt;   Days.to.Date.of.Last.Contact Days.to.date.of.Death   NP_958782      
+#&gt;   Min.   :   0.0               Min.   : 160.0        Min.   :-1.9478  
+#&gt;   1st Qu.: 237.5               1st Qu.: 947.5        1st Qu.:-0.4831  
+#&gt;   Median : 654.0               Median :1364.0        Median : 0.3175  
+#&gt;   Mean   : 806.4               Mean   :1254.5        Mean   : 0.3201  
+#&gt;   3rd Qu.:1297.5               3rd Qu.:1627.5        3rd Qu.: 0.9924  
+#&gt;   Max.   :2850.0               Max.   :2483.0        Max.   : 2.7651  
+#&gt;                                NA's   :97            NA's   :28       
+#&gt;     NP_958785         NP_958786         NP_000436         NP_958781      
+#&gt;   Min.   :-1.9527   Min.   :-1.9552   Min.   :-1.9478   Min.   :-1.9576  
+#&gt;   1st Qu.:-0.4804   1st Qu.:-0.4831   1st Qu.:-0.4749   1st Qu.:-0.4832  
+#&gt;   Median : 0.3116   Median : 0.3116   Median : 0.3132   Median : 0.3116  
+#&gt;   Mean   : 0.3267   Mean   : 0.3262   Mean   : 0.3234   Mean   : 0.3267  
+#&gt;   3rd Qu.: 0.9962   3rd Qu.: 0.9962   3rd Qu.: 0.9919   3rd Qu.: 1.0020  
+#&gt;   Max.   : 2.7797   Max.   : 2.7797   Max.   : 2.7980   Max.   : 2.7870  
 #&gt;   NA's   :28        NA's   :28        NA's   :28        NA's   :28       
-#&gt;     NP_958783         NP_958784         NP_112598         NP_001611      
-#&gt;   Min.   :-1.9552   Min.   :-1.9552   Min.   :-4.9527   Min.   :-2.5751  
-#&gt;   1st Qu.:-0.4831   1st Qu.:-0.4831   1st Qu.:-1.7264   1st Qu.:-0.5562  
-#&gt;   Median : 0.3116   Median : 0.3116   Median :-0.6596   Median : 0.6084  
-#&gt;   Mean   : 0.3257   Mean   : 0.3258   Mean   :-0.3046   Mean   : 0.3830  
-#&gt;   3rd Qu.: 0.9962   3rd Qu.: 0.9962   3rd Qu.: 1.0183   3rd Qu.: 1.3563  
-#&gt;   Max.   : 2.7834   Max.   : 2.7834   Max.   : 4.9557   Max.   : 3.4365  
-#&gt;   NA's   :28        NA's   :28        NA's   :28        NA's   :28
+#&gt;     NP_958780         NP_958783         NP_958784         NP_112598      
+#&gt;   Min.   :-1.9552   Min.   :-1.9552   Min.   :-1.9552   Min.   :-4.9527  
+#&gt;   1st Qu.:-0.4859   1st Qu.:-0.4831   1st Qu.:-0.4831   1st Qu.:-1.7264  
+#&gt;   Median : 0.3116   Median : 0.3116   Median : 0.3116   Median :-0.6596  
+#&gt;   Mean   : 0.3261   Mean   : 0.3257   Mean   : 0.3258   Mean   :-0.3046  
+#&gt;   3rd Qu.: 0.9962   3rd Qu.: 0.9962   3rd Qu.: 0.9962   3rd Qu.: 1.0183  
+#&gt;   Max.   : 2.7797   Max.   : 2.7834   Max.   : 2.7834   Max.   : 4.9557  
+#&gt;   NA's   :28        NA's   :28        NA's   :28        NA's   :28       
+#&gt;     NP_001611      
+#&gt;   Min.   :-2.5751  
+#&gt;   1st Qu.:-0.5562  
+#&gt;   Median : 0.6084  
+#&gt;   Mean   : 0.3830  
+#&gt;   3rd Qu.: 1.3563  
+#&gt;   Max.   : 3.4365  
+#&gt;   NA's   :28
 ```
 
 ---
@@ -555,7 +556,7 @@ brca &lt;- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %&gt;%
 ```
 
 ```
-#&gt;  Warning: NAs introduced by coercion
+#&gt;  Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion
 ```
 
 ```r
@@ -861,8 +862,8 @@ There are missing values now, so we have to use `na.rm=T`.
 #&gt;  1 Negative         NA        NA        NA        NA        NA        NA
 #&gt;  2 Positive         NA        NA        NA        NA        NA        NA
 #&gt;  3 &lt;NA&gt;             NA        NA        NA        NA        NA        NA
-#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;,
-#&gt;  #   NP_112598 &lt;dbl&gt;, NP_001611 &lt;dbl&gt;
+#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;, NP_112598 &lt;dbl&gt;,
+#&gt;  #   NP_001611 &lt;dbl&gt;
 ```
 ]
 
@@ -888,8 +889,8 @@ We still have a row for the missing values of ER.Status
 #&gt;  1 Negative      0.429     0.438     0.439     0.432     0.436     0.436
 #&gt;  2 Positive      0.267     0.273     0.272     0.271     0.274     0.273
 #&gt;  3 &lt;NA&gt;        NaN       NaN       NaN       NaN       NaN       NaN    
-#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;,
-#&gt;  #   NP_112598 &lt;dbl&gt;, NP_001611 &lt;dbl&gt;
+#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;, NP_112598 &lt;dbl&gt;,
+#&gt;  #   NP_001611 &lt;dbl&gt;
 ```
 ]
 
@@ -916,8 +917,8 @@ How about reversing the rows and columns for readability
 #&gt;    &lt;fct&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
 #&gt;  1 Negative      0.429     0.438     0.439     0.432     0.436     0.436
 #&gt;  2 Positive      0.267     0.273     0.272     0.271     0.274     0.273
-#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;,
-#&gt;  #   NP_112598 &lt;dbl&gt;, NP_001611 &lt;dbl&gt;
+#&gt;  # … with 4 more variables: NP_958783 &lt;dbl&gt;, NP_958784 &lt;dbl&gt;, NP_112598 &lt;dbl&gt;,
+#&gt;  #   NP_001611 &lt;dbl&gt;
 ```
 ]
 
@@ -1047,11 +1048,10 @@ t.test(NP_958782 ~ ER.Status, data=brca) %&gt;%
 
 ```
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352     0.676
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 ```
 
 --
@@ -1089,341 +1089,1087 @@ brca %&gt;%
 .pull-right[
 
 ```
-#&gt;      ER.Status   protein  expression
-#&gt;  1    Negative NP_958782          NA
-#&gt;  2    Negative NP_958782  0.68340354
-#&gt;  3    Negative NP_958782          NA
-#&gt;  4    Negative NP_958782  0.19534065
-#&gt;  5    Negative NP_958782          NA
-#&gt;  6    Negative NP_958782 -1.12317308
-#&gt;  7    Negative NP_958782  0.53859578
-#&gt;  8    Negative NP_958782          NA
-#&gt;  9    Negative NP_958782  0.83113175
-#&gt;  10   Negative NP_958782  0.65584968
-#&gt;  11   Negative NP_958782  0.10749090
-#&gt;  12   Negative NP_958782 -0.39855983
-#&gt;  13   Negative NP_958782 -0.10667998
-#&gt;  14   Negative NP_958782 -1.94779243
-#&gt;  15   Negative NP_958782  0.32366271
-#&gt;  16   Negative NP_958782  2.45513793
-#&gt;  17   Negative NP_958782 -0.03322133
-#&gt;  18   Negative NP_958782          NA
-#&gt;  19   Negative NP_958782  0.35053566
-#&gt;  20   Negative NP_958782  0.67390470
-#&gt;  21   Negative NP_958782  2.60994298
-#&gt;  22   Negative NP_958782  2.70725015
-#&gt;  23   Negative NP_958782  0.14018179
-#&gt;  24   Negative NP_958782          NA
-#&gt;  25   Negative NP_958782 -1.08652907
-#&gt;  26   Negative NP_958782          NA
-#&gt;  27       &lt;NA&gt; NP_958782          NA
-#&gt;  28   Negative NP_958782          NA
-#&gt;  29   Negative NP_958782          NA
-#&gt;  30   Negative NP_958782          NA
-#&gt;  31   Negative NP_958782  1.09613118
-#&gt;  32   Negative NP_958782  1.10068807
-#&gt;  33   Negative NP_958782  0.55977697
-#&gt;  34   Negative NP_958782 -0.91267028
-#&gt;  35   Positive NP_958782  1.87398183
-#&gt;  36   Positive NP_958782 -1.52334349
-#&gt;  37   Positive NP_958782 -0.58342864
-#&gt;  38   Negative NP_958782  1.40757026
-#&gt;  39   Negative NP_958782          NA
-#&gt;  40   Negative NP_958782          NA
-#&gt;  41   Positive NP_958782 -0.20491791
-#&gt;  42   Negative NP_958782 -0.78719498
-#&gt;  43   Positive NP_958782 -0.49405958
-#&gt;  44   Negative NP_958782  1.12050183
-#&gt;  45   Positive NP_958782  2.76508066
-#&gt;  46   Positive NP_958782 -1.10167521
-#&gt;  47   Positive NP_958782  1.10126053
-#&gt;  48   Positive NP_958782          NA
-#&gt;  49   Positive NP_958782          NA
-#&gt;  50   Positive NP_958782          NA
-#&gt;  51   Positive NP_958782          NA
-#&gt;  52   Positive NP_958782          NA
-#&gt;  53   Positive NP_958782  0.31131919
-#&gt;  54   Positive NP_958782  0.76204441
-#&gt;  55   Positive NP_958782  0.79397556
-#&gt;  56   Positive NP_958782          NA
-#&gt;  57   Positive NP_958782  0.06377853
-#&gt;  58   Positive NP_958782  0.45298593
-#&gt;  59   Positive NP_958782  0.81882406
-#&gt;  60   Positive NP_958782  0.02000705
-#&gt;  61   Positive NP_958782 -0.06583842
-#&gt;  62   Positive NP_958782  0.26485911
-#&gt;  63   Positive NP_958782  0.19587669
-#&gt;  64   Positive NP_958782  1.18510823
-#&gt;  65   Positive NP_958782  0.75718813
-#&gt;  66   Positive NP_958782  0.56889458
-#&gt;  67   Positive NP_958782  0.38458773
-#&gt;  68   Positive NP_958782  0.46108752
-#&gt;  69   Positive NP_958782  1.22250730
-#&gt;  70   Positive NP_958782  0.57830868
-#&gt;  71   Positive NP_958782 -0.51836650
-#&gt;  72   Positive NP_958782 -0.20563748
-#&gt;  73   Positive NP_958782  1.46666516
-#&gt;  74   Positive NP_958782  0.86265926
-#&gt;  75   Positive NP_958782  1.05322494
-#&gt;  76   Positive NP_958782 -0.48777247
-#&gt;  77   Positive NP_958782 -0.26503035
-#&gt;  78   Positive NP_958782          NA
-#&gt;  79   Positive NP_958782          NA
-#&gt;  80   Positive NP_958782  1.27918472
-#&gt;  81   Positive NP_958782 -1.00123984
-#&gt;  82   Positive NP_958782  0.58371325
-#&gt;  83   Positive NP_958782 -0.07820182
-#&gt;  84   Positive NP_958782  1.17488099
-#&gt;  85   Positive NP_958782          NA
-#&gt;  86   Positive NP_958782          NA
-#&gt;  87   Positive NP_958782 -0.30726684
-#&gt;  88   Positive NP_958782  1.39524718
-#&gt;  89   Positive NP_958782 -0.65982805
-#&gt;  90   Positive NP_958782 -0.96390393
-#&gt;  91   Positive NP_958782  0.23854713
-#&gt;  92   Positive NP_958782 -0.49640909
-#&gt;  93   Positive NP_958782  1.04895925
-#&gt;  94   Positive NP_958782          NA
-#&gt;  95   Positive NP_958782          NA
-#&gt;  96   Positive NP_958782 -0.42818149
-#&gt;  97   Positive NP_958782  1.50196696
-#&gt;  98   Positive NP_958782          NA
-#&gt;  99   Positive NP_958782  0.97356417
-#&gt;  100  Positive NP_958782 -0.51142119
-#&gt;  101  Positive NP_958782 -1.51427833
-#&gt;  102  Positive NP_958782 -0.75982306
-#&gt;  103  Positive NP_958782          NA
-#&gt;  104  Positive NP_958782 -0.55221197
-#&gt;  105  Positive NP_958782 -0.69231577
-#&gt;  106  Positive NP_958782 -0.48155015
-#&gt;  107  Positive NP_958782          NA
-#&gt;  108  Positive NP_958782  2.18012330
-#&gt;  109  Negative NP_958785          NA
-#&gt;  110  Negative NP_958785  0.69442409
-#&gt;  111  Negative NP_958785          NA
-#&gt;  112  Negative NP_958785  0.21541294
-#&gt;  113  Negative NP_958785          NA
-#&gt;  114  Negative NP_958785 -1.12317308
-#&gt;  115  Negative NP_958785  0.54221052
-#&gt;  116  Negative NP_958785          NA
-#&gt;  117  Negative NP_958785  0.85653983
-#&gt;  118  Negative NP_958785  0.65814259
-#&gt;  119  Negative NP_958785  0.10416449
-#&gt;  120  Negative NP_958785 -0.39260141
-#&gt;  121  Negative NP_958785 -0.10667998
-#&gt;  122  Negative NP_958785 -1.95271766
-#&gt;  123  Negative NP_958785  0.32697264
-#&gt;  124  Negative NP_958785  2.48013666
-#&gt;  125  Negative NP_958785 -0.03021642
-#&gt;  126  Negative NP_958785          NA
-#&gt;  127  Negative NP_958785  0.36740533
-#&gt;  128  Negative NP_958785  0.68871756
-#&gt;  129  Negative NP_958785  2.65042179
-#&gt;  130  Negative NP_958785  2.73383192
-#&gt;  131  Negative NP_958785  0.12605376
-#&gt;  132  Negative NP_958785          NA
-#&gt;  133  Negative NP_958785 -1.09549238
-#&gt;  134  Negative NP_958785          NA
-#&gt;  135      &lt;NA&gt; NP_958785          NA
-#&gt;  136  Negative NP_958785          NA
-#&gt;  137  Negative NP_958785          NA
-#&gt;  138  Negative NP_958785          NA
-#&gt;  139  Negative NP_958785  1.11137037
-#&gt;  140  Negative NP_958785  1.10068807
-#&gt;  141  Negative NP_958785  0.56340687
-#&gt;  142  Negative NP_958785 -0.92797866
-#&gt;  143  Positive NP_958785  1.87038310
-#&gt;  144  Positive NP_958785 -1.51264622
-#&gt;  145  Positive NP_958785 -0.57254887
-#&gt;  146  Negative NP_958785  1.40757026
-#&gt;  147  Negative NP_958785          NA
-#&gt;  148  Negative NP_958785          NA
-#&gt;  149  Positive NP_958785 -0.16241849
-#&gt;  150  Negative NP_958785 -0.75594056
-#&gt;  151  Positive NP_958785 -0.50389919
-#&gt;  152  Negative NP_958785  1.13761779
-#&gt;  153  Positive NP_958785  2.77970922
-#&gt;  154  Positive NP_958785 -1.10878258
-#&gt;  155  Positive NP_958785  1.10126053
-#&gt;  156  Positive NP_958785          NA
-#&gt;  157  Positive NP_958785          NA
-#&gt;  158  Positive NP_958785          NA
-#&gt;  159  Positive NP_958785          NA
-#&gt;  160  Positive NP_958785          NA
-#&gt;  161  Positive NP_958785  0.29617712
-#&gt;  162  Positive NP_958785  0.76204441
-#&gt;  163  Positive NP_958785  0.81818151
-#&gt;  164  Positive NP_958785          NA
-#&gt;  165  Positive NP_958785  0.09333637
-#&gt;  166  Positive NP_958785  0.47259013
-#&gt;  167  Positive NP_958785  0.81487725
-#&gt;  168  Positive NP_958785  0.01195532
-#&gt;  169  Positive NP_958785 -0.05589267
-#&gt;  170  Positive NP_958785  0.27571131
-#&gt;  171  Positive NP_958785  0.19587669
-#&gt;  172  Positive NP_958785  1.19261195
-#&gt;  173  Positive NP_958785  0.78087066
-#&gt;  174  Positive NP_958785  0.56889458
-#&gt;  175  Positive NP_958785  0.37139283
-#&gt;  176  Positive NP_958785  0.46108752
-#&gt;  177  Positive NP_958785  1.21897360
-#&gt;  178  Positive NP_958785  0.58221285
-#&gt;  179  Positive NP_958785 -0.51000200
-#&gt;  180  Positive NP_958785 -0.20563748
-#&gt;  181  Positive NP_958785  1.48228346
-#&gt;  182  Positive NP_958785  0.87018604
-#&gt;  183  Positive NP_958785  1.05594815
-#&gt;  184  Positive NP_958785 -0.48777247
-#&gt;  185  Positive NP_958785 -0.25164229
-#&gt;  186  Positive NP_958785          NA
-#&gt;  187  Positive NP_958785          NA
-#&gt;  188  Positive NP_958785  1.27516713
-#&gt;  189  Positive NP_958785 -1.00461982
-#&gt;  190  Positive NP_958785  0.58062313
-#&gt;  191  Positive NP_958785 -0.06805814
-#&gt;  192  Positive NP_958785  1.18320879
-#&gt;  193  Positive NP_958785          NA
-#&gt;  194  Positive NP_958785          NA
-#&gt;  195  Positive NP_958785 -0.30726684
-#&gt;  196  Positive NP_958785  1.40892213
-#&gt;  197  Positive NP_958785 -0.64874215
-#&gt;  198  Positive NP_958785 -0.93820953
-#&gt;  199  Positive NP_958785  0.24981815
-#&gt;  200  Positive NP_958785 -0.49850890
-#&gt;  201  Positive NP_958785  1.05225694
-#&gt;  202  Positive NP_958785          NA
-#&gt;  203  Positive NP_958785          NA
-#&gt;  204  Positive NP_958785 -0.40637805
-#&gt;  205  Positive NP_958785  1.51034838
-#&gt;  206  Positive NP_958785          NA
-#&gt;  207  Positive NP_958785  0.97747606
-#&gt;  208  Positive NP_958785 -0.52606668
-#&gt;  209  Positive NP_958785 -1.52828543
-#&gt;  210  Positive NP_958785 -0.75982306
-#&gt;  211  Positive NP_958785          NA
-#&gt;  212  Positive NP_958785 -0.54774937
-#&gt;  213  Positive NP_958785 -0.65946866
-#&gt;  214  Positive NP_958785 -0.47788983
-#&gt;  215  Positive NP_958785          NA
-#&gt;  216  Positive NP_958785  2.18012330
-#&gt;  217  Negative NP_958786          NA
-#&gt;  218  Negative NP_958786  0.69809760
-#&gt;  219  Negative NP_958786          NA
-#&gt;  220  Negative NP_958786  0.21541294
-#&gt;  221  Negative NP_958786          NA
-#&gt;  222  Negative NP_958786 -1.11686051
-#&gt;  223  Negative NP_958786  0.54221052
-#&gt;  224  Negative NP_958786          NA
-#&gt;  225  Negative NP_958786  0.85653983
-#&gt;  226  Negative NP_958786  0.65584968
-#&gt;  227  Negative NP_958786  0.10749090
-#&gt;  228  Negative NP_958786 -0.39260141
-#&gt;  229  Negative NP_958786 -0.10667998
-#&gt;  230  Negative NP_958786 -1.95518028
-#&gt;  231  Negative NP_958786  0.32697264
-#&gt;  232  Negative NP_958786  2.48013666
-#&gt;  233  Negative NP_958786 -0.02721152
-#&gt;  234  Negative NP_958786          NA
-#&gt;  235  Negative NP_958786  0.36740533
-#&gt;  236  Negative NP_958786  0.68871756
-#&gt;  237  Negative NP_958786  2.65042179
-#&gt;  238  Negative NP_958786  2.73762932
-#&gt;  239  Negative NP_958786  0.13311778
-#&gt;  240  Negative NP_958786          NA
-#&gt;  241  Negative NP_958786 -1.09549238
-#&gt;  242  Negative NP_958786          NA
-#&gt;  243      &lt;NA&gt; NP_958786          NA
-#&gt;  244  Negative NP_958786          NA
-#&gt;  245  Negative NP_958786          NA
-#&gt;  246  Negative NP_958786          NA
-#&gt;  247  Negative NP_958786  1.11137037
-#&gt;  248  Negative NP_958786  1.10068807
-#&gt;  249  Negative NP_958786  0.55977697
-#&gt;  250  Negative NP_958786 -0.92797866
-#&gt;  251  Positive NP_958786  1.87038310
-#&gt;  252  Positive NP_958786 -1.50997191
-#&gt;  253  Positive NP_958786 -0.56710898
-#&gt;  254  Negative NP_958786  1.41031183
-#&gt;  255  Negative NP_958786          NA
-#&gt;  256  Negative NP_958786          NA
-#&gt;  257  Positive NP_958786 -0.16666843
-#&gt;  258  Negative NP_958786 -0.75594056
-#&gt;  259  Positive NP_958786 -0.50061932
-#&gt;  260  Negative NP_958786  1.13761779
-#&gt;  261  Positive NP_958786  2.77970922
-#&gt;  262  Positive NP_958786 -1.10878258
-#&gt;  263  Positive NP_958786  1.09776669
-#&gt;  264  Positive NP_958786          NA
-#&gt;  265  Positive NP_958786          NA
-#&gt;  266  Positive NP_958786          NA
-#&gt;  267  Positive NP_958786          NA
-#&gt;  268  Positive NP_958786          NA
-#&gt;  269  Positive NP_958786  0.29617712
-#&gt;  270  Positive NP_958786  0.76638435
-#&gt;  271  Positive NP_958786  0.81472351
-#&gt;  272  Positive NP_958786          NA
-#&gt;  273  Positive NP_958786  0.08446902
-#&gt;  274  Positive NP_958786  0.47259013
-#&gt;  275  Positive NP_958786  0.81487725
-#&gt;  276  Positive NP_958786  0.01195532
-#&gt;  277  Positive NP_958786 -0.06583842
-#&gt;  278  Positive NP_958786  0.27571131
-#&gt;  279  Positive NP_958786  0.19587669
-#&gt;  280  Positive NP_958786  1.18886009
-#&gt;  281  Positive NP_958786  0.77410422
-#&gt;  282  Positive NP_958786  0.56889458
-#&gt;  283  Positive NP_958786  0.37139283
-#&gt;  284  Positive NP_958786  0.46108752
-#&gt;  285  Positive NP_958786  1.22250730
-#&gt;  286  Positive NP_958786  0.57830868
-#&gt;  287  Positive NP_958786 -0.50721383
-#&gt;  288  Positive NP_958786 -0.20563748
-#&gt;  289  Positive NP_958786  1.47447431
-#&gt;  290  Positive NP_958786  0.87018604
-#&gt;  291  Positive NP_958786  1.05594815
-#&gt;  292  Positive NP_958786 -0.48777247
-#&gt;  293  Positive NP_958786 -0.25164229
-#&gt;  294  Positive NP_958786          NA
-#&gt;  295  Positive NP_958786          NA
-#&gt;  296  Positive NP_958786  1.27516713
-#&gt;  297  Positive NP_958786 -1.00461982
-#&gt;  298  Positive NP_958786  0.58062313
-#&gt;  299  Positive NP_958786 -0.07143937
-#&gt;  300  Positive NP_958786  1.18320879
-#&gt;  301  Positive NP_958786          NA
-#&gt;  302  Positive NP_958786          NA
-#&gt;  303  Positive NP_958786 -0.30726684
-#&gt;  304  Positive NP_958786  1.41234087
-#&gt;  305  Positive NP_958786 -0.65428510
-#&gt;  306  Positive NP_958786 -0.94391940
-#&gt;  307  Positive NP_958786  0.24418264
-#&gt;  308  Positive NP_958786 -0.49640909
-#&gt;  309  Positive NP_958786  1.05225694
-#&gt;  310  Positive NP_958786          NA
-#&gt;  311  Positive NP_958786          NA
-#&gt;  312  Positive NP_958786 -0.40637805
-#&gt;  313  Positive NP_958786  1.50196696
-#&gt;  314  Positive NP_958786          NA
-#&gt;  315  Positive NP_958786  0.97747606
-#&gt;  316  Positive NP_958786 -0.52606668
-#&gt;  317  Positive NP_958786 -1.52828543
-#&gt;  318  Positive NP_958786 -0.74911369
-#&gt;  319  Positive NP_958786          NA
-#&gt;  320  Positive NP_958786 -0.55221197
-#&gt;  321  Positive NP_958786 -0.66416111
-#&gt;  322  Positive NP_958786 -0.48155015
-#&gt;  323  Positive NP_958786          NA
-#&gt;  324  Positive NP_958786  2.18012330
-#&gt;  325  Negative NP_000436          NA
-#&gt;  326  Negative NP_000436  0.68707705
-#&gt;  327  Negative NP_000436          NA
-#&gt;  328  Negative NP_000436  0.20537680
-#&gt;  329  Negative NP_000436          NA
-#&gt;  330  Negative NP_000436 -1.12948566
-#&gt;  331  Negative NP_000436  0.53498104
-#&gt;  332  Negative NP_000436          NA
-#&gt;  333  Negative NP_000436  0.83677799
-#&gt;   [ reached 'max' / getOption("max.print") -- omitted 747 rows ]
+#&gt;       ER.Status   protein   expression
+#&gt;  1     Negative NP_958782           NA
+#&gt;  2     Negative NP_958782  0.683403537
+#&gt;  3     Negative NP_958782           NA
+#&gt;  4     Negative NP_958782  0.195340653
+#&gt;  5     Negative NP_958782           NA
+#&gt;  6     Negative NP_958782 -1.123173085
+#&gt;  7     Negative NP_958782  0.538595778
+#&gt;  8     Negative NP_958782           NA
+#&gt;  9     Negative NP_958782  0.831131746
+#&gt;  10    Negative NP_958782  0.655849679
+#&gt;  11    Negative NP_958782  0.107490904
+#&gt;  12    Negative NP_958782 -0.398559835
+#&gt;  13    Negative NP_958782 -0.106679982
+#&gt;  14    Negative NP_958782 -1.947792427
+#&gt;  15    Negative NP_958782  0.323662708
+#&gt;  16    Negative NP_958782  2.455137931
+#&gt;  17    Negative NP_958782 -0.033221329
+#&gt;  18    Negative NP_958782           NA
+#&gt;  19    Negative NP_958782  0.350535663
+#&gt;  20    Negative NP_958782  0.673904701
+#&gt;  21    Negative NP_958782  2.609942977
+#&gt;  22    Negative NP_958782  2.707250153
+#&gt;  23    Negative NP_958782  0.140181795
+#&gt;  24    Negative NP_958782           NA
+#&gt;  25    Negative NP_958782 -1.086529070
+#&gt;  26    Negative NP_958782           NA
+#&gt;  27        &lt;NA&gt; NP_958782           NA
+#&gt;  28    Negative NP_958782           NA
+#&gt;  29    Negative NP_958782           NA
+#&gt;  30    Negative NP_958782           NA
+#&gt;  31    Negative NP_958782  1.096131182
+#&gt;  32    Negative NP_958782  1.100688066
+#&gt;  33    Negative NP_958782  0.559776970
+#&gt;  34    Negative NP_958782 -0.912670278
+#&gt;  35    Positive NP_958782  1.873981833
+#&gt;  36    Positive NP_958782 -1.523343490
+#&gt;  37    Positive NP_958782 -0.583428637
+#&gt;  38    Negative NP_958782  1.407570262
+#&gt;  39    Negative NP_958782           NA
+#&gt;  40    Negative NP_958782           NA
+#&gt;  41    Positive NP_958782 -0.204917912
+#&gt;  42    Negative NP_958782 -0.787194984
+#&gt;  43    Positive NP_958782 -0.494059581
+#&gt;  44    Negative NP_958782  1.120501833
+#&gt;  45    Positive NP_958782  2.765080659
+#&gt;  46    Positive NP_958782 -1.101675210
+#&gt;  47    Positive NP_958782  1.101260533
+#&gt;  48    Positive NP_958782           NA
+#&gt;  49    Positive NP_958782           NA
+#&gt;  50    Positive NP_958782           NA
+#&gt;  51    Positive NP_958782           NA
+#&gt;  52    Positive NP_958782           NA
+#&gt;  53    Positive NP_958782  0.311319194
+#&gt;  54    Positive NP_958782  0.762044407
+#&gt;  55    Positive NP_958782  0.793975555
+#&gt;  56    Positive NP_958782           NA
+#&gt;  57    Positive NP_958782  0.063778527
+#&gt;  58    Positive NP_958782  0.452985925
+#&gt;  59    Positive NP_958782  0.818824062
+#&gt;  60    Positive NP_958782  0.020007050
+#&gt;  61    Positive NP_958782 -0.065838424
+#&gt;  62    Positive NP_958782  0.264859107
+#&gt;  63    Positive NP_958782  0.195876687
+#&gt;  64    Positive NP_958782  1.185108231
+#&gt;  65    Positive NP_958782  0.757188126
+#&gt;  66    Positive NP_958782  0.568894580
+#&gt;  67    Positive NP_958782  0.384587729
+#&gt;  68    Positive NP_958782  0.461087521
+#&gt;  69    Positive NP_958782  1.222507296
+#&gt;  70    Positive NP_958782  0.578308676
+#&gt;  71    Positive NP_958782 -0.518366498
+#&gt;  72    Positive NP_958782 -0.205637484
+#&gt;  73    Positive NP_958782  1.466665164
+#&gt;  74    Positive NP_958782  0.862659263
+#&gt;  75    Positive NP_958782  1.053224940
+#&gt;  76    Positive NP_958782 -0.487772474
+#&gt;  77    Positive NP_958782 -0.265030351
+#&gt;  78    Positive NP_958782           NA
+#&gt;  79    Positive NP_958782           NA
+#&gt;  80    Positive NP_958782  1.279184725
+#&gt;  81    Positive NP_958782 -1.001239843
+#&gt;  82    Positive NP_958782  0.583713254
+#&gt;  83    Positive NP_958782 -0.078201822
+#&gt;  84    Positive NP_958782  1.174880993
+#&gt;  85    Positive NP_958782           NA
+#&gt;  86    Positive NP_958782           NA
+#&gt;  87    Positive NP_958782 -0.307266841
+#&gt;  88    Positive NP_958782  1.395247180
+#&gt;  89    Positive NP_958782 -0.659828047
+#&gt;  90    Positive NP_958782 -0.963903926
+#&gt;  91    Positive NP_958782  0.238547130
+#&gt;  92    Positive NP_958782 -0.496409093
+#&gt;  93    Positive NP_958782  1.048959250
+#&gt;  94    Positive NP_958782           NA
+#&gt;  95    Positive NP_958782           NA
+#&gt;  96    Positive NP_958782 -0.428181490
+#&gt;  97    Positive NP_958782  1.501966964
+#&gt;  98    Positive NP_958782           NA
+#&gt;  99    Positive NP_958782  0.973564168
+#&gt;  100   Positive NP_958782 -0.511421193
+#&gt;  101   Positive NP_958782 -1.514278334
+#&gt;  102   Positive NP_958782 -0.759823056
+#&gt;  103   Positive NP_958782           NA
+#&gt;  104   Positive NP_958782 -0.552211965
+#&gt;  105   Positive NP_958782 -0.692315765
+#&gt;  106   Positive NP_958782 -0.481550154
+#&gt;  107   Positive NP_958782           NA
+#&gt;  108   Positive NP_958782  2.180123300
+#&gt;  109   Negative NP_958785           NA
+#&gt;  110   Negative NP_958785  0.694424088
+#&gt;  111   Negative NP_958785           NA
+#&gt;  112   Negative NP_958785  0.215412944
+#&gt;  113   Negative NP_958785           NA
+#&gt;  114   Negative NP_958785 -1.123173085
+#&gt;  115   Negative NP_958785  0.542210518
+#&gt;  116   Negative NP_958785           NA
+#&gt;  117   Negative NP_958785  0.856539831
+#&gt;  118   Negative NP_958785  0.658142590
+#&gt;  119   Negative NP_958785  0.104164490
+#&gt;  120   Negative NP_958785 -0.392601414
+#&gt;  121   Negative NP_958785 -0.106679982
+#&gt;  122   Negative NP_958785 -1.952717659
+#&gt;  123   Negative NP_958785  0.326972641
+#&gt;  124   Negative NP_958785  2.480136657
+#&gt;  125   Negative NP_958785 -0.030216424
+#&gt;  126   Negative NP_958785           NA
+#&gt;  127   Negative NP_958785  0.367405326
+#&gt;  128   Negative NP_958785  0.688717560
+#&gt;  129   Negative NP_958785  2.650421787
+#&gt;  130   Negative NP_958785  2.733831920
+#&gt;  131   Negative NP_958785  0.126053757
+#&gt;  132   Negative NP_958785           NA
+#&gt;  133   Negative NP_958785 -1.095492377
+#&gt;  134   Negative NP_958785           NA
+#&gt;  135       &lt;NA&gt; NP_958785           NA
+#&gt;  136   Negative NP_958785           NA
+#&gt;  137   Negative NP_958785           NA
+#&gt;  138   Negative NP_958785           NA
+#&gt;  139   Negative NP_958785  1.111370375
+#&gt;  140   Negative NP_958785  1.100688066
+#&gt;  141   Negative NP_958785  0.563406875
+#&gt;  142   Negative NP_958785 -0.927978656
+#&gt;  143   Positive NP_958785  1.870383096
+#&gt;  144   Positive NP_958785 -1.512646224
+#&gt;  145   Positive NP_958785 -0.572548866
+#&gt;  146   Negative NP_958785  1.407570262
+#&gt;  147   Negative NP_958785           NA
+#&gt;  148   Negative NP_958785           NA
+#&gt;  149   Positive NP_958785 -0.162418489
+#&gt;  150   Negative NP_958785 -0.755940561
+#&gt;  151   Positive NP_958785 -0.503899187
+#&gt;  152   Negative NP_958785  1.137617791
+#&gt;  153   Positive NP_958785  2.779709215
+#&gt;  154   Positive NP_958785 -1.108782577
+#&gt;  155   Positive NP_958785  1.101260533
+#&gt;  156   Positive NP_958785           NA
+#&gt;  157   Positive NP_958785           NA
+#&gt;  158   Positive NP_958785           NA
+#&gt;  159   Positive NP_958785           NA
+#&gt;  160   Positive NP_958785           NA
+#&gt;  161   Positive NP_958785  0.296177120
+#&gt;  162   Positive NP_958785  0.762044407
+#&gt;  163   Positive NP_958785  0.818181507
+#&gt;  164   Positive NP_958785           NA
+#&gt;  165   Positive NP_958785  0.093336368
+#&gt;  166   Positive NP_958785  0.472590131
+#&gt;  167   Positive NP_958785  0.814877249
+#&gt;  168   Positive NP_958785  0.011955318
+#&gt;  169   Positive NP_958785 -0.055892667
+#&gt;  170   Positive NP_958785  0.275711307
+#&gt;  171   Positive NP_958785  0.195876687
+#&gt;  172   Positive NP_958785  1.192611952
+#&gt;  173   Positive NP_958785  0.780870661
+#&gt;  174   Positive NP_958785  0.568894580
+#&gt;  175   Positive NP_958785  0.371392832
+#&gt;  176   Positive NP_958785  0.461087521
+#&gt;  177   Positive NP_958785  1.218973595
+#&gt;  178   Positive NP_958785  0.582212852
+#&gt;  179   Positive NP_958785 -0.510001999
+#&gt;  180   Positive NP_958785 -0.205637484
+#&gt;  181   Positive NP_958785  1.482283458
+#&gt;  182   Positive NP_958785  0.870186035
+#&gt;  183   Positive NP_958785  1.055948153
+#&gt;  184   Positive NP_958785 -0.487772474
+#&gt;  185   Positive NP_958785 -0.251642291
+#&gt;  186   Positive NP_958785           NA
+#&gt;  187   Positive NP_958785           NA
+#&gt;  188   Positive NP_958785  1.275167128
+#&gt;  189   Positive NP_958785 -1.004619822
+#&gt;  190   Positive NP_958785  0.580623133
+#&gt;  191   Positive NP_958785 -0.068058137
+#&gt;  192   Positive NP_958785  1.183208792
+#&gt;  193   Positive NP_958785           NA
+#&gt;  194   Positive NP_958785           NA
+#&gt;  195   Positive NP_958785 -0.307266841
+#&gt;  196   Positive NP_958785  1.408922131
+#&gt;  197   Positive NP_958785 -0.648742151
+#&gt;  198   Positive NP_958785 -0.938209532
+#&gt;  199   Positive NP_958785  0.249818154
+#&gt;  200   Positive NP_958785 -0.498508898
+#&gt;  201   Positive NP_958785  1.052256940
+#&gt;  202   Positive NP_958785           NA
+#&gt;  203   Positive NP_958785           NA
+#&gt;  204   Positive NP_958785 -0.406378045
+#&gt;  205   Positive NP_958785  1.510348384
+#&gt;  206   Positive NP_958785           NA
+#&gt;  207   Positive NP_958785  0.977476060
+#&gt;  208   Positive NP_958785 -0.526066681
+#&gt;  209   Positive NP_958785 -1.528285429
+#&gt;  210   Positive NP_958785 -0.759823056
+#&gt;  211   Positive NP_958785           NA
+#&gt;  212   Positive NP_958785 -0.547749365
+#&gt;  213   Positive NP_958785 -0.659468664
+#&gt;  214   Positive NP_958785 -0.477889835
+#&gt;  215   Positive NP_958785           NA
+#&gt;  216   Positive NP_958785  2.180123300
+#&gt;  217   Negative NP_958786           NA
+#&gt;  218   Negative NP_958786  0.698097605
+#&gt;  219   Negative NP_958786           NA
+#&gt;  220   Negative NP_958786  0.215412944
+#&gt;  221   Negative NP_958786           NA
+#&gt;  222   Negative NP_958786 -1.116860512
+#&gt;  223   Negative NP_958786  0.542210518
+#&gt;  224   Negative NP_958786           NA
+#&gt;  225   Negative NP_958786  0.856539831
+#&gt;  226   Negative NP_958786  0.655849679
+#&gt;  227   Negative NP_958786  0.107490904
+#&gt;  228   Negative NP_958786 -0.392601414
+#&gt;  229   Negative NP_958786 -0.106679982
+#&gt;  230   Negative NP_958786 -1.955180275
+#&gt;  231   Negative NP_958786  0.326972641
+#&gt;  232   Negative NP_958786  2.480136657
+#&gt;  233   Negative NP_958786 -0.027211520
+#&gt;  234   Negative NP_958786           NA
+#&gt;  235   Negative NP_958786  0.367405326
+#&gt;  236   Negative NP_958786  0.688717560
+#&gt;  237   Negative NP_958786  2.650421787
+#&gt;  238   Negative NP_958786  2.737629316
+#&gt;  239   Negative NP_958786  0.133117776
+#&gt;  240   Negative NP_958786           NA
+#&gt;  241   Negative NP_958786 -1.095492377
+#&gt;  242   Negative NP_958786           NA
+#&gt;  243       &lt;NA&gt; NP_958786           NA
+#&gt;  244   Negative NP_958786           NA
+#&gt;  245   Negative NP_958786           NA
+#&gt;  246   Negative NP_958786           NA
+#&gt;  247   Negative NP_958786  1.111370375
+#&gt;  248   Negative NP_958786  1.100688066
+#&gt;  249   Negative NP_958786  0.559776970
+#&gt;  250   Negative NP_958786 -0.927978656
+#&gt;  251   Positive NP_958786  1.870383096
+#&gt;  252   Positive NP_958786 -1.509971908
+#&gt;  253   Positive NP_958786 -0.567108981
+#&gt;  254   Negative NP_958786  1.410311827
+#&gt;  255   Negative NP_958786           NA
+#&gt;  256   Negative NP_958786           NA
+#&gt;  257   Positive NP_958786 -0.166668431
+#&gt;  258   Negative NP_958786 -0.755940561
+#&gt;  259   Positive NP_958786 -0.500619319
+#&gt;  260   Negative NP_958786  1.137617791
+#&gt;  261   Positive NP_958786  2.779709215
+#&gt;  262   Positive NP_958786 -1.108782577
+#&gt;  263   Positive NP_958786  1.097766685
+#&gt;  264   Positive NP_958786           NA
+#&gt;  265   Positive NP_958786           NA
+#&gt;  266   Positive NP_958786           NA
+#&gt;  267   Positive NP_958786           NA
+#&gt;  268   Positive NP_958786           NA
+#&gt;  269   Positive NP_958786  0.296177120
+#&gt;  270   Positive NP_958786  0.766384351
+#&gt;  271   Positive NP_958786  0.814723513
+#&gt;  272   Positive NP_958786           NA
+#&gt;  273   Positive NP_958786  0.084469016
+#&gt;  274   Positive NP_958786  0.472590131
+#&gt;  275   Positive NP_958786  0.814877249
+#&gt;  276   Positive NP_958786  0.011955318
+#&gt;  277   Positive NP_958786 -0.065838424
+#&gt;  278   Positive NP_958786  0.275711307
+#&gt;  279   Positive NP_958786  0.195876687
+#&gt;  280   Positive NP_958786  1.188860091
+#&gt;  281   Positive NP_958786  0.774104222
+#&gt;  282   Positive NP_958786  0.568894580
+#&gt;  283   Positive NP_958786  0.371392832
+#&gt;  284   Positive NP_958786  0.461087521
+#&gt;  285   Positive NP_958786  1.222507296
+#&gt;  286   Positive NP_958786  0.578308676
+#&gt;  287   Positive NP_958786 -0.507213833
+#&gt;  288   Positive NP_958786 -0.205637484
+#&gt;  289   Positive NP_958786  1.474474311
+#&gt;  290   Positive NP_958786  0.870186035
+#&gt;  291   Positive NP_958786  1.055948153
+#&gt;  292   Positive NP_958786 -0.487772474
+#&gt;  293   Positive NP_958786 -0.251642291
+#&gt;  294   Positive NP_958786           NA
+#&gt;  295   Positive NP_958786           NA
+#&gt;  296   Positive NP_958786  1.275167128
+#&gt;  297   Positive NP_958786 -1.004619822
+#&gt;  298   Positive NP_958786  0.580623133
+#&gt;  299   Positive NP_958786 -0.071439365
+#&gt;  300   Positive NP_958786  1.183208792
+#&gt;  301   Positive NP_958786           NA
+#&gt;  302   Positive NP_958786           NA
+#&gt;  303   Positive NP_958786 -0.307266841
+#&gt;  304   Positive NP_958786  1.412340868
+#&gt;  305   Positive NP_958786 -0.654285099
+#&gt;  306   Positive NP_958786 -0.943919398
+#&gt;  307   Positive NP_958786  0.244182642
+#&gt;  308   Positive NP_958786 -0.496409093
+#&gt;  309   Positive NP_958786  1.052256940
+#&gt;  310   Positive NP_958786           NA
+#&gt;  311   Positive NP_958786           NA
+#&gt;  312   Positive NP_958786 -0.406378045
+#&gt;  313   Positive NP_958786  1.501966964
+#&gt;  314   Positive NP_958786           NA
+#&gt;  315   Positive NP_958786  0.977476060
+#&gt;  316   Positive NP_958786 -0.526066681
+#&gt;  317   Positive NP_958786 -1.528285429
+#&gt;  318   Positive NP_958786 -0.749113689
+#&gt;  319   Positive NP_958786           NA
+#&gt;  320   Positive NP_958786 -0.552211965
+#&gt;  321   Positive NP_958786 -0.664161107
+#&gt;  322   Positive NP_958786 -0.481550154
+#&gt;  323   Positive NP_958786           NA
+#&gt;  324   Positive NP_958786  2.180123300
+#&gt;  325   Negative NP_000436           NA
+#&gt;  326   Negative NP_000436  0.687077054
+#&gt;  327   Negative NP_000436           NA
+#&gt;  328   Negative NP_000436  0.205376799
+#&gt;  329   Negative NP_000436           NA
+#&gt;  330   Negative NP_000436 -1.129485657
+#&gt;  331   Negative NP_000436  0.534981038
+#&gt;  332   Negative NP_000436           NA
+#&gt;  333   Negative NP_000436  0.836777987
+#&gt;  334   Negative NP_000436  0.655849679
+#&gt;  335   Negative NP_000436  0.097511661
+#&gt;  336   Negative NP_000436 -0.392601414
+#&gt;  337   Negative NP_000436 -0.106679982
+#&gt;  338   Negative NP_000436 -1.947792427
+#&gt;  339   Negative NP_000436  0.330282575
+#&gt;  340   Negative NP_000436  2.461955765
+#&gt;  341   Negative NP_000436 -0.030216424
+#&gt;  342   Negative NP_000436           NA
+#&gt;  343   Negative NP_000436  0.360657461
+#&gt;  344   Negative NP_000436  0.677607916
+#&gt;  345   Negative NP_000436  2.646373906
+#&gt;  346   Negative NP_000436  2.733831920
+#&gt;  347   Negative NP_000436  0.111925718
+#&gt;  348   Negative NP_000436           NA
+#&gt;  349   Negative NP_000436 -1.095492377
+#&gt;  350   Negative NP_000436           NA
+#&gt;  351       &lt;NA&gt; NP_000436           NA
+#&gt;  352   Negative NP_000436           NA
+#&gt;  353   Negative NP_000436           NA
+#&gt;  354   Negative NP_000436           NA
+#&gt;  355   Negative NP_000436  1.107560577
+#&gt;  356   Negative NP_000436  1.100688066
+#&gt;  357   Negative NP_000436  0.541627447
+#&gt;  358   Negative NP_000436 -0.931805750
+#&gt;  359   Positive NP_000436  1.859586885
+#&gt;  360   Positive NP_000436 -1.517994857
+#&gt;  361   Positive NP_000436 -0.583428637
+#&gt;  362   Negative NP_000436  1.407570262
+#&gt;  363   Negative NP_000436           NA
+#&gt;  364   Negative NP_000436           NA
+#&gt;  365   Positive NP_000436 -0.183668200
+#&gt;  366   Negative NP_000436 -0.774693215
+#&gt;  367   Positive NP_000436 -0.510458925
+#&gt;  368   Negative NP_000436  1.137617791
+#&gt;  369   Positive NP_000436  2.797994911
+#&gt;  370   Positive NP_000436 -1.096936966
+#&gt;  371   Positive NP_000436  1.090778991
+#&gt;  372   Positive NP_000436           NA
+#&gt;  373   Positive NP_000436           NA
+#&gt;  374   Positive NP_000436           NA
+#&gt;  375   Positive NP_000436           NA
+#&gt;  376   Positive NP_000436           NA
+#&gt;  377   Positive NP_000436  0.296177120
+#&gt;  378   Positive NP_000436  0.757704463
+#&gt;  379   Positive NP_000436  0.800891541
+#&gt;  380   Positive NP_000436           NA
+#&gt;  381   Positive NP_000436  0.066734311
+#&gt;  382   Positive NP_000436  0.458587127
+#&gt;  383   Positive NP_000436  0.799089996
+#&gt;  384   Positive NP_000436  0.003903587
+#&gt;  385   Positive NP_000436 -0.055892667
+#&gt;  386   Positive NP_000436  0.278424357
+#&gt;  387   Positive NP_000436  0.218934622
+#&gt;  388   Positive NP_000436  1.185108231
+#&gt;  389   Positive NP_000436  0.763954564
+#&gt;  390   Positive NP_000436  0.568894580
+#&gt;  391   Positive NP_000436  0.377990280
+#&gt;  392   Positive NP_000436  0.461087521
+#&gt;  393   Positive NP_000436  1.204838793
+#&gt;  394   Positive NP_000436  0.590021204
+#&gt;  395   Positive NP_000436 -0.518366498
+#&gt;  396   Positive NP_000436 -0.215006194
+#&gt;  397   Positive NP_000436  1.458856017
+#&gt;  398   Positive NP_000436  0.866422649
+#&gt;  399   Positive NP_000436  1.058671367
+#&gt;  400   Positive NP_000436 -0.487772474
+#&gt;  401   Positive NP_000436 -0.251642291
+#&gt;  402   Positive NP_000436           NA
+#&gt;  403   Positive NP_000436           NA
+#&gt;  404   Positive NP_000436  1.279184725
+#&gt;  405   Positive NP_000436 -0.997859864
+#&gt;  406   Positive NP_000436  0.586803375
+#&gt;  407   Positive NP_000436 -0.057914451
+#&gt;  408   Positive NP_000436  1.174880993
+#&gt;  409   Positive NP_000436           NA
+#&gt;  410   Positive NP_000436           NA
+#&gt;  411   Positive NP_000436 -0.307266841
+#&gt;  412   Positive NP_000436  1.408922131
+#&gt;  413   Positive NP_000436 -0.632113308
+#&gt;  414   Positive NP_000436 -0.935354600
+#&gt;  415   Positive NP_000436  0.249818154
+#&gt;  416   Positive NP_000436 -0.492209483
+#&gt;  417   Positive NP_000436  1.058852321
+#&gt;  418   Positive NP_000436           NA
+#&gt;  419   Positive NP_000436           NA
+#&gt;  420   Positive NP_000436 -0.406378045
+#&gt;  421   Positive NP_000436  1.501966964
+#&gt;  422   Positive NP_000436           NA
+#&gt;  423   Positive NP_000436  0.969652277
+#&gt;  424   Positive NP_000436 -0.533389425
+#&gt;  425   Positive NP_000436 -1.531086848
+#&gt;  426   Positive NP_000436 -0.735726982
+#&gt;  427   Positive NP_000436           NA
+#&gt;  428   Positive NP_000436 -0.552211965
+#&gt;  429   Positive NP_000436 -0.657122443
+#&gt;  430   Positive NP_000436 -0.470569197
+#&gt;  431   Positive NP_000436           NA
+#&gt;  432   Positive NP_000436  2.180123300
+#&gt;  433   Negative NP_958781           NA
+#&gt;  434   Negative NP_958781  0.687077054
+#&gt;  435   Negative NP_958781           NA
+#&gt;  436   Negative NP_958781  0.215412944
+#&gt;  437   Negative NP_958781           NA
+#&gt;  438   Negative NP_958781 -1.129485657
+#&gt;  439   Negative NP_958781  0.542210518
+#&gt;  440   Negative NP_958781           NA
+#&gt;  441   Negative NP_958781  0.865009193
+#&gt;  442   Negative NP_958781  0.651263857
+#&gt;  443   Negative NP_958781  0.104164490
+#&gt;  444   Negative NP_958781 -0.395580625
+#&gt;  445   Negative NP_958781 -0.106679982
+#&gt;  446   Negative NP_958781 -1.957642890
+#&gt;  447   Negative NP_958781  0.326972641
+#&gt;  448   Negative NP_958781  2.477864046
+#&gt;  449   Negative NP_958781 -0.030216424
+#&gt;  450   Negative NP_958781           NA
+#&gt;  451   Negative NP_958781  0.370779259
+#&gt;  452   Negative NP_958781  0.688717560
+#&gt;  453   Negative NP_958781  2.646373906
+#&gt;  454   Negative NP_958781  2.752818897
+#&gt;  455   Negative NP_958781  0.126053757
+#&gt;  456   Negative NP_958781           NA
+#&gt;  457   Negative NP_958781 -1.095492377
+#&gt;  458   Negative NP_958781           NA
+#&gt;  459       &lt;NA&gt; NP_958781           NA
+#&gt;  460   Negative NP_958781           NA
+#&gt;  461   Negative NP_958781           NA
+#&gt;  462   Negative NP_958781           NA
+#&gt;  463   Negative NP_958781  1.115180173
+#&gt;  464   Negative NP_958781  1.093358353
+#&gt;  465   Negative NP_958781  0.559776970
+#&gt;  466   Negative NP_958781 -0.927978656
+#&gt;  467   Positive NP_958781  1.870383096
+#&gt;  468   Positive NP_958781 -1.509971908
+#&gt;  469   Positive NP_958781 -0.572548866
+#&gt;  470   Negative NP_958781  1.413053392
+#&gt;  471   Negative NP_958781           NA
+#&gt;  472   Negative NP_958781           NA
+#&gt;  473   Positive NP_958781 -0.166668431
+#&gt;  474   Negative NP_958781 -0.771567772
+#&gt;  475   Positive NP_958781 -0.503899187
+#&gt;  476   Negative NP_958781  1.120501833
+#&gt;  477   Positive NP_958781  2.787023494
+#&gt;  478   Positive NP_958781 -1.111151700
+#&gt;  479   Positive NP_958781  1.108248227
+#&gt;  480   Positive NP_958781           NA
+#&gt;  481   Positive NP_958781           NA
+#&gt;  482   Positive NP_958781           NA
+#&gt;  483   Positive NP_958781           NA
+#&gt;  484   Positive NP_958781           NA
+#&gt;  485   Positive NP_958781  0.296177120
+#&gt;  486   Positive NP_958781  0.766384351
+#&gt;  487   Positive NP_958781  0.818181507
+#&gt;  488   Positive NP_958781           NA
+#&gt;  489   Positive NP_958781  0.084469016
+#&gt;  490   Positive NP_958781  0.472590131
+#&gt;  491   Positive NP_958781  0.818824062
+#&gt;  492   Positive NP_958781  0.011955318
+#&gt;  493   Positive NP_958781 -0.062523172
+#&gt;  494   Positive NP_958781  0.278424357
+#&gt;  495   Positive NP_958781  0.199719676
+#&gt;  496   Positive NP_958781  1.200115674
+#&gt;  497   Positive NP_958781  0.770721003
+#&gt;  498   Positive NP_958781  0.568894580
+#&gt;  499   Positive NP_958781  0.374691556
+#&gt;  500   Positive NP_958781  0.461087521
+#&gt;  501   Positive NP_958781  1.222507296
+#&gt;  502   Positive NP_958781  0.586117028
+#&gt;  503   Positive NP_958781 -0.512790166
+#&gt;  504   Positive NP_958781 -0.205637484
+#&gt;  505   Positive NP_958781  1.474474311
+#&gt;  506   Positive NP_958781  0.870186035
+#&gt;  507   Positive NP_958781  1.058671367
+#&gt;  508   Positive NP_958781 -0.503853222
+#&gt;  509   Positive NP_958781 -0.251642291
+#&gt;  510   Positive NP_958781           NA
+#&gt;  511   Positive NP_958781           NA
+#&gt;  512   Positive NP_958781  1.279184725
+#&gt;  513   Positive NP_958781 -1.001239843
+#&gt;  514   Positive NP_958781  0.586803375
+#&gt;  515   Positive NP_958781 -0.064676908
+#&gt;  516   Positive NP_958781  1.179044893
+#&gt;  517   Positive NP_958781           NA
+#&gt;  518   Positive NP_958781           NA
+#&gt;  519   Positive NP_958781 -0.301032745
+#&gt;  520   Positive NP_958781  1.408922131
+#&gt;  521   Positive NP_958781 -0.640427730
+#&gt;  522   Positive NP_958781 -0.935354600
+#&gt;  523   Positive NP_958781  0.249818154
+#&gt;  524   Positive NP_958781 -0.488009874
+#&gt;  525   Positive NP_958781  1.052256940
+#&gt;  526   Positive NP_958781           NA
+#&gt;  527   Positive NP_958781           NA
+#&gt;  528   Positive NP_958781 -0.406378045
+#&gt;  529   Positive NP_958781  1.501966964
+#&gt;  530   Positive NP_958781           NA
+#&gt;  531   Positive NP_958781  0.985299842
+#&gt;  532   Positive NP_958781 -0.529728053
+#&gt;  533   Positive NP_958781 -1.514278334
+#&gt;  534   Positive NP_958781 -0.749113689
+#&gt;  535   Positive NP_958781           NA
+#&gt;  536   Positive NP_958781 -0.556674565
+#&gt;  537   Positive NP_958781 -0.661814886
+#&gt;  538   Positive NP_958781 -0.481550154
+#&gt;  539   Positive NP_958781           NA
+#&gt;  540   Positive NP_958781  2.180123300
+#&gt;  541   Negative NP_958780           NA
+#&gt;  542   Negative NP_958780  0.698097605
+#&gt;  543   Negative NP_958780           NA
+#&gt;  544   Negative NP_958780  0.215412944
+#&gt;  545   Negative NP_958780           NA
+#&gt;  546   Negative NP_958780 -1.120016798
+#&gt;  547   Negative NP_958780  0.542210518
+#&gt;  548   Negative NP_958780           NA
+#&gt;  549   Negative NP_958780  0.856539831
+#&gt;  550   Negative NP_958780  0.658142590
+#&gt;  551   Negative NP_958780  0.104164490
+#&gt;  552   Negative NP_958780 -0.392601414
+#&gt;  553   Negative NP_958780 -0.106679982
+#&gt;  554   Negative NP_958780 -1.955180275
+#&gt;  555   Negative NP_958780  0.326972641
+#&gt;  556   Negative NP_958780  2.471046211
+#&gt;  557   Negative NP_958780 -0.030216424
+#&gt;  558   Negative NP_958780           NA
+#&gt;  559   Negative NP_958780  0.367405326
+#&gt;  560   Negative NP_958780  0.688717560
+#&gt;  561   Negative NP_958780  2.646373906
+#&gt;  562   Negative NP_958780  2.737629316
+#&gt;  563   Negative NP_958780  0.126053757
+#&gt;  564   Negative NP_958780           NA
+#&gt;  565   Negative NP_958780 -1.093251550
+#&gt;  566   Negative NP_958780           NA
+#&gt;  567       &lt;NA&gt; NP_958780           NA
+#&gt;  568   Negative NP_958780           NA
+#&gt;  569   Negative NP_958780           NA
+#&gt;  570   Negative NP_958780           NA
+#&gt;  571   Negative NP_958780  1.107560577
+#&gt;  572   Negative NP_958780  1.097023210
+#&gt;  573   Negative NP_958780  0.559776970
+#&gt;  574   Negative NP_958780 -0.927978656
+#&gt;  575   Positive NP_958780  1.870383096
+#&gt;  576   Positive NP_958780 -1.512646224
+#&gt;  577   Positive NP_958780 -0.577988752
+#&gt;  578   Negative NP_958780  1.407570262
+#&gt;  579   Negative NP_958780           NA
+#&gt;  580   Negative NP_958780           NA
+#&gt;  581   Positive NP_958780 -0.166668431
+#&gt;  582   Negative NP_958780 -0.771567772
+#&gt;  583   Positive NP_958780 -0.503899187
+#&gt;  584   Negative NP_958780  1.127348216
+#&gt;  585   Positive NP_958780  2.779709215
+#&gt;  586   Positive NP_958780 -1.106413455
+#&gt;  587   Positive NP_958780  1.101260533
+#&gt;  588   Positive NP_958780           NA
+#&gt;  589   Positive NP_958780           NA
+#&gt;  590   Positive NP_958780           NA
+#&gt;  591   Positive NP_958780           NA
+#&gt;  592   Positive NP_958780           NA
+#&gt;  593   Positive NP_958780  0.296177120
+#&gt;  594   Positive NP_958780  0.762044407
+#&gt;  595   Positive NP_958780  0.811265520
+#&gt;  596   Positive NP_958780           NA
+#&gt;  597   Positive NP_958780  0.093336368
+#&gt;  598   Positive NP_958780  0.472590131
+#&gt;  599   Positive NP_958780  0.814877249
+#&gt;  600   Positive NP_958780  0.011955318
+#&gt;  601   Positive NP_958780 -0.055892667
+#&gt;  602   Positive NP_958780  0.272998257
+#&gt;  603   Positive NP_958780  0.199719676
+#&gt;  604   Positive NP_958780  1.188860091
+#&gt;  605   Positive NP_958780  0.777487441
+#&gt;  606   Positive NP_958780  0.568894580
+#&gt;  607   Positive NP_958780  0.377990280
+#&gt;  608   Positive NP_958780  0.461087521
+#&gt;  609   Positive NP_958780  1.218973595
+#&gt;  610   Positive NP_958780  0.578308676
+#&gt;  611   Positive NP_958780 -0.507213833
+#&gt;  612   Positive NP_958780 -0.210321839
+#&gt;  613   Positive NP_958780  1.474474311
+#&gt;  614   Positive NP_958780  0.870186035
+#&gt;  615   Positive NP_958780  1.055948153
+#&gt;  616   Positive NP_958780 -0.487772474
+#&gt;  617   Positive NP_958780 -0.251642291
+#&gt;  618   Positive NP_958780           NA
+#&gt;  619   Positive NP_958780           NA
+#&gt;  620   Positive NP_958780  1.279184725
+#&gt;  621   Positive NP_958780 -1.001239843
+#&gt;  622   Positive NP_958780  0.586803375
+#&gt;  623   Positive NP_958780 -0.068058137
+#&gt;  624   Positive NP_958780  1.183208792
+#&gt;  625   Positive NP_958780           NA
+#&gt;  626   Positive NP_958780           NA
+#&gt;  627   Positive NP_958780 -0.307266841
+#&gt;  628   Positive NP_958780  1.412340868
+#&gt;  629   Positive NP_958780 -0.654285099
+#&gt;  630   Positive NP_958780 -0.938209532
+#&gt;  631   Positive NP_958780  0.249818154
+#&gt;  632   Positive NP_958780 -0.496409093
+#&gt;  633   Positive NP_958780  1.052256940
+#&gt;  634   Positive NP_958780           NA
+#&gt;  635   Positive NP_958780           NA
+#&gt;  636   Positive NP_958780 -0.406378045
+#&gt;  637   Positive NP_958780  1.510348384
+#&gt;  638   Positive NP_958780           NA
+#&gt;  639   Positive NP_958780  0.977476060
+#&gt;  640   Positive NP_958780 -0.529728053
+#&gt;  641   Positive NP_958780 -1.525484010
+#&gt;  642   Positive NP_958780 -0.743759006
+#&gt;  643   Positive NP_958780           NA
+#&gt;  644   Positive NP_958780 -0.547749365
+#&gt;  645   Positive NP_958780 -0.661814886
+#&gt;  646   Positive NP_958780 -0.485210473
+#&gt;  647   Positive NP_958780           NA
+#&gt;  648   Positive NP_958780  2.180123300
+#&gt;  649   Negative NP_958783           NA
+#&gt;  650   Negative NP_958783  0.698097605
+#&gt;  651   Negative NP_958783           NA
+#&gt;  652   Negative NP_958783  0.215412944
+#&gt;  653   Negative NP_958783           NA
+#&gt;  654   Negative NP_958783 -1.123173085
+#&gt;  655   Negative NP_958783  0.542210518
+#&gt;  656   Negative NP_958783           NA
+#&gt;  657   Negative NP_958783  0.850893590
+#&gt;  658   Negative NP_958783  0.655849679
+#&gt;  659   Negative NP_958783  0.104164490
+#&gt;  660   Negative NP_958783 -0.392601414
+#&gt;  661   Negative NP_958783 -0.106679982
+#&gt;  662   Negative NP_958783 -1.955180275
+#&gt;  663   Negative NP_958783  0.326972641
+#&gt;  664   Negative NP_958783  2.480136657
+#&gt;  665   Negative NP_958783 -0.030216424
+#&gt;  666   Negative NP_958783           NA
+#&gt;  667   Negative NP_958783  0.360657461
+#&gt;  668   Negative NP_958783  0.688717560
+#&gt;  669   Negative NP_958783  2.650421787
+#&gt;  670   Negative NP_958783  2.737629316
+#&gt;  671   Negative NP_958783  0.115457728
+#&gt;  672   Negative NP_958783           NA
+#&gt;  673   Negative NP_958783 -1.093251550
+#&gt;  674   Negative NP_958783           NA
+#&gt;  675       &lt;NA&gt; NP_958783           NA
+#&gt;  676   Negative NP_958783           NA
+#&gt;  677   Negative NP_958783           NA
+#&gt;  678   Negative NP_958783           NA
+#&gt;  679   Negative NP_958783  1.111370375
+#&gt;  680   Negative NP_958783  1.097023210
+#&gt;  681   Negative NP_958783  0.559776970
+#&gt;  682   Negative NP_958783 -0.927978656
+#&gt;  683   Positive NP_958783  1.870383096
+#&gt;  684   Positive NP_958783 -1.515320541
+#&gt;  685   Positive NP_958783 -0.577988752
+#&gt;  686   Negative NP_958783  1.410311827
+#&gt;  687   Negative NP_958783           NA
+#&gt;  688   Negative NP_958783           NA
+#&gt;  689   Positive NP_958783 -0.166668431
+#&gt;  690   Negative NP_958783 -0.771567772
+#&gt;  691   Positive NP_958783 -0.500619319
+#&gt;  692   Negative NP_958783  1.137617791
+#&gt;  693   Positive NP_958783  2.783366355
+#&gt;  694   Positive NP_958783 -1.108782577
+#&gt;  695   Positive NP_958783  1.101260533
+#&gt;  696   Positive NP_958783           NA
+#&gt;  697   Positive NP_958783           NA
+#&gt;  698   Positive NP_958783           NA
+#&gt;  699   Positive NP_958783           NA
+#&gt;  700   Positive NP_958783           NA
+#&gt;  701   Positive NP_958783  0.296177120
+#&gt;  702   Positive NP_958783  0.762044407
+#&gt;  703   Positive NP_958783  0.811265520
+#&gt;  704   Positive NP_958783           NA
+#&gt;  705   Positive NP_958783  0.084469016
+#&gt;  706   Positive NP_958783  0.472590131
+#&gt;  707   Positive NP_958783  0.814877249
+#&gt;  708   Positive NP_958783  0.011955318
+#&gt;  709   Positive NP_958783 -0.062523172
+#&gt;  710   Positive NP_958783  0.275711307
+#&gt;  711   Positive NP_958783  0.199719676
+#&gt;  712   Positive NP_958783  1.188860091
+#&gt;  713   Positive NP_958783  0.777487441
+#&gt;  714   Positive NP_958783  0.568894580
+#&gt;  715   Positive NP_958783  0.374691556
+#&gt;  716   Positive NP_958783  0.461087521
+#&gt;  717   Positive NP_958783  1.222507296
+#&gt;  718   Positive NP_958783  0.582212852
+#&gt;  719   Positive NP_958783 -0.510001999
+#&gt;  720   Positive NP_958783 -0.205637484
+#&gt;  721   Positive NP_958783  1.474474311
+#&gt;  722   Positive NP_958783  0.870186035
+#&gt;  723   Positive NP_958783  1.058671367
+#&gt;  724   Positive NP_958783 -0.487772474
+#&gt;  725   Positive NP_958783 -0.251642291
+#&gt;  726   Positive NP_958783           NA
+#&gt;  727   Positive NP_958783           NA
+#&gt;  728   Positive NP_958783  1.279184725
+#&gt;  729   Positive NP_958783 -1.001239843
+#&gt;  730   Positive NP_958783  0.586803375
+#&gt;  731   Positive NP_958783 -0.071439365
+#&gt;  732   Positive NP_958783  1.183208792
+#&gt;  733   Positive NP_958783           NA
+#&gt;  734   Positive NP_958783           NA
+#&gt;  735   Positive NP_958783 -0.307266841
+#&gt;  736   Positive NP_958783  1.412340868
+#&gt;  737   Positive NP_958783 -0.648742151
+#&gt;  738   Positive NP_958783 -0.943919398
+#&gt;  739   Positive NP_958783  0.244182642
+#&gt;  740   Positive NP_958783 -0.496409093
+#&gt;  741   Positive NP_958783  1.052256940
+#&gt;  742   Positive NP_958783           NA
+#&gt;  743   Positive NP_958783           NA
+#&gt;  744   Positive NP_958783 -0.406378045
+#&gt;  745   Positive NP_958783  1.506157674
+#&gt;  746   Positive NP_958783           NA
+#&gt;  747   Positive NP_958783  0.977476060
+#&gt;  748   Positive NP_958783 -0.529728053
+#&gt;  749   Positive NP_958783 -1.525484010
+#&gt;  750   Positive NP_958783 -0.754468373
+#&gt;  751   Positive NP_958783           NA
+#&gt;  752   Positive NP_958783 -0.552211965
+#&gt;  753   Positive NP_958783 -0.664161107
+#&gt;  754   Positive NP_958783 -0.481550154
+#&gt;  755   Positive NP_958783           NA
+#&gt;  756   Positive NP_958783  2.180123300
+#&gt;  757   Negative NP_958784           NA
+#&gt;  758   Negative NP_958784  0.698097605
+#&gt;  759   Negative NP_958784           NA
+#&gt;  760   Negative NP_958784  0.215412944
+#&gt;  761   Negative NP_958784           NA
+#&gt;  762   Negative NP_958784 -1.123173085
+#&gt;  763   Negative NP_958784  0.542210518
+#&gt;  764   Negative NP_958784           NA
+#&gt;  765   Negative NP_958784  0.850893590
+#&gt;  766   Negative NP_958784  0.655849679
+#&gt;  767   Negative NP_958784  0.104164490
+#&gt;  768   Negative NP_958784 -0.392601414
+#&gt;  769   Negative NP_958784 -0.106679982
+#&gt;  770   Negative NP_958784 -1.955180275
+#&gt;  771   Negative NP_958784  0.326972641
+#&gt;  772   Negative NP_958784  2.480136657
+#&gt;  773   Negative NP_958784 -0.030216424
+#&gt;  774   Negative NP_958784           NA
+#&gt;  775   Negative NP_958784  0.360657461
+#&gt;  776   Negative NP_958784  0.688717560
+#&gt;  777   Negative NP_958784  2.650421787
+#&gt;  778   Negative NP_958784  2.737629316
+#&gt;  779   Negative NP_958784  0.115457728
+#&gt;  780   Negative NP_958784           NA
+#&gt;  781   Negative NP_958784 -1.093251550
+#&gt;  782   Negative NP_958784           NA
+#&gt;  783       &lt;NA&gt; NP_958784           NA
+#&gt;  784   Negative NP_958784           NA
+#&gt;  785   Negative NP_958784           NA
+#&gt;  786   Negative NP_958784           NA
+#&gt;  787   Negative NP_958784  1.111370375
+#&gt;  788   Negative NP_958784  1.097023210
+#&gt;  789   Negative NP_958784  0.559776970
+#&gt;  790   Negative NP_958784 -0.927978656
+#&gt;  791   Positive NP_958784  1.870383096
+#&gt;  792   Positive NP_958784 -1.515320541
+#&gt;  793   Positive NP_958784 -0.577988752
+#&gt;  794   Negative NP_958784  1.413053392
+#&gt;  795   Negative NP_958784           NA
+#&gt;  796   Negative NP_958784           NA
+#&gt;  797   Positive NP_958784 -0.166668431
+#&gt;  798   Negative NP_958784 -0.771567772
+#&gt;  799   Positive NP_958784 -0.500619319
+#&gt;  800   Negative NP_958784  1.137617791
+#&gt;  801   Positive NP_958784  2.783366355
+#&gt;  802   Positive NP_958784 -1.108782577
+#&gt;  803   Positive NP_958784  1.101260533
+#&gt;  804   Positive NP_958784           NA
+#&gt;  805   Positive NP_958784           NA
+#&gt;  806   Positive NP_958784           NA
+#&gt;  807   Positive NP_958784           NA
+#&gt;  808   Positive NP_958784           NA
+#&gt;  809   Positive NP_958784  0.296177120
+#&gt;  810   Positive NP_958784  0.762044407
+#&gt;  811   Positive NP_958784  0.811265520
+#&gt;  812   Positive NP_958784           NA
+#&gt;  813   Positive NP_958784  0.084469016
+#&gt;  814   Positive NP_958784  0.472590131
+#&gt;  815   Positive NP_958784  0.814877249
+#&gt;  816   Positive NP_958784  0.011955318
+#&gt;  817   Positive NP_958784 -0.062523172
+#&gt;  818   Positive NP_958784  0.275711307
+#&gt;  819   Positive NP_958784  0.199719676
+#&gt;  820   Positive NP_958784  1.192611952
+#&gt;  821   Positive NP_958784  0.777487441
+#&gt;  822   Positive NP_958784  0.568894580
+#&gt;  823   Positive NP_958784  0.374691556
+#&gt;  824   Positive NP_958784  0.461087521
+#&gt;  825   Positive NP_958784  1.222507296
+#&gt;  826   Positive NP_958784  0.582212852
+#&gt;  827   Positive NP_958784 -0.510001999
+#&gt;  828   Positive NP_958784 -0.205637484
+#&gt;  829   Positive NP_958784  1.474474311
+#&gt;  830   Positive NP_958784  0.870186035
+#&gt;  831   Positive NP_958784  1.058671367
+#&gt;  832   Positive NP_958784 -0.487772474
+#&gt;  833   Positive NP_958784 -0.251642291
+#&gt;  834   Positive NP_958784           NA
+#&gt;  835   Positive NP_958784           NA
+#&gt;  836   Positive NP_958784  1.279184725
+#&gt;  837   Positive NP_958784 -1.001239843
+#&gt;  838   Positive NP_958784  0.586803375
+#&gt;  839   Positive NP_958784 -0.071439365
+#&gt;  840   Positive NP_958784  1.183208792
+#&gt;  841   Positive NP_958784           NA
+#&gt;  842   Positive NP_958784           NA
+#&gt;  843   Positive NP_958784 -0.307266841
+#&gt;  844   Positive NP_958784  1.412340868
+#&gt;  845   Positive NP_958784 -0.648742151
+#&gt;  846   Positive NP_958784 -0.943919398
+#&gt;  847   Positive NP_958784  0.244182642
+#&gt;  848   Positive NP_958784 -0.496409093
+#&gt;  849   Positive NP_958784  1.052256940
+#&gt;  850   Positive NP_958784           NA
+#&gt;  851   Positive NP_958784           NA
+#&gt;  852   Positive NP_958784 -0.406378045
+#&gt;  853   Positive NP_958784  1.506157674
+#&gt;  854   Positive NP_958784           NA
+#&gt;  855   Positive NP_958784  0.977476060
+#&gt;  856   Positive NP_958784 -0.529728053
+#&gt;  857   Positive NP_958784 -1.525484010
+#&gt;  858   Positive NP_958784 -0.754468373
+#&gt;  859   Positive NP_958784           NA
+#&gt;  860   Positive NP_958784 -0.552211965
+#&gt;  861   Positive NP_958784 -0.664161107
+#&gt;  862   Positive NP_958784 -0.481550154
+#&gt;  863   Positive NP_958784           NA
+#&gt;  864   Positive NP_958784  2.180123300
+#&gt;  865   Negative NP_112598           NA
+#&gt;  866   Negative NP_112598 -2.652150067
+#&gt;  867   Negative NP_112598           NA
+#&gt;  868   Negative NP_112598 -1.035759872
+#&gt;  869   Negative NP_112598           NA
+#&gt;  870   Negative NP_112598  2.244584354
+#&gt;  871   Negative NP_112598 -0.148204900
+#&gt;  872   Negative NP_112598           NA
+#&gt;  873   Negative NP_112598 -0.967196074
+#&gt;  874   Negative NP_112598 -1.969533682
+#&gt;  875   Negative NP_112598 -0.880454146
+#&gt;  876   Negative NP_112598 -2.504861658
+#&gt;  877   Negative NP_112598  0.025188599
+#&gt;  878   Negative NP_112598 -1.004610594
+#&gt;  879   Negative NP_112598  1.932290343
+#&gt;  880   Negative NP_112598  3.959606744
+#&gt;  881   Negative NP_112598 -2.551331119
+#&gt;  882   Negative NP_112598           NA
+#&gt;  883   Negative NP_112598 -1.650206386
+#&gt;  884   Negative NP_112598 -2.733052927
+#&gt;  885   Negative NP_112598  3.909312755
+#&gt;  886   Negative NP_112598  4.089502075
+#&gt;  887   Negative NP_112598 -0.725160560
+#&gt;  888   Negative NP_112598           NA
+#&gt;  889   Negative NP_112598  0.096627356
+#&gt;  890   Negative NP_112598           NA
+#&gt;  891       &lt;NA&gt; NP_112598           NA
+#&gt;  892   Negative NP_112598           NA
+#&gt;  893   Negative NP_112598           NA
+#&gt;  894   Negative NP_112598           NA
+#&gt;  895   Negative NP_112598 -1.517390359
+#&gt;  896   Negative NP_112598 -2.413909374
+#&gt;  897   Negative NP_112598 -1.698023696
+#&gt;  898   Negative NP_112598 -3.071151471
+#&gt;  899   Positive NP_112598  1.539299286
+#&gt;  900   Positive NP_112598 -2.194596901
+#&gt;  901   Positive NP_112598  0.730303716
+#&gt;  902   Negative NP_112598  3.195070488
+#&gt;  903   Negative NP_112598           NA
+#&gt;  904   Negative NP_112598           NA
+#&gt;  905   Positive NP_112598  2.425796388
+#&gt;  906   Negative NP_112598  2.363250927
+#&gt;  907   Positive NP_112598 -1.845365554
+#&gt;  908   Negative NP_112598  0.589907135
+#&gt;  909   Positive NP_112598  2.205538366
+#&gt;  910   Positive NP_112598 -1.324372713
+#&gt;  911   Positive NP_112598 -3.444234673
+#&gt;  912   Positive NP_112598           NA
+#&gt;  913   Positive NP_112598           NA
+#&gt;  914   Positive NP_112598           NA
+#&gt;  915   Positive NP_112598           NA
+#&gt;  916   Positive NP_112598           NA
+#&gt;  917   Positive NP_112598 -3.254639306
+#&gt;  918   Positive NP_112598 -0.583338181
+#&gt;  919   Positive NP_112598  1.381834372
+#&gt;  920   Positive NP_112598           NA
+#&gt;  921   Positive NP_112598 -0.237711460
+#&gt;  922   Positive NP_112598 -0.742870654
+#&gt;  923   Positive NP_112598 -1.537423401
+#&gt;  924   Positive NP_112598  0.225326195
+#&gt;  925   Positive NP_112598 -2.187599782
+#&gt;  926   Positive NP_112598 -0.001019793
+#&gt;  927   Positive NP_112598 -2.624877344
+#&gt;  928   Positive NP_112598  1.046289383
+#&gt;  929   Positive NP_112598 -2.494085562
+#&gt;  930   Positive NP_112598  3.263024321
+#&gt;  931   Positive NP_112598 -0.242169869
+#&gt;  932   Positive NP_112598  2.318731725
+#&gt;  933   Positive NP_112598 -0.473668945
+#&gt;  934   Positive NP_112598 -1.627550800
+#&gt;  935   Positive NP_112598 -2.439413060
+#&gt;  936   Positive NP_112598 -1.151877145
+#&gt;  937   Positive NP_112598 -0.352866070
+#&gt;  938   Positive NP_112598  1.920170648
+#&gt;  939   Positive NP_112598 -0.332890890
+#&gt;  940   Positive NP_112598 -1.626289437
+#&gt;  941   Positive NP_112598 -1.613877425
+#&gt;  942   Positive NP_112598           NA
+#&gt;  943   Positive NP_112598           NA
+#&gt;  944   Positive NP_112598  3.026839582
+#&gt;  945   Positive NP_112598 -1.379797505
+#&gt;  946   Positive NP_112598  0.052212450
+#&gt;  947   Positive NP_112598  0.351214199
+#&gt;  948   Positive NP_112598  4.955701511
+#&gt;  949   Positive NP_112598           NA
+#&gt;  950   Positive NP_112598           NA
+#&gt;  951   Positive NP_112598 -1.460574599
+#&gt;  952   Positive NP_112598  1.008929830
+#&gt;  953   Positive NP_112598 -0.618255939
+#&gt;  954   Positive NP_112598 -1.252252127
+#&gt;  955   Positive NP_112598 -1.860681139
+#&gt;  956   Positive NP_112598 -1.300634341
+#&gt;  957   Positive NP_112598  0.679617968
+#&gt;  958   Positive NP_112598           NA
+#&gt;  959   Positive NP_112598           NA
+#&gt;  960   Positive NP_112598  2.258487365
+#&gt;  961   Positive NP_112598  2.151527016
+#&gt;  962   Positive NP_112598           NA
+#&gt;  963   Positive NP_112598 -1.811702422
+#&gt;  964   Positive NP_112598 -4.952665524
+#&gt;  965   Positive NP_112598 -3.147505566
+#&gt;  966   Positive NP_112598 -0.700921541
+#&gt;  967   Positive NP_112598           NA
+#&gt;  968   Positive NP_112598  0.679465615
+#&gt;  969   Positive NP_112598  0.234441727
+#&gt;  970   Positive NP_112598 -2.802192305
+#&gt;  971   Positive NP_112598           NA
+#&gt;  972   Positive NP_112598  1.911710702
+#&gt;  973   Negative NP_001611           NA
+#&gt;  974   Negative NP_001611 -0.984373265
+#&gt;  975   Negative NP_001611           NA
+#&gt;  976   Negative NP_001611 -0.517225683
+#&gt;  977   Negative NP_001611           NA
+#&gt;  978   Negative NP_001611 -2.575064764
+#&gt;  979   Negative NP_001611  0.267490247
+#&gt;  980   Negative NP_001611           NA
+#&gt;  981   Negative NP_001611  2.838370489
+#&gt;  982   Negative NP_001611  1.307036469
+#&gt;  983   Negative NP_001611 -1.512472865
+#&gt;  984   Negative NP_001611  0.694810418
+#&gt;  985   Negative NP_001611 -1.177327273
+#&gt;  986   Negative NP_001611 -2.551133287
+#&gt;  987   Negative NP_001611 -1.910542340
+#&gt;  988   Negative NP_001611 -1.858278696
+#&gt;  989   Negative NP_001611 -2.100595477
+#&gt;  990   Negative NP_001611           NA
+#&gt;  991   Negative NP_001611  0.401144652
+#&gt;  992   Negative NP_001611 -2.133132127
+#&gt;  993   Negative NP_001611 -1.045293501
+#&gt;  994   Negative NP_001611 -1.120524403
+#&gt;  995   Negative NP_001611 -2.360481012
+#&gt;  996   Negative NP_001611           NA
+#&gt;  997   Negative NP_001611 -1.149272214
+#&gt;  998   Negative NP_001611           NA
+#&gt;  999       &lt;NA&gt; NP_001611           NA
+#&gt;  1000  Negative NP_001611           NA
+#&gt;  1001  Negative NP_001611           NA
+#&gt;  1002  Negative NP_001611           NA
+#&gt;  1003  Negative NP_001611  0.482753678
+#&gt;  1004  Negative NP_001611  0.543629869
+#&gt;  1005  Negative NP_001611  1.754015586
+#&gt;  1006  Negative NP_001611 -2.278942948
+#&gt;  1007  Positive NP_001611  1.377356118
+#&gt;  1008  Positive NP_001611  0.134732665
+#&gt;  1009  Positive NP_001611  1.638764597
+#&gt;  1010  Negative NP_001611 -0.007077155
+#&gt;  1011  Negative NP_001611           NA
+#&gt;  1012  Negative NP_001611           NA
+#&gt;  1013  Positive NP_001611  0.470822918
+#&gt;  1014  Negative NP_001611  0.025420032
+#&gt;  1015  Positive NP_001611 -0.405503121
+#&gt;  1016  Negative NP_001611  2.257001446
+#&gt;  1017  Positive NP_001611  0.749996978
+#&gt;  1018  Positive NP_001611  1.075548247
+#&gt;  1019  Positive NP_001611  2.103994679
+#&gt;  1020  Positive NP_001611           NA
+#&gt;  1021  Positive NP_001611           NA
+#&gt;  1022  Positive NP_001611           NA
+#&gt;  1023  Positive NP_001611           NA
+#&gt;  1024  Positive NP_001611           NA
+#&gt;  1025  Positive NP_001611  2.351713708
+#&gt;  1026  Positive NP_001611  2.185545984
+#&gt;  1027  Positive NP_001611  1.565108003
+#&gt;  1028  Positive NP_001611           NA
+#&gt;  1029  Positive NP_001611  1.305207881
+#&gt;  1030  Positive NP_001611  1.811277356
+#&gt;  1031  Positive NP_001611  1.051686039
+#&gt;  1032  Positive NP_001611  0.325972835
+#&gt;  1033  Positive NP_001611  0.709930573
+#&gt;  1034  Positive NP_001611  0.131919657
+#&gt;  1035  Positive NP_001611  0.653192395
+#&gt;  1036  Positive NP_001611  2.138080861
+#&gt;  1037  Positive NP_001611  1.927781982
+#&gt;  1038  Positive NP_001611  0.887747701
+#&gt;  1039  Positive NP_001611  0.051416585
+#&gt;  1040  Positive NP_001611 -0.283625077
+#&gt;  1041  Positive NP_001611  1.741961269
+#&gt;  1042  Positive NP_001611 -1.697825970
+#&gt;  1043  Positive NP_001611 -2.174537264
+#&gt;  1044  Positive NP_001611  0.272166701
+#&gt;  1045  Positive NP_001611  2.813743010
+#&gt;  1046  Positive NP_001611  2.349196620
+#&gt;  1047  Positive NP_001611 -1.250613945
+#&gt;  1048  Positive NP_001611  0.731148229
+#&gt;  1049  Positive NP_001611 -0.646590070
+#&gt;  1050  Positive NP_001611           NA
+#&gt;  1051  Positive NP_001611           NA
+#&gt;  1052  Positive NP_001611  0.961794533
+#&gt;  1053  Positive NP_001611  0.563690494
+#&gt;  1054  Positive NP_001611  1.501479177
+#&gt;  1055  Positive NP_001611 -0.287837990
+#&gt;  1056  Positive NP_001611  0.825113456
+#&gt;  1057  Positive NP_001611           NA
+#&gt;  1058  Positive NP_001611           NA
+#&gt;  1059  Positive NP_001611  1.170213908
+#&gt;  1060  Positive NP_001611  1.802076956
+#&gt;  1061  Positive NP_001611  1.222002715
+#&gt;  1062  Positive NP_001611  1.325752082
+#&gt;  1063  Positive NP_001611 -0.229200377
+#&gt;  1064  Positive NP_001611  1.349319349
+#&gt;  1065  Positive NP_001611  3.436486828
+#&gt;  1066  Positive NP_001611           NA
+#&gt;  1067  Positive NP_001611           NA
+#&gt;  1068  Positive NP_001611  0.972084153
+#&gt;  1069  Positive NP_001611  1.552255484
+#&gt;  1070  Positive NP_001611           NA
+#&gt;  1071  Positive NP_001611  3.262020566
+#&gt;  1072  Positive NP_001611 -0.526066681
+#&gt;  1073  Positive NP_001611 -1.738391848
+#&gt;  1074  Positive NP_001611  0.726101526
+#&gt;  1075  Positive NP_001611           NA
+#&gt;  1076  Positive NP_001611  0.487573818
+#&gt;  1077  Positive NP_001611  0.980540164
+#&gt;  1078  Positive NP_001611 -0.997655112
+#&gt;  1079  Positive NP_001611           NA
+#&gt;  1080  Positive NP_001611  0.896216374
 ```
 ]
 
@@ -1446,6 +2192,13 @@ brca %&gt;%
 .pull-right[
 
 ```
+#&gt;  &lt;list_of&lt;
+#&gt;    tbl_df&lt;
+#&gt;      ER.Status : factor&lt;65731&gt;
+#&gt;      protein   : character
+#&gt;      expression: double
+#&gt;    &gt;
+#&gt;  &gt;[10]&gt;
 #&gt;  [[1]]
 #&gt;  # A tibble: 108 x 3
 #&gt;     ER.Status protein   expression
@@ -1605,10 +2358,6 @@ brca %&gt;%
 #&gt;   9 Negative  NP_958786      0.857
 #&gt;  10 Negative  NP_958786      0.656
 #&gt;  # … with 98 more rows
-#&gt;  
-#&gt;  attr(,"ptype")
-#&gt;  # A tibble: 0 x 3
-#&gt;  # … with 3 variables: ER.Status &lt;fct&gt;, protein &lt;chr&gt;, expression &lt;dbl&gt;
 ```
 ]
 
@@ -1635,83 +2384,73 @@ brca %&gt;%
 ```
 #&gt;  $NP_000436
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.161     0.432     0.271     0.628   0.534      41.5   -0.356
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.161     0.432     0.271     0.628   0.534      41.5   -0.356     0.677
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_001611
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    -1.41    -0.566     0.840     -4.10 1.99e-4      39.9    -2.10
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    -1.41    -0.566     0.840     -4.10 1.99e-4      39.9    -2.10    -0.712
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_112598
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.160    -0.197    -0.357     0.306   0.761      43.5   -0.892
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.160    -0.197    -0.357     0.306   0.761      43.5   -0.892      1.21
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_958780
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.163     0.436     0.273     0.637   0.528      41.6   -0.354
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.163     0.436     0.273     0.637   0.528      41.6   -0.354     0.680
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_958781
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.162     0.436     0.274     0.633   0.530      41.5   -0.356
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.162     0.436     0.274     0.633   0.530      41.5   -0.356     0.680
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_958782
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352     0.676
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_958783
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.164     0.436     0.272     0.639   0.527      41.5   -0.354
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.164     0.436     0.272     0.639   0.527      41.5   -0.354     0.681
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_958784
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.164     0.436     0.273     0.639   0.527      41.5   -0.354
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.164     0.436     0.273     0.639   0.527      41.5   -0.354     0.681
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_958785
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.165     0.438     0.273     0.642   0.524      41.6   -0.353
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.165     0.438     0.273     0.642   0.524      41.6   -0.353     0.682
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 #&gt;  
 #&gt;  $NP_958786
 #&gt;  # A tibble: 1 x 10
-#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low
-#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-#&gt;  1    0.166     0.439     0.272     0.649   0.520      41.6   -0.351
-#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;    estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+#&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1    0.166     0.439     0.272     0.649   0.520      41.6   -0.351     0.684
+#&gt;  # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 ```
 ]
 
@@ -1738,20 +2477,19 @@ brca %&gt;%
 
 ```
 #&gt;  # A tibble: 10 x 11
-#&gt;     Protein estimate estimate1 estimate2 statistic p.value parameter
-#&gt;     &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
-#&gt;   1 NP_000…    0.161     0.432     0.271     0.628 5.34e-1      41.5
-#&gt;   2 NP_001…   -1.41     -0.566     0.840    -4.10  1.99e-4      39.9
-#&gt;   3 NP_112…    0.160    -0.197    -0.357     0.306 7.61e-1      43.5
-#&gt;   4 NP_958…    0.163     0.436     0.273     0.637 5.28e-1      41.6
-#&gt;   5 NP_958…    0.162     0.436     0.274     0.633 5.30e-1      41.5
-#&gt;   6 NP_958…    0.162     0.429     0.267     0.635 5.29e-1      41.8
-#&gt;   7 NP_958…    0.164     0.436     0.272     0.639 5.27e-1      41.5
-#&gt;   8 NP_958…    0.164     0.436     0.273     0.639 5.27e-1      41.5
-#&gt;   9 NP_958…    0.165     0.438     0.273     0.642 5.24e-1      41.6
-#&gt;  10 NP_958…    0.166     0.439     0.272     0.649 5.20e-1      41.6
-#&gt;  # … with 4 more variables: conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-#&gt;  #   alternative &lt;chr&gt;
+#&gt;     Protein estimate estimate1 estimate2 statistic p.value parameter conf.low
+#&gt;     &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+#&gt;   1 NP_000…    0.161     0.432     0.271     0.628 5.34e-1      41.5   -0.356
+#&gt;   2 NP_001…   -1.41     -0.566     0.840    -4.10  1.99e-4      39.9   -2.10 
+#&gt;   3 NP_112…    0.160    -0.197    -0.357     0.306 7.61e-1      43.5   -0.892
+#&gt;   4 NP_958…    0.163     0.436     0.273     0.637 5.28e-1      41.6   -0.354
+#&gt;   5 NP_958…    0.162     0.436     0.274     0.633 5.30e-1      41.5   -0.356
+#&gt;   6 NP_958…    0.162     0.429     0.267     0.635 5.29e-1      41.8   -0.352
+#&gt;   7 NP_958…    0.164     0.436     0.272     0.639 5.27e-1      41.5   -0.354
+#&gt;   8 NP_958…    0.164     0.436     0.273     0.639 5.27e-1      41.5   -0.354
+#&gt;   9 NP_958…    0.165     0.438     0.273     0.642 5.24e-1      41.6   -0.353
+#&gt;  10 NP_958…    0.166     0.439     0.272     0.649 5.20e-1      41.6   -0.351
+#&gt;  # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;, alternative &lt;chr&gt;
 ```
 ]
 
@@ -1811,9 +2549,9 @@ wilcox.test(NP_958782 ~ ER.Status, data=brca) %&gt;%
 
 ```
 #&gt;  # A tibble: 1 x 4
-#&gt;    statistic p.value method                                      alternative
-#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                                       &lt;chr&gt;      
-#&gt;  1       755   0.590 Wilcoxon rank sum test with continuity cor… two.sided
+#&gt;    statistic p.value method                                           alternative
+#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                                            &lt;chr&gt;      
+#&gt;  1       755   0.590 Wilcoxon rank sum test with continuity correcti… two.sided
 ```
 
 --
@@ -2114,9 +2852,25 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -2125,7 +2879,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {
