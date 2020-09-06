@@ -1,3 +1,0 @@
-unnamed-chunk-1	%>%	airquality	group_by	kable	library	mean	Month	summarize	T	Temp
-unnamed-chunk-2	aes	avg_temp_by_month	avgTemp	geom_line	geom_point	ggplot	labs	Month
-unnamed-chunk-3	aes	airquality	geom_point	geom_smooth	ggplot	Ozone	Wind

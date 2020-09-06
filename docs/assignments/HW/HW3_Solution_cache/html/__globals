@@ -1,8 +1,0 @@
-unnamed-chunk-1	import	library
-unnamed-chunk-2	::	c	separate	spread	str	T	weather
-unnamed-chunk-3	head	library	who
-unnamed-chunk-4	::	c	separate	who
-unnamed-chunk-5	$	unique	who2
-unnamed-chunk-6	$	$<-	str_replace
-unnamed-chunk-7	c	head	separate	who2
-unnamed-chunk-8	c	head	separate	who3
