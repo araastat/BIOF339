@@ -52,7 +52,7 @@ vis_dat(beaches)
 ```
 ]
 .pull-right[
-```{r, eval = T, echo = F, ref.label = "v1"}
+```{r 12-CleaningExploring-1, eval = T, echo = F, ref.label = "v1"}
 ```
 ]
 
@@ -67,7 +67,7 @@ vis_dat(brca)
 ```
 ]
 .pull-right[
-```{r, eval = T, echo = F, ref.label = "v2"}
+```{r 12-CleaningExploring-2, eval = T, echo = F, ref.label = "v2"}
 ```
 ]
 
@@ -87,7 +87,7 @@ These plots give a nice insight into
 
 ]
 .pull-right[
-```{r, eval = T, echo = F, ref.label = "v3"}
+```{r 12-CleaningExploring-3, eval = T, echo = F, ref.label = "v3"}
 ```
 ]
 
@@ -101,12 +101,12 @@ class: middle, center
 ## `summary` and `str`/`glimpse` are a first pass
 
 .pull-left[
-```{r}
+```{r 12-CleaningExploring-4}
 summary(airquality)
 ```
 ]
 .pull-right[
-```{r}
+```{r 12-CleaningExploring-5}
 glimpse(airquality)
 ```
 
@@ -128,7 +128,7 @@ glimpse(airquality)
 
 ## Being assertive
 
-```{r, error=T}
+```{r 12-CleaningExploring-6, error=T}
 library(assertthat)
 assert_that(all(between(airquality$Day, 1, 31) ))
 assert_that(is.factor(mpg$manufacturer))
@@ -143,13 +143,13 @@ assert_that(all(beaches$season_name %in% c('Summer','Winter','Spring', 'Fall')))
 + `assert_that` generates an error, which will stop things
 + `see_if` does the same validation, but just generates a `TRUE/FALSE`, which you can capture
 
-```{r}
+```{r 12-CleaningExploring-7}
 see_if(is.factor(mpg$manufacturer))
 ```
 
 + `validate_that` generates `TRUE` if the assertion is true, otherwise generates a string explaining the error
 
-```{r}
+```{r 12-CleaningExploring-8}
 validate_that(is.factor(mpg$manufacturer))
 validate_that(is.character(mpg$manufacturer))
 ```
@@ -160,7 +160,7 @@ validate_that(is.character(mpg$manufacturer))
 
 You can even write your own validation functions and custom messages
 
-```{r, error=TRUE}
+```{r 12-CleaningExploring-9, error=TRUE}
 is_odd <- function(x){
     assert_that(is.numeric(x), length(x)==1)
     x %% 2 == 1
@@ -188,7 +188,7 @@ R denotes missing data as `NA`, and supplies several functions to deal with miss
 
 The most fundamental is `is.na`, which gives a TRUE/FALSE answer
 
-```{r}
+```{r 12-CleaningExploring-10}
 is.na(NA)
 is.na(25)
 ```
@@ -199,7 +199,7 @@ is.na(25)
 
 When we get a new dataset, it's useful to get a sense of the missingness
 
-```{r}
+```{r 12-CleaningExploring-11}
 mpg %>% summarize_all(function(x) sum(is.na(x)))
 ```
 
@@ -209,7 +209,7 @@ mpg %>% summarize_all(function(x) sum(is.na(x)))
 
 The `naniar` package allows a tidyverse-compatible way to deal with missing data
 
-```{r}
+```{r 12-CleaningExploring-12}
 library(naniar)
 weather <- rio::import('data/weather.csv')
 all_complete(mpg)
@@ -222,7 +222,7 @@ weather %>% summarize_all(pct_complete)
 
 ## Missing data
 
-```{r}
+```{r 12-CleaningExploring-13}
 gg_miss_case(weather, show_pct = T)
 ```
 
@@ -230,7 +230,7 @@ gg_miss_case(weather, show_pct = T)
 
 ## Missing data
 
-```{r}
+```{r 12-CleaningExploring-14}
 gg_miss_var(weather, show_pct=T)
 ```
 
@@ -281,7 +281,7 @@ geom_point()
 ```
 ]
 .pull-right[
-```{r, fig.height=3}
+```{r 12-CleaningExploring-15, fig.height=3}
 ggplot(airquality,
        aes(x = Ozone,
            y = Solar.R)) +
@@ -293,7 +293,7 @@ ggplot(airquality,
 
 ## Co-patterns of missingness
 
-```{r, warning=F}
+```{r 12-CleaningExploring-16, warning=F}
 gg_miss_fct(x = riskfactors, fct = marital)
 ```
 
@@ -305,7 +305,7 @@ gg_miss_fct(x = riskfactors, fct = marital)
 
 In the weather dataset, values are missing generally because there wasn't recorded rainfall on a day. So these values should really be 0
 
-```{r}
+```{r 12-CleaningExploring-17}
 weather1 <- weather %>% mutate(d1 = replace_na(d1, 0))
 pct_miss(weather1$d1)
 ```
@@ -316,7 +316,7 @@ pct_miss(weather1$d1)
 
 --
 
-```{r, results = 'hide'}
+```{r 12-CleaningExploring-18, results = 'hide'}
 weather %>% mutate_all(function(x) replace_na(x, 0))
 ```
 
@@ -326,7 +326,7 @@ weather %>% mutate_all(function(x) replace_na(x, 0))
 
 --
 
-```{r, results = 'hide'}
+```{r 12-CleaningExploring-19, results = 'hide'}
 weather %>% mutate_if(is.numeric, function(x) replace_na(x, mean(x, na.rm=T)))
 ```
 

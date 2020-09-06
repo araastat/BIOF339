@@ -10,7 +10,7 @@ img/*
 assignments/**/*.html
 .drake/*
 slides/lectures/*cache/*
-docs/slides/lectures/05-Plotting_cache/*
+docs/slides/lectures/*-cache/*
 docs/slides/lectures/05-Plotting_files/*
 slides/lectures/05-Plotting_files/*
 slides/lectures/data/*
@@ -20,6 +20,8 @@ docs/notes/*
 docs/assignments/HW/*.R
 docs/_top_level/*
 _top_level/*
+
+docs/slides/lectures/**/*cache/*
 Projects/*
 docs/Projects/**/*.csv
 docs/Projects/**/*.xls*

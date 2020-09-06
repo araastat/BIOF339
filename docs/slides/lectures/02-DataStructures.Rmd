@@ -32,7 +32,7 @@ You type commands (_code_) for R to run.
 .pull-right[
 Examples
 
-```{r, eval=F}
+```{r 02-DataStructures-1, eval=F}
 airquality
 diamonds
 
@@ -62,7 +62,7 @@ Let's look at the Ozone and Wind columns
 
 ]
 .pull-right[
-```{r, echo = F}
+```{r 02-DataStructures-2, echo = F}
 head(airquality, 25)
 ```
 
@@ -71,7 +71,7 @@ head(airquality, 25)
 
 # Objects in R
 
-```{r}
+```{r 02-DataStructures-3}
 head(iris)
 str(iris)
 ```
@@ -82,7 +82,7 @@ Now we see another type of object, a `factor`
 
 # Objects in R
 
-```{r}
+```{r 02-DataStructures-4}
 library(ggplot2)
 str(midwest)
 ```
@@ -96,7 +96,7 @@ The most common types of data we see are `numeric`, `character`, `factor`. You c
 
 You can test to see if data is of a particular type, or convert from one data type to another
 
-```{r, echo=F}
+```{r 02-DataStructures-5, echo=F}
 library(tibble)
 d <- tribble(
   ~"Data type", ~"Test", ~"Convert",
@@ -111,7 +111,7 @@ knitr::kable(d, format='html')
 
 This conversion is important. Why?
 
-```{r, echo=F}
+```{r 02-DataStructures-6, echo=F}
 countdown(minutes=5)
 ```
 
@@ -159,7 +159,7 @@ is stored in the name.
 From the iris dataset, save each column into a new object, giving it a name. Then
 see what kind of data that object contains.
 
-```{r, echo=F}
+```{r 02-DataStructures-7, echo=F}
 countdown(minutes = 5)
 ```
 
@@ -181,13 +181,13 @@ countdown(minutes = 5)
 
 ## Examples
 
-```{r}
+```{r 02-DataStructures-8}
 2
 ```
 
 --
 
-```{r}
+```{r 02-DataStructures-9}
 c(2,3,4,5,6)
 ```
 
@@ -195,7 +195,7 @@ c(2,3,4,5,6)
 
 --
 
-```{r}
+```{r 02-DataStructures-10}
 matrix(c(1,2,3,4), byrow = T, nrow = 2)
 ```
 
@@ -249,7 +249,7 @@ They were revolutionary in that they kept heterogeneous data together
 
 They share properties of both a __matrix__ and a __list__
 
-```{r}
+```{r 02-DataStructures-11}
 class(airquality)
 ```
 
@@ -270,7 +270,7 @@ project.
 Then, in the Environment pane, import it using the **Import Dataset** button. You will 
 use the `From text (readr)` option
 
-```{r, echo=F}
+```{r 02-DataStructures-12, echo=F}
 data_spine <- read.csv('data/Dataset_spine.csv', stringsAsFactors=F)
 ```
 
@@ -298,13 +298,13 @@ class:center, middle
 
 A __matrix__ is a rectangular array of data _of the same type_
 
-```{r}
+```{r 02-DataStructures-13}
 matrix(0, nrow=2, ncol=4)
 ```
-```{r}
+```{r 02-DataStructures-14}
 matrix(letters, nrow=2)
 ```
-```{r}
+```{r 02-DataStructures-15}
 matrix(letters, nrow=2, byrow=T)
 ```
 
@@ -313,12 +313,12 @@ matrix(letters, nrow=2, byrow=T)
 # Matrices
 
 You can create a matrix from a set of _vectors_ of the same length
-```{r}
+```{r 02-DataStructures-16}
 x <- c(1,2,3,4)
 y <- c(10,20,30,40)
 ```
 Put columns together
-```{r}
+```{r 02-DataStructures-17}
 cbind(c(1,2,3,4), c(10,20,30,40)) ## Column bind
 ```
 
@@ -327,12 +327,12 @@ cbind(c(1,2,3,4), c(10,20,30,40)) ## Column bind
 # Matrices
 
 You can create a matrix from a set of _vectors_ of the same length
-```{r}
+```{r 02-DataStructures-18}
 x <- c(1,2,3,4)
 y <- c(10,20,30,40)
 ```
 Put rows together
-```{r}
+```{r 02-DataStructures-19}
 example_matrix <- rbind(c(1,2,3,4), c(10,20,30,40)) ## Row bind
 example_matrix
 ```
@@ -341,7 +341,7 @@ example_matrix
 
 # Extracting elements
 
-```{r}
+```{r 02-DataStructures-20}
 example_matrix 
 example_matrix[1,] ## Extracts 1st row
 example_matrix[,2:3] ## extracts 2nd & 3rd columns
@@ -351,7 +351,7 @@ example_matrix[1,4]
 ---
 
 # Matrix properties
-```{r}
+```{r 02-DataStructures-21}
 example_matrix
 nrow(example_matrix) ## Number of rows
 ncol(example_matrix) ## Number of columns
@@ -361,7 +361,7 @@ dim(example_matrix) ## shortcut for above
 ---
 
 # Matrix arithmetic
-```{r}
+```{r 02-DataStructures-22}
 example_matrix
 example_matrix + 5 ## Add 5 to each element
 example_matrix * 2 ## Multiply each element by 2
@@ -370,7 +370,7 @@ example_matrix * 2 ## Multiply each element by 2
 ---
 
 # Two matrices
-```{r}
+```{r 02-DataStructures-23}
 example_matrix
 example_matrix2 <- rbind(3:6, 9:12)
 example_matrix2
@@ -380,7 +380,7 @@ example_matrix + example_matrix2
 ---
 
 # Two matrices
-```{r}
+```{r 02-DataStructures-24}
 example_matrix
 example_matrix2
 example_matrix * example_matrix2 ## Not matrix multiplication, but element-wise multiplication
@@ -389,7 +389,7 @@ example_matrix * example_matrix2 ## Not matrix multiplication, but element-wise 
 ---
 
 # Two matrices
-```{r}
+```{r 02-DataStructures-25}
 rbind(example_matrix, example_matrix2)
 cbind(example_matrix, example_matrix2)
 ```
@@ -397,7 +397,7 @@ cbind(example_matrix, example_matrix2)
 ---
 
 # Two matrices
-```{r}
+```{r 02-DataStructures-26}
 dim(example_matrix2)
 t(example_matrix2) ## Transpose of a matrix
 example_matrix %*% t(example_matrix2) ## Matrix multiplication
@@ -408,7 +408,7 @@ example_matrix %*% t(example_matrix2) ## Matrix multiplication
 # Lists
 
 Lists are collections of arbitrary objects in R
-```{r}
+```{r 02-DataStructures-27}
 example_list <- list(c('Andy','Brian','Harry'), 
                      c(12, 16, 16), 
                      c(TRUE, TRUE, FALSE), 
@@ -419,17 +419,17 @@ example_list
 ---
 
 # Extracting elements from lists
-```{r}
+```{r 02-DataStructures-28}
 example_list[[3]]
 ```
-```{r}
+```{r 02-DataStructures-29}
 example_list[1:2]
 ```
 
 ---
 
 # Extracting elements from lists
-```{r}
+```{r 02-DataStructures-30}
 example_list[[4]]
 class(example_list[[4]])
 example_list[[4]][1,]
@@ -438,7 +438,7 @@ example_list[[4]][1,]
 ---
 
 # Named lists
-```{r}
+```{r 02-DataStructures-31}
 example_named_list <- list('Names' = c('Andy','Brian','Harry'), 
                      "YearsOfEducation" = c(12, 16, 16), 
                      "Married" = c(TRUE, TRUE, FALSE), 
@@ -466,14 +466,14 @@ You can use both _matrix_ and _list_ functions to operate on data.frame objects!
 
 # Data Frames
 
-```{r}
+```{r 02-DataStructures-32}
 head(data_spine)
 ```
 
 ---
 
 # Data Frames
-```{r}
+```{r 02-DataStructures-33}
 dim(data_spine)
 nrow(data_spine)
 
@@ -483,7 +483,7 @@ data_spine_small <- data_spine[1:4,] ## Matrix operation
 ---
 
 # Data Frames
-```{r}
+```{r 02-DataStructures-34}
 data_spine_small[,2] ## Matrix extraction by position
 data_spine_small[[2]] ## List extraction by position
 ```
@@ -491,7 +491,7 @@ data_spine_small[[2]] ## List extraction by position
 ---
 
 # Data Frames
-```{r}
+```{r 02-DataStructures-35}
 data_spine_small[['Pelvic.tilt']] ## Named list extraction
 data_spine_small[,'Pelvic.tilt'] ## Data frame named column extraction
 data_spine_small$Pelvic.tilt ## Dollar sign extraction
@@ -511,7 +511,7 @@ My preference is for
 ---
 
 # Data Frames
-```{r}
+```{r 02-DataStructures-36}
 names(data_spine_small)
 
 data_spine_small[,c('Pelvic.tilt', 'Pelvic.slope','Class.attribute')]

@@ -31,13 +31,13 @@ We learned how to
 
 ## Tidying the weather data
 
-```{r}
+```{r 04-MungingTIdyverse-1}
 library(tidyverse)
 weather_data <- rio::import('data/weather.csv')
 ```
 
 .pull-left[
-```{r, echo=F}
+```{r 04-MungingTIdyverse-2, echo=F}
 head(weather_data)
 ```
 ]
@@ -59,7 +59,7 @@ head(weather1,20)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w1"}
+```{r 04-MungingTIdyverse-3, eval=T, echo = F, ref.label="w1"}
 ```
 ]
 
@@ -75,7 +75,7 @@ head(weather2, 20)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w2"}
+```{r 04-MungingTIdyverse-4, eval=T, echo = F, ref.label="w2"}
 ```
 ]
 
@@ -96,7 +96,7 @@ This gets us into the right shape for the data.
 There still is some work to do, but the format is tidy
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w3"}
+```{r 04-MungingTIdyverse-5, eval=T, echo = F, ref.label="w3"}
 ```
 ]
 
@@ -149,7 +149,7 @@ head(weather1, 20)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w5"}
+```{r 04-MungingTIdyverse-6, eval=T, echo = F, ref.label="w5"}
 ```
 ]
 
@@ -165,7 +165,7 @@ head(weather1, 20)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w6"}
+```{r 04-MungingTIdyverse-7, eval=T, echo = F, ref.label="w6"}
 ```
 ]
 
@@ -182,7 +182,7 @@ as_tibble(weather4)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w8"}
+```{r 04-MungingTIdyverse-8, eval=T, echo = F, ref.label="w8"}
 ```
 ]
 
@@ -199,7 +199,7 @@ as_tibble(weather4)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w7"}
+```{r 04-MungingTIdyverse-9, eval=T, echo = F, ref.label="w7"}
 ```
 ]
 
@@ -217,7 +217,7 @@ mutate(weather4, tmax = replace_na(tmax, 0))
 You wouldn't want to do exactly this, of course
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w11"}
+```{r 04-MungingTIdyverse-10, eval=T, echo = F, ref.label="w11"}
 ```
 ]
 ---
@@ -235,7 +235,7 @@ head(january)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w9"}
+```{r 04-MungingTIdyverse-11, eval=T, echo = F, ref.label="w9"}
 ```
 ]
 
@@ -276,7 +276,7 @@ select(mpg1, manufacturer, cty, hwy, class, year)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="m1"}
+```{r 04-MungingTIdyverse-12, eval=T, echo = F, ref.label="m1"}
 ```
 ]
 
@@ -298,7 +298,7 @@ head(weather5, 20)
 So `!is.na` is the opposite of that. 
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w12"}
+```{r 04-MungingTIdyverse-13, eval=T, echo = F, ref.label="w12"}
 ```
 ]
 
@@ -316,7 +316,7 @@ arrange(weather5, day)
 Not quite. 
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w13"}
+```{r 04-MungingTIdyverse-14, eval=T, echo = F, ref.label="w13"}
 ```
 ]
 
@@ -330,7 +330,7 @@ arrange(weather5, month, day)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="w14"}
+```{r 04-MungingTIdyverse-15, eval=T, echo = F, ref.label="w14"}
 ```
 ]
 
@@ -350,7 +350,7 @@ arrange(weather5, month, day)
 
 We've done a bit, but lets see all the objects we've created
 
-```{r}
+```{r 04-MungingTIdyverse-16}
 ls()
 ```
 
@@ -367,7 +367,7 @@ class: middle, center
 
 Recall how we cleaned the weather dataset yesterday
 
-```{r, eval = F}
+```{r 04-MungingTIdyverse-17, eval = F}
 weather <- as_tibble(weather)
 weather1 <- tidyr::gather(weather, key='day', value = 'temp', starts_with('d'))
 weather2 <- spread(weather1, element, temp)
@@ -406,7 +406,7 @@ In the tidyverse, we start with a tibble, and every intermediate result is also 
 
 ## The tidyverse pipe
 
-```{r, echo=F, results='asis'}
+```{r 04-MungingTIdyverse-18, echo=F, results='asis'}
 d <- tribble(~"Old School", ~"Piping school",
         "`mutate(mpg, differ = hwy-city))`", "`mpg %>% mutate(differ=hyw-cty)`",
         "`select(mpg, cyl, cty, hwy)`","`mpg %>% select(cyl, cty, hyw)`")
@@ -420,7 +420,7 @@ There is a handy shortcut in RStudio to type the pipe operator. It is Ctrl-Shift
 
 ## Reading a pipe
 
-```{r}
+```{r 04-MungingTIdyverse-19}
 mpg %>% 
   mutate(differ = hwy - cty) %>% 
   group_by(cyl) %>% 
@@ -436,7 +436,7 @@ You can verbalize the pipe operator as __then__
 
 Since the end result of a pipe is a tibble, we can assign a name to store it
 
-```{r}
+```{r 04-MungingTIdyverse-20}
 summary_mpg <- mpg %>% 
   mutate(differ = hwy - cty) %>% 
   group_by(cyl) %>% 
@@ -451,7 +451,7 @@ summary_mpg
 
 Transform the process of tidyfing the weather data into a pipe format
 
-```{r, echo=F}
+```{r 04-MungingTIdyverse-21, echo=F}
 countdown(minutes = 10)
 ```
 
@@ -473,7 +473,7 @@ The `group_by` and `summarize` functions work together, in a principle called
 
 Let's find the average city mileage from the `mpg` dataset by vehicle class
 
-```{r}
+```{r 04-MungingTIdyverse-22}
 mpg %>% 
   group_by(class) %>% 
   summarize(avgMPG = mean(cty))
@@ -486,7 +486,7 @@ mpg %>%
 
 Let's find the average city mileage from the `mpg` dataset by vehicle class
 
-```{r}
+```{r 04-MungingTIdyverse-23}
 mpg %>% 
   group_by(class) %>% 
   summarize(avgMPG = mean(cty)) %>% 
@@ -503,7 +503,7 @@ mpg %>%
 
 We can compute the monthly average minimum and maximum temperatures from the weather dataset
 
-```{r}
+```{r 04-MungingTIdyverse-24}
 weather5 %>% 
   arrange(month, day) %>% 
   group_by(month) %>% 
@@ -518,7 +518,7 @@ The split-apply-combine method is also useful in `mutate`.
 
 In the weather dataset, let's impute the monthly averages for the missing values
 
-```{r}
+```{r 04-MungingTIdyverse-25}
 weather4 %>% # weather4 still has missing values #<<
   arrange(month,day) %>% 
   group_by(month) %>% 
@@ -532,7 +532,7 @@ weather4 %>% # weather4 still has missing values #<<
 
 We can even use this principle for some filtering
 
-```{r}
+```{r 04-MungingTIdyverse-26}
 weather5 %>% 
   arrange(month, day) %>% 
   group_by(month) %>% 
@@ -549,7 +549,7 @@ class:middle, center, inverse
 
 ## The data science pipeline
 
-```{r, fig.align='center', out.height=500, echo=F}
+```{r 04-MungingTIdyverse-27, fig.align='center', out.height=500, echo=F}
 knitr::include_graphics('img/0246OS_00_02.png')
 ```
 
@@ -669,7 +669,7 @@ This goes in `packages.R`
 
 Now you can ensure that your analyses are reproducible by creating a pipeline where code is run sequentially in a particular order
 
-```{r , echo=T, eval=F}
+```{r 04-MungingTIdyverse-28, echo=T, eval=F}
 source('packages.R')
 source('DataAcquistion.R')
 source('DataExploration.R')

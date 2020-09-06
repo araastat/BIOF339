@@ -44,7 +44,7 @@ class: middle, center
   - There is an inherent ordering of labels, by default alphabetically
 + Individual levels of a factor are treated as *separate* but related variables (dummy variables)
 
-```{r, message=F}
+```{r 03-DataIngestionMunging-1, message=F}
 breast_cancer <- read_csv('data/clinical_data_breast_cancer_modified.csv')
 names(breast_cancer) <- make.names(names(breast_cancer))
 breast_cancer$ER.Status.f <- factor(breast_cancer$ER.Status)
@@ -56,7 +56,7 @@ summary(breast_cancer$ER.Status.f)
 
 ## Factors
 
-```{r}
+```{r 03-DataIngestionMunging-2}
 breast_cancer$ER.Status.f <- fct_relevel(breast_cancer$ER.Status.f, 'Negative')
 summary(breast_cancer$ER.Status.f)
 ```
@@ -67,7 +67,7 @@ This is manipulating the meta-data, not the actual data itself
 
 ## Factors
 
-```{r}
+```{r 03-DataIngestionMunging-3}
 breast_cancer$ER.Status.n <- as.numeric(breast_cancer$ER.Status.f)
 summary(breast_cancer$ER.Status.n)
 ```
@@ -75,14 +75,14 @@ summary(breast_cancer$ER.Status.n)
 Logistic regression of death status on ER status
 
 .pull-left[
-```{r, echo=F}
+```{r 03-DataIngestionMunging-4, echo=F}
 broom::tidy(glm(as.factor(Vital.Status)~ER.Status.n, data=breast_cancer, family=binomial))[,1:2]
 ```
 
 Only one coefficient, since levels are modeled as numeric, with one slope being estimated
 ]
 .pull-right[
-```{r, echo=F}
+```{r 03-DataIngestionMunging-5, echo=F}
 broom::tidy(glm(as.factor(Vital.Status)~ER.Status.f, data=breast_cancer, family=binomial))[,1:2]
 
 ```
@@ -96,7 +96,7 @@ One coefficient for all but one factor level
 
 You can add options to each R chunk to add or suppress output
 
-```{r, echo = F}
+```{r 03-DataIngestionMunging-6, echo = F}
 a <- tribble(
   ~Option, ~Property,
   "echo=T/F", "Does the document show the R code",
@@ -109,7 +109,7 @@ knitr::kable(a, format='html')
 
 You can also set these once per session by putting the following in a R chunk:
 
-```{r, eval=F}
+```{r 03-DataIngestionMunging-7, eval=F}
 knitr::opts_chunk(echo=T, eval=T, message=F, warning=F)
 ```
 
@@ -136,7 +136,7 @@ The GUI you've used is one way, but not very programmatic
 
 ## Data ingestion
 
-```{r, echo=F}
+```{r 03-DataIngestionMunging-8, echo=F}
 b <- tribble(
   ~Type, ~Function, ~Package,~Notes,
   "csv", "read_csv", "readr", "Takes care of formatting",
@@ -156,18 +156,18 @@ knitr::kable(b, format='html')
 
 We will use [this](data/BreastCancer_Clinical.csv) csv data and [this](data/BreastCancer.xlsx) Excel data for the following:
 
-```{r, message=F}
+```{r 03-DataIngestionMunging-9, message=F}
 brca_clinical <- readr::read_csv('data/BreastCancer_Clinical.csv')
 brca_clinical2 <- data.table::fread('data/BreastCancer_Clinical.csv')
 ```
 
 .pull-left[
-```{r}
+```{r 03-DataIngestionMunging-10}
 str(brca_clinical)
 ```
 ]
 .pull-right[
-```{r}
+```{r 03-DataIngestionMunging-11}
 str(brca_clinical2)
 ```
 ]
@@ -178,14 +178,14 @@ str(brca_clinical2)
 
 .pull-left[
 A `tibble`
-```{r, echo=F}
+```{r 03-DataIngestionMunging-12, echo=F}
 head(brca_clinical)
 ```
 ]
 .pull-right[
 A `data.table`
 
-```{r, echo=F}
+```{r 03-DataIngestionMunging-13, echo=F}
 head(brca_clinical2)
 ```
 ]
@@ -206,7 +206,7 @@ Suggested modifications:
 + If using `fread`, convert the resulting object to a `data.frame` or `tibble` using `as_data_frame()` or `as_tibble`
 + Convert the column names to not have spaces using, for example,
 
-```{r}
+```{r 03-DataIngestionMunging-14}
 names(brca_clinical) <- make.names(names(brca_clinical))
 ```
 
@@ -216,7 +216,7 @@ names(brca_clinical) <- make.names(names(brca_clinical))
 
 Note that you **have** to give a name to what you're importing using `read_*` or whatever you're using, otherwise it won't stay in R
 
-```{r, eval=F}
+```{r 03-DataIngestionMunging-15, eval=F}
 brca_clinical <- readr::read_csv('data/BreastCancer_Clinical.csv')
 ```
 
@@ -226,7 +226,7 @@ brca_clinical <- readr::read_csv('data/BreastCancer_Clinical.csv')
 
 ## Reading Excel
 
-```{r}
+```{r 03-DataIngestionMunging-16}
 readxl::excel_sheets('data/BreastCancer.xlsx')
 brca_expression <- readxl::read_excel('data/BreastCancer.xlsx', sheet='Expression')
 ```
@@ -240,7 +240,7 @@ class: middle, center
 
 ## Data export
 
-```{r, echo=F}
+```{r 03-DataIngestionMunging-17, echo=F}
 b <- tribble(
   ~Type, ~Function, ~Package,~Notes,
   "csv", "write_csv", "readr", "Takes care of formatting",
@@ -274,7 +274,7 @@ load the clinical breast cancer data into R
 - Note, you have to "activate" the `rio` package in the chunk
 - You have to save the imported object by giving it a name
 
-```{r, echo=F}
+```{r 03-DataIngestionMunging-18, echo=F}
 countdown(minutes=10L)
 ```
 
@@ -507,7 +507,7 @@ Load the data from [this link](data/pew.csv). You can look the structure by `hea
 
 What do you think you would need to do to make this data tidy? (Hint: look at the column headers)
 
-```{r, echo=F}
+```{r 03-DataIngestionMunging-19, echo=F}
 countdown(minutes=5)
 ```
 

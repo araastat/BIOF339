@@ -105,7 +105,7 @@ hist(x) # This is the base R way to create a histogram
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="sim1"}
+```{r 09-Modeling-1, eval=T, echo = F, ref.label="sim1"}
 ```
 ]
 
@@ -122,7 +122,7 @@ hist(x)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="sim2"}
+```{r 09-Modeling-2, eval=T, echo = F, ref.label="sim2"}
 ```
 ]
 
@@ -140,7 +140,7 @@ hist(x)
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="sim3"}
+```{r 09-Modeling-3, eval=T, echo = F, ref.label="sim3"}
 ```
 ]
 
@@ -166,7 +166,7 @@ plt2 <- ggplot(dd, aes( y)) + geom_histogram()
 
 cowplot::plot_grid(plt1, plt2, nrow=1)
 ```
-```{r, eval=T, echo = F, ref.label="sim", fig.height=3.5}
+```{r 09-Modeling-4, eval=T, echo = F, ref.label="sim", fig.height=3.5}
 ```
 
 ---
@@ -183,7 +183,7 @@ plt2 <- ggplot(dd, aes( y)) + geom_histogram()
 
 cowplot::plot_grid(plt1, plt2, nrow=1)
 ```
-```{r, eval=T, echo = F, ref.label="sim4", fig.height=3.5}
+```{r 09-Modeling-5, eval=T, echo = F, ref.label="sim4", fig.height=3.5}
 ```
 
 ---
@@ -199,7 +199,7 @@ We will use the R package `infer` for this section, as well as the `pbc` data. W
 
 A classical thing to do would be a `t.test` or a `wilcox.test`. 
 
-```{r, echo=T}
+```{r 09-Modeling-6, echo=T}
 library(survival)
 
 t.test(bili~trt, data=pbc)
@@ -234,7 +234,8 @@ sims <- pbc %>%
 visualize(sims)
 ```
 
-```{r, echo=T}
+```{r 09-Modeling-7, echo=T}
+library(infer)
 (obs_stat <- pbc %>% mutate(trt=as.factor(trt)) %>% 
   specify(bili ~ trt) %>% 
   calculate(stat='diff in means',order = c('1','2')))
@@ -242,7 +243,7 @@ visualize(sims)
 
 ]
 .pull-right[
-```{r, ref.label='simt', echo = F, eval=T}
+```{r 09-Modeling-8, ref.label='simt', echo = F, eval=T}
 
 ```
 
@@ -268,14 +269,14 @@ sims <- pbc %>%
 visualize(sims) + shade_p_value(obs_stat, direction = 'both')
 ```
 
-```{r, echo=T}
+```{r 09-Modeling-9, echo=T}
 sims %>% get_pvalue(obs_stat, direction ='both')
 
 ```
 
 ]
 .pull-right[
-```{r, ref.label='simt2', echo = F, eval=T}
+```{r 09-Modeling-10, ref.label='simt2', echo = F, eval=T}
 
 ```
 
@@ -297,7 +298,7 @@ Strong theory from the 80s and 90s says that if we repeatedly take bootstrap sam
 ## Bootstrapping for confidence intervals
 
 .pull-left[
-```{r ,echo=T, eval=T}
+```{r 09-Modeling-11,echo=T, eval=T}
 x <- pbc %>% 
   specify(response = bili) %>% 
   generate(reps = 1000, type = 'bootstrap') %>% #<<
@@ -309,12 +310,12 @@ visualize(x)
 ```
 
 
-```{r, echo=T}
+```{r 09-Modeling-12, echo=T}
 (ci <- x %>% get_confidence_interval())
 ```
 ]
 .pull-right[
-```{r, echo=F, eval=T, ref.label='boot'}
+```{r 09-Modeling-13, echo=F, eval=T, ref.label='boot'}
 
 ```
 
@@ -448,7 +449,7 @@ They require a different **philosophic perspective** than traditional associatio
 
 We will use the `pbc` data from the `survival` package, and the in-built `mtcars` dataset.
 
-```{r, echo=T}
+```{r 09-Modeling-14, echo=T}
 library(survival)
 str(pbc)
 ```
@@ -503,7 +504,7 @@ This interpretation holds for the vast majority of statistical models in R
 
 # Our first model
 
-```{r, echo=T}
+```{r 09-Modeling-15, echo=T}
 myLinearModel <- lm(chol ~ bili, data = pbc)
 ```
 
@@ -521,7 +522,7 @@ R does not interpret the model, evaluate the adequacy or appropriateness of the 
 
 # Our first model
 
-```{r, echo=T}
+```{r 09-Modeling-16, echo=T}
 myLinearModel
 ```
 
@@ -531,7 +532,7 @@ myLinearModel
 
 # Our first model
 
-```{r, echo=T}
+```{r 09-Modeling-17, echo=T}
 summary(myLinearModel)
 ```
 
@@ -546,11 +547,11 @@ Talk about the different metrics in this slide
 
 # Our first model
 
-```{r, echo=T}
+```{r 09-Modeling-18, echo=T}
 broom::tidy(myLinearModel)
 ```
 
-```{r, echo=T}
+```{r 09-Modeling-19, echo=T}
 broom::glance(myLinearModel)
 ```
 
@@ -561,14 +562,14 @@ broom::glance(myLinearModel)
 We do need some sense as to how well this model fit the data
 
 .pull-left[
-```{r, echo=T, eval=F}
+```{r 09-Modeling-20, echo=T, eval=F}
 # install.packages('ggfortify')
 library(ggfortify)
 autoplot(myLinearModel)
 ```
 ]
 .pull-right[
-```{r, echo=F, eval=T}
+```{r 09-Modeling-21, echo=F, eval=T}
 # install.packages('ggfortify')
 library(ggfortify)
 autoplot(myLinearModel)
@@ -583,14 +584,14 @@ Let's see if we have some strangeness going on
 
 --
 .pull-left[
-```{r, echo=T, eval=F}
+```{r 09-Modeling-22, echo=T, eval=F}
 ggplot(pbc, aes(x = bili))+geom_density()
 ```
 
 We'd like this to be a bit more "Gaussian" for better behavior
 ]
 .pull-right[
-```{r, echo=F, eval=T}
+```{r 09-Modeling-23, echo=F, eval=T}
 ggplot(pbc, aes(x = bili))+geom_density()
 ```
 
@@ -603,13 +604,13 @@ ggplot(pbc, aes(x = bili))+geom_density()
 Let's see if we have some strangeness going on
 
 .pull-left[
-```{r, echo=T, eval=F}
+```{r 09-Modeling-24, echo=T, eval=F}
 ggplot(pbc, aes(x = log(bili)))+geom_density()
 ```
 
 ]
 .pull-right[
-```{r, echo=F, eval=T}
+```{r 09-Modeling-25, echo=F, eval=T}
 ggplot(pbc, aes(x = log(bili)))+geom_density()
 ```
 
@@ -619,7 +620,7 @@ ggplot(pbc, aes(x = log(bili)))+geom_density()
 
 # Our first model
 
-```{r, echo=T}
+```{r 09-Modeling-26, echo=T}
 myLinearModel2 <- lm(chol~log(bili), data = pbc)
 summary(myLinearModel2)
 ```
@@ -628,7 +629,7 @@ summary(myLinearModel2)
 
 # Our first model
 
-```{r}
+```{r 09-Modeling-27}
 autoplot(myLinearModel2)
 ```
 
@@ -636,7 +637,7 @@ autoplot(myLinearModel2)
 
 # Just the residual plot, please
 
-```{r, echo=T}
+```{r 09-Modeling-28, echo=T}
 autoplot(myLinearModel2, which=1)
 ```
 
@@ -648,8 +649,8 @@ autoplot(myLinearModel2, which=1)
 
 # Just the residual plot, please
 
-```{r, echo=T}
-d <- broom::augment(myLinearModel2)
+```{r 09-Modeling-29, echo=T}
+d <- broom::augment(myLinearModel2, newdata=pbc)
 d
 ```
 
@@ -657,7 +658,7 @@ d
 
 # Just the residual plot, please
 
-```{r, echo=T, fig.height=5}
+```{r 09-Modeling-30, echo=T, fig.height=5}
 ggplot(d, aes(x = .fitted, y = .resid))+geom_point()+ geom_smooth(se=F)+
   labs(x = 'Fitted values', y = 'Residual values')
 ```
@@ -667,7 +668,7 @@ ggplot(d, aes(x = .fitted, y = .resid))+geom_point()+ geom_smooth(se=F)+
 
 # Predictions
 
-```{r, echo=T}
+```{r 09-Modeling-31, echo=T}
 head(predict(myLinearModel2, newdata = pbc))
 ```
 
@@ -677,7 +678,7 @@ The `newdata` has to have the same format and components as the original data th
 
 # Categorical predictors
 
-```{r, echo=T}
+```{r 09-Modeling-32, echo=T}
 myLM3 <- lm(chol ~ log(bili) + sex, data = pbc)
 broom::tidy(myLM3)
 ```
@@ -711,7 +712,7 @@ and we model _logit(p)_, which has a range from $-\infty$ to $\infty$
 
 Logistic regression is a special case of a **generalized linear model**, so the function we use to run a logistic regression is `glm`
 
-```{r, echo = T}
+```{r 09-Modeling-33, echo = T}
 myLR <- glm(spiders ~ albumin + bili + chol, data = pbc, family = binomial)
 myLR
 ```
@@ -723,12 +724,12 @@ myLR
 
 # Logistic regression
 
-```{r, echo=T}
+```{r 09-Modeling-34, echo=T}
 broom::tidy(myLR)
 ```
 --
 
-```{r, echo=T}
+```{r 09-Modeling-35, echo=T}
 broom::glance(myLR)
 ```
 
@@ -736,7 +737,7 @@ broom::glance(myLR)
 
 # Predictions from logistic regression
 
-```{r, echo=T}
+```{r 09-Modeling-36, echo=T}
 head(predict(myLR))
 ```
 --
@@ -744,7 +745,7 @@ head(predict(myLR))
 These are on the "wrong" scale. We would expect probabilities
 --
 
-```{r, echo=T}
+```{r 09-Modeling-37, echo=T}
 head(predict(myLR, type='response'))
 ```
 
@@ -801,7 +802,7 @@ You can look at graphs, as well as science, for clues about interactions (synerg
 
 # Automated model selection
 
-```{r, echo=T}
+```{r 09-Modeling-38, echo=T}
 # install.packages('leaps')
 library(leaps)
 mtcars1 <- mtcars %>% mutate_at(vars(cyl, vs:carb), as.factor)
@@ -815,7 +816,7 @@ all_subsets
 
 Which has the best R<sup>2</sup>?
 
-```{r, echo=T}
+```{r 09-Modeling-39, echo=T}
 ind <- which.max(summary(all_subsets)$adjr2)
 summary(all_subsets)$which[ind,]
 ```

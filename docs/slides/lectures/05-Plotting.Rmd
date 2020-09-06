@@ -39,7 +39,7 @@ Some functions I found particularly useful from your solutions to HW 3:
 
 ## A basic function
 
-```{r, eval = F}
+```{r 05-Plotting-1, eval = F}
 name <- function(variables) {
   
 }
@@ -54,7 +54,7 @@ name <- function(variables) {
 
 # A basic function
 
-```{r}
+```{r 05-Plotting-2}
 
 my_mean <- function(x){
   out <- sum(x, na.rm=T)/length(x)
@@ -95,11 +95,11 @@ Functions encapsulate repeated tasks. All the functions you use from packages ar
 
 The main way you can figure out the syntax for a function is from its help documentation
 
-```{r, eval=F}
+```{r 05-Plotting-3, eval=F}
 help(case_when)
 ```
 
-```{r, eval=F}
+```{r 05-Plotting-4, eval=F}
 ?parse_number
 ```
 
@@ -113,7 +113,7 @@ class: middle, center
 ## Anscombe's data
 
 .pull-left[
-```{r, echo=F}
+```{r 05-Plotting-5, echo=F}
 library(datasauRus)
 
 d <- anscombe %>% 
@@ -149,7 +149,7 @@ ggplot(d, aes(x, y))+
 
 .pull-left[
 
-```{r, echo=F}
+```{r 05-Plotting-6, echo=F}
  ggplot(datasaurus_dozen, aes(x=x, y=y, colour=dataset))+
     geom_point()+
     theme_void()+
@@ -189,7 +189,7 @@ class: middle, center
 ---
 ## Gallery
 
-```{r, echo = F, fig.align='center'}
+```{r 05-Plotting-7, echo = F, fig.align='center'}
 # install.packages('ggpubr')
 library(ggpubr)
 data("ToothGrowth")
@@ -210,7 +210,7 @@ This is a typical plot in scientific journals
 
 ## Gallery
 
-```{r, echo = F, fig.align = 'center'}
+```{r 05-Plotting-8, echo = F, fig.align = 'center'}
 # install.packages('cowplot')
 library(cowplot)
 p1 <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) + 
@@ -250,7 +250,7 @@ These graphs can be cleaned up some.
 
 ## Gallery
 
-```{r, echo = F, fig.align="center"}
+```{r 05-Plotting-9, echo = F, fig.align="center"}
 # library
 library(ggridges)
 library(ggplot2)
@@ -271,7 +271,7 @@ This is a plot of the diamonds dataset that comes with ggplot2
 ## Gallery
 
 ### Manhattan plot
-```{r, echo = F, fig.align="center", out.height = "500px", out.width="600px", message = F}
+```{r 05-Plotting-10, echo = F, fig.align="center", out.height = "500px", out.width="600px", message = F}
 library(qqman)
 manhattan(gwasResults, annotatePval = 0.01)
 
@@ -292,7 +292,7 @@ the line for the significance levels
 #install.packages('CMplot')
 library(CMplot)
 data(pig60K)
-CMplot(pig60K, plot.type="c", chr.labels=paste("Chr",c(1:18,"X"),sep=""), r=0.4, cir.legend=TRUE,
+CMplot(pig60K, plot.type="c", chr.labels=paste("Chr",c(1:18,"X", 'Y'),sep=""), r=0.4, cir.legend=TRUE,
         outward=FALSE, cir.legend.col="black", cir.chr.h=1.3 ,chr.den.col="black", file="jpg",
         memo="", dpi=300)
 detach('package:CMplot')
@@ -300,7 +300,7 @@ detach('package:CMplot')
 
 
 
-```{r, echo=F, out.height="500", out.width="500"}
+```{r 05-Plotting-11, echo=F, out.height="500", out.width="500"}
 knitr::include_graphics('Circular-Manhattan.trait1.trait2.trait3.jpg')
 ```
 
@@ -314,7 +314,7 @@ This gives a different representation of the manhattan plot. This example looks 
 
 ### Maps
 
-```{r, echo = F}
+```{r 05-Plotting-12, echo = F}
 library(choroplethr)
 data(df_pop_county)
 county_choropleth(df_pop_county,
@@ -327,7 +327,7 @@ detach('package:choroplethr')
 
 ### Interactive graphs
 
-```{r,  echo=F, eval=T}
+```{r 05-Plotting-13,  echo=F, eval=T}
 library(plotly)
 library(fs)
 library(here)
@@ -451,7 +451,7 @@ Emphasize that ggplot uses the + sign for piping, while the rest of the tidyvers
 
 ## Introduction to ggplot2
 
-```{r, eval=F}
+```{r 05-Plotting-14, eval=F}
 library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point()
 ```
@@ -466,7 +466,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point()
 ---
 
 ## Introduction to ggplot2
-```{r, eval=F}
+```{r 05-Plotting-15, eval=F}
 library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point()+ geom_smooth()
 ```
@@ -485,12 +485,12 @@ ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point()+ geom_smooth()
 
 We will use the [beaches](data/sydneybeaches3.csv) dataset
 
-```{r, echo = T, message = F}
+```{r 05-Plotting-16, echo = T, message = F}
 library(tidyverse)
 library(rio)
 beaches <- import('data/sydneybeaches3.csv')
 ```
-```{r, echo = F}
+```{r 05-Plotting-17, echo = F}
 head(beaches)
 ```
 
@@ -514,7 +514,7 @@ ggplot()
 
 ### 
 
-```{r, ref.label='gr2', eval=T, echo = F}
+```{r 05-Plotting-18, ref.label='gr2', eval=T, echo = F}
 
 ```
 
@@ -535,7 +535,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr3', eval=T, echo = F}
+```{r 05-Plotting-19, ref.label='gr3', eval=T, echo = F}
 
 ```
 
@@ -566,7 +566,7 @@ What goes in
 
 ### 
 
-```{r, ref.label='gr4', eval=T, echo = F}
+```{r 05-Plotting-20, ref.label='gr4', eval=T, echo = F}
 
 ```
 
@@ -600,7 +600,7 @@ What to draw:
 
 ### 
 
-```{r, ref.label='gr5', eval=T, echo = F}
+```{r 05-Plotting-21, ref.label='gr5', eval=T, echo = F}
 
 ```
 
@@ -632,7 +632,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr6', eval=T, echo = F}
+```{r 05-Plotting-22, ref.label='gr6', eval=T, echo = F}
 
 ```
 
@@ -664,7 +664,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr7', eval=T, echo = F}
+```{r 05-Plotting-23, ref.label='gr7', eval=T, echo = F}
 
 ```
 
@@ -695,7 +695,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr8', eval=T, echo = F}
+```{r 05-Plotting-24, ref.label='gr8', eval=T, echo = F}
 
 ```
 
@@ -727,7 +727,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr9', eval=T, echo = F}
+```{r 05-Plotting-25, ref.label='gr9', eval=T, echo = F}
 
 ```
 
@@ -760,7 +760,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr10', eval=T, echo = F}
+```{r 05-Plotting-26, ref.label='gr10', eval=T, echo = F}
 
 ```
 
@@ -794,7 +794,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr11', eval=T, echo = F}
+```{r 05-Plotting-27, ref.label='gr11', eval=T, echo = F}
 
 ```
 
@@ -831,7 +831,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr12', eval=T, echo = F}
+```{r 05-Plotting-28, ref.label='gr12', eval=T, echo = F}
 
 ```
 
@@ -858,7 +858,7 @@ class: middle, center
 .pull-left[
 ### If I write...
 
-```{r, eval = F, echo = T}
+```{r 05-Plotting-29, eval = F, echo = T}
 ggplot(
   data = beaches,
   aes(x = temperature,
@@ -872,7 +872,7 @@ ggplot(
 .pull-right[
 ### what's really run is ...
 
-```{r,echo = T, eval = F}
+```{r 05-Plotting-30,echo = T, eval = F}
 ggplot(
   data = beaches, 
   mapping = aes(
@@ -928,7 +928,7 @@ ggplot(
 
 ### 
 
-```{r, ref.label='gr13', eval=T, echo = F}
+```{r 05-Plotting-31, ref.label='gr13', eval=T, echo = F}
 
 ```
 
@@ -940,7 +940,7 @@ ggplot(
 
 We'll use the brca data developed during the homework. The RDS file is available [here](data/brca.rds). 
 
-```{r}
+```{r 05-Plotting-32}
 brca_clean <- readRDS('data/brca.rds')
 brca_clean <- brca_clean %>% 
   rename('Age' = 'Age.at.Initial.Pathologic.Diagnosis')
@@ -959,7 +959,7 @@ ggplot(data=brca_clean,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u1"}
+```{r 05-Plotting-33, eval=T, echo = F, ref.label="u1"}
 ```
 ]
 
@@ -975,7 +975,7 @@ ggplot(data=brca_clean,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u2"}
+```{r 05-Plotting-34, eval=T, echo = F, ref.label="u2"}
 ```
 ]
 
@@ -991,7 +991,7 @@ ggplot(data=brca_clean,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u22"}
+```{r 05-Plotting-35, eval=T, echo = F, ref.label="u22"}
 ```
 ]
 
@@ -1010,7 +1010,7 @@ ggplot(data = brca_clean,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u3"}
+```{r 05-Plotting-36, eval=T, echo = F, ref.label="u3"}
 ```
 ]
 
@@ -1033,7 +1033,7 @@ ggplot(data = brca_clean,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u4"}
+```{r 05-Plotting-37, eval=T, echo = F, ref.label="u4"}
 ```
 ]
 
@@ -1054,7 +1054,7 @@ ggplot(data = brca_clean,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u5"}
+```{r 05-Plotting-38, eval=T, echo = F, ref.label="u5"}
 ```
 ]
 
@@ -1076,7 +1076,7 @@ ggplot(data=mpg,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u6"}
+```{r 05-Plotting-39, eval=T, echo = F, ref.label="u6"}
 ```
 ]
 
@@ -1094,7 +1094,7 @@ ggplot(data=mpg,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u7"}
+```{r 05-Plotting-40, eval=T, echo = F, ref.label="u7"}
 ```
 ]
 ---
@@ -1116,7 +1116,7 @@ This forces a straight line.
 
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u8"}
+```{r 05-Plotting-41, eval=T, echo = F, ref.label="u8"}
 ```
 ]
 
@@ -1134,7 +1134,7 @@ ggplot(data = mpg,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u9"}
+```{r 05-Plotting-42, eval=T, echo = F, ref.label="u9"}
 ```
 ]
 ---
@@ -1156,7 +1156,7 @@ Separate lines for separate groups
 `se=F` suppresses the confidence bands
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u10"}
+```{r 05-Plotting-43, eval=T, echo = F, ref.label="u10"}
 ```
 ]
 
@@ -1191,7 +1191,7 @@ ggplot(data = mpg,
 
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="u11"}
+```{r 05-Plotting-44, eval=T, echo = F, ref.label="u11"}
 ```
 ]
 
@@ -1211,7 +1211,7 @@ ggplot(data = brca_clean,
 + Can't see the points since they are overlayed
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="v1"}
+```{r 05-Plotting-45, eval=T, echo = F, ref.label="v1"}
 ```
 ]
 
@@ -1232,7 +1232,7 @@ ggplot(data = brca_clean,
 + Maybe too wide?
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="v2"}
+```{r 05-Plotting-46, eval=T, echo = F, ref.label="v2"}
 ```
 ]
 
@@ -1253,7 +1253,7 @@ ggplot(data = brca_clean,
 
 ]
 .pull-right[
-```{r, eval=T, echo = F, ref.label="v3"}
+```{r 05-Plotting-47, eval=T, echo = F, ref.label="v3"}
 ```
 ]
 
@@ -1270,7 +1270,7 @@ library(qqman)
 data(gwasResults)
 head(gwasResults)
 ```
-```{r }
+```{r 05-Plotting-48 }
 gwasResults <- gwasResults %>% 
   mutate(x_position = 1:n())
 head(gwasResults)
@@ -1297,7 +1297,7 @@ ggplot(gwasResults,
 ```
 ]
 .pull-right[
-```{r,eval=T, echo = F, ref.label="m1"}
+```{r 05-Plotting-49,eval=T, echo = F, ref.label="m1"}
 
 ```
 
@@ -1328,7 +1328,7 @@ CHR in as numeric.
 Need to convert to factor, i.e., discrete
 ]
 .pull-right[
-```{r, eval=T, echo=F, ref.label="m2"}
+```{r 05-Plotting-50, eval=T, echo=F, ref.label="m2"}
 
 ```
 
@@ -1353,7 +1353,7 @@ ggplot(gwasResults,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo=F, ref.label="m3"}
+```{r 05-Plotting-51, eval=T, echo=F, ref.label="m3"}
 
 ```
 
@@ -1376,7 +1376,7 @@ ggplot(gwasResults,
 ```
 ]
 .pull-right[
-```{r, eval=T, echo=F, ref.label='m4'}
+```{r 05-Plotting-52, eval=T, echo=F, ref.label='m4'}
 
 ```
 
@@ -1402,7 +1402,7 @@ ggplot(gwasResults,
 + A new function `facet_wrap`
 ]
 .pull-right[
-```{r, eval=T, echo=F, ref.label='exploded'}
+```{r 05-Plotting-53, eval=T, echo=F, ref.label='exploded'}
 
 ```
 
