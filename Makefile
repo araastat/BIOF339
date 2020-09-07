@@ -15,7 +15,7 @@ docs/slides/lectures/%.html: slides/lectures/%.Rmd
 
 slideweb : docs/slides/index.html
 
-docs/slides/index.html : slides/index.Rmd $(htmlfiles)
+docs/slides/index.html : slides/index.Rmd $(rmdfiles)
 	cd slides; Rscript -e "rmarkdown::render_site('index.Rmd')"
 
 buildclass: lectures slideweb
