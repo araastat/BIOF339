@@ -490,16 +490,44 @@ class: middle, center, inverse
 
 # Plan
 
-
-|Week   |Topic                                                                    |
-|:------|:------------------------------------------------------------------------|
-|Week 1 |Introduction to R: Working environmnent and data structures              |
-|Week 2 |Using packages to enhance data ingestion, munging, and reporting         |
-|Week 3 |Data visualization for exploration and reporting                         |
-|Week 4 |Statistical analyses using R                                             |
-|Week 5 |Statistical learning using R                                             |
-|Week 6 |Designing and analyzing experiments, with a sprinkling of bioinformatics |
-|Week 7 |Reproducible documents for analytic reporting                            |
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Week &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Topic &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Week 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Introduction to R: Working environmnent and data structures &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Week 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Using packages to enhance data ingestion, munging, and reporting &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Week 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Data visualization for exploration and reporting &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Week 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Statistical analyses using R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Week 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Statistical learning using R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Week 6 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Designing and analyzing experiments, with a sprinkling of bioinformatics &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Week 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Reproducible documents for analytic reporting &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 ---
 
@@ -916,8 +944,8 @@ runif(10, 0, 10)
 ```
 
 ```
-#&gt;   [1] 9.6383786 2.7689373 2.4291854 1.7018136 4.8812344 0.5893566 1.9033637
-#&gt;   [8] 9.7952480 2.1012500 5.6648043
+#&gt;   [1] 9.6383786 2.7689373 2.4291854 1.7018136 4.8812344
+#&gt;   [6] 0.5893566 1.9033637 9.7952480 2.1012500 5.6648043
 ```
 
 ---
@@ -982,21 +1010,21 @@ summary(airquality)
 ```
 
 ```
-#&gt;       Ozone           Solar.R           Wind             Temp      
-#&gt;   Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
-#&gt;   1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
-#&gt;   Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
-#&gt;   Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
-#&gt;   3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
-#&gt;   Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
-#&gt;   NA's   :37       NA's   :7                                       
-#&gt;       Month            Day      
-#&gt;   Min.   :5.000   Min.   : 1.0  
-#&gt;   1st Qu.:6.000   1st Qu.: 8.0  
-#&gt;   Median :7.000   Median :16.0  
-#&gt;   Mean   :6.993   Mean   :15.8  
-#&gt;   3rd Qu.:8.000   3rd Qu.:23.0  
-#&gt;   Max.   :9.000   Max.   :31.0  
+#&gt;       Ozone           Solar.R           Wind       
+#&gt;   Min.   :  1.00   Min.   :  7.0   Min.   : 1.700  
+#&gt;   1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400  
+#&gt;   Median : 31.50   Median :205.0   Median : 9.700  
+#&gt;   Mean   : 42.13   Mean   :185.9   Mean   : 9.958  
+#&gt;   3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500  
+#&gt;   Max.   :168.00   Max.   :334.0   Max.   :20.700  
+#&gt;   NA's   :37       NA's   :7                       
+#&gt;        Temp           Month            Day      
+#&gt;   Min.   :56.00   Min.   :5.000   Min.   : 1.0  
+#&gt;   1st Qu.:72.00   1st Qu.:6.000   1st Qu.: 8.0  
+#&gt;   Median :79.00   Median :7.000   Median :16.0  
+#&gt;   Mean   :77.88   Mean   :6.993   Mean   :15.8  
+#&gt;   3rd Qu.:85.00   3rd Qu.:8.000   3rd Qu.:23.0  
+#&gt;   Max.   :97.00   Max.   :9.000   Max.   :31.0  
 #&gt;  
 ```
 ]
@@ -1099,7 +1127,7 @@ median(airquality$Temp)
 hist(airquality$Temp)
 ```
 
-&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-17-1.png" width="504" /&gt;
+&lt;img src="01-intro_files/figure-html/01-intro-17-1.png" width="504" /&gt;
 ]
 
 ---
@@ -1112,7 +1140,7 @@ hist(airquality$Temp)
 plot(Ozone ~ Month, data = airquality)
 ```
 
-&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-18-1.png" width="504" height="400" /&gt;
+&lt;img src="01-intro_files/figure-html/01-intro-18-1.png" width="504" height="400" /&gt;
 ]
 .pull-right[
 
@@ -1124,7 +1152,7 @@ ggplot(airquality) +
   theme_bw()
 ```
 
-&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-19-1.png" width="504" height="400" /&gt;
+&lt;img src="01-intro_files/figure-html/01-intro-19-1.png" width="504" height="400" /&gt;
 
 ]
 
@@ -1143,7 +1171,8 @@ summary(aov(Ozone ~ Month, data=airquality))
 #&gt;  Month         1   3387    3387   3.171 0.0776 .
 #&gt;  Residuals   114 121756    1068                 
 #&gt;  ---
-#&gt;  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt;  Signif. codes:  
+#&gt;  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt;  37 observations deleted due to missingness
 ```
 
@@ -1165,7 +1194,8 @@ summary(aov(Ozone~factor(Month), data=airquality))
 #&gt;  factor(Month)   4  29438    7359   8.536 4.83e-06 ***
 #&gt;  Residuals     111  95705     862                     
 #&gt;  ---
-#&gt;  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt;  Signif. codes:  
+#&gt;  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt;  37 observations deleted due to missingness
 ```
 
