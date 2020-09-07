@@ -1,13 +1,13 @@
 ---
 title: "Practical R: Introductions"
 author: Abhijit Dasgupta
-date: Fall, 2019
+date: BIOF 339
 
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
-knitr::opts_chunk$set( warning=F, message = F)
+knitr::opts_chunk$set( warning=F, message = F, fig.retina=3)
 library(tidyverse)
 library(lubridate)
 library(knitr)
@@ -20,7 +20,8 @@ library(countdown)
 layout: true
 
 <div class="my-header">
-<span>BIOF339, Fall, 2019</span></div>
+<span>BIOF339</span></div>
+</div>
 
 ---
 class: middle, center
@@ -28,6 +29,10 @@ class: middle, center
 <img src="img/R.jpg" height="561" width="724"/>
 
 ---
+```{r, child='../../Personal/slideFormat.Rmd'}
+
+```
+
 
 # What does R look like?
 .right-column30[
@@ -470,45 +475,41 @@ class: middle, center, inverse
 
 ```{r outline, echo = FALSE, warning=F, message=F}
 
-
-startDate <- lubridate::ymd('20190911')
-classDate <- function(wk, startDate ){
-  today <- startDate + 7*(wk-1)
-  return(format(today, "%B %d, %Y"))
-}
-dts <- classDate(1:14, startDate)
+dts <- paste('Week', 1:7)
 topics <- c(
-  'Introduction to R, RStudio and RMarkdown',
-  'Data Structures in R .fatinline[(classes 5:30-7, 7-8:30)]',
-  'R packages, data import/export',
-  'Towards analytic data: Data Munging',
-  'Data exploration through visualization',
-  'Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot',
-  'Statistical analyses: Classical hypothesis testing and computational inference',
-  'Statistical learning: Regression models',
-  'Statistical learning: Cluster analysis and pattern recognition .fatinline[(classes 5:30-7, 7-8:30)]',
-  "More data munging with `purrr`: grouping, mapping and functional programming",
-  "Basic bioinformatics: Bioconductor and friends",
-  ".heatinline[No class (Thanksgiving)]",
-  "More complex visualizations and RMarkdown",
-  "Project presentations")
-D <- tibble( Date = dts, Topic=topics)
+  'Introduction to R: Working environmnent and data structures',
+  'Using packages to enhance data ingestion, munging, and reporting',
+  'Data visualization for exploration and reporting',
+  'Statistical analyses using R',
+  'Statistical learning using R',
+  'Designing and analyzing experiments, with a sprinkling of bioinformatics',
+  'Reproducible documents for analytic reporting'
+)
+
+D <- tibble( Week = dts, Topic=topics)
 knitr::kable(D)
 
 ```
+
+---
+
+## Teaching materials
+
+1. The main ideas for the week will be developed through videos, screencasts and slides
+1. I will assign tutorials where you can interactively work with R to improve your understanding
+    + [RStudio Primers](https://rstudio.cloud/learn/primers)
+    + I will create and periodically update a R package of R tutorials, that will be called `BIOF339Tutorials`. Instructions are forthcoming
 
 
 ---
 
 # Grading rubric
 
-1. Homeworks, available Friday after class, due by 11:59PM the following Tuesday.  (50%)
-    - No late homeworks, since solutions will be available Wednesday mornings
-    - I'll score the top 10 homeworks for grade
-1. Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (20%)
-1. Class participation (20%)
-1. Completion and submission of class exercises (10%, marked for completion)
-    - These will need to be in basic RMarkdown, showing the problem and the solution. You can add a section for questions here that I can address in the following class or online. These will have to be submitted before you leave the classroom
+1. Homeworks for each week are due Sunday at 11:59pm (50%)
+    - No late homeworks
+    - We'll have 6 homeworks, I'll score the top 4 for grade
+1. Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (30%)
+1. Class participation (20%): Discussion topics each week
 
 ---
 
@@ -516,26 +517,18 @@ knitr::kable(D)
 
 ## Homework
 
-+ Each homework will come with a submission link. 
-  - This link will automatically expire at deadline
-+ Name your RMarkdown file <Name>_HW<#>.Rmd
-  - For example *FelixLeiter_HW3.Rmd*
-+ The RMarkdown file should be self contained, i.e. I should be able to run it
-
-
-### Must contain "BIOF339" and your name in the subject line
-
-### Needs to be a attached RMarkdown file that I can run
-
-We'll talk about RMarkdown later today
++ All homework will be submitted via Canvas
++ You must submit your homework using R Markdown
+    - The submission will consist of 2 files: A Rmd file and the corresponding HTML file. Both are required for full credit. 
++ I will initially provide templates for the homework, but you will be expected to create your own R Markdown documents by week 4. 
 
 ---
 
 # Communication
 
 - Primarily via `r fa('slack')` [Slack](http://www.slack.com). 
-  - Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/enQtNzU1Njk5NDc2MDMyLWU5MjkwNzNlMmRlYTAwNDg2MGZjYWQ1YzEzMDUxMzc0MzE1NjZkMDFlY2Y0NTIyMGI2Y2VkODBiYmY0MjBiMzE).
-  - You will see two channels named `r fa('slack-hash')`*wed5-7_2019* and `r fa('slack-hash')`*wed7-9_2019*. Please join the channel corresponding to your section. 
+  - Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/zt-hczp2mg1-Yh0yqms52wAA8H445jkBUg).
+  - You will see a channel `#fall2020-a`. Please join this channel
 - Slack for broadcasting messages, answering questions and the like. 
   - If you have a question, you can directly message me on Slack. Expect an answer within 24 hours.
 - Office hours by appointment
@@ -544,15 +537,15 @@ We'll talk about RMarkdown later today
 
 # Class project
 
-- Create a RMarkdown document or presentation
+- Create a R Markdown document or presentation
 - Use your own data, or data available on the web (legally)
 - Show me that you can 
   - import data into R
   - manipulate (munge) the data
   - perform some analysis on the data
   - create a visualization
-  - create a report in RMarkdown
-- 5 minute _lightning talks_ on final class day
+  - create a report in R Markdown
+- 5 minute _lightning talks_ that can be recorded using Quicktime or [Screencastify](https://www.screencastify.com/)
 
 ---
 class: inverse, middle, center

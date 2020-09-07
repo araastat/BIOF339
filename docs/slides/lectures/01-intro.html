@@ -6,6 +6,11 @@
     <meta name="author" content="Abhijit Dasgupta" />
     <script src="01-intro_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="01-intro_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <script src="01-intro_files/xaringanExtra_fit-screen-0.2.3/fit-screen.js"></script>
+    <link href="01-intro_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="01-intro_files/panelset-0.2.3/panelset.css" rel="stylesheet" />
+    <script src="01-intro_files/panelset-0.2.3/panelset.js"></script>
+    <link href="01-intro_files/xaringanExtra-extra-styles-0.2.3/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="robot.css" type="text/css" />
     <link rel="stylesheet" href="robot-fonts.css" type="text/css" />
     <link rel="stylesheet" href="sfah.css" type="text/css" />
@@ -16,7 +21,7 @@ class: center, middle, inverse, title-slide
 
 # Practical R: Introductions
 ### Abhijit Dasgupta
-### Fall, 2019
+### BIOF 339
 
 ---
 
@@ -26,7 +31,8 @@ class: center, middle, inverse, title-slide
 layout: true
 
 &lt;div class="my-header"&gt;
-&lt;span&gt;BIOF339, Fall, 2019&lt;/span&gt;&lt;/div&gt;
+&lt;span&gt;BIOF339&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
 
 ---
 class: middle, center
@@ -34,6 +40,10 @@ class: middle, center
 &lt;img src="img/R.jpg" height="561" width="724"/&gt;
 
 ---
+
+
+
+
 
 # What does R look like?
 .right-column30[
@@ -481,35 +491,35 @@ class: middle, center, inverse
 # Plan
 
 
-|Date               |Topic                                                                                               |
-|:------------------|:---------------------------------------------------------------------------------------------------|
-|September 11, 2019 |Introduction to R, RStudio and RMarkdown                                                            |
-|September 18, 2019 |Data Structures in R .fatinline[(classes 5:30-7, 7-8:30)]                                           |
-|September 25, 2019 |R packages, data import/export                                                                      |
-|October 02, 2019   |Towards analytic data: Data Munging                                                                 |
-|October 09, 2019   |Data exploration through visualization                                                              |
-|October 16, 2019   |Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot                 |
-|October 23, 2019   |Statistical analyses: Classical hypothesis testing and computational inference                      |
-|October 30, 2019   |Statistical learning: Regression models                                                             |
-|November 06, 2019  |Statistical learning: Cluster analysis and pattern recognition .fatinline[(classes 5:30-7, 7-8:30)] |
-|November 13, 2019  |More data munging with `purrr`: grouping, mapping and functional programming                        |
-|November 20, 2019  |Basic bioinformatics: Bioconductor and friends                                                      |
-|November 27, 2019  |.heatinline[No class (Thanksgiving)]                                                                |
-|December 04, 2019  |More complex visualizations and RMarkdown                                                           |
-|December 11, 2019  |Project presentations                                                                               |
+|Week   |Topic                                                                    |
+|:------|:------------------------------------------------------------------------|
+|Week 1 |Introduction to R: Working environmnent and data structures              |
+|Week 2 |Using packages to enhance data ingestion, munging, and reporting         |
+|Week 3 |Data visualization for exploration and reporting                         |
+|Week 4 |Statistical analyses using R                                             |
+|Week 5 |Statistical learning using R                                             |
+|Week 6 |Designing and analyzing experiments, with a sprinkling of bioinformatics |
+|Week 7 |Reproducible documents for analytic reporting                            |
+
+---
+
+## Teaching materials
+
+1. The main ideas for the week will be developed through videos, screencasts and slides
+1. I will assign tutorials where you can interactively work with R to improve your understanding
+    + [RStudio Primers](https://rstudio.cloud/learn/primers)
+    + I will create and periodically update a R package of R tutorials, that will be called `BIOF339Tutorials`. Instructions are forthcoming
 
 
 ---
 
 # Grading rubric
 
-1. Homeworks, available Friday after class, due by 11:59PM the following Tuesday.  (50%)
-    - No late homeworks, since solutions will be available Wednesday mornings
-    - I'll score the top 10 homeworks for grade
-1. Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (20%)
-1. Class participation (20%)
-1. Completion and submission of class exercises (10%, marked for completion)
-    - These will need to be in basic RMarkdown, showing the problem and the solution. You can add a section for questions here that I can address in the following class or online. These will have to be submitted before you leave the classroom
+1. Homeworks for each week are due Sunday at 11:59pm (50%)
+    - No late homeworks
+    - We'll have 6 homeworks, I'll score the top 4 for grade
+1. Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (30%)
+1. Class participation (20%): Discussion topics each week
 
 ---
 
@@ -517,26 +527,18 @@ class: middle, center, inverse
 
 ## Homework
 
-+ Each homework will come with a submission link. 
-  - This link will automatically expire at deadline
-+ Name your RMarkdown file &lt;Name&gt;_HW&lt;#&gt;.Rmd
-  - For example *FelixLeiter_HW3.Rmd*
-+ The RMarkdown file should be self contained, i.e. I should be able to run it
-
-
-### Must contain "BIOF339" and your name in the subject line
-
-### Needs to be a attached RMarkdown file that I can run
-
-We'll talk about RMarkdown later today
++ All homework will be submitted via Canvas
++ You must submit your homework using R Markdown
+    - The submission will consist of 2 files: A Rmd file and the corresponding HTML file. Both are required for full credit. 
++ I will initially provide templates for the homework, but you will be expected to create your own R Markdown documents by week 4. 
 
 ---
 
 # Communication
 
 - Primarily via &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M244.2 217.5l19.3 57.7-59.8 20-19.3-57.7 59.8-20zm41.4 243.7C131.6 507.4 65 471.6 18.8 317.6S8.4 97 162.4 50.8C316.4 4.6 383 40.4 429.2 194.4c46.2 154 10.4 220.6-143.6 266.8zM366.2 265c-3.9-12.2-17.2-18.6-29.4-14.7l-29 9.7-19.3-57.7 29-9.7c12.2-3.9 18.6-17.2 14.7-29.4-3.9-12.2-17.2-18.6-29.4-14.7l-29 9.7-10-30.1c-3.9-12.2-17.2-18.6-29.4-14.7-12.2 3.9-18.6 17.2-14.7 29.4l10 30.1-59.8 20.1-10-30.1c-3.9-12.2-17.2-18.6-29.4-14.7-12.2 3.9-18.6 17.2-14.7 29.4l10 30.1-29 9.7c-12.2 3.9-18.6 17.2-14.7 29.4 3.2 9.3 12.2 15.4 21.5 15.8 4.3.6 7.7-1 36.9-10.7l19.3 57.7-29 9.7c-12.2 3.9-18.6 17.2-14.7 29.4 3.2 9.3 12.2 15.4 21.5 15.8 4.3.6 7.7-1 36.9-10.7l10 30.1c3.7 10.8 15.8 18.6 29.4 14.7 12.2-3.9 18.6-17.2 14.7-29.4l-10-30.1 59.8-20.1 10 30.1c3.7 10.8 15.8 18.6 29.4 14.7 12.2-3.9 18.6-17.2 14.7-29.4l-10-30.1 29-9.7c12.2-4.2 18.6-17.5 14.7-29.6z"/&gt;&lt;/svg&gt; [Slack](http://www.slack.com). 
-  - Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/enQtNzU1Njk5NDc2MDMyLWU5MjkwNzNlMmRlYTAwNDg2MGZjYWQ1YzEzMDUxMzc0MzE1NjZkMDFlY2Y0NTIyMGI2Y2VkODBiYmY0MjBiMzE).
-  - You will see two channels named &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M446.2 270.4c-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-30.3-90 45.4-15.1c19.1-6.2 29.1-26.8 23-45.9-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-93.4 31.2-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-45.3 15c-19.1 6.2-29.1 26.8-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l30.3 90L78 354.8c-19 6.2-29.1 26.9-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 93.6-31.3 15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 45.4-15.1c19-6 29.1-26.7 22.9-45.7zm-254.1 47.2l-30.3-90.2 93.5-31.3 30.3 90.2-93.5 31.3z"/&gt;&lt;/svg&gt;*wed5-7_2019* and &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M446.2 270.4c-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-30.3-90 45.4-15.1c19.1-6.2 29.1-26.8 23-45.9-6.2-19-26.9-29.1-46-22.9l-45.4 15.1-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-93.4 31.2-15.7-47c-6.2-19-26.9-29.1-46-22.9-19.1 6.2-29.1 26.8-23 45.9l15.7 47-45.3 15c-19.1 6.2-29.1 26.8-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l30.3 90L78 354.8c-19 6.2-29.1 26.9-23 45.9 5 14.5 19.1 24 33.6 24.6 6.8 1 12-1.6 57.7-16.8l15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 93.6-31.3 15.7 47c5.9 16.9 24.7 29 46 22.9 19.1-6.2 29.1-26.8 23-45.9l-15.7-47 45.4-15.1c19-6 29.1-26.7 22.9-45.7zm-254.1 47.2l-30.3-90.2 93.5-31.3 30.3 90.2-93.5 31.3z"/&gt;&lt;/svg&gt;*wed7-9_2019*. Please join the channel corresponding to your section. 
+  - Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/zt-hczp2mg1-Yh0yqms52wAA8H445jkBUg).
+  - You will see a channel `#fall2020-a`. Please join this channel
 - Slack for broadcasting messages, answering questions and the like. 
   - If you have a question, you can directly message me on Slack. Expect an answer within 24 hours.
 - Office hours by appointment
@@ -545,15 +547,15 @@ We'll talk about RMarkdown later today
 
 # Class project
 
-- Create a RMarkdown document or presentation
+- Create a R Markdown document or presentation
 - Use your own data, or data available on the web (legally)
 - Show me that you can 
   - import data into R
   - manipulate (munge) the data
   - perform some analysis on the data
   - create a visualization
-  - create a report in RMarkdown
-- 5 minute _lightning talks_ on final class day
+  - create a report in R Markdown
+- 5 minute _lightning talks_ that can be recorded using Quicktime or [Screencastify](https://www.screencastify.com/)
 
 ---
 class: inverse, middle, center
@@ -1097,7 +1099,7 @@ median(airquality$Temp)
 hist(airquality$Temp)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-17-1.png)&lt;!-- --&gt;
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-17-1.png" width="504" /&gt;
 ]
 
 ---
@@ -1110,7 +1112,7 @@ hist(airquality$Temp)
 plot(Ozone ~ Month, data = airquality)
 ```
 
-&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-18-1.png" height="400" /&gt;
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-18-1.png" width="504" height="400" /&gt;
 ]
 .pull-right[
 
@@ -1122,7 +1124,7 @@ ggplot(airquality) +
   theme_bw()
 ```
 
-&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-19-1.png" height="400" /&gt;
+&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/01-intro_files/figure-html/01-intro-19-1.png" width="504" height="400" /&gt;
 
 ]
 

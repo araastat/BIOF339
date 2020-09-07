@@ -21,6 +21,8 @@ docs/assignments/HW/*.R
 docs/_top_level/*
 _top_level/*
 
+*.swp
+slides/lectures/*files/*
 docs/slides/lectures/**/*cache/*
 Projects/*
 docs/Projects/**/*.csv
