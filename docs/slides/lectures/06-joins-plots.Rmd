@@ -1,14 +1,14 @@
 ---
 title: "Joins, and more plotting"
 author: Abhijit Dasgupta
-date: Fall, 2019
+date: BIOF 339
 ---
 
 
 layout: true
 
 <div class="my-header">
-<span>BIOF339, Fall, 2019</span></div>
+<span>BIOF339, BIOF 339</span></div>
 
 ```{r setup, include=FALSE, message = F, warning = F}
 knitr::opts_chunk$set(echo = TRUE, comment = '#> ', warning=F, message=F,

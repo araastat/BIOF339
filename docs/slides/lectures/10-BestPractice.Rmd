@@ -1,7 +1,7 @@
 ---
 title: "Project Organization"
 author: "Abhijit Dasgupta"
-date: "November 13, 2019"
+date: "BIOF 339"
 output:
   xaringan::moon_reader:
     css: [default, './robot.css', './robot-fonts.css']

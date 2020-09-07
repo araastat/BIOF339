@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 
 # Describing and summarizing data
 ### Abhijit Dasgupta
-### Fall, 2019
+### BIOF 339
 
 ---
 
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 layout: true
 
 &lt;div class="my-header"&gt;
-&lt;span&gt;BIOF339, Fall, 2019&lt;/span&gt;&lt;/div&gt;
+&lt;span&gt;BIOF339, BIOF 339&lt;/span&gt;&lt;/div&gt;
 
 ---
 
@@ -469,6 +469,12 @@ brca &lt;- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %&gt;%
 ```
 
 ```
+#&gt;  Warning: Problem with `mutate()` input `Age.at.Initial.Pathologic.Diagnosis`.
+#&gt;  ℹ NAs introduced by coercion
+#&gt;  ℹ Input `Age.at.Initial.Pathologic.Diagnosis` is `as.numeric(Age.at.Initial.Pathologic.Diagnosis)`.
+```
+
+```
 #&gt;  Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion
 ```
 
@@ -553,6 +559,12 @@ brca &lt;- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %&gt;%
                                     NA, HER2.Final.Status)) %&gt;% 
   mutate_if(is.character, as.factor) %&gt;% 
 * mutate(Complete.TCGA.ID = as.character(Complete.TCGA.ID))
+```
+
+```
+#&gt;  Warning: Problem with `mutate()` input `Age.at.Initial.Pathologic.Diagnosis`.
+#&gt;  ℹ NAs introduced by coercion
+#&gt;  ℹ Input `Age.at.Initial.Pathologic.Diagnosis` is `as.numeric(Age.at.Initial.Pathologic.Diagnosis)`.
 ```
 
 ```
