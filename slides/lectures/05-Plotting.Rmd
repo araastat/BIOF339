@@ -1,7 +1,7 @@
 ---
 title: "Visualizing data"
 author: Abhijit Dasgupta
-date: Fall, 2019
+date: BIOF 339
 
 ---
 
@@ -17,7 +17,7 @@ options(htmltools.dir.version = TRUE)
 layout: true
 
 <div class="my-header">
-<span>BIOF339, Fall, 2019</span></div>
+<span>BIOF339, BIOF 339</span></div>
 
 
 ---

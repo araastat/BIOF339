@@ -1,7 +1,7 @@
 ---
 title: "A very short, sketchy, introduction to Bioconductor"
 author: Abhijit Dasgupta
-date: Fall, 2019
+date: BIOF 339
 
 ---
 
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE,  warning=F, message=F, comment = '#> ', cache
 layout: true
 
 <div class="my-header">
-<span>BIOF339, Fall, 2019</span></div>
+<span>BIOF 339</span></div>
 
 ---
 
