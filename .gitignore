@@ -6,7 +6,7 @@ slides/**/*.html
 notes/**/*.html
 hw/**/*.html
 Tutorials/*.key
-img/*
+
 assignments/**/*.html
 .drake/*
 slides/lectures/*cache/*
