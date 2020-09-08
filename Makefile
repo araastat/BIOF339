@@ -33,7 +33,7 @@ docs/forCanvas/%.html: forCanvas/%.Rmd
 
 topbuild : $(toplevelweb)
 
-docs/%.html: %.Rmd _site.yml
+docs/%.html: ./%.Rmd _site.yml
 	Rscript -e "rmarkdown::render_site('.')"
 	cp -r docs/toplevel/* docs
 	
