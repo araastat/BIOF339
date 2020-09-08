@@ -9,7 +9,8 @@ title: "BIOF 339: Practical R"
 <div style="background-color:wheat;">
 ## Installing Software
 
-Directions for installing R and RStudio are provided [here](Tutorials/Installing.pdf).
+Directions for installing R and RStudio are provided [here](../Tutorials/Installing.pdf). The general
+directions remain the same, but the current versions of R and RStudio have been updated to 4.0.2 and 1.3.1073, respectively.
 
 Continue to the end, where you are asked to install some R packages to start with. If you
 can't or are uncomfortable with this step, no worries. We'll also do it in class.
