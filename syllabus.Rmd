@@ -1,127 +1,163 @@
 ---
-title: "BIOF 339: Practical R"
+title: ''
+output: 
+  html_document:
+    css: styles.css
+    toc: false
 ---
 
-```{r setup, include = F}
-knitr::opts_chunk$set(echo = F, warning=F, message = F)
-library(tidyverse)
-library(lubridate)
-library(knitr)
-library(pander)
-
-startDate <- lubridate::ymd('20190911')
-classDate <- function(wk, startDate ){
-  today <- startDate + 7*(wk-1)
-  return(format(today, "%B %d, %Y"))
+```{css, echo=FALSE}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+h4 {
+  font-family: Charter, serif;
+  font-weight: bold;
 }
 ```
 
-## Instructor 
-Abhijit Dasgupta  
-Contact: via Slack or email ([adasgupta+biof339@araastat.com](mailto:adasgupta+biof339@araastat.com)) 
+<img class='center' height="80" src='img/faes.png'>
 
-## Course description
+<div style="text-align: center;">
+<p>BIOF 339: Practical R 
+<p>Number of credits : 2
+<p>Fall 2020 Term A
+<p>Syllabus
+</div>
 
-The goal of this course is to introduce R as an analysis platform and tool for data science rather than a programming language.
-Throughout the course, emphasis will be placed on example-driven
-learning. Topics to be covered include: installation of R and R
-packages; command line R; R data types; loading data in R; manipulating
-data; exploring data through visualization; statistical tests;
-correcting for multiple comparisons; building models;  generating
-publication-quality graphics; creating reports using RMarkdown. No prior programming experience is
-required.
+#### Instructor
+Abhijit Dasgupta, PhD
 
-# Learning Objectives
+#### Contact information:
++ E-mail: [adasgupta+biof339@araastat.com](mailto:adasgupta+biof339@araastat.com)
++ Preferred method of communcation: via [Slack](https://biof339.slack.com){target=_blank}. Sign up via [this link](https:/join.slack.com/t/biof339/shared_invite/zt-hczp2mg1-Yh0yqms52wAA8H445jkBUg){target=_blank}
 
-- Run R and RStudio, making use of inherent R features
-- Find and make use of the extensive packages (R add-ons) available for analyzing biological and other forms of data
-- Load, manipulate, and combine data to make it amenable to further analyses
-- Visualize data with extensive graphics capabilities of R (including ggplot)
-- Use R to run statistical models and hypothesis tests and report results conforming to standards expected in scientific journals
-- Write reports using the powerful `rmarkdown` package and its derivatives
+### Course information
 
-## Required computers and software
+Prerequisites, if any: None
 
-You are required to bring to each class a personal laptop running Windows, Mac OS X or Linux. You 
-are also required to install the software [R](http://cran.r-project.org){target=_blank} and
-the integrated development environment [RStudio](https://www.rstudio.com){target=_blank}. Instructions for 
-installing these are available on the Resources page (see links above).
+#### Course description
+The goal of this course is to introduce R as an analysis platform and tool for data science rather than a programming language. Throughout the course, emphasis will be placed on example-driven learning. Topics to be covered include: installation of R and R packages; command line R; R data types; loading data in R; manipulating data; exploring data through visualization; statistical tests; correcting for multiple comparisons; building models; generating publication-quality graphics; creating reports using R Markdown. No prior programming experience is required
 
+#### Course Website (Canvas)
+Course materials will be posted at 10 am on Monday of each week. Homework will be submitted on Canvas by Sunday 11:59 pm at the end of each week.
 
-## Outline of the class
+#### Learning Materials
+Required and Recommended Texts: There are no required texts for this class
 
-```{r outline, echo = FALSE}
-dts <- classDate(1:14, startDate)
+Required Journal Articles: There are no required journal articles for this class
+
+#### Course Goals
+When you complete the course successfully, you will be able to:
+
++ Run R and RStudio, making use of inherent R features
++ Find and make use of the extensive packages (R add-ons) available for analyzing biological and other forms of data
++	Load, manipulate, and combine data to make it amenable to further analyses
++	Visualize data with extensive graphics capabilities of R (including ggplot)
++	Use R to run statistical models and hypothesis tests and report results conforming to standards expected in scientific journals
++	Write reports using the powerful rmarkdown package and its derivatives
+
+#### Structure of the course
+
+```{r outline, echo = FALSE, warning=F, message=F}
+library(tidyverse)
+dts <- paste('Week', 1:7)
 topics <- c(
-  'Introduction to R, RStudio and RMarkdown',
-  'Data Structures in R (classes 5:30-7, 7-8:30)',
-  'R packages, data import/export, munging',
-  'Towards analytic data: Data Munging, continued',
-  'Data exploration through visualization',
-  'More data visualization and RMarkdown',
-  'Statistical analyses: Table 1, estimation and confidence intervals, and more ggplot',
-  'Statistical analyses: Classical hypothesis testing and computational inference',
-  'Statistical learning: Regression models',
-  "More data munging with `purrr`: grouping, mapping and functional programming",
-  "Basic bioinformatics: Bioconductor and friends",
-  "No class (Thanksgiving)",
-  'Statistical learning: Cluster analysis and pattern recognition',
-  "Project presentations")
-D <- tibble(Date = dts, Topic=topics)
-knitr::kable(D)
+  'Introduction to R: Working environmnent and data structures',
+  'Using packages to enhance data ingestion, munging, and reporting',
+  'Data visualization for exploration and reporting',
+  'Statistical analyses using R',
+  'Statistical learning using R',
+  'Designing and analyzing experiments, with a sprinkling of bioinformatics',
+  'Reproducible documents for analytic reporting'
+)
+
+D <- tibble( Week = dts, Topic=topics)
+knitr::kable(D) %>% kableExtra::kable_styling()
 
 ```
 
-## Books and learning materials
+#### The Learning Process
 
-There are no required books for this class. However, we will extensively refer to
-a few books available freely online and will serve as reading material and ongoing 
-reference material for this course. 
+My philosophy is to get students up and running with R for data analysis as quickly as possible. As such, this course is opinionated, in that I make certain choices of what parts of R to teach to make things most accessible and useful. The course will be a mixture of didactic lessons, interactive tutorials and exercises, culminating in a final project that brings different aspects of the course together into a single document, either a HTML report or presentation, mimicking a typical workflow in data science of going from data acquisition to reporting. We will learn some of the details or nuances of R as we go along when they come up, but the general approach will be to begin with the end in mind.
 
-1. _R for Data Science_ [R4DS] by Hadley Wickham and Garrett Grolemund (available [online](https://r4ds.had.co.nz/){target=_blank})
+Students can be successful in this course through following the teaching materials, participating in discussions on Slack, and practice. R is a language in the same way that French or Japanese is a language (you’re just talking to a computer), and so the only way to retain the knowledge gained in this class is to use it. The exercises and tutorials are meant to get you used to using R for different purposes, so please do them diligently.
 
-### Communication
+This course should take around 4-6 hours of time weekly, depending on the week. 
 
-This class will communicate primarily via [Slack](http://www.slack.com){target=_blank}. Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/enQtNzU1Njk5NDc2MDMyLWU5MjkwNzNlMmRlYTAwNDg2MGZjYWQ1YzEzMDUxMzc0MzE1NjZkMDFlY2Y0NTIyMGI2Y2VkODBiYmY0MjBiMzE).
+#### Communication
 
-You will see two channels named *wed5-7_2019* and *wed7-9_2019*. Please join the channel corresponding to your section. I will be using Slack for broadcasting messages, answering questions and the like. If you have a question, you can directly message me on Slack if you like. Expect an answer within 24 hours.
+This class will communicate primarily via Slack. 
+You will see a channel `#fall2020-a`. Please join this channel. Please use Slack for broadcasting messages, answering questions and the like. When you ask a question, please ask it under the `#general` or `#fall2020-a` channels, so others can learn as well. I should respond within 24 hours.
 
-## Grades
+The Canvas Discussion forum will be used for guided class discussions.
+
+#### Etiquette
+
+The most important thing is to be polite, considerate and empathetic in all communications and discussions. There are different levels of knowledge about R in this class, and so some questions may appear trivial to some but are essential for others. Be kind, and if you can help a classmate, do so with grace and civility. The class learns best if we all help and support each other. 
+
+### Policies
+
+#### Academic Policies
+
+This course adheres to all FAES policies described in the academic catalog and student handbook, including the Academic Integrity policy listed on page 11 of the academic catalog and student handbook. Be certain that you are knowledgeable about all of the policies listed in this syllabus, in the academic catalog and student handbook, and on the FAES website. As a student in this program, you are bound by those policies.
+
+#### Copyright
+All course materials are the property of FAES and are to be used for the student’s individual academic purpose only. Any dissemination, copying, reproducing, modification, displaying, or transmitting of any course material for any other purpose is prohibited, will be considered misconduct, and may be cause for disciplinary action. In addition, encouraging academic dishonesty by distributing information about course materials or assignments which would give an unfair advantage to others may violate the FAES Academic Integrity policy. Course materials may not be exchanged or distributed for commercial purposes, for compensation, or for any purpose other than use by students enrolled in the course. Distributions of course materials may be subject to disciplinary action.
+
+#### Guidelines for Disability Accommodations
+FAES is committed to providing reasonable and appropriate accommodations to students with disabilities. Students with documented disabilities should contact Dr. Mindy Maris, Assistant Dean of Academic Programs.
+
+#### Dropping the Course
+Students are responsible for understanding FAES policies, procedures, and deadlines regarding dropping or withdrawing from the course or switching to audit status.
+
+#### Harassment
+FAES adheres to the NIH’s harassment policies, which can be found at the following link:
+https://hr.nih.gov/working-nih/civil/statement-workplace-harassment
+Faculty and students in FAES courses are responsible for being familiar with the NIH’s harassment policies and adhering to them.
+
+#### Attendance
+It is in your best interest to use, utilize, question and understand all the instructional material provided, and to submit questions and homework in a timely manner. Since this course is completely asynchronous, there is no attendance required at particular times.
+
+#### Participation
+Participation will be judged through the assigned discussions as well as through activity on Slack. 
+
+#### Assignment Submission 
+Assignment submission is through Canvas. Each submission will consist of a R Markdown file and the corresponding HTML file. **Both are required**. Just submitting the R Markdown doesn’t let us see the results easily, and just submitting the HTML doesn’t let us evaluate your code. If you have trouble knitting the R Markdown to HTML, let me know and I can help. If it’s really impossible and you’re tearing your hair out, reach out to me at least by Saturday so I can see if (a) I can help, or (b) I can see if reasonable accommodation can be made. The latter will be a rarity, generally. 
+
+#### Due Dates
+Homework is assigned at 10am each Monday and is due by 11:59pm the following Sunday. 
+
+#### Late Submission Policies
+No late submissions of homework or discussion are allowed. However, for homework, I will only use the top 4 scores for your grade, so you will have the option of not submitting or doing poorly on 2 of them. 
+
+#### Step-by-Step Guidelines for Submitting Assignments:
+The guidelines for submitting assignments will be posted as a screencast during the first week of class. 
+
+#### Expectations for instructor’s feedback on assignments:
+We will get your assignment grades and feedback to you within a week of submission.
+
+#### Major Assignments
 
 Grades will be based on the following requirements:
 
-1. Homeworks, available Friday after class, due by 11:59PM the following Tuesday.  (50%)
-    - No late homeworks, since solutions will be available Wednesday mornings
-    - I'll score the top 10 homeworks for grade
-1. Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (20%)
-1. Class participation (20%)
-1. Completion and submission of class exercises (10%, marked for completion)
-    - These will need to be in basic RMarkdown, showing the problem and the solution. You can add a section for questions here that I can address in the following class or online. These will have to be submitted before you leave the classroom
+1.	Homeworks for each week are due Sunday at 11:59pm (50%) 
+    - No late homeworks
+    - We’ll have 6 homeworks, I’ll score the top 4 for grade
+2.	Final project: A R Markdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (30%)
+3.	Class participation (20%): Discussion topics in weeks 2-6
 
-## Academic policy regarding plagiarism
+**Final project**
 
-The FAES Graduate School at NIH prides itself on providing quality
-educational experiences and upholds the highest level of honesty,
-integrity, and mutual respect. It is our policy that cheating,
-fabrication or plagiarism by students is\
-not acceptable in any form. If a student is found to be in violation of
-any, or all of the below, his/her credits will be forfeited, and he/she
-will not be allowed to enroll in future courses or education programs
-administered by FAES.
-
-• Cheating is defined as an attempt to give or obtain inappropriate/
-unauthorized assistance during any academic exercise, such as during
-examination, homework assignment, class presentation.\
-• Fabrication is defined as the falsification of data, information or
-citations in any academic materials.\
-• Plagiarism is defined as using the ideas, methods, or written words of
-another, without proper acknowledgment and with the intention that they
-be taken as the work of the deceiver. These include, but are not limited
-to, the use of published articles, paraphrasing, copying someone else’s
-homework and turning it in as one’s own and failing to reference
-footnotes. Procuring information from online sources without proper
-attribution also constitutes plagiarism.
-
-See [this link](https://faes.org/sites/default/files/Student_Handbook_2016-17.pdfhttps://faes.org/sites/default/files/Student_Handbook_2016-17.pdf){target=_blank} for FAES policy on academic plagiarism.
-
++	Create a R Markdown document or presentation
++	Use your own data, or data available on the web (legally)
++	Show me that you can 
+    - import data into R
+    - manipulate (munge) the data
+    - perform some analysis on the data
+    - create a visualization
+    - create a report in R Markdown
++	5 minute lightning talks that can be recorded using Quicktime or [Screencastify](https://www.screencastify.com){target=_blank    }, which requires the Chrome browser
 
