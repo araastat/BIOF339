@@ -4,6 +4,7 @@ output:
   html_document:
     theme: cosmo
     highlight: textmate
+    toc: false
 ---
 
 ## [Abhijit Dasgupta, PhD](https://webbedfeet.netlify.com){target=_blank}
