@@ -28,7 +28,7 @@ layout: true
 ---
 class: middle, center
 
-<img src="img/R.jpg" height="561" width="724"/>
+<img src="../img/R.jpg" height="561" width="724"/>
 
 ---
 ```{r, child='../../../Personal/slideFormat.Rmd'}
