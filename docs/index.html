@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Abhijit Dasgupta" />
@@ -88,7 +88,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -248,18 +248,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -301,20 +289,11 @@ $(document).ready(function () {
   <a href="slides/index.html">Lectures</a>
 </li>
 <li>
-  <a href="assignments/index.html">Homework</a>
-</li>
-<li>
-  <a href="projects.html">Projects</a>
-</li>
-<li>
   <a href="resources.html">Resources</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="notes/index.html">Course Notes</a>
-</li>
-<li>
   <a href="https://biof339.slack.com">
     <span class="fa fa-slack"></span>
      
@@ -325,7 +304,7 @@ $(document).ready(function () {
   <a href="https://www.github.com/araastat/BIOF339">
     <span class="fa fa-github"></span>
      
-    GitHub
+    Github
   </a>
 </li>
       </ul>
@@ -349,7 +328,7 @@ $(document).ready(function () {
 <div id="contact-info" class="section level3">
 <h3>Contact info:</h3>
 <ul>
-<li>Abhijit Dasgupta: Via Slack (primary); Email (<a href="mailto:adasgupta+biof339@araastat.com">adasgupta+biof339@araastat.com</a>) for assignment submission</li>
+<li>Abhijit Dasgupta: Via Slack (primary); Email (<a href="mailto:adasgupta+biof339@araastat.com" class="email">adasgupta+biof339@araastat.com</a>) for assignment submission</li>
 </ul>
 <hr />
 <p><a href="http://www.r-project.org" target="_blank">R</a> is one of the most popular programming languages for data science and statistics. It is a free and open source language available for all major operating systems. It is extensible through a packaging system that has resulted in over 12,000 user-contributed packages available on <a href="http://cran.r-project.org">CRAN</a>.</p>
@@ -388,6 +367,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

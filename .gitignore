@@ -31,3 +31,7 @@ docs/Projects/**/*.Rproj
 docs/Projects/December 18/late/Kamil Kruczek/R-class-final-project-sc-analysis-of-retinal-organoids.html
 
 slides/site_libs/*
+
+# Adds 2020 Fall
+docs/toplevel/*
+docs/slides_top/*

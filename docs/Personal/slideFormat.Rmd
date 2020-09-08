@@ -1,0 +1,9 @@
+```{r xaringan-extra, echo = FALSE}
+library(xaringanExtra)
+use_fit_screen()
+# use_animate()
+use_tachyons()
+use_panelset()
+use_extra_styles(hover_code_line=TRUE)
+```
+
