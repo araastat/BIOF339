@@ -1,5 +1,5 @@
 name: BIOF339
-output_dir: "docs"
+output_dir: "docs/toplevel"
 exclude: ['slides','notes']
 navbar:
   title: Practical R
