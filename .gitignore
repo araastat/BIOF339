@@ -18,9 +18,8 @@ slides/lectures/img/*
 slides/lectures/06-joins-plots_files/*
 docs/notes/*
 docs/assignments/HW/*.R
-docs/_top_level/*
-_top_level/*
-
+docs/toplevel/*
+docs/Makefile
 *.swp
 slides/lectures/*files/*
 docs/slides/lectures/**/*cache/*

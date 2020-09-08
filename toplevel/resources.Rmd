@@ -1,0 +1,64 @@
+---
+title: "BIOF 339: Practical R"
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
+---
+
+<div style="background-color:wheat;">
+## Installing Software
+
+Directions for installing R and RStudio are provided [here](Tutorials/Installing.pdf).
+
+Continue to the end, where you are asked to install some R packages to start with. If you
+can't or are uncomfortable with this step, no worries. We'll also do it in class.
+
+</div>
+
+------
+
+## Cheatsheets (from RStudio)
+
++ [RStudio](https://github.com/rstudio/cheatsheets/blob/master/rstudio-ide.pdf)
++ [Base R](https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf)
++ [R Markdown](https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf)
++ [Data import](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf)
++ [Data transformation](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
++ [Data visualization](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
++ [Manipulating categorical variables](https://github.com/rstudio/cheatsheets/blob/master/factors.pdf)
++ [Manipulating strings](https://github.com/rstudio/cheatsheets/blob/master/strings.pdf)
+  - [Regular expressions](https://github.com/rstudio/cheatsheets/blob/master/regex.pdf)
++ [Manipulating dates](https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf)
+
+
+## Reading list (click on covers for online versions)
+
+### R References
+
+[<img style="height:150px; width:112px; border: 3px solid black;" src="img/handson.png"/>](https://rstudio-education.github.io/hopr/){target=_blank}
+[<img style="height:150px; width:112px; border: 3px solid black;" src="img/rcookbook.jpg"/>](https://rc2e.com/){target=_blank}
+[<img style="height:150px; width:112px; border: 3px solid black;" src="img/r4ds.png"/>](https://r4ds.had.co.nz/){target=_blank}
+[<img style="height:150px; width:112px; border: 3px solid black;" src="img/advr.png"/>](https://adv-r.hadley.nz/){target=_blank}
+
+### Statistics using R
+
+[<img style="height:150px; width:112px; border: 3px solid black;" src="img/msmb.png"/>](http://web.stanford.edu/class/bios221/book/){target=_blank} 
+[<img style="height:150px; border: 3px solid black;" src="img/md.png"/>](https://moderndive.com/){target=_blank}
+[<img style="height:150px; border: 3px solid black;" src="img/kaplan.png"/>](https://dtkaplan.github.io/SM2-bookdown/){target=_blank}
+
+### Data visualization using R 
+
+[<img  style="height:150px; width:112px; border: 3px solid black;" src="img/wilke.jpg"/>](https://serialmentor.com/dataviz/index.html){target=_blank}
+[<img  src="img/healy.jpg" style="border: 3px solid black;height:150px; width:112px"/>](https://socviz.co/){target=_blank} 
+[<img src="img/graphckbk.jpg" style="height:150px; width:112px; border: 3px solid black;" />](https://r-graphics.org/){target=_blank}
+
+### R Markdown
+
+[
+<img src='img/rmd.png' style="width:112px; height:150px; border:3px solid black" />
+](https://bookdown.org/yihui/rmarkdown/){target=_blank}
+
+Of partcular interest to us will be chapters on [HTML
+documents](https://bookdown.org/yihui/rmarkdown/html-document.html){target=_blank} and [HTML
+Presentations](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html){target=_blank}
