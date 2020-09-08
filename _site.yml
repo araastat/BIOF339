@@ -1,6 +1,6 @@
 name: BIOF339
 output_dir: docs/toplevel
-exclude: ["slides","assignments","lib","Makefile","docs"]
+exclude: ["slides","assignments","lib","Makefile","docs","forCanvas"]
 navbar:
   title: Practical R
   left:
