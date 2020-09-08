@@ -1,5 +1,5 @@
 ---
-title: "Practical R: Introductions"
+title: "Practical R: [Introductions](#about)"
 author: Abhijit Dasgupta
 date: BIOF 339
 
@@ -22,6 +22,8 @@ layout: true
 <div class="my-header">
 <span>BIOF339</span></div>
 </div>
+
+
 
 ---
 class: middle, center
@@ -455,7 +457,7 @@ Takes a lot of effort to do complex analyses
 
 ---
 class: middle, center, inverse
-
+name: about
 # About this class
 
 ---
@@ -947,7 +949,7 @@ kableone(CreateTableOne(data=airquality),
          format='html')
 ```
 
-We'll talk more about this in Week 3 & 6
+We'll talk more about this in coming weeks.
 ]
 
 --

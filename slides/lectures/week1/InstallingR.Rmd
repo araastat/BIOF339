@@ -1,0 +1,58 @@
+---
+title: "Practical R: [Introductions](#about)"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+knitr::opts_chunk$set( warning=F, message = F, fig.retina=3)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+library(pander)
+library(fontawesome)
+library(emo)
+library(countdown)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339</span></div>
+</div>
+# Working in a project
+
+---
+
+# Open a new script 
+
+.left-column30[
+You will start by opening a new script
+
+- This is a blank canvas
+- You will write R code (instructions) in this script
+- This is just a text editor, so you can copy, paste, edit just as in Notepad
+- Good practice is to write code in the script window, then **send** the code to R
+]
+.right-column30[
+![](../img/NewScript.png)
+]
+
+---
+
+# Run some code
+
+.pull-left[
+
+Write some code, then send it to the console, where R is running
+
+- You can use the button, but
+- I prefer you learn the keyboard shortcut
+- Ctrl/Cmd + Enter sends either
+  - current line under cursor
+  - highlighted code
+]
+.pull-right[
+![](../img/RunCode.png)

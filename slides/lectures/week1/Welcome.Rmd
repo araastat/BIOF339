@@ -1,0 +1,120 @@
+---
+title: "Practical R: [Introductions](#about)"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+knitr::opts_chunk$set( warning=F, message = F, fig.retina=3)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+library(pander)
+library(fontawesome)
+library(emo)
+library(countdown)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339</span></div>
+</div>
+
+---
+
+class: middle, center, inverse
+name: about
+# About this class
+
+---
+
+## Learning Objectives
+
+- Run R and RStudio, making use of inherent R features
+- Find and make use of the extensive packages (R add-ons) available for analyzing biological and other forms of data
+- Load, manipulate, and combine data to make it amenable to further analyses
+- Visualize data with extensive graphics capabilities of R (including ggplot)
+- Use R to run statistical models and hypothesis tests and report results conforming to standards expected in scientific journals
+- Write reports using the powerful `rmarkdown` package and its derivatives
+
+---
+
+# Plan
+
+```{r outline, echo = FALSE, warning=F, message=F}
+
+dts <- paste('Week', 1:7)
+topics <- c(
+  'Introduction to R: Working environmnent and data structures',
+  'Using packages to enhance data ingestion, munging, and reporting',
+  'Data visualization for exploration and reporting',
+  'Statistical analyses using R',
+  'Statistical learning using R',
+  'Designing and analyzing experiments, with a sprinkling of bioinformatics',
+  'Reproducible documents for analytic reporting'
+)
+
+D <- tibble( Week = dts, Topic=topics)
+knitr::kable(D)
+
+```
+
+---
+
+## Teaching materials
+
+1. The main ideas for the week will be developed through videos, screencasts and slides
+1. I will assign tutorials where you can interactively work with R to improve your understanding
+    + [RStudio Primers](https://rstudio.cloud/learn/primers)
+    + I will create and periodically update a R package of R tutorials, that will be called `BIOF339Tutorials`. Instructions are forthcoming
+
+
+---
+
+# Grading rubric
+
+1. Homeworks for each week are due Sunday at 11:59pm (50%)
+    - No late homeworks
+    - We'll have 6 homeworks, I'll score the top 4 for grade
+1. Final project: A RMarkdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (30%)
+1. Class participation (20%): Discussion topics each week
+
+---
+
+# Submitting assignments
+
+## Homework
+
++ All homework will be submitted via Canvas
++ You must submit your homework using R Markdown
+    - The submission will consist of 2 files: A Rmd file and the corresponding HTML file. Both are required for full credit. 
++ I will initially provide templates for the homework, but you will be expected to create your own R Markdown documents by week 4. 
+
+---
+
+# Communication
+
+- Primarily via `r fa('slack')` [Slack](http://www.slack.com). 
+  - Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/zt-hczp2mg1-Yh0yqms52wAA8H445jkBUg).
+  - You will see a channel `#fall2020-a`. Please join this channel
+- Slack for broadcasting messages, answering questions and the like. 
+  - If you have a question, you can directly message me on Slack. Expect an answer within 24 hours.
+- Office hours by appointment
+
+---
+
+# Class project
+
+- Create a R Markdown document or presentation
+- Use your own data, or data available on the web (legally)
+- Show me that you can 
+  - import data into R
+  - manipulate (munge) the data
+  - perform some analysis on the data
+  - create a visualization
+  - create a report in R Markdown
+- 5 minute _lightning talks_ that can be recorded using Quicktime or [Screencastify](https://www.screencastify.com/)
+

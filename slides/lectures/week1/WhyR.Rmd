@@ -1,0 +1,456 @@
+---
+title: "Practical R: [Introductions](#about)"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+knitr::opts_chunk$set( warning=F, message = F, fig.retina=3)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+library(pander)
+library(fontawesome)
+library(emo)
+library(countdown)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339</span></div>
+</div>
+
+
+
+---
+class: middle, center
+
+<img src="img/R.jpg" height="561" width="724"/>
+
+---
+```{r, child='../../../Personal/slideFormat.Rmd'}
+
+```
+
+
+# What does R look like?
+.right-column30[
+
+```{r ex, echo=T, eval=F}
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies <- 
+  breast_cancer %>% 
+    mutate(luminalA = ifelse(ER == '+' & PR == '+' & HER2 == '-', 1, 0),
+         luminalB = ifelse(ER == '+' & PR == '-' & HER2 == '+', 1, 0),
+         her2 = ifelse(ER == '-' & PR == '-' & HER2 == '+', 1, 0),
+         basal = ifelse(ER == '-' & PR == '-' & HER2 == '-', 1, 0)) %>% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %>%
+    count(type)
+```
+]
+
+--
+
+.left-column30[
++ A .heatinline[scripting] language
+  - Provide instructions to the computer
+  - in a .saltinline[structured] manner
+  - to do statistical analysis
+]
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
+]
+.right-column30[
+
+```{r ex1, eval=F}
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies <- 
+  breast_cancer %>% #<<
+    mutate(luminalA = ifelse(ER == '+' & PR == '+' & HER2 == '-', 1, 0),
+         luminalB = ifelse(ER == '+' & PR == '-' & HER2 == '+', 1, 0),
+         her2 = ifelse(ER == '-' & PR == '-' & HER2 == '+', 1, 0),
+         basal = ifelse(ER == '-' & PR == '-' & HER2 == '-', 1, 0)) %>% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %>%
+    count(type)
+```
+]
+
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
++ Create new variables from old variables
+]
+.right-column30[
+
+```{r ex2, eval=F}
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies <- 
+  breast_cancer %>% 
+    mutate(luminalA = ifelse(ER == '+' & PR == '+' & HER2 == '-', 1, 0), #<<
+         luminalB = ifelse(ER == '+' & PR == '-' & HER2 == '+', 1, 0), #<<
+         her2 = ifelse(ER == '-' & PR == '-' & HER2 == '+', 1, 0), #<<
+         basal = ifelse(ER == '-' & PR == '-' & HER2 == '-', 1, 0)) %>% #<<
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %>%
+    count(type)
+```
+]
+
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
++ Create new variables from old variables
++ Deal with missing values
+]
+.right-column30[
+
+```{r ex3, eval=F}
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies <- 
+  breast_cancer %>% 
+    mutate(luminalA = ifelse(ER == '+' & PR == '+' & HER2 == '-', 1, 0), 
+         luminalB = ifelse(ER == '+' & PR == '-' & HER2 == '+', 1, 0), 
+         her2 = ifelse(ER == '-' & PR == '-' & HER2 == '+', 1, 0), 
+         basal = ifelse(ER == '-' & PR == '-' & HER2 == '-', 1, 0)) %>% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %>% #<<
+    count(type)
+```
+]
+
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
++ Create new variables from old variables
++ Deal with missing values
++ Find the frequencies
+]
+.right-column30[
+
+```{r ex4, eval=F}
+# Determining frequencies of breast cancer subtypes
+
+type_frequencies <- 
+  breast_cancer %>% 
+    mutate(luminalA = ifelse(ER == '+' & PR == '+' & HER2 == '-', 1, 0), 
+         luminalB = ifelse(ER == '+' & PR == '-' & HER2 == '+', 1, 0), 
+         her2 = ifelse(ER == '-' & PR == '-' & HER2 == '+', 1, 0), 
+         basal = ifelse(ER == '-' & PR == '-' & HER2 == '-', 1, 0)) %>% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %>%
+    count(type) #<<
+```
+]
+
+
+---
+
+# What does R look like?
+
+.left-column30[
++ Start with a data set
++ Create new variables from old variables
++ Deal with missing values
++ Find the frequencies
++ .heatinline[Comment on what you're doing]
+]
+.right-column30[
+
+```{r ex5, eval=F}
+# Determining frequencies of breast cancer subtypes #<<
+
+type_frequencies <- 
+  breast_cancer %>% 
+    mutate(luminalA = ifelse(ER == '+' & PR == '+' & HER2 == '-', 1, 0), 
+         luminalB = ifelse(ER == '+' & PR == '-' & HER2 == '+', 1, 0), 
+         her2 = ifelse(ER == '-' & PR == '-' & HER2 == '+', 1, 0), 
+         basal = ifelse(ER == '-' & PR == '-' & HER2 == '-', 1, 0)) %>% 
+    mutate(type = case_when(
+      luminalA == 1 ~ "Luminal A",
+      luminalB == 1 ~ "Luminal B",
+      her2 == 1 ~ "HER2",
+      basal == 1 ~ "Basal",
+      TRUE ~ NA)) %>%
+    count(type) 
+```
+]
+
+--
+
+.center[This is an example of a .heatinline[pipeline] in R. We'll develop different aspects of this
+progressively throughout the semester]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. .heatinline[Have to think]
+1. Reproducible (custom) workflows
+1. Much less error-prone
+1. Much lower costs to repeat analyses, or as you learn more
+1. Easily leverage work of smarter developers
+1. Easier to work with larger datasets (more than size of screen)
+]
+.pull-right[
+.large[Cons:]
+
+1. Have to type
+1. Have to know the language
+1. Higher initial startup cost
+1. .heatinline[Have to think]
+]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. .fatinline[Have to think]
+1. Reproducible (custom) workflows
+1. Much less error-prone
+1. Much lower costs to repeat analyses, or as you learn more
+1. Easily leverage work of smarter developers
+1. Easier to work with larger datasets (more than size of screen)
+]
+.pull-right[
++ You're giving instructions to a fast but stupid machine
++ This machine will do .heatinline[**exactly**] what you tell it
++ The machine is capable of amazing things
++ Can't just _menu-mine_ and try things that __seem__ to be what you want
+
+#### With great power comes great responsibility
+
+#### But also great benefits
+
+]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. Have to think
+1. Reproducible (custom) workflows
+1. .fatinline[Much less error-prone]
+1. Much lower costs to repeat analyses, or as you learn more
+1. Easily leverage work of smarter developers
+1. Easier to work with larger datasets (more than size of screen)
+]
+.pull-right[
++ If your code is not right, it won't run
+  - Can be frustrating
+  - But if it runs you're much more confident
++ If you screw up in Excel
+  - almost impossible to recover
++ You have much more control over what you're doing
+]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. Have to think
+1. Reproducible (custom) workflows
+1. Much less error-prone
+1. Much lower costs to repeat analyses, or as you learn more
+1. .fatinline[Easily leverage work of smarter developers]
+1. Easier to work with larger datasets (more than size of screen)
+]
+.pull-right[
++ Can use _modules_ or _packages_ developed by others
+  - `tidyverse`, `Seurat`, `ggplot2`
++ Can "steal" code from others (provided license allows)
+]
+
+---
+
+# Why use a scripting language for analysis?
+
+.pull-left[
+.large[Pros:]
+
+1. Have to think
+1. Reproducible (custom) workflows
+1. Much less error-prone
+1. Much lower costs to repeat analyses, or as you learn more
+1. Easily leverage work of smarter developers
+1. .fatinline[Easier to work with larger datasets (more than size of screen)]
+]
+.pull-right[
+Good luck working with
+
++ GWAS data
++ fMRI data
++ Stocks and bonds data
++ Sports data
++ Many more ...
+
+in a unified environment  
+
+Learn once, use everywhere
+]
+
+---
+
+# Why use `r fa('r-project', fill='steelblue')`?
+
++ Specializes in statistics and data visualization
++ Flexible
+  - ~~_If you can do it_~~ __How you can do it__
++ Large ecosystem
+  - Over 16,000 packages, 1500+ dedicated to bioinformatics
+  - Can read from most sources of data
+  - Generic and specialized analyses
++ Fantastic community
+  - Twitter, StackOverflow, blogosphere, conferences, online books
+
+---
+
+# Why use `r fa('r-project', fill='steelblue')`?
+
+R is a very high-quality product that is accepted and used widely in 
+government agencies, corporations and universities worldwide
+
+- Standard data analytic software in bioinformatics, behavioral health and many aspects of quantitative finance
+- Increasingly used in pharma, economics, political science and engineering
+
+--
+
+R is open-source, in that anyone can see the actual code and validate the 
+computations directly
+
+---
+
+# Why use `r fa('r-project', fill='steelblue')`?
+
+- R has a well-deserved reputation for being a great data visualization 
+tool, with users being able to create complex, customizable graphs with relative 
+ease
+- As a scripting language, it allows the same workflows to be coded and re-used.
+- You can set up workflows to validate data, in terms of data quality and missingness, 
+which avoids visual inspection which can be time-consuming and mistake-prone. 
+- R can handle large datasets, and can work with multiple datasets at the same time
+
+---
+
+# Why use `r fa('r-project', fill='steelblue')`?
+
+Specialized packages available for many domains
+
+- Bioinformatics
+- Econometrics
+- Maps and spatial analytics 
+- Text mining and Natural Language Processing
+
+The [CRAN Task Views](https://cran.r-project.org/web/views/) 
+provide curated lists of packages based on different domains
+
+The [Bioconductor Project](https://www.bioconductor.org) is THE source for bioinformatics packages in R. It is the gold standard for many bioinformatic workflows
+
+
+
+---
+
+# Things `r fa('r-project', fill='steelblue')` is not (in this class)
+
+--
+
+- The 18th letter of the English alphabet
+
+--
+
+- A magic incantation that will produce an analysis
+
+--
+
+- Just something the cool kids are doing
+
+--
+
+- Point-and-click, automatic, WYSIWYG (What you see is what you get)
+    - So it's not Excel, SPSS, Prism, GraphPad
+    - It's much more!!!
+
+---
+
+# A note on Excel `r fa('file-excel', fill='steelblue')`
+
+.pull-left[
+   
+
+Excel is omnipresent, so it becomes the default data medium
+
+It is great for many things, including _quick-and-dirty_ analyses
+
+.heatinline[It can be error-prone]
+
+It needs to be backed up
+
+It has size limitations
+
+Takes a lot of effort to do complex analyses
+]
+
+--
+
+.pull-right[
++ No way to reproduce analyses without macros
++ No way to document what you are doing
++ Excel has some nasty default behavior
+  - Guess what the `MAR1` gene gets recorded as?
++ Very hard to recover from errors
+  - Shift of one error (off by one row or column)
+  - Google _Duke Potti_ or _Reinhart Rogoff Herndon_
+]
