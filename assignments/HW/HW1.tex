@@ -1,0 +1,343 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Homework 1},
+  pdfauthor={BIOF 339},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Homework 1}
+\author{BIOF 339}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{installation-and-setup}{%
+\section{Installation and setup}\label{installation-and-setup}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Install R and RStudio on your computer following the instructions in
+  class. If you have trouble, reach out to me on Slack
+\item
+  Install the \textbf{pacman} package by running the following R command
+  in the RStudio console pane: \texttt{install.packages("pacman")}. Make
+  sure of spelling and case.
+\item
+  Now install a few more packages using the \textbf{pacman} package.
+  This simplifies some aspects of package installation and loading. Open
+  a new script window and type the following code in that window:
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(pacman)}
+\KeywordTok{p_load}\NormalTok{(}\DataTypeTok{char =} \KeywordTok{c}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{, }\StringTok{'broom'}\NormalTok{, }\StringTok{'janitor'}\NormalTok{, }\StringTok{'readxl'}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+This installs and loads the meta-package \textbf{tidyverse}, and the
+packages \textbf{broom}, \textbf{janitor} and \textbf{readxl} into R.
+
+\begin{infobox}
+
+\texttt{p\_load} is a function within the \textbf{pacman} package. You
+can think of functions as recipes and packages as recipe books, if that
+helps.\\
+The \texttt{p\_load} function installs a package if you don't have it on
+your computer, and then loads it. It just loads the package if you
+already have it installed. Note that you only need to install a package
+\textbf{once} on a computer.
+
+\end{infobox}
+
+\begin{infobox}
+
+Note that I've interchanged single and double quotes in the code
+snippet. Please feel free to use either single- or double-quotes or a
+mixture, as long as the quotes are properly paired by type.
+
+\end{infobox}
+
+\hypertarget{r-markdown-practice-10-pts}{%
+\section{R Markdown practice (10
+pts)}\label{r-markdown-practice-10-pts}}
+
+We will continue with the \texttt{airquality} dataset we worked with in
+class. Learn more about this dataset by typing either
+\texttt{help(airquality)} or \texttt{?airquality} at the console prompt.
+
+In this homework you will create a report and a presentation on this
+dataset using RMarkdown. You will do this in the same RStudio project
+you created this week.
+
+Your documents will incorporate the following 3 code snippets (in order)
+as R chunks and one piece of code inline. If I'm calling a package you
+do not have installed, use the \texttt{p\_load} function above to
+install it.
+
+\hypertarget{snippet-1}{%
+\subsubsection{Snippet 1}\label{snippet-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\NormalTok{avg_temp_by_month <-}\StringTok{ }\NormalTok{airquality }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(Month) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{avgTemp =} \KeywordTok{mean}\NormalTok{(Temp, }\DataTypeTok{na.rm=}\NormalTok{T))}
+\KeywordTok{kable}\NormalTok{(avg_temp_by_month)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{snippet-2}{%
+\subsubsection{Snippet 2}\label{snippet-2}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(avg_temp_by_month, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Month, }\DataTypeTok{y =}\NormalTok{ avgTemp)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{color =} \StringTok{'blue'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{'Average Temperature (F)'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{snippet-3}{%
+\subsubsection{Snippet 3}\label{snippet-3}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(airquality, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Wind, }\DataTypeTok{y =}\NormalTok{ Ozone)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{color =} \StringTok{'blue'}\NormalTok{, }\DataTypeTok{se =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{inline-snippet}{%
+\subsubsection{Inline snippet}\label{inline-snippet}}
+
+\texttt{max(airquality\$Ozone,\ na.rm\ =\ T)}, which is the maximum
+recorded Ozone level. Incorporate into a sentence.
+
+\hypertarget{markdown}{%
+\subsubsection{Markdown}\label{markdown}}
+
+There is a Markdown Quick Reference available in under the Help menu to
+get you started.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{assignment-1}{%
+\section{Assignment 1}\label{assignment-1}}
+
+\hypertarget{background-reading}{%
+\subsection{Background reading}\label{background-reading}}
+
+\begin{itemize}
+\tightlist
+\item
+  Read the first 3 sections of the document at
+  \url{https://rmarkdown.rstudio.com/lesson-1.html}.
+\item
+  To go into more detail on each style below see:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    HTML document:
+    \url{https://bookdown.org/yihui/rmarkdown/html-document.html}
+  \item
+    HTML ioslide presentation:
+    \url{https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html}
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{work-10-pts}{%
+\subsection{Work (10 pts)}\label{work-10-pts}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Write a RMarkdown report incorporating these code snippets and create
+  a story around them. You will set the output to HTML. Call this file
+  \texttt{\textless{}your\ name\textgreater{}\_HW1\_report.Rmd}
+\item
+  Write a RMarkdown presentation incorporating these same code snippets.
+  The output format should be HTML(ioslides). Call this file
+  \texttt{\textless{}your\ name\textgreater{}\_HW1\_slides.Rmd}
+\end{enumerate}
+
+Submit both the Rmds and the corresponding HTML files to Canvas.
+
+\hypertarget{assignment-2-10-points}{%
+\section{Assignment 2 (10 points)}\label{assignment-2-10-points}}
+
+The following section contains a templated R Markdown file that you can
+copy into a fresh R Markdown document in RStudio. You are expected to
+use the help system in R/RStudio as well as Google, if need be, to fill
+in the blanks below.
+
+\begin{infobox}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The symbol \texttt{==} checks for equality between two objects, and
+  returns \texttt{TRUE} or \texttt{FALSE}
+\item
+  Just as we saw \texttt{is.character} and \texttt{is.numeric}, you can
+  check missing values with \texttt{is.na}, which gives a \texttt{TRUE}
+  everytime it encounters a missing value in a data array, and
+  \texttt{FALSE} otherwise. Internally in R, \texttt{TRUE} = 1.
+\end{enumerate}
+
+\end{infobox}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{---}
+\NormalTok{title: Homework 1, Part 2}
+\NormalTok{author: _________ ___________}
+\NormalTok{date: "BIOF 339"}
+\NormalTok{---}
+
+
+\BaseNTok{```\{r, echo = FALSE, eval=TRUE\}}
+\BaseNTok{knitr::opts_chunk$set(message=FALSE, warning=FALSE)}
+\BaseNTok{```}
+
+
+\FunctionTok{## Descriptive statistics}
+
+\NormalTok{We'll start with the }\BaseNTok{`airquality`}\NormalTok{ data set that is in-built in R. }
+
+\NormalTok{1. }\StringTok{The average temperature in June was }\BaseNTok{`r ______(airquality$_____[airquality$Month==6], na.rm=TRUE)`}\StringTok{.}
+\StringTok{2. Solar radiation data is missing on }\BaseNTok{`r sum(is._____(airquality[,"Solar.R"]))`}\StringTok{ days, or in }\BaseNTok{`r 100 * sum(is._____(airquality[,"Solar.R"]))/_______(airquality)`}\StringTok{ percent of all the days collected. }
+
+\NormalTok{We can also visualize the missing data patterns in this data set.}
+
+\BaseNTok{```\{r, echo = TRUE, eval=TRUE\}}
+\BaseNTok{library(pacman)}
+\BaseNTok{p_load('naniar') # This is a package for missing data}
+\BaseNTok{vis_miss(______________) # see the documentation for vis_miss}
+\BaseNTok{```}
+
+\NormalTok{Let's grab a more interesting data set. We will download and use the }\OtherTok{[Palmer Station penguins data set](doi:10.1371/journal.pone.0090081)}\NormalTok{, which is in the form }
+\NormalTok{of an R package on GitHub. }
+
+\BaseNTok{```\{r, echo = TRUE, eval=TRUE\}}
+\BaseNTok{library(pacman)}
+\BaseNTok{p_______('visdat') # Install and load visdat}
+\BaseNTok{p_install_gh('allisonhorst/palmerpenguins') }
+\BaseNTok{p_load('palmerpenguins')}
+\BaseNTok{vis_dat(penguins)}
+\BaseNTok{```}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Icons made by Freepik from www.flaticon.com
+
+\end{document}
