@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data structures in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="02-DataStructures_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="02-DataStructures_files/countdown-0.3.3/countdown.css" rel="stylesheet" />
+    <script src="02-DataStructures_files/countdown-0.3.3/countdown.js"></script>
+    <link rel="stylesheet" href="../robot.css" type="text/css" />
+    <link rel="stylesheet" href="../robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data structures in R
+### Abhijit Dasgupta
+### BIOF 339
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339&lt;/span&gt;&lt;/div&gt;
+
+---
+
+## A quick refresh
+
++ R is a scripting language for data analysis and statistics
++ R Markdown is a way of combining textual information and R code to produce reproducible documents
++ RStudio is an integrated environment that makes it easier to work with R
+
+.pull-left[
+You type commands (_code_) for R to run.
+  - objects like data (_nouns_)
+  - functions that do something to R objects (_verbs_)
+]
+.pull-right[
+Examples
+
+
+```r
+airquality
+diamonds
+
+summary(airquality)
+```
+]
+
+---
+
+# Objects in R
+
+.pull-left[
+Let's start with the `airquality` data.
+
+- It is an object
+- of class `class(airquality)` = data.frame
+
+
+How about each column? 
+
+Let's look at the Ozone and Wind columns
+
+- We can access them using `airquality$Ozone` and `airquality$Wind`
+  - `class(airquality$Ozone)` = integer
+  - `class(airquality$Wind)` = numeric
+
+]
+.pull-right[
+
+```
+#&gt;     Ozone Solar.R Wind Temp Month Day
+#&gt;  1     41     190  7.4   67     5   1
+#&gt;  2     36     118  8.0   72     5   2
+#&gt;  3     12     149 12.6   74     5   3
+#&gt;  4     18     313 11.5   62     5   4
+#&gt;  5     NA      NA 14.3   56     5   5
+#&gt;  6     28      NA 14.9   66     5   6
+#&gt;  7     23     299  8.6   65     5   7
+#&gt;  8     19      99 13.8   59     5   8
+#&gt;  9      8      19 20.1   61     5   9
+#&gt;  10    NA     194  8.6   69     5  10
+#&gt;  11     7      NA  6.9   74     5  11
+#&gt;  12    16     256  9.7   69     5  12
+#&gt;  13    11     290  9.2   66     5  13
+#&gt;  14    14     274 10.9   68     5  14
+#&gt;  15    18      65 13.2   58     5  15
+#&gt;  16    14     334 11.5   64     5  16
+#&gt;  17    34     307 12.0   66     5  17
+#&gt;  18     6      78 18.4   57     5  18
+#&gt;  19    30     322 11.5   68     5  19
+#&gt;  20    11      44  9.7   62     5  20
+#&gt;  21     1       8  9.7   59     5  21
+#&gt;  22    11     320 16.6   73     5  22
+#&gt;  23     4      25  9.7   61     5  23
+#&gt;  24    32      92 12.0   61     5  24
+#&gt;  25    NA      66 16.6   57     5  25
+```
+
+]
+---
+
+# Objects in R
+
+
+```r
+head(iris)
+```
+
+```
+#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt;  1          5.1         3.5          1.4         0.2  setosa
+#&gt;  2          4.9         3.0          1.4         0.2  setosa
+#&gt;  3          4.7         3.2          1.3         0.2  setosa
+#&gt;  4          4.6         3.1          1.5         0.2  setosa
+#&gt;  5          5.0         3.6          1.4         0.2  setosa
+#&gt;  6          5.4         3.9          1.7         0.4  setosa
+```
+
+```r
+str(iris)
+```
+
+```
+#&gt;  'data.frame':	150 obs. of  5 variables:
+#&gt;   $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+#&gt;   $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+#&gt;   $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+#&gt;   $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+#&gt;   $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+Now we see another type of object, a `factor`
+
+---
+
+# Objects in R
+
+
+```r
+library(ggplot2)
+str(midwest)
+```
+
+```
+#&gt;  tibble [437 × 28] (S3: tbl_df/tbl/data.frame)
+#&gt;   $ PID                 : int [1:437] 561 562 563 564 565 566 567 568 569 570 ...
+#&gt;   $ county              : chr [1:437] "ADAMS" "ALEXANDER" "BOND" "BOONE" ...
+#&gt;   $ state               : chr [1:437] "IL" "IL" "IL" "IL" ...
+#&gt;   $ area                : num [1:437] 0.052 0.014 0.022 0.017 0.018 0.05 0.017 0.027 0.024 0.058 ...
+#&gt;   $ poptotal            : int [1:437] 66090 10626 14991 30806 5836 35688 5322 16805 13437 173025 ...
+#&gt;   $ popdensity          : num [1:437] 1271 759 681 1812 324 ...
+#&gt;   $ popwhite            : int [1:437] 63917 7054 14477 29344 5264 35157 5298 16519 13384 146506 ...
+#&gt;   $ popblack            : int [1:437] 1702 3496 429 127 547 50 1 111 16 16559 ...
+#&gt;   $ popamerindian       : int [1:437] 98 19 35 46 14 65 8 30 8 331 ...
+#&gt;   $ popasian            : int [1:437] 249 48 16 150 5 195 15 61 23 8033 ...
+#&gt;   $ popother            : int [1:437] 124 9 34 1139 6 221 0 84 6 1596 ...
+#&gt;   $ percwhite           : num [1:437] 96.7 66.4 96.6 95.3 90.2 ...
+#&gt;   $ percblack           : num [1:437] 2.575 32.9 2.862 0.412 9.373 ...
+#&gt;   $ percamerindan       : num [1:437] 0.148 0.179 0.233 0.149 0.24 ...
+#&gt;   $ percasian           : num [1:437] 0.3768 0.4517 0.1067 0.4869 0.0857 ...
+#&gt;   $ percother           : num [1:437] 0.1876 0.0847 0.2268 3.6973 0.1028 ...
+#&gt;   $ popadults           : int [1:437] 43298 6724 9669 19272 3979 23444 3583 11323 8825 95971 ...
+#&gt;   $ perchsd             : num [1:437] 75.1 59.7 69.3 75.5 68.9 ...
+#&gt;   $ percollege          : num [1:437] 19.6 11.2 17 17.3 14.5 ...
+#&gt;   $ percprof            : num [1:437] 4.36 2.87 4.49 4.2 3.37 ...
+#&gt;   $ poppovertyknown     : int [1:437] 63628 10529 14235 30337 4815 35107 5241 16455 13081 154934 ...
+#&gt;   $ percpovertyknown    : num [1:437] 96.3 99.1 95 98.5 82.5 ...
+#&gt;   $ percbelowpoverty    : num [1:437] 13.15 32.24 12.07 7.21 13.52 ...
+#&gt;   $ percchildbelowpovert: num [1:437] 18 45.8 14 11.2 13 ...
+#&gt;   $ percadultpoverty    : num [1:437] 11.01 27.39 10.85 5.54 11.14 ...
+#&gt;   $ percelderlypoverty  : num [1:437] 12.44 25.23 12.7 6.22 19.2 ...
+#&gt;   $ inmetro             : int [1:437] 0 0 0 1 0 0 0 0 0 1 ...
+#&gt;   $ category            : chr [1:437] "AAR" "LHR" "AAR" "ALU" ...
+```
+ Here we have a `character`.
+ 
+---
+
+# Objects in R
+
+The most common types of data we see are `numeric`, `character`, `factor`. You can also see `Date` and `logical`
+
+You can test to see if data is of a particular type, or convert from one data type to another
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Data type &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Test &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Convert &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; is.numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; as.numeric &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; character &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; is.character &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; as.character &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; factor &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; is.factor &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; as.factor &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+This conversion is important. Why?
+
+<div class="countdown" id="timer_5f5ef795" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Factors
+
+Factors are uniquely an R thing. 
+
+They are meant to represent categorical data (gender, race, state, phenotype)
+
+They look like character vectors, but internally act like integers, so you have to 
+be a bit careful with them
+
+--
+
+Whenever you're in doubt, convert them to characters using `as.character`.
+
+We'll see the utility of factors when we do data munging, summaries and modeling
+
+
+
+
+---
+
+## Every object in R has a name
+
+You give an object a name using the syntax `name &lt;- object`
+
+Naming conventions: 
+
+1. Snake_case or pothole_case
+1. CamelCase
+1. Some.people.use.periods
+
+I'm partial to `snake_case`.
+
+The point here is to make expressive names using English so you know what 
+is stored in the name.
+
+---
+
+## A silly exercise
+
+From the iris dataset, save each column into a new object, giving it a name. Then
+see what kind of data that object contains.
+
+<div class="countdown" id="timer_5f5efa27" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+## Bigger objects
+
+### Scalar -&gt; vector (array) -&gt; matrix (2-d array)
+
+--
+
++ A scalar is a single number or word
++ A vector is a bunch of scalars arranged in a row or column
++ A matrix is a bunch of scalars arranged in rows and columns
+
+#### Each of these **must** be of the same data type
+
+---
+
+## Examples
+
+
+```r
+2
+```
+
+```
+#&gt;  [1] 2
+```
+
+--
+
+
+```r
+c(2,3,4,5,6)
+```
+
+```
+#&gt;  [1] 2 3 4 5 6
+```
+
+&gt; `c()` is the concatenate function
+
+--
+
+
+```r
+matrix(c(1,2,3,4), byrow = T, nrow = 2)
+```
+
+```
+#&gt;       [,1] [,2]
+#&gt;  [1,]    1    2
+#&gt;  [2,]    3    4
+```
+
+---
+class:middle,center
+
+# Data comes in many flavors
+
+---
+
+## Heterogeneous data
+
+From Excel, we are familiar with keeping different kinds of data together in a spreadsheet
+
++ Expression levels (numeric)
++ Gene names (character)
++ Date of experiment (Date)
+
+
+In R, the objects that can hold heterogeneous data are `data.frame` and `list`
+
+---
+class:middle, center
+
+# Data sets
+
+---
+
+## Typical data structure
+
++ Data is typically in a rectangular format
+  
+    + spreadsheet, database table
+    + CSV (comma-separated values) or TSV (tab-separated values) files
+
++ Characteristic
+  
+    + Rows are observations
+    + Columns are variables
+    + Each column has the same number of observations
+
+&gt; [__Tidy data__](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) is a particularly amenable format for data analysis. 
+ 
+---
+
+# The `data.frame`
+
+Dataframes are the primary mode of storing datasets in R
+
+They were revolutionary in that they kept heterogeneous data together
+
+They share properties of both a __matrix__ and a __list__
+
+
+```r
+class(airquality)
+```
+
+```
+#&gt;  [1] "data.frame"
+```
+
+&gt; Technically, a data.frame is a list of vectors (or objects, generally) of the same length  
+
+---
+class: middle, center
+
+# Load some data
+
+---
+
+We'll load the `spine` dataset into R.
+
+To do this, download the data from the web, and store it in the main folder in your
+project.
+
+Then, in the Environment pane, import it using the **Import Dataset** button. You will 
+use the `From text (readr)` option
+
+
+
+
+---
+
+![](img/readr1.png)
+
+---
+
+![](img/readr2.png)
+
+---
+
+![](img/readr3.png)
+
+---
+class:center, middle
+
+# A digression: Lists and Matrices
+
+---
+
+# Matrices
+
+A __matrix__ is a rectangular array of data _of the same type_
+
+
+```r
+matrix(0, nrow=2, ncol=4)
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    0    0    0    0
+#&gt;  [2,]    0    0    0    0
+```
+
+```r
+matrix(letters, nrow=2)
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+#&gt;  [1,] "a"  "c"  "e"  "g"  "i"  "k"  "m"  "o"  "q"  "s"   "u"   "w"   "y"  
+#&gt;  [2,] "b"  "d"  "f"  "h"  "j"  "l"  "n"  "p"  "r"  "t"   "v"   "x"   "z"
+```
+
+```r
+matrix(letters, nrow=2, byrow=T)
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+#&gt;  [1,] "a"  "b"  "c"  "d"  "e"  "f"  "g"  "h"  "i"  "j"   "k"   "l"   "m"  
+#&gt;  [2,] "n"  "o"  "p"  "q"  "r"  "s"  "t"  "u"  "v"  "w"   "x"   "y"   "z"
+```
+
+---
+
+# Matrices
+
+You can create a matrix from a set of _vectors_ of the same length
+
+```r
+x &lt;- c(1,2,3,4)
+y &lt;- c(10,20,30,40)
+```
+Put columns together
+
+```r
+cbind(c(1,2,3,4), c(10,20,30,40)) ## Column bind
+```
+
+```
+#&gt;       [,1] [,2]
+#&gt;  [1,]    1   10
+#&gt;  [2,]    2   20
+#&gt;  [3,]    3   30
+#&gt;  [4,]    4   40
+```
+
+---
+
+# Matrices
+
+You can create a matrix from a set of _vectors_ of the same length
+
+```r
+x &lt;- c(1,2,3,4)
+y &lt;- c(10,20,30,40)
+```
+Put rows together
+
+```r
+example_matrix &lt;- rbind(c(1,2,3,4), c(10,20,30,40)) ## Row bind
+example_matrix
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    1    2    3    4
+#&gt;  [2,]   10   20   30   40
+```
+
+---
+
+# Extracting elements
+
+
+```r
+example_matrix 
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    1    2    3    4
+#&gt;  [2,]   10   20   30   40
+```
+
+```r
+example_matrix[1,] ## Extracts 1st row
+```
+
+```
+#&gt;  [1] 1 2 3 4
+```
+
+```r
+example_matrix[,2:3] ## extracts 2nd &amp; 3rd columns
+```
+
+```
+#&gt;       [,1] [,2]
+#&gt;  [1,]    2    3
+#&gt;  [2,]   20   30
+```
+
+```r
+example_matrix[1,4]
+```
+
+```
+#&gt;  [1] 4
+```
+
+---
+
+# Matrix properties
+
+```r
+example_matrix
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    1    2    3    4
+#&gt;  [2,]   10   20   30   40
+```
+
+```r
+nrow(example_matrix) ## Number of rows
+```
+
+```
+#&gt;  [1] 2
+```
+
+```r
+ncol(example_matrix) ## Number of columns
+```
+
+```
+#&gt;  [1] 4
+```
+
+```r
+dim(example_matrix) ## shortcut for above
+```
+
+```
+#&gt;  [1] 2 4
+```
+
+---
+
+# Matrix arithmetic
+
+```r
+example_matrix
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    1    2    3    4
+#&gt;  [2,]   10   20   30   40
+```
+
+```r
+example_matrix + 5 ## Add 5 to each element
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    6    7    8    9
+#&gt;  [2,]   15   25   35   45
+```
+
+```r
+example_matrix * 2 ## Multiply each element by 2
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    2    4    6    8
+#&gt;  [2,]   20   40   60   80
+```
+
+---
+
+# Two matrices
+
+```r
+example_matrix
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    1    2    3    4
+#&gt;  [2,]   10   20   30   40
+```
+
+```r
+example_matrix2 &lt;- rbind(3:6, 9:12)
+example_matrix2
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    3    4    5    6
+#&gt;  [2,]    9   10   11   12
+```
+
+```r
+example_matrix + example_matrix2
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    4    6    8   10
+#&gt;  [2,]   19   30   41   52
+```
+
+---
+
+# Two matrices
+
+```r
+example_matrix
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    1    2    3    4
+#&gt;  [2,]   10   20   30   40
+```
+
+```r
+example_matrix2
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    3    4    5    6
+#&gt;  [2,]    9   10   11   12
+```
+
+```r
+example_matrix * example_matrix2 ## Not matrix multiplication, but element-wise multiplication
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    3    8   15   24
+#&gt;  [2,]   90  200  330  480
+```
+
+---
+
+# Two matrices
+
+```r
+rbind(example_matrix, example_matrix2)
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4]
+#&gt;  [1,]    1    2    3    4
+#&gt;  [2,]   10   20   30   40
+#&gt;  [3,]    3    4    5    6
+#&gt;  [4,]    9   10   11   12
+```
+
+```r
+cbind(example_matrix, example_matrix2)
+```
+
+```
+#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
+#&gt;  [1,]    1    2    3    4    3    4    5    6
+#&gt;  [2,]   10   20   30   40    9   10   11   12
+```
+
+---
+
+# Two matrices
+
+```r
+dim(example_matrix2)
+```
+
+```
+#&gt;  [1] 2 4
+```
+
+```r
+t(example_matrix2) ## Transpose of a matrix
+```
+
+```
+#&gt;       [,1] [,2]
+#&gt;  [1,]    3    9
+#&gt;  [2,]    4   10
+#&gt;  [3,]    5   11
+#&gt;  [4,]    6   12
+```
+
+```r
+example_matrix %*% t(example_matrix2) ## Matrix multiplication
+```
+
+```
+#&gt;       [,1] [,2]
+#&gt;  [1,]   50  110
+#&gt;  [2,]  500 1100
+```
+
+---
+
+# Lists
+
+Lists are collections of arbitrary objects in R
+
+```r
+example_list &lt;- list(c('Andy','Brian','Harry'), 
+                     c(12, 16, 16), 
+                     c(TRUE, TRUE, FALSE), 
+                     matrix(1, nrow=2, ncol=3))
+example_list
+```
+
+```
+#&gt;  [[1]]
+#&gt;  [1] "Andy"  "Brian" "Harry"
+#&gt;  
+#&gt;  [[2]]
+#&gt;  [1] 12 16 16
+#&gt;  
+#&gt;  [[3]]
+#&gt;  [1]  TRUE  TRUE FALSE
+#&gt;  
+#&gt;  [[4]]
+#&gt;       [,1] [,2] [,3]
+#&gt;  [1,]    1    1    1
+#&gt;  [2,]    1    1    1
+```
+
+---
+
+# Extracting elements from lists
+
+```r
+example_list[[3]]
+```
+
+```
+#&gt;  [1]  TRUE  TRUE FALSE
+```
+
+```r
+example_list[1:2]
+```
+
+```
+#&gt;  [[1]]
+#&gt;  [1] "Andy"  "Brian" "Harry"
+#&gt;  
+#&gt;  [[2]]
+#&gt;  [1] 12 16 16
+```
+
+---
+
+# Extracting elements from lists
+
+```r
+example_list[[4]]
+```
+
+```
+#&gt;       [,1] [,2] [,3]
+#&gt;  [1,]    1    1    1
+#&gt;  [2,]    1    1    1
+```
+
+```r
+class(example_list[[4]])
+```
+
+```
+#&gt;  [1] "matrix"
+```
+
+```r
+example_list[[4]][1,]
+```
+
+```
+#&gt;  [1] 1 1 1
+```
+
+---
+
+# Named lists
+
+```r
+example_named_list &lt;- list('Names' = c('Andy','Brian','Harry'), 
+                     "YearsOfEducation" = c(12, 16, 16), 
+                     "Married" = c(TRUE, TRUE, FALSE), 
+                     'something' = matrix(1, nrow=2, ncol=3))
+
+example_named_list[['Names']]
+```
+
+```
+#&gt;  [1] "Andy"  "Brian" "Harry"
+```
+
+```r
+example_named_list$Names
+```
+
+```
+#&gt;  [1] "Andy"  "Brian" "Harry"
+```
+
+```r
+example_named_list$Names[3]
+```
+
+```
+#&gt;  [1] "Harry"
+```
+
+---
+class: middle, center
+
+# Back to a Data Frame
+
+---
+
+# Data frames
+
+A data.frame object is a __named list__ where each element is of the same length
+
+You can use both _matrix_ and _list_ functions to operate on data.frame objects!!
+
+---
+
+# Data Frames
+
+
+```r
+head(data_spine)
+```
+
+```
+#&gt;    Pelvic.incidence Pelvic.tilt Lumbar.lordosis.angle Sacral.slope Pelvic.radius
+#&gt;  1         63.02782   22.552586              39.60912     40.47523      98.67292
+#&gt;  2         39.05695   10.060991              25.01538     28.99596     114.40543
+#&gt;  3         68.83202   22.218482              50.09219     46.61354     105.98514
+#&gt;  4         69.29701   24.652878              44.31124     44.64413     101.86850
+#&gt;  5         49.71286    9.652075              28.31741     40.06078     108.16872
+#&gt;  6         40.25020   13.921907              25.12495     26.32829     130.32787
+#&gt;    Degree.spondylolisthesis Pelvic.slope Direct.tilt Thoracic.slope
+#&gt;  1                -0.254400    0.7445035     12.5661        14.5386
+#&gt;  2                 4.564259    0.4151857     12.8874        17.5323
+#&gt;  3                -3.530317    0.4748892     26.8343        17.4861
+#&gt;  4                11.211523    0.3693453     23.5603        12.7074
+#&gt;  5                 7.918501    0.5433605     35.4940        15.9546
+#&gt;  6                 2.230652    0.7899929     29.3230        12.0036
+#&gt;    Cervical.tilt Sacrum.angle Scoliosis.slope Class.attribute
+#&gt;  1      15.30468   -28.658501         43.5123        Abnormal
+#&gt;  2      16.78486   -25.530607         16.1102        Abnormal
+#&gt;  3      16.65897   -29.031888         19.2221        Abnormal
+#&gt;  4      11.42447   -30.470246         18.8329        Abnormal
+#&gt;  5       8.87237   -16.378376         24.9171        Abnormal
+#&gt;  6      10.40462    -1.512209          9.6548        Abnormal
+```
+
+---
+
+# Data Frames
+
+```r
+dim(data_spine)
+```
+
+```
+#&gt;  [1] 310  13
+```
+
+```r
+nrow(data_spine)
+```
+
+```
+#&gt;  [1] 310
+```
+
+```r
+data_spine_small &lt;- data_spine[1:4,] ## Matrix operation
+```
+
+---
+
+# Data Frames
+
+```r
+data_spine_small[,2] ## Matrix extraction by position
+```
+
+```
+#&gt;  [1] 22.55259 10.06099 22.21848 24.65288
+```
+
+```r
+data_spine_small[[2]] ## List extraction by position
+```
+
+```
+#&gt;  [1] 22.55259 10.06099 22.21848 24.65288
+```
+
+---
+
+# Data Frames
+
+```r
+data_spine_small[['Pelvic.tilt']] ## Named list extraction
+```
+
+```
+#&gt;  [1] 22.55259 10.06099 22.21848 24.65288
+```
+
+```r
+data_spine_small[,'Pelvic.tilt'] ## Data frame named column extraction
+```
+
+```
+#&gt;  [1] 22.55259 10.06099 22.21848 24.65288
+```
+
+```r
+data_spine_small$Pelvic.tilt ## Dollar sign extraction
+```
+
+```
+#&gt;  [1] 22.55259 10.06099 22.21848 24.65288
+```
+
+---
+
+# Data Frames
+
+My preference is for
+
+1. _data frame named column extraction_ `data_spine_small[,'Pelvic.tilt']`, 
+2. _named list extraction_ `data_spine_small[['Pelvic.tilt']]`
+3. _Dollar-based extraction_ `data_spine_small$Pelvic.tilt`
+
+
+---
+
+# Data Frames
+
+```r
+names(data_spine_small)
+```
+
+```
+#&gt;   [1] "Pelvic.incidence"         "Pelvic.tilt"             
+#&gt;   [3] "Lumbar.lordosis.angle"    "Sacral.slope"            
+#&gt;   [5] "Pelvic.radius"            "Degree.spondylolisthesis"
+#&gt;   [7] "Pelvic.slope"             "Direct.tilt"             
+#&gt;   [9] "Thoracic.slope"           "Cervical.tilt"           
+#&gt;  [11] "Sacrum.angle"             "Scoliosis.slope"         
+#&gt;  [13] "Class.attribute"
+```
+
+```r
+data_spine_small[,c('Pelvic.tilt', 'Pelvic.slope','Class.attribute')]
+```
+
+```
+#&gt;    Pelvic.tilt Pelvic.slope Class.attribute
+#&gt;  1    22.55259    0.7445035        Abnormal
+#&gt;  2    10.06099    0.4151857        Abnormal
+#&gt;  3    22.21848    0.4748892        Abnormal
+#&gt;  4    24.65288    0.3693453        Abnormal
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
