@@ -1,0 +1,343 @@
+---
+title: "Practical R: Functions and Loops"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '', message=F, warning=F)
+library(countdown)
+library(fontawesome)
+library(tidyverse)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339, BIOF 339</span></div>
+
+---
+class: middle,center,inverse
+
+# Functions
+
+---
+
+## Why do we need functions?
+
+When you are typing instructions to the computer, you might find yourself repeating the same instructions over and over. So you end up copying and pasting code for each repitition.
+
++ Can make a mistake copying and pasting
++ If you need to change the instructions, you need to find every instance of it **manually** and change it, and you're likely to miss one
+
+The rule of thumb is, if you're copying the same code more than twice, write a function.
+
++ Write the instructions once
++ Change it in only one place, if needed
+
+---
+
+## Defining functions
+
+The basic syntax of a function is 
+
+```
+<function name> <- function(<input argument(s)>){
+  <code for instructions>
+  ...
+  <more code>
+  return(<output object>)
+}
+```
+
+---
+
+## Defining functions
+
+Let's create our own function to convert feet to inches.
+
+```{r}
+ft2in <- function(ft){
+  inch <- ft * 12
+  return(inch)
+}
+```
+
++ `ft2in` is the name of the function
++ The input argument is named `ft` (make an expressive name)
++ Inches are computed by multiplying `ft` by 12 and storing it in `inch`
++ The output of the function is the value of the `inch` variable
+
+To run this:
+
+.pull-left[
+```{r a1, eval = F, echo = T}
+ft2in(12) # 12 feet to inches
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="a1"}
+```
+]
+
+---
+
+## Defining functions
+
+What if we want more than one input?
+
+```{r}
+ft2in <- function(ft, convert_to){
+  # ft = input (feet)
+  # convert_to = unit to convert to ('in','m','cm')
+  if(convert_to == 'in'){
+    output <- ft * 12
+  }
+  if(convert_to == 'm'){
+    output <- ft * 0.3048
+  }
+  if(convert_to == 'cm'){
+    output <- ft * 30.48
+  }
+  return(paste(output, convert_to))
+}
+```
+
+.pull-left[
+```{r f2, eval = F, echo = T}
+ft2in(12, convert_to='cm')
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="f2"}
+```
+]
+---
+
+## Quick reminder about conditions
+
+Some comparison operators for filtering
+
+| Operator | Meaning                          |
+|----------|----------------------------------|
+| ==       | Equals                           |
+| !=       | Not equals                       |
+| > / <    | Greater / less than              |
+| >= / <=  | Greater or equal / Less or equal |
+| !        | Not                              |
+| %in%     | In a set                         |
+
+Combining comparisons
+
+| Operator   | Meaning |
+|------------|---------|
+| &          | And     |
+| &#124;       | Or      |
+
+---
+background-image: url(../img/dplyr_case_when.png)
+background-size: contain
+
+---
+
+## Defining functions
+
+```{r}
+ft2in <- function(ft, convert_to){
+  # ft = input (feet)
+  # convert_to = unit to convert to ('in','m','cm')
+  conversion <- case_when( #<<
+    convert_to == 'in' ~ 12, #<<
+    convert_to =='m' ~ 0.3048, #<<
+    convert_to == 'cm' ~ 30.48, #<<
+    TRUE ~ 1  # otherwise #<< 
+  ) #<<
+  output = ft * conversion
+  return(paste(output, convert_to))
+}
+```
+
+.pull-left[
+```{r f3, eval = F, echo = T}
+ft2in(12, convert_to='cm')
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="f3"}
+```
+]
+
+---
+
+## The concept of local vs global variables
+
+```{r}
+x <-  10
+print(x)
+
+f <- function(x){
+  x <- 5
+  print(x)
+}
+
+f(x)
+
+print(x)
+```
+
+The `x` inside the function is local to the function and is independent of the `x` in the global space that has the value 10..
+
+---
+class: middle,center,inverse
+
+# Loops   
+
+---
+
+
+## for-loops
+
+![](https://media.giphy.com/media/3o6nURRboKQJrBGVC8/giphy.gif)
+
+---
+
+## for-loops
+
+The for-loop is a construct to repeat the same operation over a list of values.
+
+Basic syntax:
+
+```
+for(<variable> in <list>){
+    <code>
+    ...
+    <more code>
+}
+```
+
+Example:
+
+.pull-left[
+```{r loop1, eval = F, echo = T}
+for(i in 1:10){
+  print(i)
+}
+```
+
+Here `i` is a dummy variable. It's actual name doesn't matter, just its action
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="loop1"}
+```
+]
+
+---
+
+## for-loops
+
+Example:
+
+```{r}
+for(n in names(iris)){
+  if(is.numeric(iris[,n])){
+    print(glue::glue('The mean of {n} is {mean(iris[,n])}')) #<<
+  }
+}
+```
+
+You don't need the `<list>` in the for-loop definition to be integers. In this case it is a list of strings.
+
+Note that vectors are also considered lists for this purpose. 
+
+.footnote[
+-----
+The **glue** package allows you to run templated text strings interspersed with the results of R objects]
+
+---
+class: middle,center,inverse
+
+# purrr: functional programming and mapping
+
+---
+
+## purrr
+
+The **purrr** package provides ways to efficiently run functions over lists. These functions
+are typically more efficient than for-loops.
+
+The function `purrr::map` has syntax
+
+```
+map(<list/vector>, <function/formula>, ...)
+```
+
+Example:
+
+.pull-left[
+```{r}
+iris1 <- select(iris, where(is.numeric))
+map(iris1, mean) #<<
+```
+]
+.pull-right[
+`map` takes a list and outputs a list. 
+
+Recall, a data.frame is a list of columns, so `map` takes each column and applies the function `mean` to it, and prints the output
+
+If you're familiar with `lapply`, `map` works almost exactly the same way
+]
+
+---
+
+## purrr
+
+Example (cont.):
+
+You can clean the output up a bit.
+
+.pull-left[
+```{r}
+map_dbl(iris1, mean)
+```
+
+]
+.pull-right[
+There are several helper functions like `map_dbl`, `map_int`, `map_chr`, and others that
+will reduce the output into a vector of particular type (more [here](https://purrr.tidyverse.org/reference/map.html))
+]
+
+`map` can also be used as part of pipes, leveraging the fact that data.frames are 
+lists of columns.
+
+```{r}
+iris %>% 
+  select(where(is.numeric)) %>% 
+  map_dbl(mean)
+```
+
+> **Question:** Why does `map_dbl` only have the argument `mean`?
+
+---
+
+## purrr
+
+There are several extensions of `map`
+
++ `map2` and  derivatives `map2_dbl`, etc, iterate over two lists to compute the outcome of a function of **two** variables
++ `pmap` and derivatives iterate over _p_ lists to compute the outcome of a p-dimensional function
++ `imap` and derivatives iterates over a list and its index/names to compute the outcome of a function that takes the values and index/names as inputs
+
+---
+
+## purrr
+
+The function part of these functions can be entered in a couple of ways:
+
+1. If you have a formal `function` f with the appropriate number of arguments, you can just add `f`. 
+    + `map_dbl(iris1, mean)`
+1. You can also define a function "on-the-fly" using a _formula interface_.
+    + `map_dbl(iris1, ~mean(.x))`
+    + if you have multiple arguments, they are denoted as `.x`, `.y`, `.z`, `.w`, etc.
+
+.footnote[The second method is often referred to as *anonymous functions* or *lambda functions* in computer science since they aren't given a name]

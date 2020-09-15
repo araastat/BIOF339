@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Practical R: Functions and Loops</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="functions_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../robot.css" type="text/css" />
+    <link rel="stylesheet" href="../robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Practical R: Functions and Loops
+### Abhijit Dasgupta
+### BIOF 339
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339, BIOF 339&lt;/span&gt;&lt;/div&gt;
+
+---
+class: middle,center,inverse
+
+# Functions
+
+---
+
+## Why do we need functions?
+
+When you are typing instructions to the computer, you might find yourself repeating the same instructions over and over. So you end up copying and pasting code for each repitition.
+
++ Can make a mistake copying and pasting
++ If you need to change the instructions, you need to find every instance of it **manually** and change it, and you're likely to miss one
+
+The rule of thumb is, if you're copying the same code more than twice, write a function.
+
++ Write the instructions once
++ Change it in only one place, if needed
+
+---
+
+## Defining functions
+
+The basic syntax of a function is 
+
+```
+&lt;function name&gt; &lt;- function(&lt;input argument(s)&gt;){
+  &lt;code for instructions&gt;
+  ...
+  &lt;more code&gt;
+  return(&lt;output object&gt;)
+}
+```
+
+---
+
+## Defining functions
+
+Let's create our own function to convert feet to inches.
+
+
+```r
+ft2in &lt;- function(ft){
+  inch &lt;- ft * 12
+  return(inch)
+}
+```
+
++ `ft2in` is the name of the function
++ The input argument is named `ft` (make an expressive name)
++ Inches are computed by multiplying `ft` by 12 and storing it in `inch`
++ The output of the function is the value of the `inch` variable
+
+To run this:
+
+.pull-left[
+
+```r
+ft2in(12) # 12 feet to inches
+```
+]
+.pull-right[
+
+```
+[1] 144
+```
+]
+
+---
+
+## Defining functions
+
+What if we want more than one input?
+
+
+```r
+ft2in &lt;- function(ft, convert_to){
+  # ft = input (feet)
+  # convert_to = unit to convert to ('in','m','cm')
+  if(convert_to == 'in'){
+    output &lt;- ft * 12
+  }
+  if(convert_to == 'm'){
+    output &lt;- ft * 0.3048
+  }
+  if(convert_to == 'cm'){
+    output &lt;- ft * 30.48
+  }
+  return(paste(output, convert_to))
+}
+```
+
+.pull-left[
+
+```r
+ft2in(12, convert_to='cm')
+```
+]
+.pull-right[
+
+```
+[1] "365.76 cm"
+```
+]
+---
+
+## Quick reminder about conditions
+
+Some comparison operators for filtering
+
+| Operator | Meaning                          |
+|----------|----------------------------------|
+| ==       | Equals                           |
+| !=       | Not equals                       |
+| &gt; / &lt;    | Greater / less than              |
+| &gt;= / &lt;=  | Greater or equal / Less or equal |
+| !        | Not                              |
+| %in%     | In a set                         |
+
+Combining comparisons
+
+| Operator   | Meaning |
+|------------|---------|
+| &amp;          | And     |
+| &amp;#124;       | Or      |
+
+---
+background-image: url(../img/dplyr_case_when.png)
+background-size: contain
+
+---
+
+## Defining functions
+
+
+```r
+ft2in &lt;- function(ft, convert_to){
+  # ft = input (feet)
+  # convert_to = unit to convert to ('in','m','cm')
+* conversion &lt;- case_when(
+*   convert_to == 'in' ~ 12,
+*   convert_to =='m' ~ 0.3048,
+*   convert_to == 'cm' ~ 30.48,
+*   TRUE ~ 1  # otherwise
+* )
+  output = ft * conversion
+  return(paste(output, convert_to))
+}
+```
+
+.pull-left[
+
+```r
+ft2in(12, convert_to='cm')
+```
+]
+.pull-right[
+
+```
+[1] "365.76 cm"
+```
+]
+
+---
+
+## The concept of local vs global variables
+
+
+```r
+x &lt;-  10
+print(x)
+```
+
+```
+[1] 10
+```
+
+```r
+f &lt;- function(x){
+  x &lt;- 5
+  print(x)
+}
+
+f(x)
+```
+
+```
+[1] 5
+```
+
+```r
+print(x)
+```
+
+```
+[1] 10
+```
+
+The `x` inside the function is local to the function and is independent of the `x` in the global space that has the value 10..
+
+---
+class: middle,center,inverse
+
+# Loops   
+
+---
+
+
+## for-loops
+
+![](https://media.giphy.com/media/3o6nURRboKQJrBGVC8/giphy.gif)
+
+---
+
+## for-loops
+
+The for-loop is a construct to repeat the same operation over a list of values.
+
+Basic syntax:
+
+```
+for(&lt;variable&gt; in &lt;list&gt;){
+    &lt;code&gt;
+    ...
+    &lt;more code&gt;
+}
+```
+
+Example:
+
+.pull-left[
+
+```r
+for(i in 1:10){
+  print(i)
+}
+```
+
+Here `i` is a dummy variable. It's actual name doesn't matter, just its action
+]
+.pull-right[
+
+```
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+[1] 10
+```
+]
+
+---
+
+## for-loops
+
+Example:
+
+
+```r
+for(n in names(iris)){
+  if(is.numeric(iris[,n])){
+*   print(glue::glue('The mean of {n} is {mean(iris[,n])}'))
+  }
+}
+```
+
+```
+The mean of Sepal.Length is 5.84333333333333
+The mean of Sepal.Width is 3.05733333333333
+The mean of Petal.Length is 3.758
+The mean of Petal.Width is 1.19933333333333
+```
+
+You don't need the `&lt;list&gt;` in the for-loop definition to be integers. In this case it is a list of strings.
+
+Note that vectors are also considered lists for this purpose. 
+
+.footnote[
+-----
+The **glue** package allows you to run templated text strings interspersed with the results of R objects]
+
+---
+class: middle,center,inverse
+
+# purrr: functional programming and mapping
+
+---
+
+## purrr
+
+The **purrr** package provides ways to efficiently run functions over lists. These functions
+are typically more efficient than for-loops.
+
+The function `purrr::map` has syntax
+
+```
+map(&lt;list/vector&gt;, &lt;function/formula&gt;, ...)
+```
+
+Example:
+
+.pull-left[
+
+```r
+iris1 &lt;- select(iris, where(is.numeric))
+*map(iris1, mean)
+```
+
+```
+$Sepal.Length
+[1] 5.843333
+
+$Sepal.Width
+[1] 3.057333
+
+$Petal.Length
+[1] 3.758
+
+$Petal.Width
+[1] 1.199333
+```
+]
+.pull-right[
+`map` takes a list and outputs a list. 
+
+Recall, a data.frame is a list of columns, so `map` takes each column and applies the function `mean` to it, and prints the output
+
+If you're familiar with `lapply`, `map` works almost exactly the same way
+]
+
+---
+
+## purrr
+
+Example (cont.):
+
+You can clean the output up a bit.
+
+.pull-left[
+
+```r
+map_dbl(iris1, mean)
+```
+
+```
+Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+    5.843333     3.057333     3.758000     1.199333 
+```
+
+]
+.pull-right[
+There are several helper functions like `map_dbl`, `map_int`, `map_chr`, and others that
+will reduce the output into a vector of particular type (more [here](https://purrr.tidyverse.org/reference/map.html))
+]
+
+`map` can also be used as part of pipes, leveraging the fact that data.frames are 
+lists of columns.
+
+
+```r
+iris %&gt;% 
+  select(where(is.numeric)) %&gt;% 
+  map_dbl(mean)
+```
+
+```
+Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+    5.843333     3.057333     3.758000     1.199333 
+```
+
+&gt; **Question:** Why does `map_dbl` only have the argument `mean`?
+
+---
+
+## purrr
+
+There are several extensions of `map`
+
++ `map2` and  derivatives `map2_dbl`, etc, iterate over two lists to compute the outcome of a function of **two** variables
++ `pmap` and derivatives iterate over _p_ lists to compute the outcome of a p-dimensional function
++ `imap` and derivatives iterates over a list and its index/names to compute the outcome of a function that takes the values and index/names as inputs
+
+---
+
+## purrr
+
+The function part of these functions can be entered in a couple of ways:
+
+1. If you have a formal `function` f with the appropriate number of arguments, you can just add `f`. 
+    + `map_dbl(iris1, mean)`
+1. You can also define a function "on-the-fly" using a _formula interface_.
+    + `map_dbl(iris1, ~mean(.x))`
+    + if you have multiple arguments, they are denoted as `.x`, `.y`, `.z`, `.w`, etc.
+
+.footnote[The second method is often referred to as *anonymous functions* or *lambda functions* in computer science since they aren't given a name]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

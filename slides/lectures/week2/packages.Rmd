@@ -1,0 +1,286 @@
+---
+title: "Practical R: Packages"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+layout: true
+
+<div class="my-header">
+<span>BIOF 339</span></div>
+
+```{r, include=FALSE}
+library(tidyverse)
+get_description <- function(pkgs){
+  tibble(Package = pkgs) %>% 
+    mutate(Description = map_chr(Package, ~packageDescription(.)$Title)) %>% 
+    knitr::kable() %>% 
+    kableExtra::kable_styling()
+}
+```
+
+
+
+---
+class: middle, center, inverse
+
+# What are packages in R?
+
+---
+
+## Packages
+
+Packages are collections of functions, and sometimes data, that are usually unified for 
+a common purpose
+
+.saltinline[If _functions_ are recipes, then _packages_ are recipe books]
+
+--
+
+If you want to cook from a recipe, you first have to grab the recipe book from your shelf
+
+--
+
+.heatinline[Similarly, if you want to use a function from a package, you first have to grab or activate
+the package in _your current R session_ ]
+
+This is done using the `library` function 
+
+For example, 
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(janitor)
+```
+
+---
+
+## Packages
+
+There is another way to access functions from packages, if you're really only going to 
+use one function from it. 
+
+The general form for this is .heatinline[`<package>::<function>`] (note the __two__ colons)
+
+For example, if you just want to use the `clean_names` function from the **janitor** package, you can 
+do so by 
+
+```{r, eval=F}
+janitor::clean_names(dataset)
+```
+
+where `dataset` is the name of the data.frame whose column names you want to clean.
+
+---
+
+## Important operational notes
+
+.pull-left[
+.acid[Install packages **once per computer**]
+
+Never install packages inside a R Markdown file
+]
+.pull-right[
+.heat[Activate a package **once per R session**]
+
+]
+--
+
+
+.footnote[The **pacman** package and the `pacman::p_load` function saves you a bunch of trouble by 
+installing a package only if it doesn't exist on your computer and then activating the packaage. This one function removes a lot of the operational issues in installing and loading packages in R.]
+
+
+---
+class: middle,center,inverse
+
+# Where are the packages?
+
+---
+
+## CRAN
+
+CRAN is the Comprehensive R Archive Network, a network of mirrored repositories containing R packages.
+
+Today, it really doesn't matter which of the repositories you use. 
+
+In RStudio, the default repository is **Global (CDN) - RStudio** which is a version in the cloud that typically works the fastest. 
+
+![:scale 50%](../img/pkg1.png)
+
+---
+
+## CRAN
+
+You can install packages from CRAN using the following means:
+
+.pull-left[
+`install.packages("<package name>")`
+
+Or, if you want to be explicit, or are not using RStudio, 
+
+`install.packages("<package name>", repos = "<repository URL>")`
+
+]
+.pull-right[
+Using the RStudio _Packages_ panel
+
+(see next slide)
+
+You can find packages using CRAN [Task Views](https://cran.r-project.org/web/views/)
+
+---
+background-image: url(../img/pkg2.png)
+background-size: contain
+
+---
+
+## GitHub
+
+GitHub is where many R packages reside during development. 
+
+To install a package directly from GitHub, you need the **remotes** package, and 
+then you can use
+
+```{r, eval=F}
+remotes::install_github("<owner>/<repo>")
+```
+
+For example, if you want to install the development version of **dplyr**:
+
+```{r, eval=F}
+remotes::install_github("tidyverse/dplyr")
+```
+
+---
+
+## Bioconductor
+
+The [Bioconductor](https://www.bioconductor.org) is a R organization dedicated to 
+bioinformatics. It has its own repository of over 1900 packages
+
+To install Bioconductor packages, you first need to install the **BiocManager** package from CRAN (note the upper and lower case letters). Then you can install packages by 
+
+```{r, eval=F}
+BiocManager::install('<package name>')
+```
+
+For example, if you want to install the **DESeq2** package that computes differential gene expressions: 
+
+```{r, eval=F}
+BiocManager::install('DESeq2')
+```
+
+---
+## Installing packages, a summary
+
+
+.pull-left[
+### From CRAN
+```{r Rintro-10, eval=F}
+install.packages("tidyverse")
+```
+
+### From Bioconductor
+```{r Rintro-11, eval = F}
+install.packages("BiocManager") # do once 
+BioManager::install('limma')
+```
+
+### From GitHub
+
+```{r Rintro-12, eval = F}
+install.packages('remotes') # do once
+remotes::install_github("rstudio/rmarkdown") 
+# usual format is username/packagename
+```
+]
+.pull-right[
+> GitHub often hosts development version of packages published on CRAN or Bioconductor
+
+> Both CRAN and Bioconductor have stringent checks to make sure packages can run properly, with no obvious program flaws. There are typically no
+  guarantees about analytic or theoretical correctness, but most packages have been crowd-validated and there are several reliable developer groups
+  including RStudio
+]
+
+
+
+---
+class: middle,center,inverse
+
+# Packages commonly used 
+## An incomplete listing
+
+---
+
+## Data ingestion
+
+```{r, echo=F}
+get_description(c('readr','readxl','haven', 'DBI', 'rvest','jsonlite')) 
+```
+
+---
+
+## Data munging
+
+```{r, echo=F}
+get_description(c('tidyr','dplyr','stringr','lubridate', 'forcats', 'purrr', 'janitor'))
+```
+
+---
+
+## Data visualization
+
+```{r, echo=F}
+get_description(c('ggplot2','lattice', 'visdat','naniar','htmlwidgets','leaflet','highcharter','plotly'))
+```
+
+There is an entire package ecosystem around `ggplot2` that can be seen [here](https://exts.ggplot2.tidyverse.org/). These include specialized plots, 
+different themes and colors, animations, etc. 
+
+---
+
+## Statistics
+
+**Data description**
+
+```{r, echo=FALSE}
+get_description(c('tableone','table1','stargazer', 'arsenal','gtsummary', 'flextable', 'Hmisc'))
+```
+
+---
+
+## Statistics
+
+**Analysis**
+```{r, echo=F}
+get_description(c('stats','survival','infer','rsample','broom', 'finalfit'))
+```
+
+
+---
+
+## Statistical modeling
+
+```{r, echo=F}
+get_description(c('stats','survival','recipes', 'rms', 'broom', 'rsample'))
+```
+
+---
+
+## Machine Learning
+
+```{r, echo=F}
+get_description(c('caret','parsnip','yardstick', 'rpart','party','randomForest','baguette', 'kernlab','earth'))
+```
+
+---
+
+## Reporting
+
+```{r, echo=F}
+get_description(c('rmarkdown','knitr','bookdown','distill', 'rticles','blogdown','flexdashboard', 'shiny', 'officer'))
+```
+
+

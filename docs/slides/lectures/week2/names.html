@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Naming conventions in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="names_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="names_files/panelset-0.2.2/panelset.css" rel="stylesheet" />
+    <script src="names_files/panelset-0.2.2/panelset.js"></script>
+    <link rel="stylesheet" href="../robot.css" type="text/css" />
+    <link rel="stylesheet" href="../robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Naming conventions in R
+### Abhijit Dasgupta
+### BIOF 339
+
+---
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339&lt;/span&gt;&lt;/div&gt;
+
+---
+class: middle,center,inverse
+
+# Naming rules
+
+---
+
+## Why do we need names?
+
+Everything in R is an object that can be named
+
+Unless you name an object, it doesn't stay in the R environment
+
+You name an object using the assignment operator `&lt;-`  
+I read this as a left arrow
+
+For example
+
+```r
+spine_data &lt;- readr::read_csv('data/Dataset_spine.csv')
+```
+
+Here, we read the CSV file into R, and then save it in the current R session by naming it `spine_data`
+
+---
+
+## Syntactic names
+
+Following these rules will always give you valid object names without the need for additional trouble.
+
+1. Contains letters, numbers, `.` or `_` characters
+1. Starts with a letter or `.` not followed by a number
+1. Is not a reserved word ()
+
+--
+
+So `.2way` is not a syntactically valid name
+
+---
+
+## Going wild
+
+You can actually use **any** name for an object, as long as you encase it in backticks
+
+The name can then include spaces, special characters, start with a number, etc.
+
+Still, don't use reserved words.
+
+--
+
+.pull-left[
+
+You can do 
+
+`` `First variable` ``
+
+`` `2 many bikes` ``
+
+]
+.pull-right[
+.heat[But should you?!!]
+]
+
+---
+
+## Naming conventions
+
+There are several prevalent naming conventions in R
+
++ snake case, e.g., `my_variable`
++ lower camel case, e.g., `myVariable`
++ upper camel case, e.g., `MyVariable`
++ period separated, e.g., `my.variable`
++ lower case, e.g., `myvariable`
+
+Choose one and stick with it. It will save you some sanity.
+
+
+-----
+
+&gt; The **janitor** package has a nice function called `clean_names` which will 
+transform the column names in a data.frame to follow a particular naming convention, 
+with the default being snake case.
+
+---
+background-image: url(../img/janitor_clean_names.png)
+background-size: contain
+
+---
+
+## Resources
+
+The following commands, typed in the R console, will get you to the corresponding help files.
++ `?make.names`
++ `?assign`
+
+---
+class: middle,center,inverse
+
+# Brackets
+
+---
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF339&lt;/span&gt;&lt;/div&gt;
+
+## Brackets
+
+There are three kinds of brackets in R
+
+---
+
+
+.fatinline[`[]`] are used for extracting elements from arrays, matrices, data frames.
+
+.panelset[
+.panel[.panel-name[Arrays]
+- `x[3]` is the 3rd element of an array `x`
+- `d[1,3]` is the element in the 1st row and 3rd column of a matrix/data frame `d`
+- `d[2,]` is the entire first __row__ of a matrix/data frame `d`
+- `d[,4]` is the entire 4th __column__ of a matrix/data frame `d`
+- `d[,'gender']` is the column named _gender_ in a _data frame_ `d`
+]
+.panel[.panel-name[Lists]
+
+To extract single elements, you use a .acidinline[double bracket:]
+- `lst[[3]]` is the third element of the list `lst`
+- `lst[['apple']]` is the element named _apple_ in a named list `lst`
+
+To extract a sub-list, you use .acidinline[single brackets]:
++ `lst[1:3]` creates a sub-list with the first 3 elements of `lst`
+]]
+
+---
+
+
+.fatinline[`()`] are used for specifying arguments to functions
+
+- `mean(x)` gives the mean of an array of numbers `x`
+- `summary(d)` gives a summary representation of a data frame `d`
+- There are several functions used to make the following visualization
+
+
+```r
+ggplot(beaches, aes(x = temperature, y = rainfall)) + 
+  geom_point() + 
+  geom_smooth() + 
+  theme_classic()
+```
+---
+
+
+.fatinline[`{}`] are used to contain groups of commands/statements
+
+.pull-left[
+
+A conditional statement
+
+
+```r
+if (age &lt; 18){
+   person &lt;- 'Minor'
+} else if (age &gt; 65) {
+  person &lt;- 'Senior'
+} else {
+  person &lt;- 'Adult'
+}
+```
+]
+.pull-right[
+
+A function definition
+
+
+```r
+my_mean &lt;- function(x, na.rm = T){
+  if(na.rm){
+    x &lt;- x[!is.na(x)]
+  }
+  s &lt;- sum(x)
+  n &lt;- length(x)
+  mn &lt;- s / n # There is a built-in function mean, so I don't use that word
+  return(mn)
+}
+```
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

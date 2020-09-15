@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Practical R: Packages</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="packages_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <script src="packages_files/kePrint-0.0.1/kePrint.js"></script>
+    <link rel="stylesheet" href="../robot.css" type="text/css" />
+    <link rel="stylesheet" href="../robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Practical R: Packages
+### Abhijit Dasgupta
+### BIOF 339
+
+---
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339&lt;/span&gt;&lt;/div&gt;
+
+
+
+
+
+---
+class: middle, center, inverse
+
+# What are packages in R?
+
+---
+
+## Packages
+
+Packages are collections of functions, and sometimes data, that are usually unified for 
+a common purpose
+
+.saltinline[If _functions_ are recipes, then _packages_ are recipe books]
+
+--
+
+If you want to cook from a recipe, you first have to grab the recipe book from your shelf
+
+--
+
+.heatinline[Similarly, if you want to use a function from a package, you first have to grab or activate
+the package in _your current R session_ ]
+
+This is done using the `library` function 
+
+For example, 
+
+
+```r
+library(tidyverse)
+library(janitor)
+```
+
+---
+
+## Packages
+
+There is another way to access functions from packages, if you're really only going to 
+use one function from it. 
+
+The general form for this is .heatinline[`&lt;package&gt;::&lt;function&gt;`] (note the __two__ colons)
+
+For example, if you just want to use the `clean_names` function from the **janitor** package, you can 
+do so by 
+
+
+```r
+janitor::clean_names(dataset)
+```
+
+where `dataset` is the name of the data.frame whose column names you want to clean.
+
+---
+
+## Important operational notes
+
+.pull-left[
+.acid[Install packages **once per computer**]
+
+Never install packages inside a R Markdown file
+]
+.pull-right[
+.heat[Activate a package **once per R session**]
+
+]
+--
+
+
+.footnote[The **pacman** package and the `pacman::p_load` function saves you a bunch of trouble by 
+installing a package only if it doesn't exist on your computer and then activating the packaage. This one function removes a lot of the operational issues in installing and loading packages in R.]
+
+
+---
+class: middle,center,inverse
+
+# Where are the packages?
+
+---
+
+## CRAN
+
+CRAN is the Comprehensive R Archive Network, a network of mirrored repositories containing R packages.
+
+Today, it really doesn't matter which of the repositories you use. 
+
+In RStudio, the default repository is **Global (CDN) - RStudio** which is a version in the cloud that typically works the fastest. 
+
+![:scale 50%](../img/pkg1.png)
+
+---
+
+## CRAN
+
+You can install packages from CRAN using the following means:
+
+.pull-left[
+`install.packages("&lt;package name&gt;")`
+
+Or, if you want to be explicit, or are not using RStudio, 
+
+`install.packages("&lt;package name&gt;", repos = "&lt;repository URL&gt;")`
+
+]
+.pull-right[
+Using the RStudio _Packages_ panel
+
+(see next slide)
+
+You can find packages using CRAN [Task Views](https://cran.r-project.org/web/views/)
+
+---
+background-image: url(../img/pkg2.png)
+background-size: contain
+
+---
+
+## GitHub
+
+GitHub is where many R packages reside during development. 
+
+To install a package directly from GitHub, you need the **remotes** package, and 
+then you can use
+
+
+```r
+remotes::install_github("&lt;owner&gt;/&lt;repo&gt;")
+```
+
+For example, if you want to install the development version of **dplyr**:
+
+
+```r
+remotes::install_github("tidyverse/dplyr")
+```
+
+---
+
+## Bioconductor
+
+The [Bioconductor](https://www.bioconductor.org) is a R organization dedicated to 
+bioinformatics. It has its own repository of over 1900 packages
+
+To install Bioconductor packages, you first need to install the **BiocManager** package from CRAN (note the upper and lower case letters). Then you can install packages by 
+
+
+```r
+BiocManager::install('&lt;package name&gt;')
+```
+
+For example, if you want to install the **DESeq2** package that computes differential gene expressions: 
+
+
+```r
+BiocManager::install('DESeq2')
+```
+
+---
+## Installing packages, a summary
+
+
+.pull-left[
+### From CRAN
+
+```r
+install.packages("tidyverse")
+```
+
+### From Bioconductor
+
+```r
+install.packages("BiocManager") # do once 
+BioManager::install('limma')
+```
+
+### From GitHub
+
+
+```r
+install.packages('remotes') # do once
+remotes::install_github("rstudio/rmarkdown") 
+# usual format is username/packagename
+```
+]
+.pull-right[
+&gt; GitHub often hosts development version of packages published on CRAN or Bioconductor
+
+&gt; Both CRAN and Bioconductor have stringent checks to make sure packages can run properly, with no obvious program flaws. There are typically no
+  guarantees about analytic or theoretical correctness, but most packages have been crowd-validated and there are several reliable developer groups
+  including RStudio
+]
+
+
+
+---
+class: middle,center,inverse
+
+# Packages commonly used 
+## An incomplete listing
+
+---
+
+## Data ingestion
+
+
+```
+## Warning in kableExtra::kable_styling(.): Please specify format in kable.
+## kableExtra can customize either HTML or LaTeX outputs. See https://
+## haozhu233.github.io/kableExtra/ for details.
+```
+
+
+
+|Package  |Description                                         |
+|:--------|:---------------------------------------------------|
+|readr    |Read Rectangular Text Data                          |
+|readxl   |Read Excel Files                                    |
+|haven    |Import and Export 'SPSS', 'Stata' and 'SAS' Files   |
+|DBI      |R Database Interface                                |
+|rvest    |Easily Harvest (Scrape) Web Pages                   |
+|jsonlite |A Simple and Robust JSON Parser and Generator for R |
+
+---
+
+## Data munging
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; tidyr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Tidy Messy Data &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; dplyr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; A Grammar of Data Manipulation &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; stringr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Simple, Consistent Wrappers for Common String Operations &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; lubridate &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Make Dealing with Dates a Little Easier &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; forcats &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Tools for Working with Categorical Variables (Factors) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; purrr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Functional Programming Tools &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; janitor &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Simple Tools for Examining and Cleaning Dirty Data &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Data visualization
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ggplot2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Create Elegant Data Visualisations Using the Grammar of Graphics &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; lattice &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Trellis Graphics for R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; visdat &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Preliminary Visualisation of Data &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; naniar &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Data Structures, Summaries, and Visualisations for Missing Data &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; htmlwidgets &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HTML Widgets for R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; leaflet &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Create Interactive Web Maps with the JavaScript 'Leaflet'
+Library &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; highcharter &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; A Wrapper for the 'Highcharts' Library &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; plotly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Create Interactive Web Graphics via 'plotly.js' &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+There is an entire package ecosystem around `ggplot2` that can be seen [here](https://exts.ggplot2.tidyverse.org/). These include specialized plots, 
+different themes and colors, animations, etc. 
+
+---
+
+## Statistics
+
+**Data description**
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; tableone &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Create 'Table 1' to Describe Baseline Characteristics with or
+without Propensity Score Weights &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; table1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Tables of Descriptive Statistics in HTML &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; stargazer &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Well-Formatted Regression and Summary Statistics Tables &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; arsenal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; An Arsenal of 'R' Functions for Large-Scale Statistical
+Summaries &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; gtsummary &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Presentation-Ready Data Summary and Analytic Result Tables &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; flextable &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Functions for Tabular Reporting &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hmisc &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Harrell Miscellaneous &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Statistics
+
+**Analysis**
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; stats &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; The R Stats Package &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; survival &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Survival Analysis &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; infer &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Tidy Statistical Inference &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rsample &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; General Resampling Infrastructure &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; broom &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Convert Statistical Objects into Tidy Tibbles &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; finalfit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Quickly Create Elegant Regression Results Tables and Plots when
+Modelling &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+
+## Statistical modeling
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; stats &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; The R Stats Package &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; survival &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Survival Analysis &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; recipes &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Preprocessing Tools to Create Design Matrices &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rms &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Regression Modeling Strategies &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; broom &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Convert Statistical Objects into Tidy Tibbles &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rsample &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; General Resampling Infrastructure &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Machine Learning
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; caret &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Classification and Regression Training &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; parsnip &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; A Common API to Modeling and Analysis Functions &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; yardstick &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Tidy Characterizations of Model Performance &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rpart &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Recursive Partitioning and Regression Trees &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; party &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; A Laboratory for Recursive Partytioning &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; randomForest &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Breiman and Cutler's Random Forests for Classification and
+Regression &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; baguette &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Efficient Model Functions for Bagging &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; kernlab &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Kernel-Based Machine Learning Lab &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; earth &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Multivariate Adaptive Regression Splines &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Reporting
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rmarkdown &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dynamic Documents for R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; knitr &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; A General-Purpose Package for Dynamic Report Generation in R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bookdown &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Authoring Books and Technical Documents with R Markdown &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; distill &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 'R Markdown' Format for Scientific and Technical Writing &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rticles &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Article Formats for R Markdown &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; blogdown &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Create Blogs and Websites with R Markdown &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; flexdashboard &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; R Markdown Format for Flexible Dashboards &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; shiny &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Web Application Framework for R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; officer &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Manipulation of Microsoft Word and PowerPoint Documents &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

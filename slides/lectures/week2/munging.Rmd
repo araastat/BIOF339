@@ -1,0 +1,873 @@
+---
+title: "Practical R: Data Munging"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '', message=F, warning=F)
+library(countdown)
+library(fontawesome)
+library(tidyverse)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF 339: Practical R</span></div>
+
+---
+class: middle, center
+
+# Data munging
+
+---
+background-image: url(../img/tidyverse_celestial.png)
+background-size: contain
+---
+
+## What is the tidyverse?
+
+> The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures. -- Dr. Hadley Wickham
+
+- A human-friendly syntax and semantics to make code more understandable
+- The functions in the tidyverse often wraps harder-to-understand functions into simpler, more understandable forms
+- We're taking an opinionated choice here
+    - Covers maybe 85% of the cases you'll ever face
+    - Takes a particular viewpoint about how data _should_ be organized
+- But this makes things easier and simpler
+
+----
+The [tidyverse.org](https://www.tidyverse.org) site and the [R4DS book](https://r4ds.had.co.nz) 
+are the definitive sources for tidyverse information.  
+The packages are united in a common philosophy of how data analysis should be done.
+
+---
+class:middle, center
+
+# Tidying data
+
+---
+
+## Tidy data
+
+<div style="display:flex;align-items:center;font-size:30pt;font-family:'Roboto Slab';width:100%;height:300px;background-color:wheat;text-align:center;padding-left: 50px; padding-right: 0px;border: 1px solid red; position: relative;">
+
+Tidy datasets are all alike, <br/>
+but every messy data is messy in its own way
+
+</div>
+
+---
+
+## Tidy data
+
+Tidy data is a **computer-friendly** format based on the following characteristics:
+
+- Each row is one observation
+- Each column is one variable
+- Each set of observational unit forms a table
+
+All other forms of data can be considered **messy data**.
+
+---
+
+## Let us count the ways
+
+There are many ways data can be messy. An incomplete list....
+
++ Column headers are values, not variables
++ Multiple variables are stored in a single column
++ Variables are stored in both rows and columns
++ Multiple types of observational units are saved in the same table
++ A single observational unit is stored in multiple tables
+
+---
+
+## Ways to have messy (i.e. not tidy) data
+
+1. Column headers contain values
+
+Country   |   < $10K    | $10-20K    | $20-50K   | $50-100K    | > $100K
+----------|-------------|------------|-----------|-------------|---------
+India     |   40        |  25        |   25      |  9          |  1
+USA       |   20        |  20        |  20       | 30          |  10
+
+---
+
+## Ways to have messy (i.e. not tidy) data
+
+Column headers contain values
+
+Country   |   Income  | Percentage
+----------|-----------|------------
+India     |  < $10K   |  40
+USA       |  < $10K   | 20
+
+This is a case of reshaping or melting 
+
+---
+
+## Ways to have messy (i.e. not tidy) data
+
+Multiple variables in one column
+
+Country  | Year   | M_0-14  | F_0-14  | M_ 15-60  | F_15-60  | M_60+  | F_60+
+---------|--------|---------|---------|-----------|----------|--------|-------
+UK       |  2010  |         |         |           |          |        | 
+UK       |  2011  |         |         |           |          |        | 
+
+<p>
+Separating columns into different variables
+
+Country  | Year   | Gender  | Age    | Count
+---------|--------|---------|--------|-------
+
+
+
+
+---
+
+## Tidying data
+
+The typical steps are 
+
++ Transforming data from wide to tall (`pivot_longer`) and from tall to wide (`pivot_wider`)
++ Separating columns into different columns (`separate`)
++ Putting columns together into new variables (`unite`)
+
+----
+>The functions `pivot_longer` and `pivot_wider` supercede the older functions `gather` and `spread`, 
+which I have used in previous iterations of this class. However, if you are familiar with `gather` and `spread`, they aren't gone and can still be used in the current **tidyr** package.
+
+---
+
+
+## Tidy data
+
+A first step in the tidyverse is to activate the `tidyverse` meta-package
+
+```{r munging-1, message = F, warning=F}
+library(tidyverse)
+```
+
+<font size=5>
+.pull-left[
+```{r munging-2, echo = F, results = 'asis'}
+library(tidyverse)
+library(glue)
+tidy_pkgs <- 
+  tibble('pkgs' = c('ggplot2','purrr','readr','tidyr',
+                    'dplyr','forcats','lubridate','stringr')) %>% 
+  mutate(
+    descr = map_chr(pkgs, ~packageDescription(., fields='Title')))
+
+glue_data(tidy_pkgs[1:4,], 
+          "- [**{pkgs}**](http://{pkgs}.tidyverse.org): {descr}")
+```
+]
+.pull-right[
+```{r munging-3, echo = F, results = 'asis'}
+library(tidyverse)
+library(glue)
+glue_data(tidy_pkgs[5:8,], 
+          "- [**{pkgs}**](http://{pkgs}.tidyverse.org): {descr}")
+```
+]
+</font>
+
+---
+
+## Tidy data
+
+The common feature of all these packages is that their functions take a 
+data frame (which the tidyverse calls a `tibble`) as their first argument.
+
+So the starting point for any analysis is the data set.
+
+---
+
+## Tidy data
+
+```{r munging-4 }
+table1
+```
+
+Is this tidy?
+
+---
+
+## Tidy data
+
+```{r munging-5 }
+table2
+```
+
+Is this tidy?
+
+---
+
+## Tidy data
+
+```{r munging-6 }
+table3
+```
+
+Is this tidy?
+
+---
+
+
+## Tidy data
+
+```{r munging-7 }
+table4a # cases
+table4b # population
+```
+
+Are these tidy?
+
+---
+
+## Can we make datasets tidy?
+
+Sometimes. The functions in the `tidyr` package can help
+
+- `separate` is a function that can split a column into multiple columns
+    - When there are multiple variables together in a column
+    
+```{r munging-8 }
+table3
+```
+
+We need to separate `rate` into two variables, cases and population
+
+---
+
+
+
+## Can we make datasets tidy?
+
+```{r munging-9 }
+separate(table3, col = rate, into = c("cases", "population"), 
+         sep = "/", 
+         convert = TRUE) # convert type if possible #<<
+```
+
+> I've been explicit about naming all the options. R functions can work by 
+position as well, so `separate(table3, rate, c('cases','population'), '/')` would work, but it's not very clear, is it?
+
+---
+
+## Can we make datasets tidy?
+
+```{r munging-10 }
+table2
+```
+
+Here there are observations on two variables in successive rows
+
+---
+
+## Can we make datasets tidy?
+
+We need to `spread` these rows out into different columns. This function is now called `pivot_wider`.
+
+.left-column30[
+![](../img/tidyr-spread-gather.gif)
+]
+.right-column70[
+```{r munging-11 }
+pivot_wider(table2, names_from = type, values_from = count)
+```
+]
+
+---
+
+## Can we make datasets tidy?
+
+```{r munging-12 }
+table4a
+```
+
+Here, the variable for year is stored as a header, not as data in a cell.
+
+We need to `gather` that data and put it into a column. This function is now called `pivot_longer`
+
+---
+
+## Can we make datasets tidy?
+
+.left-column30[
+![](../img/tidyr-spread-gather.gif)
+]
+
+.right-column70[
+```{r munging-13 }
+pivot_longer(table4a, names_to = 'year', values_to  = 'cases', 
+    cols = c(`1999`, `2000`))
+```
+]
+
+---
+
+## Making data tidy
+
+Admittedly, `pivot_wider` and `pivot_longer` are not easy concepts, but we'll practice with them more. 
+
+1. `pivot_longer` collects multiple columns into 2, and only 2 columns
+    - One column represents the data in the column headers
+    - One column represents the values in the column
+    - All other columns are repeated to keep all the data properly associated
+1. `pivot_wider` takes two columns and makes them multiple columns
+    - The values in one column form the headers to different new columns
+    - The values in the other column represent the values in the corresponding cells
+    - The other columns are repeated to start with, but reduce repetitions to make all associated data stay together
+    
+
+---
+
+## `dplyr` verbs in the tidyverse
+
+The `dplyr` package gives us a few verbs for data manipulation
+
+```{r munging-14, echo = F, results='asis'}
+dat <- tribble(
+  ~Function, ~Purpose,
+  'select', "Select columns based on name or position",
+  'mutate', 'Create or change a column',
+  'filter', 'Extract rows based on some criteria',
+  'arrange', 'Re-order rows based on values of variable(s)',
+  'group_by', 'Split a dataset by unique values of a variable',
+  'summarize', 'Create summary statistics based on columns')
+knitr::kable(dat, format='markdown')
+```
+
+---
+
+## Tidying the weather data
+
+```{r munging-15 }
+library(tidyverse)
+weather_data <- rio::import('../data/weather.csv')
+
+```
+
+.pull-left[
+```{r munging-16, echo=F}
+head(weather_data)
+```
+]
+.pull-right[
+
+1. Days are in separate columns
+1. Temperatures for each day is in two rows, max and min
+1. Don't worry about missing values. Just work on getting the shape right
+]
+
+---
+
+## Tidying the weather data
+
+```{r munging-17, eval = T, echo = T}
+weather1 <- pivot_longer(weather_data, names_to='day', values_to='temp', 
+                         cols = c(-(1:4))) #<<
+head(weather1,5)
+```
+
+
+
+---
+
+## Tidying the weather data
+
+```{r munging-19, eval = T, echo = T}
+weather1 <- pivot_longer(weather_data, names_to='day', values_to='temp', 
+                         cols = c(-(1:4))) 
+weather2 <- spread(weather1, element, temp)
+head(weather2, 5)
+```
+
+
+---
+
+## Tidying the weather data
+
+
+```{r munging-21, eval = T, echo = T}
+weather1 <- pivot_longer(weather_data, names_to='day', values_to='temp', 
+                         cols = c(-(1:4))) 
+weather2 <- spread(weather1, element, temp)
+weather3 <- separate(weather2, col='day', into=c('symbol','day'), sep=1)
+head(weather3,5)
+```
+
+This gets us into the right shape for the data. 
+
+There still is some work to do, but the format is tidy
+
+
+---
+
+## Data transformation (dplyr)
+
+The `dplyr` package gives us a few verbs for data manipulation
+
+```{r munging-23, echo = F, results='asis'}
+dat <- tribble(
+  ~Function, ~Purpose,
+  'select', "Select columns based on name or position",
+  'mutate', 'Create or change a column',
+  'filter', 'Extract rows based on some criteria',
+  'arrange', 'Re-order rows based on values of variable(s)',
+  'group_by', 'Split a dataset by unique values of a variable',
+  'summarize', 'Create summary statistics based on columns')
+knitr::kable(dat, format='markdown')
+```
+
+---
+
+## `select`
+
+You can select columns by name or position, of course, e.g., `select(weather, month)` or `select(weather, 3)`
+
+You can select consecutive columns using `:` notation, e.g. `select(weather, d1:d31)`
+
+You can also select columns based on some criteria, which are encapsulated in functions.
+
+- `starts_with("___")`, `ends_with("___")`, `contains("____")`
+- `one_of("____","_____","______")`
+- `everything()`
+
+There are others; see `help(starts_with)`.
+
+These selection methods work in all tidyverse functions
+
+> Note that for `select` the names of the columns don't need to be quoted. This is called *non-standard evaluation* and
+is a convenience. However for the criteria-based selectors within `select`, you **do** need to quote the criteria
+
+---
+
+## select
+
+.pull-left[
+```{r munging-24, eval = F, echo = T}
+weather1 <- select(weather_data, year, month, d1:d31) #<<
+head(weather1, 20)
+```
+]
+.pull-right[
+```{r munging-25, eval=T, echo = F, ref.label="munging-24"}
+```
+]
+
+---
+
+## select
+
+.pull-left[
+```{r munging-26, eval = F, echo = T}
+weather1 <- select(weather_data, starts_with('d')) #<<
+head(weather1, 20)
+```
+]
+.pull-right[
+```{r munging-27, eval=T, echo = F, ref.label="munging-26"}
+```
+]
+
+
+---
+
+## select
+
+The flexibility of the `select` function, which is also used in other tidyverse functions like `pivot_longer`, and others we'll see presently, is quite powerful. 
+
+Suppose you have a large genomic data where the columns are different genes, and suppose that the housekeeping genes all start with "HK". Then, in order to _remove_ the housekeeping genes, you could just do
+
+```{r munging-54, eval=F}
+new_data <- select(old_data, -starts_with("HK"))
+```
+
+Here, the `-` sign means, remove those columns.
+
+Also note that we have to assign the selected dataset to a new (or old) name in order to 
+preserve it in the workspace.
+
+---
+
+## select
+
+I always prefer naming my columns well and using the capabilities of `select` to grab columns. 
+
+However, you can use `select` with column numbers. For example, if you wanted to grab the 
+first 4 columns of a dataset, you could do
+
+```{r munging-55, eval=F}
+new_data <- select(old_data, 1:4)
+```
+
+.footnote[The notation `1:4` is a short hand for the sequence `1,2,3,4`. Generally, the notation `m:n` means the set of consecutive integers between `m` and `n`.]
+
+---
+
+## mutate
+
+`mutate`, as the name suggests, either creates a new column in your data set or transforms an existing column.
+
+.pull-left[
+```{r munging-28, eval = F, echo = T}
+weather4 <- mutate(weather3, 
+                   num_day = as.numeric(day))
+as_tibble(weather4)
+```
+]
+.pull-right[
+```{r munging-29, eval=T, echo = F, ref.label="munging-28"}
+```
+]
+
+---
+
+## mutate
+
+`mutate` can either transform a column in place or create a new column in a dataset
+
+.pull-left[
+```{r munging-30, eval = F, echo = T}
+weather4 <- mutate(weather3, day = as.numeric(day))
+as_tibble(weather4)
+```
+]
+.pull-right[
+```{r munging-31, eval=T, echo = F, ref.label="munging-30"}
+```
+]
+
+---
+
+## mutate
+
+`mutate` can also be used to deal with missing values, by replacing them with a value, for example
+
+.pull-left[
+```{r munging-32, eval = F, echo = T}
+mutate(weather4, tmax = replace_na(tmax, 0))
+```
+
+You wouldn't want to do exactly this, of course
+]
+.pull-right[
+```{r munging-33, eval=T, echo = F, ref.label="munging-32"}
+```
+]
+
+---
+
+## across
+
+**dplyr** version 1.0 introduced a new verb, `across` to allow functions like `mutate` (and `summarize`, which we shall see in the statistics module) to act on a selection of columns 
+which can be chosen using the same syntax as `select`, or by condition.
+
+.pull-left[
+```{r, eval=F}
+mutate(mpg, 
+       cty = cty * 1.6/3.8,
+       hwy = hwy * 1.6/3.8)
+```
+
+]
+.pull-right[
+```{r munging-59, echo=T, eval=F}
+mutate(mpg, 
+       across(c(cty, hwy), 
+                   function(x) {x * 1.6/3.8}))
+```
+]
+
+-----
+
+
+
+```{r munging-60,eval=F}
+mutate(mpg, 
+       across(is.character, as.factor)) # select based on condition
+```
+
+
+---
+
+## filter
+
+`filter` extracts **rows** based on criteria
+
+So if we wanted to just grab January data, we could use
+
+.pull-left[
+```{r munging-34, eval = F, echo = T}
+january <- filter(weather4, month==1)
+head(january)
+```
+]
+.pull-right[
+```{r munging-35, eval=T, echo = F, ref.label="munging-34"}
+```
+]
+
+---
+
+## filter
+
+Some comparison operators for filtering
+
+| Operator | Meaning                          |
+|----------|----------------------------------|
+| ==       | Equals                           |
+| !=       | Not equals                       |
+| > / <    | Greater / less than              |
+| >= / <=  | Greater or equal / Less or equal |
+| !        | Not                              |
+| %in%     | In a set                         |
+
+Combining comparisons
+
+| Operator   | Meaning |
+|------------|---------|
+| &          | And     |
+| &#124;       | Or      |
+
+---
+
+## filter
+
+Some comparison operators for filtering
+
+Strings: `str_detect(<variable>, "<string>")` or `str_detect(<variable>, "<regex>")`
+
+Regex or regular expression basics:
+
+```{r, echo=F}
+tribble(~Expression, ~Meaning,
+        '[a,b,c]', 'Matches "a", "b" or "c"',
+        '[a-z]', 'Matches letters between "a" and "z"',
+        '[^abc]', 'Matches anything except "a", "b" and "c"',
+        "[:alpha:]", "letters",
+        "[:digit:]", "digits",
+        "[:alnum:]", "letters or numbers",
+        "[:punct:]", "punctuation") %>% 
+  knitr::kable() %>% 
+  kableExtra::kable_styling()
+```
+
+.footnote[Many more details are available [here](https://stringr.tidyverse.org/articles/regular-expressions.html#special-characters-1) and a cheatsheet is available [here](https://github.com/rstudio/cheatsheets/raw/master/strings.pdf)]
+
+---
+
+## filter
+
+Let's use the `mpg` dataset from the `ggplot2` package
+
+.pull-left[
+```{r munging-36, eval = F, echo = T}
+mpg1 <- filter(mpg, 
+       (year==1999) & 
+         (class %in% c('minivan','suv')))
+select(mpg1, manufacturer, cty, hwy, class, year)
+```
+]
+.pull-right[
+```{r munging-37, eval=T, echo = F, ref.label="munging-36"}
+```
+]
+
+---
+
+## filter
+
+A common use of `filter` is to remove rows with missing values from your dataset
+
+.pull-left[
+```{r munging-38, eval = F, echo = T}
+weather5 <- filter(weather4, 
+                   !is.na(tmax) & !is.na(tmin))
+head(weather5, 20)
+```
+
+`is.na` is a *function* that tests whether a value is missing or not. 
+
+So `!is.na` is the opposite of that. 
+]
+.pull-right[
+```{r munging-39, eval=T, echo = F, ref.label="munging-38"}
+```
+]
+
+
+---
+
+## Important distinction
+
+.pull-left[
+.acid[The `filter` function affects **rows** of a dataset]
+]
+.pull-right[
+.heat[The `select` function affects **columns** of a dataset]
+]
+
+--    -
+
+## slice
+
+You can use `slice` and siblings to subset **rows** of a data set by index. 
+
++ `slice(mpg, 1,2,5)` grabs rows 1, 2 and 5
++ `slice_head(mpg)` / `slice_tail(mpg)` grabs first/last row of data set
+    - You can specify an argument `n` for the number of rows to grab
+    - You can specify an argument `prop` for the proportion of rows to grab
++ `slice_sample(mpg, 10)` grabs 10 rows at random, without replacement
++ `slice_min(mpg, hwy)` / `slice_max(mpg, hwy)` gives the `n`/`prop` rows with the lowest/highest values of `hwy`.
+
+
+
+---
+
+## arrange
+
+`arrange` reorders **rows** of a data set according to the values of one or more variables
+
+.pull-left[
+```{r munging-40, eval = F, echo = T}
+arrange(weather5, day)
+```
+
+Not quite. 
+]
+.pull-right[
+```{r munging-41, eval=T, echo = F, ref.label="munging-40"}
+```
+]
+
+---
+
+## arrange
+
+.pull-left[
+```{r munging-42, eval = F, echo = T}
+arrange(weather5, month, day)
+```
+]
+.pull-right[
+```{r munging-43, eval=T, echo = F, ref.label="munging-42"}
+```
+]
+
+---
+
+## arrange
+
+1. I use `arrange` sparingly in my workflow
+  - For spiffying up final presentation tables
+  - If order is **really** important
+1. Sorting data is one of the most computationally expensive operations you can do
+  - It can crash your computer for big data
+
+---
+
+## Cluttering up our workspace
+
+We've done a bit, but lets see all the objects we've created
+
+```{r munging-44 }
+ls()
+```
+
+We see a lot of intermediate datasets we've created, that we aren't going to really use anymore
+
+---
+class: middle, center
+
+# Workflow pipes in the tidyverse
+
+---
+
+## Intermediate data sets
+
+Recall how we cleaned the weather dataset yesterday
+
+```{r munging-45, eval = F}
+weather_data <- rio::import('../data/weather.csv')
+weather1 <- pivot_longer(weather_data, names_to='day', values_to = 'temp', cols = starts_with('d'))
+weather2 <- pivot_wider(weather1, names_from = element, values_from=temp)
+weather3 <- separate(weather2, day, c('symbol','day'), sep = 1, convert=TRUE)
+weather4 <- select(weather3, -symbol)
+# weather4 <- mutate(weather2, day = readr::parse_number(day))
+weather5 <- mutate(weather4,
+                   tmax = replace_na(tmax, 0),
+                   tmin = replace_na(tmin, 0))
+weather6 <- arrange(weather5,year,month,day)
+```
+
+This required us to create and keep track of several intermediate datasets
+
+These datasets are essentially temporary datasets which do not hold the final result
+
+What we did is a series of sequential steps to process the data
+
+The `parse_number` function extracts the first number out of a character string. For example, 
+`parse_number('abc254')` outputs `r readr::parse_number('abc254')`. 
+
+---
+class: middle,center,inverse
+
+# Pipes
+
+---
+  
+## Pipes
+
+Pipes are a method in R to create analytic pipelines utilizing tidyverse functions.
+
+The pipe operator (denoted `%>%`, spoken as "then") is what creates the pipes.
+
+You start with a dataset, and then progressively add functions to the pipe. Typically you save the result to a new object.
+
+Each element of the pipe takes as its first argument the results of the previous step, which typically is a data frame.
+
+Pipes are just a different representation of an analytic process that we can do in separate steps anyway. 
+
+.footnote[The keyboard shortcut for the pipe operator in RStudio is .heatinline[`Ctrl/Cmd + Shift + m`]]
+
+---
+
+## Pipes
+
+.pull-left[
+Without pipes
+
+```{r munging-62}
+mpg1 <- mutate(mpg, id = 1:n())
+mpg2 <- select(mpg1, id, year, trans, cty, hwy)
+mpg_final <- mutate(mpg2, 
+                    across(c(cty, hwy), 
+                           function(x) {x * 1.6/3.8}))
+```
+
+]
+.pull-right[
+With pipes
+
+```{r munging-63}
+mpg_final <- mpg %>% 
+  mutate(id = 1:n()) %>% 
+  select(id, year, trans, cty, hwy) %>% 
+  mutate(across(c(cty, hwy), 
+                function(x){x*1.6/3.8}))
+```
+
+]
+
+The important things to note here are:
+
+1. When using pipes, the results of one operation are automatically entered into the **first argument** of the next function, so the actual specification omits the first argument
+1. If you need the results of one step to go to some other argument of the next function, you can represent that input by `.`, for example, .fatinline[`mpg %>% lm(cty ~ hwy, data = .)`] takes the dataset `mpg` and places it in the argument for `data` in the `lm` function. 

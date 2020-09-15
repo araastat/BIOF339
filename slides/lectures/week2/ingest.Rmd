@@ -1,0 +1,328 @@
+---
+title: "Practical R: Data Ingestion"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '', message=F, warning=F)
+library(countdown)
+library(fontawesome)
+library(tidyverse)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF 339: Practical R</span></div>
+
+---
+
+## A quick refresh
+
++ We talked about various data structures in R
++ The primacy of the `data.frame`
+  - Extracting individual variables from a data frame
+    - `breast_cancer$ER.Status`, `breast_cancer[,'ER.Status']`, `breast_cancer[['ER.Status']]`
+  - Extracting rows of a `data.frame`
++ Identifying data classes using the `class` function
++ Recognizing different classes: `numeric`, `character`, `factor`, `Date`, ..
+  - testing for a class: `is.numeric`
+  - converting to a class: `as.numeric`
+
+
+---
+
+## RMarkdown tip of the day
+
+You can add options to each R chunk to add or suppress output
+
+```{r 03-DataIngestionMunging-6, echo = FALSE}
+a <- tribble(
+  ~Option, ~Property,
+  "echo=TRUE/FALSE", "Does the document show the R code",
+  "eval=TRUE/FALSE", "Does the chunk get evaluated by R",
+  "message=TRUE/FALSE", "Do messages get printed",
+  "warning=TRUE/FALSE", "Do warnings get printed"
+)
+knitr::kable(a, format='html')
+```
+
+You can also set these globally in a RMD file by putting the following in the first R chunk:
+
+```{r 03-DataIngestionMunging-7, eval=F}
+knitr::opts_chunk(echo=T, eval=T, message=F, warning=F)
+```
+
+See [here](https://yihui.name/knitr/options/#chunk-options) for the full gory details
+
+.footnote[Note that the correct way to write `TRUE` and `FALSE` is .heatinline[all caps]. They can be shortened to `T` and `F` respectively, but it's better to get used to the full word.]
+---
+
+## Package tip of the semester
+
+Use 
+```{r, eval=F}
+library(tidyverse)
+```
+or
+```{r, eval=F}
+pacman::p_load('tidyverse')
+```
+
+for pretty much every R script and R Markdown file (put this at the top of a script file, but after the header in a R Markdown)
+
+---
+class: middle, center
+
+# Data ingestion
+
+---
+
+## Data ingestion
+
+Unlike Excel, you have to pull data into R for R to operate on it
+
+Typically your data is in some sort of file (Excel, csv, sas7bdat, dta, txt)
+
+You need to find a way to pull it into R
+
+The GUI you've used is one way, but not very programmatic
+
+---
+
+## Data ingestion
+
+```{r 03-DataIngestionMunging-8, echo=F}
+b <- tribble(
+  ~Type, ~Function, ~Package,~Notes,
+  "csv", "read_csv", "readr", "Takes care of formatting",
+  "csv", "read.csv", "base", "Built in",
+  "csv", "fread", "data.table", "Fastest",
+  "Excel", "read_excel", "readxl",'',
+  'sas7bdat','read_sas', 'haven','SAS format',
+  'sav', 'read_spss', 'haven','SPSS format',
+  'dta','read_dta', 'haven', 'Stata format'
+)
+knitr::kable(b, format='html')
+```
+
+---
+
+# Data ingestion
+
+We will use [this](../data/BreastCancer_Clinical.csv) csv data and [this](../data/BreastCancer.xlsx) Excel data for the following:
+
+```{r 03-DataIngestionMunging-9, message=F}
+brca_clinical <- readr::read_csv('../data/BreastCancer_Clinical.csv')
+brca_clinical2 <- data.table::fread('../data/BreastCancer_Clinical.csv')
+```
+
+.pull-left[
+```{r 03-DataIngestionMunging-10}
+str(brca_clinical)
+```
+]
+.pull-right[
+```{r 03-DataIngestionMunging-11}
+str(brca_clinical2)
+```
+]
+
+---
+
+## A note on two "super"-data.frame objects
+
+.pull-left[
+A `tibble`
+```{r 03-DataIngestionMunging-12, echo=F}
+head(brca_clinical)
+```
+]
+.pull-right[
+A `data.table`
+
+```{r 03-DataIngestionMunging-13, echo=F}
+head(brca_clinical2)
+```
+]
+
+---
+
+## A note on two "super"-data.frame objects
+
++ A `tibble` works pretty much like any `data.frame`, but the printing is a little saner
++ A `data.table` is faster, has more inherent functionality, but has a very different syntax
+
+We'll work almost entirely with `tibble`'s and not `data.table`
+
+--
+
+Suggested modifications:
+
++ If using `fread`, convert the resulting object to a `data.frame` or `tibble` using `as_data_frame()` or `as_tibble()`
++ Convert the column names to not have spaces using, for example,
+
+```{r 03-DataIngestionMunging-14}
+brca_clinical <- janitor::clean_names(brca_clinical)
+```
+
+---
+background-image: url(../img/janitor_clean_names.png)
+background-size: contain
+
+---
+
+## Data ingestion
+
+Note that you **have** to give a name to what you're importing using `read_*` or whatever you're using, otherwise it won't stay in R
+
+```{r 03-DataIngestionMunging-15, eval=F}
+brca_clinical <- readr::read_csv('../data/BreastCancer_Clinical.csv')
+```
+
+![](../img/env.png)
+
+> See what happens if you don't give a name to a dataset you ingest.
+
+---
+
+## Reading Excel
+
+You can find the names of the sheets in an Excel file:
+```{r 03-DataIngestionMunging-16}
+readxl::excel_sheets('../data/BreastCancer.xlsx')
+```
+
+So you can ingest a particular sheet from an Excel file using
+```{r 03-DataIngestionMunging-16a}
+brca_expression <- readxl::read_excel('../data/BreastCancer.xlsx', sheet='Expression')
+```
+
+---
+class: middle, center
+
+# Data export
+
+---
+
+## Data export
+
+```{r 03-DataIngestionMunging-17, echo=F}
+b <- tribble(
+  ~Type, ~Function, ~Package,~Notes,
+  "csv", "write_csv", "readr", "Takes care of formatting",
+  "csv", "write.csv", "base", "Built in",
+  "csv", "fwrite", "data.table", "Fastest",
+  "Excel", "write.xlsx", "openxlsx",'',
+  'sas7bdat','write_sas', 'haven','SAS format',
+  'sav', 'write_spss', 'haven','SPSS format',
+  'dta','write_dta', 'haven', 'Stata format'
+)
+knitr::kable(b, format='html')
+```
+
+We'll often save tabular results using these functions
+
+.footnote[These can also be useful for exporting results, but the R Markdown related packages are better for that]
+
+---
+
+layout: true
+
+<div class="my-header">
+<span>BIOF 339: Practical R</span></div>
+
+## Simplifying import/export
+
+---
+
+We'll be using a package that makes this easier. 
+
+It's called **rio** and it has two basic functions: `import` and `export`.
+
+The `rio` package uses the different packages mentioned earlier but unifies it into a single syntax
+
+For example:
+
+```{r, eval=F}
+rio::import('data/clinical_data_breast_cancer_modified.csv')
+```
+
+--
+
+**rio** reads the end of the file being imported or exported and decides which functions from which package should be used for the job. 
+
+**rio** accesses different packages that are right for each job, so you don't have to.
+
+---
+
+You can also import multiple sheets from Excel, or multiple objects from .RData files, into a list of data frames
+
+```{r, echo=T, eval=F}
+dat <- rio::import_list('data/BreastCancer.xlsx')
+```
+```{r, echo=F, eval=T}
+dat <- rio::import_list('../data/BreastCancer.xlsx')
+```
+```{r}
+class(dat)
+names(dat)
+map_chr(dat, class)
+```
+---
+
+layout: true
+
+<div class="my-header">
+<span>BIOF 339: Practical R</span></div>
+
+---
+
+## Saving your work
+
+You would often like to store intermediate datasets, and final datasets, so that you can access them quickly.
+
+There are several ways of saving even large datasets so that they can be quickly accessed. 
+
+| Function  | Package | Example                                  | Retrieving the stored data          |
+|-----------|---------|------------------------------------------|-------------------------------------|
+| saveRDS   | base    | `saveRDS(weather, file = 'weather.rds')` | `weather <- readRDS('weather.rds')` |
+| write_fst | fst     | `write_fst(weather, file='weather.fst')` | `weather <- read_fst('weather.fst')` |
+
+These methods are meant for storing .fatinline[single objects]
+
+---
+
+## Saving your work
+
+If you want to store all of your objects into a single file, you can store them in a .RData file.
+
+```{r rda, eval=FALSE}
+save.image(file="<filename>.RData")
+```
+
+To keep multiple specified objects in a .RData file,
+
+```{r rda2, eval=FALSE}
+save(<obj1>, <obj2>, <obj3>, file = "<filename>.RData")
+```
+
+------
+
+## Retrieving your work
+
+You can retrieve the objects in a .RData file using the function `load`. 
+
+```{r load, eval=FALSE}
+load(file = "<filename>.RData")
+```
+
+This will store each object in its original name in your R environment. 
+
+
+
+
+
+

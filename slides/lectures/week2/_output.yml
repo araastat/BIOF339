@@ -1,0 +1,11 @@
+ xaringan::moon_reader:
+    css: [default, '../robot.css', '../robot-fonts.css', '../sfah.css']
+    #css: [default, metropolis, metropolis-fonts]
+    nature:
+      ratio: '16:9'
+      beforeInit: ["macros.js"]
+      highlightLanguage: "r"
+      countIncrementalSlides: false
+      highlightStyle: "tomorrow-night-bright"
+      highlightLines: true
+      slideNumberFormat: "%current%"
