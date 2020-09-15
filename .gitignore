@@ -8,9 +8,9 @@ hw/**/*.html
 Tutorials/*.key
 
 assignments/**/*.html
+**/*cache/*
 .drake/*
-slides/lectures/*cache/*
-docs/slides/lectures/*-cache/*
+
 docs/slides/lectures/05-Plotting_files/*
 slides/lectures/05-Plotting_files/*
 slides/lectures/data/*
