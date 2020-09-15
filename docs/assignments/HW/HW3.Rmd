@@ -1,0 +1,38 @@
+---
+title: "Homework 3: Data ingestion and munging"
+author: ""
+date: "Due September 24, 2019"
+output: html_document
+---
+
+<p style="color: black; border:3px; border-style: solid; border-color: red; padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](https://www.dropbox.com/request/9AppRTALBcboUsnblpwF){target=_blank}
+</p>
+
+## Homework
+
+Create a fresh RMarkdown document to do this homework and submit at the link above when done.
+
+
+The weather dataset, available [here](data/weather.xlsx) contains max and min temperatures for a location during the
+year 2010.
+
+1. Write code to ingest this dataset into R. Activate the appropriate package(s) first using `library(...)`. 
+1. Identify and write down the ways in which this dataset is not tidy
+1. Use the functions `gather`, `spread` and `separate` to make this dataset tidy. Make sure you activate the right package(s) first. (Advice: use `gather` first). 
+
+### Extra credit
+
+The dataset `who` in the `tidyr` package gives a subset of data from the World Health Organization Global Tuberculosis Report, and accompanying global populations. (You must do `library(tidyr)` first before you can access the data)
+
+1. Read the documentation for this dataset (`?who`) to understand the variables
+1. Attempt to make this dataset tidy
+
+## General advice
+
+Open a R script file and do the R work you need first, which will involve trial and error. Once
+you think you have got your solution, open a RMarkdown file, put the parts of your code you think are
+relevant into R chunks, and include text to make a report. Then you can submit that RMarkdown file.
+This is often the workflow I use for developing reports. 
+
+

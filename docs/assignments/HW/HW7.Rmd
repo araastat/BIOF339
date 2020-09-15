@@ -1,0 +1,47 @@
+---
+title: "Homework 7: Lists and maps"
+author: "Abhijit Dasgupta"
+date: "Due Monday, Novemeber 4"
+output: html_document
+---
+
+<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](https://www.dropbox.com/request/h9WqiR5UdFC2lNKg8i9y){target=_blank}
+</p>
+
+
+
+In this homework we will play with some publicly available RNA-Seq data. 
+Information about the experiment is available [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE123519). Briefly,
+this is a mouse experiment where the authors were interested in PIK3CA mutation
+variants. This interest is derived from PIK3CA's implication in glioblastoma tumorogenesis. There are 26 mice with different engineered genetics. 
+
+The data are available as a zip file [here](https://www.dropbox.com/s/0fttg8r9ub3gm82/GSE123519_RAW.zip?dl=1). The 
+experimental design is available [here](https://www.dropbox.com/s/b510c7fx82u5prh/GSE123519design.xlsx?dl=1).
+
+### Prelim work
+1. Create a RStudio Project for this homework. Within the project, create a `data` directory. Note its path. 
+1. Download and unzip the data file in the data directory you just created. You should get 26 text files, perhaps in a sub-directory. Note this, since you'll need it
+in the next step. Also download the experimental design file here.
+1. Open a R script file in the RStudio Project you created. This will be your submission.
+
+### Homework
+
+This homework is based on material covered in Lecture 7 and the in-class code, which 
+can be accessed from the [Lectures page](../../slides/index.html). 
+
+1. Read all 26 files into a list in R, where the list consists of 26 data frames
+1. For each of the data frames perform the following data processing
+    a. Keep only the variables `tracking_id`, `gend_id`, and `locus` through `FPKM`.
+    b. Change the gene names in `gene_id` to capital letters (use `stringr::str_to_upper` or other equivalent functions)
+    c. Split the `locus` variable into a `chromosome` and a `location` variable.
+    d. Filter **out** all observations with FPKM less than 1 (no real scientific reason, just because)
+1. Now make a single data set stacking the processed datasets, adding a column that
+specifies the sample identifier of each observation. You might like to call this column `sampleID` to make the next step simpler
+1. Import the design information into a data frame. Add the design information to 
+the genetic dataset you created above, ensuring that ids and genotype specification (stored in the column `Class`) are aligned.
+1. Note that there is an add-on to the genotype information, in the form `-1`, `-2` to specify which particular sample it is. This is unnecessary and would create problems for any comparative analyses using t-tests or ANOVA later. Please remove it so that you just have genotype information.
+1. There is one idiosyncratic genotype specification which is a re-rerun. Fix this to 
+match the other genotypes. 
+
+You can choose whether you fix all the genotype information before or after you join the design dataset to the genetic dataset. Whatever makes sense to you.

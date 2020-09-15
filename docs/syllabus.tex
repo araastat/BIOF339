@@ -1,0 +1,322 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={BIOF 339: Practical R},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{BIOF 339: Practical R}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\hypertarget{instructor}{%
+\subsection{Instructor}\label{instructor}}
+
+Abhijit Dasgupta\\
+Contact: via Slack or email
+(\href{mailto:adasgupta+biof339@araastat.com}{\nolinkurl{adasgupta+biof339@araastat.com}})
+
+\hypertarget{course-description}{%
+\subsection{Course description}\label{course-description}}
+
+The goal of this course is to introduce R as an analysis platform and
+tool for data science rather than a programming language. Throughout the
+course, emphasis will be placed on example-driven learning. Topics to be
+covered include: installation of R and R packages; command line R; R
+data types; loading data in R; manipulating data; exploring data through
+visualization; statistical tests; correcting for multiple comparisons;
+building models; generating publication-quality graphics; creating
+reports using RMarkdown. No prior programming experience is required.
+
+\hypertarget{learning-objectives}{%
+\section{Learning Objectives}\label{learning-objectives}}
+
+\begin{itemize}
+\tightlist
+\item
+  Run R and RStudio, making use of inherent R features
+\item
+  Find and make use of the extensive packages (R add-ons) available for
+  analyzing biological and other forms of data
+\item
+  Load, manipulate, and combine data to make it amenable to further
+  analyses
+\item
+  Visualize data with extensive graphics capabilities of R (including
+  ggplot)
+\item
+  Use R to run statistical models and hypothesis tests and report
+  results conforming to standards expected in scientific journals
+\item
+  Write reports using the powerful \texttt{rmarkdown} package and its
+  derivatives
+\end{itemize}
+
+\hypertarget{required-computers-and-software}{%
+\subsection{Required computers and
+software}\label{required-computers-and-software}}
+
+You are required to bring to each class a personal laptop running
+Windows, Mac OS X or Linux. You are also required to install the
+software \href{http://cran.r-project.org}{R} and the integrated
+development environment \href{https://www.rstudio.com}{RStudio}.
+Instructions for installing these are available on the Resources page
+(see links above).
+
+\hypertarget{outline-of-the-class}{%
+\subsection{Outline of the class}\label{outline-of-the-class}}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.17\columnwidth}\raggedright
+Date\strut
+\end{minipage} & \begin{minipage}[b]{0.77\columnwidth}\raggedright
+Topic\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+September 11, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Introduction to R, RStudio and RMarkdown\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+September 18, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Data Structures in R (classes 5:30-7, 7-8:30)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+September 25, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+R packages, data import/export, munging\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+October 02, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Towards analytic data: Data Munging, continued\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+October 09, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Data exploration through visualization\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+October 16, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+More data visualization and RMarkdown\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+October 23, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Statistical analyses: Table 1, estimation and confidence intervals, and
+more ggplot\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+October 30, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Statistical analyses: Classical hypothesis testing and computational
+inference\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+November 06, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Statistical learning: Regression models\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+November 13, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+More data munging with \texttt{purrr}: grouping, mapping and functional
+programming\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+November 20, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Basic bioinformatics: Bioconductor and friends\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+November 27, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+No class (Thanksgiving)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+December 04, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Statistical learning: Cluster analysis and pattern recognition\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+December 11, 2019\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Project presentations\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{books-and-learning-materials}{%
+\subsection{Books and learning
+materials}\label{books-and-learning-materials}}
+
+There are no required books for this class. However, we will extensively
+refer to a few books available freely online and will serve as reading
+material and ongoing reference material for this course.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{R for Data Science} {[}R4DS{]} by Hadley Wickham and Garrett
+  Grolemund (available \href{https://r4ds.had.co.nz/}{online})
+\end{enumerate}
+
+\hypertarget{communication}{%
+\subsubsection{Communication}\label{communication}}
+
+This class will communicate primarily via
+\href{http://www.slack.com}{Slack}. Please join the BIOF339 Slack
+channel using
+\href{https://join.slack.com/t/biof339/shared_invite/enQtNzU1Njk5NDc2MDMyLWU5MjkwNzNlMmRlYTAwNDg2MGZjYWQ1YzEzMDUxMzc0MzE1NjZkMDFlY2Y0NTIyMGI2Y2VkODBiYmY0MjBiMzE}{this
+link}.
+
+You will see two channels named \emph{wed5-7\_2019} and
+\emph{wed7-9\_2019}. Please join the channel corresponding to your
+section. I will be using Slack for broadcasting messages, answering
+questions and the like. If you have a question, you can directly message
+me on Slack if you like. Expect an answer within 24 hours.
+
+\hypertarget{grades}{%
+\subsection{Grades}\label{grades}}
+
+Grades will be based on the following requirements:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Homeworks, available Friday after class, due by 11:59PM the following
+  Tuesday. (50\%)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No late homeworks, since solutions will be available Wednesday
+    mornings
+  \item
+    I'll score the top 10 homeworks for grade
+  \end{itemize}
+\item
+  Final project: A RMarkdown report/presentation demonstrating an
+  end-to-end data analysis in R using your own data, from data ingestion
+  to munging to analyses and graphics, with a brief introduction and
+  conclusion (20\%)
+\item
+  Class participation (20\%)
+\item
+  Completion and submission of class exercises (10\%, marked for
+  completion)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    These will need to be in basic RMarkdown, showing the problem and
+    the solution. You can add a section for questions here that I can
+    address in the following class or online. These will have to be
+    submitted before you leave the classroom
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{academic-policy-regarding-plagiarism}{%
+\subsection{Academic policy regarding
+plagiarism}\label{academic-policy-regarding-plagiarism}}
+
+The FAES Graduate School at NIH prides itself on providing quality
+educational experiences and upholds the highest level of honesty,
+integrity, and mutual respect. It is our policy that cheating,
+fabrication or plagiarism by students is\\
+not acceptable in any form. If a student is found to be in violation of
+any, or all of the below, his/her credits will be forfeited, and he/she
+will not be allowed to enroll in future courses or education programs
+administered by FAES.
+
+• Cheating is defined as an attempt to give or obtain inappropriate/
+unauthorized assistance during any academic exercise, such as during
+examination, homework assignment, class presentation.\\
+• Fabrication is defined as the falsification of data, information or
+citations in any academic materials.\\
+• Plagiarism is defined as using the ideas, methods, or written words of
+another, without proper acknowledgment and with the intention that they
+be taken as the work of the deceiver. These include, but are not limited
+to, the use of published articles, paraphrasing, copying someone else's
+homework and turning it in as one's own and failing to reference
+footnotes. Procuring information from online sources without proper
+attribution also constitutes plagiarism.
+
+See
+\href{https://faes.org/sites/default/files/Student_Handbook_2016-17.pdfhttps://faes.org/sites/default/files/Student_Handbook_2016-17.pdf}{this
+link} for FAES policy on academic plagiarism.
+
+\end{document}

@@ -1,0 +1,32 @@
+---
+title: "Homework 8: Summaries"
+author: "Abhijit Dasgupta"
+date: "Due Tuesday, November 5 at midnight"
+output: html_document
+---
+
+
+
+```{r, echo=F, eval=F}
+library(reticulate)
+source_python('create_request.py')
+a <- py$create_request('2019-11-07T00:00:00','Homework 8','/BIOF339_Fall2019/Homeworks/HW8')
+```
+
+<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](`r a$url`){target='_blank'}
+</p>
+
+This homework will use the `pbc` data from the `survival` package (which is already installed with R). 
+We want to explore and manipulate the data before we create a Table 1. Read the documentation (`help(pbc)`)
+to understand what each of the columns in the data represent
+
+1. Decide which variables should be `character`, `factor` and `numeric`, and make the appropriate changes
+in the data set. You may choose to save the dataset, with changes, as `pbc1` so that you don't over-write the inbuilt `pbc` dataset. 
+
+1. Draw a panel of histograms of the numeric variables to assess whether they have symmetric or skew 
+distributions. This can inform whether you want to present their summaries as means or medians.
+
+1. Construct a table showing summaries of all the variables (as a Table 1 for a publication)
+
+1. Filter out all patients who received transplants. Then construct a table of variable summaries stratified by `status`, including statistical tests of differences in these variables between censored and dead groups. The purpose is to consider whether censoring might be associated with some factor, which will mean that we might have to consider the censoring as being informative rather than independent. (Censoring in this context is either lost to followup or alive at the end of the study). Justify your choice of variables to include in this table. 

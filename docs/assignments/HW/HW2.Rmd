@@ -1,0 +1,84 @@
+---
+title: "Homework 2: Data classes and structures"
+author: ""
+date: "Due September 24, 2019"
+output: html_document
+---
+
+<p style="color: black; border:3px; border-style: solid; border-color: red; padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](https://www.dropbox.com/request/4l3YxsRsIcUgMFhw3kKl){target=_blank}
+</p>
+ 
+```{r setup, echo = T, eval = T, message=F, warning=F}
+# First modify this chunk to activate the packages you will need for this HW.
+# Ensure you have `tidyverse`, `knitr` and `rmarkdown` installed
+# Add statements like `library(tidyverse)`
+
+```
+
+
+
+# Reading
+
+1. Learn about **tidy data* by reading [this vignette](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) from the `tidyr` documentation, or the [actual paper](https://vita.had.co.nz/papers/tidy-data.html)
+
+# Exercises
+
+You may change this RMarkdown. Check the code by changing `eval=F` to `eval=T` in 
+each chumk to make sure the code works. Submit this Rmd, ensuring that for all the 
+chunks, `eval = T`. 
+
+1. Fix the following code to ensure it works
+
+```{r, eval = F}
+my_variable <-  1:5
+my_var1able
+```
+
+```{r, eval = F}
+mean(airquality$wind)
+```
+
+```{r, eval = F}
+table(iris$Sepal_Length)
+```
+
+
+2. Download this [data](data/clinical_data_breast_cancer_modified.csv) 
+  a. Import it into R, calling it `breast_cancer`. (Use the GUI to import the file, 
+  but copy the code from the GUI into the following R chunk)
+```{r, eval = T}
+# Code to import data file here
+
+
+```
+  
+  b. Check the data types for each of the variables
+```{r, eval = F}
+# Check for data types
+
+```
+  c. Convert the Gender, ER Status, PR Status and HER2 status variables to factors
+```{r, eval = F}
+# Convert here
+```
+  d. Identify any other variables that might be the wrong type and convert them
+```{r}
+# Convert any new variables here
+```
+  e. Verify that all the variables in `breast_cancer` match the modifications you made
+```{r, echo = F, eval = F}
+# Don't edit this chunk. It is for verification. You'll learn how to do similar code on Wednesday. Do change the chunk option to `eval=T`
+breast_cancer %>% 
+  dplyr::summarize_all(class) %>% 
+  tidyr::gather(Variable, Class, everything()) %>% 
+  knitr::kable()
+```
+  
+
+<p style="color: black; border:3px; border-style: solid; border-color: red; padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+[**Submission Link**](https://www.dropbox.com/request/4l3YxsRsIcUgMFhw3kKl){target=_blank}
+</p>
+ 
+
+
