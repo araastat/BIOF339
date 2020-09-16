@@ -52,7 +52,7 @@ knitr::kable(a, format='html')
 You can also set these globally in a RMD file by putting the following in the first R chunk:
 
 ```{r 03-DataIngestionMunging-7, eval=F}
-knitr::opts_chunk(echo=T, eval=T, message=F, warning=F)
+knitr::opts_chunk$set(echo=T, eval=T, message=F, warning=F)
 ```
 
 See [here](https://yihui.name/knitr/options/#chunk-options) for the full gory details

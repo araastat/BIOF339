@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
     <link href="munging_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../robot.css" type="text/css" />
-    <link rel="stylesheet" href="../robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../sfah.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -477,21 +477,7 @@ Admittedly, `pivot_wider` and `pivot_longer` are not easy concepts, but we'll pr
 
 ---
 
-## `dplyr` verbs in the tidyverse
 
-The `dplyr` package gives us a few verbs for data manipulation
-
-
-|Function  |Purpose                                        |
-|:---------|:----------------------------------------------|
-|select    |Select columns based on name or position       |
-|mutate    |Create or change a column                      |
-|filter    |Extract rows based on some criteria            |
-|arrange   |Re-order rows based on values of variable(s)   |
-|group_by  |Split a dataset by unique values of a variable |
-|summarize |Create summary statistics based on columns     |
-
----
 
 ## Tidying the weather data
 
@@ -559,7 +545,7 @@ head(weather1,5)
 ```r
 weather1 &lt;- pivot_longer(weather_data, names_to='day', values_to='temp', 
                          cols = c(-(1:4))) 
-weather2 &lt;- spread(weather1, element, temp)
+weather2 &lt;- pivot_wider(weather1, names_from='element', values_from = 'temp')
 head(weather2, 5)
 ```
 
@@ -568,10 +554,10 @@ head(weather2, 5)
   id       year month day    tmax  tmin
   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 1 MX17004  2010     1 d1       NA    NA
-2 MX17004  2010     1 d10      NA    NA
-3 MX17004  2010     1 d11      NA    NA
-4 MX17004  2010     1 d12      NA    NA
-5 MX17004  2010     1 d13      NA    NA
+2 MX17004  2010     1 d2       NA    NA
+3 MX17004  2010     1 d3       NA    NA
+4 MX17004  2010     1 d4       NA    NA
+5 MX17004  2010     1 d5       NA    NA
 ```
 
 
@@ -584,7 +570,7 @@ head(weather2, 5)
 ```r
 weather1 &lt;- pivot_longer(weather_data, names_to='day', values_to='temp', 
                          cols = c(-(1:4))) 
-weather2 &lt;- spread(weather1, element, temp)
+weather2 &lt;- pivot_wider(weather1, names_from='element', values_from = 'temp')
 weather3 &lt;- separate(weather2, col='day', into=c('symbol','day'), sep=1)
 head(weather3,5)
 ```
@@ -594,15 +580,17 @@ head(weather3,5)
   id       year month symbol day    tmax  tmin
   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 1 MX17004  2010     1 d      1        NA    NA
-2 MX17004  2010     1 d      10       NA    NA
-3 MX17004  2010     1 d      11       NA    NA
-4 MX17004  2010     1 d      12       NA    NA
-5 MX17004  2010     1 d      13       NA    NA
+2 MX17004  2010     1 d      2        NA    NA
+3 MX17004  2010     1 d      3        NA    NA
+4 MX17004  2010     1 d      4        NA    NA
+5 MX17004  2010     1 d      5        NA    NA
 ```
 
 This gets us into the right shape for the data. 
 
 There still is some work to do, but the format is tidy
+
+
 
 
 ---
@@ -837,15 +825,15 @@ as_tibble(weather4)
    id       year month symbol day    tmax  tmin num_day
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
  1 MX17004  2010     1 d      1        NA    NA       1
- 2 MX17004  2010     1 d      10       NA    NA      10
- 3 MX17004  2010     1 d      11       NA    NA      11
- 4 MX17004  2010     1 d      12       NA    NA      12
- 5 MX17004  2010     1 d      13       NA    NA      13
- 6 MX17004  2010     1 d      14       NA    NA      14
- 7 MX17004  2010     1 d      15       NA    NA      15
- 8 MX17004  2010     1 d      16       NA    NA      16
- 9 MX17004  2010     1 d      17       NA    NA      17
-10 MX17004  2010     1 d      18       NA    NA      18
+ 2 MX17004  2010     1 d      2        NA    NA       2
+ 3 MX17004  2010     1 d      3        NA    NA       3
+ 4 MX17004  2010     1 d      4        NA    NA       4
+ 5 MX17004  2010     1 d      5        NA    NA       5
+ 6 MX17004  2010     1 d      6        NA    NA       6
+ 7 MX17004  2010     1 d      7        NA    NA       7
+ 8 MX17004  2010     1 d      8        NA    NA       8
+ 9 MX17004  2010     1 d      9        NA    NA       9
+10 MX17004  2010     1 d      10       NA    NA      10
 # … with 331 more rows
 ```
 ]
@@ -870,15 +858,15 @@ as_tibble(weather4)
    id       year month symbol   day  tmax  tmin
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
  1 MX17004  2010     1 d          1    NA    NA
- 2 MX17004  2010     1 d         10    NA    NA
- 3 MX17004  2010     1 d         11    NA    NA
- 4 MX17004  2010     1 d         12    NA    NA
- 5 MX17004  2010     1 d         13    NA    NA
- 6 MX17004  2010     1 d         14    NA    NA
- 7 MX17004  2010     1 d         15    NA    NA
- 8 MX17004  2010     1 d         16    NA    NA
- 9 MX17004  2010     1 d         17    NA    NA
-10 MX17004  2010     1 d         18    NA    NA
+ 2 MX17004  2010     1 d          2    NA    NA
+ 3 MX17004  2010     1 d          3    NA    NA
+ 4 MX17004  2010     1 d          4    NA    NA
+ 5 MX17004  2010     1 d          5    NA    NA
+ 6 MX17004  2010     1 d          6    NA    NA
+ 7 MX17004  2010     1 d          7    NA    NA
+ 8 MX17004  2010     1 d          8    NA    NA
+ 9 MX17004  2010     1 d          9    NA    NA
+10 MX17004  2010     1 d         10    NA    NA
 # … with 331 more rows
 ```
 ]
@@ -904,15 +892,15 @@ You wouldn't want to do exactly this, of course
    id       year month symbol   day  tmax  tmin
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
  1 MX17004  2010     1 d          1     0    NA
- 2 MX17004  2010     1 d         10     0    NA
- 3 MX17004  2010     1 d         11     0    NA
- 4 MX17004  2010     1 d         12     0    NA
- 5 MX17004  2010     1 d         13     0    NA
- 6 MX17004  2010     1 d         14     0    NA
- 7 MX17004  2010     1 d         15     0    NA
- 8 MX17004  2010     1 d         16     0    NA
- 9 MX17004  2010     1 d         17     0    NA
-10 MX17004  2010     1 d         18     0    NA
+ 2 MX17004  2010     1 d          2     0    NA
+ 3 MX17004  2010     1 d          3     0    NA
+ 4 MX17004  2010     1 d          4     0    NA
+ 5 MX17004  2010     1 d          5     0    NA
+ 6 MX17004  2010     1 d          6     0    NA
+ 7 MX17004  2010     1 d          7     0    NA
+ 8 MX17004  2010     1 d          8     0    NA
+ 9 MX17004  2010     1 d          9     0    NA
+10 MX17004  2010     1 d         10     0    NA
 # … with 331 more rows
 ```
 ]
@@ -975,11 +963,11 @@ head(january)
   id       year month symbol   day  tmax  tmin
   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 1 MX17004  2010     1 d          1    NA    NA
-2 MX17004  2010     1 d         10    NA    NA
-3 MX17004  2010     1 d         11    NA    NA
-4 MX17004  2010     1 d         12    NA    NA
-5 MX17004  2010     1 d         13    NA    NA
-6 MX17004  2010     1 d         14    NA    NA
+2 MX17004  2010     1 d          2    NA    NA
+3 MX17004  2010     1 d          3    NA    NA
+4 MX17004  2010     1 d          4    NA    NA
+5 MX17004  2010     1 d          5    NA    NA
+6 MX17004  2010     1 d          6    NA    NA
 ```
 ]
 
@@ -1088,25 +1076,25 @@ So `!is.na` is the opposite of that.
    id       year month symbol   day  tmax  tmin
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
  1 MX17004  2010     1 d         30  27.8  14.5
- 2 MX17004  2010     2 d         11  29.7  13.4
- 3 MX17004  2010     2 d          2  27.3  14.4
- 4 MX17004  2010     2 d         23  29.9  10.7
- 5 MX17004  2010     2 d          3  24.1  14.4
- 6 MX17004  2010     3 d         10  34.5  16.8
- 7 MX17004  2010     3 d         16  31.1  17.6
- 8 MX17004  2010     3 d          5  32.1  14.2
+ 2 MX17004  2010     2 d          2  27.3  14.4
+ 3 MX17004  2010     2 d          3  24.1  14.4
+ 4 MX17004  2010     2 d         11  29.7  13.4
+ 5 MX17004  2010     2 d         23  29.9  10.7
+ 6 MX17004  2010     3 d          5  32.1  14.2
+ 7 MX17004  2010     3 d         10  34.5  16.8
+ 8 MX17004  2010     3 d         16  31.1  17.6
  9 MX17004  2010     4 d         27  36.3  16.7
 10 MX17004  2010     5 d         27  33.2  18.2
 11 MX17004  2010     6 d         17  28    17.5
 12 MX17004  2010     6 d         29  30.1  18  
-13 MX17004  2010     7 d         14  29.9  16.5
-14 MX17004  2010     7 d          3  28.6  17.5
-15 MX17004  2010     8 d         13  29.8  16.5
-16 MX17004  2010     8 d         23  26.4  15  
-17 MX17004  2010     8 d         25  29.7  15.6
-18 MX17004  2010     8 d         29  28    15.3
-19 MX17004  2010     8 d         31  25.4  15.4
-20 MX17004  2010     8 d          5  29.6  15.8
+13 MX17004  2010     7 d          3  28.6  17.5
+14 MX17004  2010     7 d         14  29.9  16.5
+15 MX17004  2010     8 d          5  29.6  15.8
+16 MX17004  2010     8 d          8  29    17.3
+17 MX17004  2010     8 d         13  29.8  16.5
+18 MX17004  2010     8 d         23  26.4  15  
+19 MX17004  2010     8 d         25  29.7  15.6
+20 MX17004  2010     8 d         29  28    15.3
 ```
 ]
 
@@ -1122,7 +1110,7 @@ So `!is.na` is the opposite of that.
 .heat[The `select` function affects **columns** of a dataset]
 ]
 
---    -
+---
 
 ## slice
 
@@ -1322,7 +1310,7 @@ The important things to note here are:
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script src="macros.js"></script>
+<script src="../../js/macros.js"></script>
 <script>var slideshow = remark.create({
 "ratio": "16:9",
 "highlightLanguage": "r",

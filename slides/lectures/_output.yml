@@ -1,5 +1,5 @@
  xaringan::moon_reader:
-    css: [default, './robot.css', './robot-fonts.css', './sfah.css']
+    css: [default, '../css/robot.css', '../css/robot-fonts.css', '../css/sfah.css']
     #css: [default, metropolis, metropolis-fonts]
     nature:
       ratio: '16:9'

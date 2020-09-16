@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
     <link href="ingest_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../robot.css" type="text/css" />
-    <link rel="stylesheet" href="../robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../sfah.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -79,7 +79,7 @@ You can also set these globally in a RMD file by putting the following in the fi
 
 
 ```r
-knitr::opts_chunk(echo=T, eval=T, message=F, warning=F)
+knitr::opts_chunk$set(echo=T, eval=T, message=F, warning=F)
 ```
 
 See [here](https://yihui.name/knitr/options/#chunk-options) for the full gory details
@@ -645,7 +645,7 @@ This will store each object in its original name in your R environment.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script src="macros.js"></script>
+<script src="../../js/macros.js"></script>
 <script>var slideshow = remark.create({
 "ratio": "16:9",
 "highlightLanguage": "r",

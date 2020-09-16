@@ -328,23 +328,7 @@ Admittedly, `pivot_wider` and `pivot_longer` are not easy concepts, but we'll pr
 
 ---
 
-## `dplyr` verbs in the tidyverse
 
-The `dplyr` package gives us a few verbs for data manipulation
-
-```{r munging-14, echo = F, results='asis'}
-dat <- tribble(
-  ~Function, ~Purpose,
-  'select', "Select columns based on name or position",
-  'mutate', 'Create or change a column',
-  'filter', 'Extract rows based on some criteria',
-  'arrange', 'Re-order rows based on values of variable(s)',
-  'group_by', 'Split a dataset by unique values of a variable',
-  'summarize', 'Create summary statistics based on columns')
-knitr::kable(dat, format='markdown')
-```
-
----
 
 ## Tidying the weather data
 
@@ -385,7 +369,7 @@ head(weather1,5)
 ```{r munging-19, eval = T, echo = T}
 weather1 <- pivot_longer(weather_data, names_to='day', values_to='temp', 
                          cols = c(-(1:4))) 
-weather2 <- spread(weather1, element, temp)
+weather2 <- pivot_wider(weather1, names_from='element', values_from = 'temp')
 head(weather2, 5)
 ```
 
@@ -398,7 +382,7 @@ head(weather2, 5)
 ```{r munging-21, eval = T, echo = T}
 weather1 <- pivot_longer(weather_data, names_to='day', values_to='temp', 
                          cols = c(-(1:4))) 
-weather2 <- spread(weather1, element, temp)
+weather2 <- pivot_wider(weather1, names_from='element', values_from = 'temp')
 weather3 <- separate(weather2, col='day', into=c('symbol','day'), sep=1)
 head(weather3,5)
 ```
@@ -406,6 +390,8 @@ head(weather3,5)
 This gets us into the right shape for the data. 
 
 There still is some work to do, but the format is tidy
+
+
 
 
 ---
@@ -715,7 +701,7 @@ So `!is.na` is the opposite of that.
 .heat[The `select` function affects **columns** of a dataset]
 ]
 
---    -
+---
 
 ## slice
 

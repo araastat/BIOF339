@@ -21,7 +21,7 @@ xaringanExtra::use_panelset()
 layout: true
 
 <div class="my-header">
-<span>BIOF339</span></div>
+<span>BIOF 339: Practical R</span></div>
 
 ---
 class: middle,center,inverse
@@ -128,7 +128,7 @@ class: middle,center,inverse
 layout: true
 
 <div class="my-header">
-<span>BIOF339</span></div>
+<span>BIOF 339: Practical R</span></div>
 
 ## Brackets
 
