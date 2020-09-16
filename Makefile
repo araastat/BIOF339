@@ -19,7 +19,6 @@ all: lectures slides_web toplevel
 
 .PHONY: $(SUBDIRS) FORCE
 
-
 .PHONY: dirs
 dirs:
 	@echo $(SUBDIRS)
