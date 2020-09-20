@@ -146,7 +146,7 @@ all(brca_data1 == brca_data2)
 c. Create a new dataset that contains patient ID, ER, PR and HER2 status. 
 
 ```{r, eval=FALSE}
-brca_data3 <- _______(brca1, ______, ______, _______, _______)
+brca_data3 <- _______(brca_data, ______, ______, _______, _______)
 ```
 
 
