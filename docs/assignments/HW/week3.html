@@ -431,13 +431,12 @@ Modify the previous plot to construct a facetted plot where each facet is based 
 <li>For each of these datasets:
 <ol style="list-style-type: lower-alpha">
 <li>Remove the row with the overall 1975-2016 rates</li>
-<li>Use <code>gather</code> to make a dataset with 3 columns: year, type of cancer and cancer incidence rate</li>
+<li>Use <code>pivot_longer</code> to make a dataset with 3 columns: year, type of cancer and cancer incidence rate</li>
 </ol></li>
 </ol>
 <li>
-<p>Create 3 plots like the one above, one for all races, one for whites and one for blacks. Assign the ggplot code for each to a name, i.e. something like <code>plt1 &lt;- ggplot(...) + ...</code>. Display the graph for all races, and create and display a panelled plot where the white and black plots are presented side-by-side, using <code>cowplot::plot_grid</code>.</p>
+<p>Create 3 plots like the one above, one for all races, one for whites and one for blacks. Assign the ggplot code for each to a name, i.e. something like <code>plt1 &lt;- ggplot(...) + ...</code>. Display the graph for all races, and create and display a panelled plot where the white and black plots are presented side-by-side. You can use functions from <strong>cowplot</strong>, <strong>ggpubr</strong> or <strong>patchwork</strong> as you like.</p>
 <ol style="list-style-type: decimal">
-<li>See <a href="https://wilkelab.org/cowplot/articles/plot_grid.html">here</a> for nice examples.</li>
 <li>Make sure you have labelled everything properly, including titles, so that the graphical information is self-evident.</li>
 </ol>
 </ol>

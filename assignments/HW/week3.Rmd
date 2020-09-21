@@ -67,11 +67,10 @@ Our goal is to create a single graphic showing the patterns of incidence rates o
 
 1. For each of these datasets:
     a. Remove the row with the overall 1975-2016 rates
-    b. Use `gather` to make a dataset with 3 columns: year, type of cancer and cancer incidence rate
+    b. Use `pivot_longer` to make a dataset with 3 columns: year, type of cancer and cancer incidence rate
 
-<li> Create 3 plots like the one above, one for all races, one for whites and one for blacks. Assign the ggplot code for each to a name, i.e. something like `plt1 <- ggplot(...) + ...`. Display the graph for all races, and create and display a panelled plot where the white and black plots are presented side-by-side, using `cowplot::plot_grid`. 
+<li> Create 3 plots like the one above, one for all races, one for whites and one for blacks. Assign the ggplot code for each to a name, i.e. something like `plt1 <- ggplot(...) + ...`. Display the graph for all races, and create and display a panelled plot where the white and black plots are presented side-by-side. You can use functions from **cowplot**, **ggpubr** or **patchwork** as you like.
     
-1. See [here](https://wilkelab.org/cowplot/articles/plot_grid.html) for nice examples.
 1. Make sure you have labelled everything properly, including titles, so that the graphical information is self-evident.
 
 </ol>
