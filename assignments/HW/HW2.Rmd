@@ -155,8 +155,9 @@ d. Creating new variables (what `dplyr` function will you use for all of these?)
 e. Create a variable giving the TNM status of each patient. The T, N and M statuses are given separately. I want a single variable encoded as, for example, "T2N0M0". [Hint: The function `paste` is your friend]
 
 ```{r, eval=FALSE}
-brca_data3 <- brca_data3 %>%
-    ______(___________ = ___________(Tumor, Node, Metastasis), sep = "")
+brca_data <- brca_data %>%
+    ______(tnm_status = ___________(Tumor, Node, Metastasis), sep = "")
+brca_data3$tnm_status <- brca_data$tnm_status
 ```
 
 f. Create a variable that divides the patients into 3 categories based on molecular profiles [Hint: The function `case_when` might help]:
@@ -179,7 +180,9 @@ d. Create a variable that equals the time of death if they are dead (see the var
 
 ```{r, eval=FALSE}
 ## Fill this in yourself. Time to start leaving the nest
-
+brca_data <- brca_data %>% 
+  mutate(event_time = ___________(Vital.Status == 1, _____________, _______________))
+brca_data3$event_time <- brca_data$event_time
 
 ```
 
