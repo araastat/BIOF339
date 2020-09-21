@@ -3,6 +3,7 @@
     #css: [default, metropolis, metropolis-fonts]
     nature:
       ratio: '16:9'
+      beforeInit: ["../../js/macros.js"]
       highlightLanguage: "r"
       countIncrementalSlides: false
       highlightStyle: "tomorrow-night-bright"
