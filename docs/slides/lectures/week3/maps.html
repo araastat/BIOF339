@@ -4,7 +4,6 @@
     <title>Maps and spatial data</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta, PhD" />
-    <script src="maps_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="maps_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
     <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
@@ -116,7 +115,7 @@ ggplot(data = world) +
   geom_sf() # a special geometry for plotting maps
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/maps_files/figure-html/e1-1.png)&lt;!-- --&gt;
+![](maps_files/figure-html/e1-1.png)&lt;!-- --&gt;
 ]
 .right-column70[
 There are several ways of getting map geometries, which are specifications of polygons.
@@ -137,7 +136,7 @@ ggplot(data = spData::world) +
   geom_sf(aes(fill = lifeExp)) # a special geometry for plotting maps
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/maps_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](maps_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 ]
 .right-column70[
@@ -159,14 +158,14 @@ ggplot(data = spData::world) +
                               trans='sqrt', labels = scales::label_number_si())
 ```
 
-&lt;img src="/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/maps_files/figure-html/unnamed-chunk-6-1.png" width="60%" height="60%" /&gt;
+&lt;img src="maps_files/figure-html/unnamed-chunk-6-1.png" width="60%" height="60%" /&gt;
 
 
 ---
 
 ## The electoral picture in Florida, 2000
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/maps_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](maps_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 We'll develop this map in a tutorial
 
@@ -190,7 +189,7 @@ tm_shape(spData::world) + tm_polygons(col = "lifeExp", style='jenks',
                                       title = 'Life expectancy')
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/maps_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](maps_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 .right-column70[
 It's more "publication-ready" by default
@@ -298,7 +297,7 @@ qmplot(lon, lat, data=crime1, maptype='toner-lite',
        color = I('red'))
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/maps_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](maps_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 **ggmap** was built for Google Maps
@@ -338,7 +337,7 @@ qmplot(lon, lat, data=crime1,
 ```
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/maps_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](maps_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -364,7 +363,6 @@ tm_shape(world1)+tm_polygons(col='lifeExp') +
 .pull-right[
 &lt;img src="img/tmap_facet.png" width="100%" height="100%" /&gt;
 ]
-
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

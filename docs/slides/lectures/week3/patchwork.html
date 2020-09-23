@@ -4,7 +4,6 @@
     <title>Putting plots together</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta, PhD" />
-    <script src="patchwork_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="patchwork_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
     <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
@@ -60,7 +59,7 @@ plt3 &lt;- ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm,
   geom_smooth(se=F)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -71,7 +70,7 @@ plt3 &lt;- ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm,
 ggarrange(plt1, plt2, plt3, ncol = 2, nrow=2)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -82,7 +81,7 @@ ggarrange(plt1, plt2, plt3, ncol = 2, nrow=2)
 ggarrange(plt1, plt2, plt3, ncol = 2, nrow=2, common.legend = TRUE)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -93,7 +92,7 @@ ggarrange(plt1, plt2, plt3, ncol = 2, nrow=2, common.legend = TRUE)
 cowplot::plot_grid(plt1, plt2, plt3, nrow = 2, ncol = 2)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -104,7 +103,7 @@ cowplot::plot_grid(plt1, plt2, plt3, nrow = 2, ncol = 2)
 cowplot::plot_grid(plt1, plt2, plt3, nrow = 2, ncol = 2, labels = c('A','B','C'))
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -117,7 +116,7 @@ grid1 = cowplot::plot_grid(plt1, plt2, nrow = 1, rel_widths=c(0.3, 0.7),
 cowplot::plot_grid(grid1, plt3, nrow=2, labels = c('', 'C'))
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -128,7 +127,7 @@ cowplot::plot_grid(grid1, plt3, nrow=2, labels = c('', 'C'))
 plt1 | plt2 / plt3
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -139,7 +138,7 @@ plt1 | plt2 / plt3
 (plt1 | plt2) / plt3
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -150,7 +149,7 @@ plt1 | plt2 / plt3
 plt1 + plt2 + plt3 + plot_layout(ncol = 2)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/patchwork_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](patchwork_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 
 ---

@@ -4,7 +4,6 @@
     <title>Visualizing the nature of data sets</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta, PhD" />
-    <script src="visdat_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="visdat_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
     <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
@@ -106,7 +105,7 @@ These give us a variable-by-variable view.
 visdat::vis_dat(airquality)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/visdat_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](visdat_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 
@@ -124,7 +123,7 @@ visdat::vis_dat(airquality)
 visdat::vis_cor(airquality)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/visdat_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](visdat_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -135,7 +134,7 @@ visdat::vis_cor(airquality)
 visdat::vis_miss(airquality)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/visdat_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](visdat_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 ---
 class: middle, center
@@ -150,7 +149,7 @@ library(naniar)
 gg_miss_upset(airquality)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/visdat_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](visdat_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -159,7 +158,7 @@ gg_miss_upset(airquality)
 gg_miss_upset(riskfactors)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/visdat_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](visdat_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -175,7 +174,7 @@ ggplot(airquality,
   geom_miss_point()
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/visdat_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](visdat_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 The red points are the values of one variable when the other variable is missing
@@ -191,7 +190,7 @@ The red points are the values of one variable when the other variable is missing
 gg_miss_fct(x = riskfactors, fct=marital)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week3/visdat_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](visdat_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ]
 .pull-right[
