@@ -6,7 +6,8 @@ date: BIOF 339
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ',
+                      message=FALSE, warning=FALSE)
 library(countdown)
 library(fontawesome)
 library(tidyverse)
