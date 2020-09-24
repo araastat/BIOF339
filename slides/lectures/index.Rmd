@@ -1,0 +1,58 @@
+---
+title: "Lectures"
+author: "BIOF 339"
+---
+
+## Lectures
+
+### Week 1
+
+```{r}
+library(tidyverse)
+library(fs)
+library(glue)
+library(kableExtra)
+parse_title <- function(f){
+  if(is.na(f)) return(NA)
+  rmarkdown::yaml_front_matter(f)$title
+}
+
+rmds <- dir_ls('week1',glob='*.Rmd')
+htmls <- dir_ls(here::here('docs/slides/lectures/week1'), glob = '*.html') %>% 
+  str_extract('week1/.*html')
+
+descriptions = map_chr(rmds, parse_title) %>% 
+  str_replace('[Introductions](#about)", "Introductions")
+
+
+setwd(here::here('docs','slides'))
+rmds <- dir_ls('lectures', regex = '\\d{2}.*.Rmd')
+htmls <- str_replace(rmds, 'Rmd','html')
+pdfs <- str_replace(rmds, 'Rmd','pdf')
+# htmls <- dir_ls('lectures',regex = '\\d{2}.*html')
+# pdfs <- dir_ls('lectures', regex = '\\d{2}.*pdf')
+htmls <- tibble(HTML = htmls) %>% 
+  mutate(base = path_file(HTML) %>% str_replace('.html',''))
+pdfs <- tibble(PDF = pdfs) %>% 
+  mutate(base = path_file(PDF) %>% str_replace('.pdf',''))
+rmds <- tibble(Rmd = rmds) %>% 
+  mutate(base = path_file(Rmd) %>% str_replace('.Rmd',''))
+blah <- Reduce(full_join, list(htmls, pdfs,rmds)) %>% 
+  select(base, everything())
+blah <- blah %>% tidyr::gather(variable, value, -base) %>% 
+  mutate(value = glue('[{variable}]({value})')) %>% 
+  mutate(value = ifelse(str_detect(value, 'NA'), '', value)) %>%
+  spread(variable, value) %>% 
+  rename(Lecture=base) %>% 
+  mutate(Lecture = Lecture %>% 
+           str_extract('^\\d+') %>% 
+           as.numeric() %>% 
+           glue::glue('Lecture {x}', x = .)) %>% 
+  mutate(Title = map_chr(str_match(Rmd, '\\((.+)\\)')[,2],parse_title)) %>% 
+  select(Lecture, Title, everything()) %>% 
+  mutate_all(~ifelse(is.na(.), '', .))
+kable(blah) %>%
+  kable_styling(bootstrap_options='striped', full_width = T)
+setwd(here::here())
+```
+

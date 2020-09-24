@@ -1,7 +1,9 @@
  xaringan::moon_reader:
     css: [default, '../../css/robot.css', '../../css/robot-fonts.css', '../../css/sfah.css']
+    #css: [default, metropolis, metropolis-fonts]
     nature:
       ratio: '16:9'
+      beforeInit: ["../../js/macros.js"]
       highlightLanguage: "r"
       countIncrementalSlides: false
       highlightStyle: "tomorrow-night-bright"

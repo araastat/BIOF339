@@ -186,7 +186,8 @@ ggsurvplot(fit, pval = TRUE, conf.int = TRUE,
 
 
 ```{r 05-Plotting-8, echo = F, fig.align = 'center'}
-# install.packages('cowplot')
+pacman::p_load('cowplot')
+
 library(cowplot)
 p1 <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) + 
   geom_point() + facet_grid(. ~ Species) + stat_smooth(method = "lm") +
@@ -204,6 +205,8 @@ p3 <- ggplot(iris, aes(Sepal.Width, fill = Species)) +
 
 # legend
 legend <- get_legend(p2)
+
+
 
 # align all plots vertically
 plots <- align_plots(p1, p2a, p3, align = 'v', axis = 'l')
