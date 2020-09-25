@@ -1,5 +1,5 @@
 ---
-title: "Practical R: [Introductions](#about)"
+title: "Practical R: Introduction"
 author: Abhijit Dasgupta
 date: BIOF 339
 
@@ -31,12 +31,19 @@ class: middle, center
 <img src="../img/R.jpg" height="561" width="724"/>
 
 ---
+
 ```{r, child='../../../Personal/slideFormat.Rmd'}
 
 ```
 
 
 # What does R look like?
+.left-column30[
++ A .heatinline[scripting] language
+  - Provide instructions to the computer
+  - in a .saltinline[structured] manner
+  - to do statistical analysis
+]
 .right-column30[
 
 ```{r ex, echo=T, eval=F}
@@ -58,14 +65,7 @@ type_frequencies <-
 ```
 ]
 
---
 
-.left-column30[
-+ A .heatinline[scripting] language
-  - Provide instructions to the computer
-  - in a .saltinline[structured] manner
-  - to do statistical analysis
-]
 ---
 
 # What does R look like?
@@ -102,7 +102,7 @@ type_frequencies <-
 + Start with a data set
 + Create new variables from old variables
 ]
-.right-column30[
+.right-column70[
 
 ```{r ex2, eval=F}
 # Determining frequencies of breast cancer subtypes

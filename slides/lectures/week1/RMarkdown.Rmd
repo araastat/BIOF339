@@ -1,5 +1,5 @@
 ---
-title: "Practical R: [Introductions](#about)"
+title: "Practical R: R Markdown"
 author: Abhijit Dasgupta
 date: BIOF 339
 
@@ -32,6 +32,8 @@ class: middle, center, inverse
 
 ![](../img/rmd1.png)
 ---
+
+## R Markdown
 
 .left-column30[
 + There are some choices you might need to make

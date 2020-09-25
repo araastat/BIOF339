@@ -1,5 +1,5 @@
 ---
-title: "Practical R: [Introductions](#about)"
+title: "Practical R: About the class"
 author: Abhijit Dasgupta
 date: BIOF 339
 

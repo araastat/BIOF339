@@ -35,3 +35,6 @@ slides/site_libs/*
 # Adds 2020 Fall
 docs/toplevel/*
 docs/slides_top/*
+*.tex
+docs/make_subdirs
+*.log

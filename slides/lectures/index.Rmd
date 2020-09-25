@@ -1,0 +1,72 @@
+---
+title: "Lectures"
+author: "BIOF 339"
+---
+
+```{r, include=F}
+knitr::opts_chunk$set(echo=F, message=F, warning=F)
+```
+
+### Week 1
+
+```{r, echo=F, message=F, warning=FALSE, results='markup'}
+library(tidyverse)
+library(fs)
+library(glue)
+library(kableExtra)
+parse_title <- function(f){
+  if(is.na(f)) return(NA)
+  rmarkdown::yaml_front_matter(f)$title
+}
+
+rmds <- dir_ls('week1',glob='*.Rmd')
+htmls <- dir_ls(here::here('docs/slides/lectures/week1'), glob = '*.html') %>% 
+  str_extract('week1/.*html')
+
+descriptions = map_chr(rmds, parse_title) %>% 
+  str_remove('Practical R: ')
+
+out <- tibble(rmd = rmds, html = htmls, titles = descriptions) %>% 
+  mutate(Lectures = glue("[{titles}]({htmls}){{target=_blank}}")) %>% 
+  arrange(titles) %>% 
+  select(Lectures)
+knitr::kable(out) %>% 
+  kable_styling(full_width = FALSE)
+```
+
+### Week 2
+
+```{r}
+rmds <- dir_ls('week2',glob='*.Rmd')
+htmls <- dir_ls(here::here('docs/slides/lectures/week2'), glob = '*.html') %>% 
+  str_extract('week2/.*html')
+
+descriptions = map_chr(rmds, parse_title) %>% 
+  str_remove('Practical R: ')
+
+out <- tibble(rmd = rmds, html = htmls, titles = descriptions) %>% 
+  mutate(Lectures = glue("[{titles}]({htmls}){{target=_blank}}")) %>% 
+  arrange(titles) %>% 
+  select(Lectures)
+knitr::kable(out) %>% 
+  kable_styling(full_width = FALSE)
+```
+
+### Week 3
+
+```{r}
+rmds <- dir_ls('week3',glob='*.Rmd')
+htmls <- dir_ls(here::here('docs/slides/lectures/week3'), glob = '*.html') %>% 
+  str_extract('week3/.*html')
+
+descriptions = map_chr(rmds, parse_title) %>% 
+  str_remove('Practical R: ')
+
+out <- tibble(rmd = rmds, html = htmls, titles = descriptions) %>% 
+  mutate(Lectures = glue("[{titles}]({htmls}){{target=_blank}}")) %>% 
+  arrange(titles) %>% 
+  select(Lectures)
+knitr::kable(out) %>% 
+  kable_styling(full_width = FALSE)
+```
+
