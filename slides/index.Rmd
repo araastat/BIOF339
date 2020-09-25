@@ -3,7 +3,6 @@ title: |
   | BIOF339: Practical R
   | Lectures
 author: Abhijit Dasgupta
-date: Fall, 2019
 output:
   html_document:
     theme: cosmo
