@@ -156,8 +156,28 @@ div.my-header span{
   height: 92%;
   float: left;
 }
-.right-column70 {
+.right-column30 {
   width: 67%;
   float: right;
 }
 
+.left-column70 {
+  color: #777;
+  width: 67%;
+  height: 92%;
+  float: left;
+}
+.right-column70 {
+  width: 30%;
+  float: right;
+}
+.left-column30 {
+  color: #777;
+  width: 30%;
+  height: 92%;
+  float: left;
+}
+.right-column30 {
+  width: 67%;
+  float: right;
+}
