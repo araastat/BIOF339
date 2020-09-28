@@ -1,0 +1,461 @@
+---
+title: "Statistical summaries"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '', warning = FALSE, message = FALSE,
+                      cache=FALSE)
+library(pacman)
+p_load(char = c('tidyverse','knitr', 'htmlwidgets', 'kableExtra', 
+                'here', 'flipbookr', 'xaringanExtra'))
+source(here::here('lib/R/update_header.R'))
+use_tachyons()
+use_extra_styles(hover_code_line = TRUE, mute_unhighlighted_code = TRUE)
+```
+
+
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+
+---
+
+## Where we've been
+
+1. Understand what tidy data is
+1. Manipulate data to make it tidy (tidyr, dplyr)
+1. Transform particular variables
+1. Write basic functions
+1. High-throughput analyses
+    - Lists of data sets
+    - `map` to apply similar processes to each data set
+    - for-loops to repeat same recipe on multiple data sets or objects
+
+---
+
+## Where we're going
+
+1. Creating data summaries
+1. Basic statistical comparisons between groups
+1. Creating tables 
+    -  Table 1
+    -  Tables for analytic results
+
+--
+
+The basic assumption we'll make is that we will start with a tidy data set.
+
+
+---
+class: middle, center
+
+# Statistical summaries
+
+---
+
+## Univariate summaries
+
+**Single summaries**  
+.pull-left[
+- Mean (`mean`)
+- Variance(`var`)
+- Standard deviation (`sd`)
+- Count (`nrow` or `dplyr::n` or `dplyr::n_distinct`)
+]
+.pull-right[
+- Median ('median')
+- Inter-quartile range (`IQR`)
+- Mean absolute deviation (`mad`)
+- Minimum (`min`) and Maximum (`max`)
+]
+
+--
+
+**Multiple summaries**  
+- Quantiles (`quantile`)
+- Range (`range`)
+
+---
+class: middle, center
+
+# Summarizing the breast cancer expression dataset
+
+---
+
+## Mean
+
+```{r s1, eval = T, echo = T}
+brca <- rio::import('../data/BreastCancer_Expression.csv')
+brca %>% 
+  summarize(across(starts_with('NP'), 
+               mean, na.rm=T)) #<<
+```
+
+---
+
+## Median
+
+```{r s2, eval = T, echo = T}
+brca %>% 
+  summarize(across(starts_with('NP'), 
+               median, na.rm=T)) #<<
+```
+
+---
+
+## Standard deviation
+
+```{r s3, eval = T, echo = T}
+brca %>% 
+  summarize(across(starts_with('NP'),
+               sd, na.rm=T)) #<<
+```
+
+---
+
+## Multiple summaries together
+
+```{r s4, eval = T, echo = T}
+brca %>% 
+  summarize(across(starts_with('NP'),
+               c(mean,
+                 median,
+                 sd), na.rm=T))
+```
+
+---
+
+## Multiple summaries together
+
+```{r s5, eval = T, echo = T}
+brca %>% 
+  summarize(across(-1, # got tired of typing
+               c('Mean'=mean,
+                 'Median' = median,
+                 'SD'=sd), na.rm=T)) 
+```
+
+---
+
+## Multiple summaries together
+
+.left-column70[
+```{r s7, eval = T, echo = T}
+brca %>% 
+  summarize(across(-1, 
+               c('Mean' = mean,
+                 'Median' = median,
+                 'SD' = sd), na.rm=T)) %>% 
+  pivot_longer(cols=everything(),
+               names_to='variable', 
+               values_to='value') %>% 
+  # extract(variable, c('ID','Statistic'), 
+          # regex = '(NP_\\d+)_([A-Za-z]+)') %>% 
+  separate(variable, #<<
+          c("Type",'ID','Statistic'), sep='_') %>% #<<
+  pivot_wider(names_from = Statistic, values_from = value) %>% #<<
+  unite(ID, c('Type','ID'), sep='_') #<<
+```
+]
+.right-column70[
+You could replace the highlighted code with
+
+```{r, eval=F}
+extract(variable, 
+        c('ID','Statistic'),
+        regex = '(NP_\\d+)_([A-Za-z]+)') %>% 
+  pivot_wider(
+    names_from=Statistic,
+    values_from=value)
+```
+
+]
+
+---
+class: middle, inverse, center
+
+# Summarizing a data set
+
+---
+
+## Data set summary
+
+There is a function `summary` that will give you summaries of all the variables. It's nice for looking at the data, but the output format isn't very good for further manipulation
+
+```{r s8, eval = T, echo = T}
+summary(brca[,-1]) # Omit first column
+```
+
+---
+class: middle, center
+
+# Maybe an easier way?
+
+---
+
+## The `tableone` package
+
+The `tableone` package is meant to create, you guessed it, Table 1. 
+
+It is quite a convenient package for most purposes and saves gobs of time
+
+---
+
+## The `tableone` package
+
+.pull-left[
+```{r t1, eval = F, echo = T}
+library(tableone)
+tab1 <- CreateTableOne(data=brca[,-1])
+tab1
+```
+]
+.pull-right[
+```{r 08-Summaries-8, eval=T, echo = F, ref.label="t1"}
+```
+]
+
+---
+
+## The `tableone` package
+
+.pull-left[
+```{r t2, eval = F, echo = T}
+library(tableone)
+tab1 <- CreateTableOne(data = brca[-1])
+print(tab1, nonnormal = names(brca)[-1])
+```
+
+You have to give the variable names of those you think are non-normally distributed and need to be summarized by the median
+]
+.pull-right[
+```{r 08-Summaries-9, eval=T, echo = F, ref.label="t2"}
+```
+]
+
+---
+
+## The `tableone` package
+
+.pull-left[
+```{r t3, eval = F, echo = T}
+library(tableone)
+tab1 <- CreateTableOne(data = brca[-1])
+kableone(print(tab1, nonnormal = names(brca)[-1]),
+         format='html')
+```
+]
+.pull-right[
+```{r 08-Summaries-10, eval=T, echo = F, ref.label="t3"}
+```
+]
+
+---
+class: middle, center
+
+# Mixed data
+
+---
+
+Let's first put the expression and clinical data together
+
+```{r 08-Summaries-11}
+library(rio)
+brca1 <- import('../data/clinical_data_breast_cancer_hw.csv')
+brca2 <- import('../data/BreastCancer_Expression.csv')
+brca <- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %>% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis =
+           as.numeric(Age.at.Initial.Pathologic.Diagnosis)) %>% 
+  mutate(ER.Status = ifelse(ER.Status %in% c('Positive','Negative'),
+                            ER.Status, NA))
+
+summary(brca)
+```
+
+---
+
+Let's first put the expression and clinical data together
+
+```{r 08-Summaries-12}
+library(rio)
+brca1 <- import('../data/clinical_data_breast_cancer_hw.csv')
+brca2 <- import('../data/BreastCancer_Expression.csv')
+brca <- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %>% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis =
+           as.numeric(Age.at.Initial.Pathologic.Diagnosis)) %>% 
+  mutate(ER.Status = ifelse(ER.Status %in% c('Positive','Negative'),
+                            ER.Status, NA),
+         HER2.Final.Status = ifelse(HER2.Final.Status=='Equivocal', 
+                                    NA, HER2.Final.Status)) %>% 
+  mutate(across(is.character, as.factor)) %>% 
+  mutate(Complete.TCGA.ID = as.character(Complete.TCGA.ID)) #<<
+
+str(brca)
+```
+
+---
+
+Identify which variables are categorical (factors) and which are continuous (numeric)
+
+```{r 08-Summaries-13}
+catvars <- brca %>% select(where(is.factor)) %>% names()
+ctsvars <- brca %>% select(where(is.numeric)) %>% names()
+```
+
+---
+
+```{r tab1, eval = T, echo = T}
+CreateCatTable(vars = catvars, data = brca)
+```
+
+---
+
+```{r tab2, eval = T, echo = T}
+CreateContTable(vars = ctsvars, data = brca)
+```
+
+---
+
+.pull-left[
+```{r tab2a, eval = F, echo = T}
+brca <- brca %>% 
+  rename(
+    'Age'='Age.at.Initial.Pathologic.Diagnosis',
+    'Last.Contact' = 'Days.to.Date.of.Last.Contact',
+    'Death' = 'Days.to.date.of.Death'
+  )
+ctsvars <- brca %>% 
+  select(where(is.numeric))%>% names()
+CreateContTable(vars = ctsvars, data = brca)
+
+```
+]
+.pull-right[
+```{r 08-Summaries-16, eval=T, echo = F, ref.label="tab2a"}
+```
+]
+
+---
+
+## Putting it together
+
+```{r tab3, eval = T, echo = T}
+CreateTableOne(vars = c(catvars, ctsvars),
+               data = brca)
+```
+
+---
+
+## Putting it together
+
+```{r tab4, eval = T, echo = T}
+CreateTableOne(data = brca[,-1])
+```
+
+
+---
+
+class: middle, center
+
+# Grouped summaries
+
+---
+
+.left-column70[
+```{r grp1, eval = T, echo = T, warning=F, message=F}
+brca %>% 
+  group_by(ER.Status) %>% 
+  summarize(across(starts_with('NP'),
+               mean))
+```
+]
+.right-column70[
+There are missing values now, so we have to use `na.rm=T`.
+]
+
+---
+
+.left-column70[
+```{r grp1a, eval = T, echo = T}
+brca %>% 
+  group_by(ER.Status) %>% 
+  summarize(across(starts_with('NP'),
+               mean, na.rm=T)) #<<
+```
+]
+.right-column70[
+We still have a row for the missing values of ER.Status
+]
+
+---
+
+.left-column70[
+```{r grp1b, eval = T, echo = T}
+brca %>% 
+  filter(!is.na(ER.Status)) %>% #<<
+  group_by(ER.Status) %>% 
+  summarize(across(starts_with('NP'),
+               mean, na.rm=T))
+```
+]
+.right-column70[
+How about reversing the rows and columns for readability
+
+]
+
+---
+
+.pull-left[
+```{r grp1c, eval = F, echo = T}
+brca %>% 
+  filter(!is.na(ER.Status)) %>%
+  group_by(ER.Status) %>% 
+  summarize(across(starts_with('NP'),
+               mean, na.rm=T)) %>% 
+  pivot_longer(names_to='ID', values_to='value', #<<
+               cols = c(-ER.Status)) %>% #<<
+  pivot_wider(names_from = ER.Status, #<<
+              values_from=value) #<<
+```
+]
+.pull-right[
+```{r 08-Summaries-22, eval=T, echo = F, ref.label="grp1c"}
+```
+]
+
+---
+
+### Using `tableone`
+
+```{r grp1d, eval = T, echo = T}
+CreateTableOne(
+  data = brca %>% filter(!is.na(ER.Status)),
+  vars = brca %>% 
+    select(starts_with('NP')) %>% 
+    names(),
+  strata = 'ER.Status', # single quotes, not backticks
+  test = F)
+```
+
+---
+
+## Alternatives to **tableone**
+
++ [table1](https://github.com/benjaminrich/table1)
++ [gtsummary](https://cran.r-project.org/package=gtsummary)
++ [flextable](https://davidgohel.github.io/flextable/)
++ [arsenal](https://github.com/eheinzen/arsenal)
+
+---
+
+## arsenal
+
+```{r, results='asis'}
+library(arsenal)
+summary(tableby(ER.Status ~ ., data = brca[,-1])) # Here . implies all other variables.
+```
+
