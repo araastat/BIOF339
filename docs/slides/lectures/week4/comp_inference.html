@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Using the computer for statistical inference</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <script src="comp_inference_files/header-attrs-2.3/header-attrs.js"></script>
+    <link href="comp_inference_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="comp_inference_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="comp_inference_files/xaringanExtra-extra-styles-0.2.2/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Using the computer for statistical inference
+### Abhijit Dasgupta
+### BIOF 339
+
+---
+
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
+&lt;/div&gt;
+
+---
+class: middle, center
+
+# A bit of computational inference
+
+---
+
+## Computational inference
+
+- Using the computer and simulation to simulate null distributions or sampling distributions of statistics
+    - _sampling distribution_ is the distribution of values we'd see for a statistics if we repeated the experiment over and over
+    - _null distribution_ is the distribution of values we'd expect to see if the null hypothesis we're using happens to be true. 
+    
+![](../img/infer.png)
+    
+---
+
+## Simulation
+
+R has several standard distributions programmed in, from which random numbers can be drawn and distributions visualized
+
+---
+
+## Simulation
+
+.pull-left[
+
+The Gaussian or normal distribution
+
+```r
+x &lt;- rnorm(10000) # 10,000 random numbers from standard normal distribution
+hist(x) # This is the base R way to create a histogram
+```
+]
+.pull-right[
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-1-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Simulation
+
+.pull-left[
+
+```r
+# Toss a fair coin 10 times, count number of heads
+# Repeat 10,000 times
+x &lt;- rbinom(10000, size = 10, prob = 0.5)
+hist(x)
+```
+]
+.pull-right[
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-2-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Simulation
+
+.pull-left[
+
+```r
+# 10,000 random dumbers from a chi-square distribution
+# with 1 d.f.
+
+x &lt;- rchisq(10000, 1)
+hist(x)
+```
+]
+.pull-right[
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-3-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Simulations
+
+Simulations on a computer aren't exactly random, but *pseudo-random*. They form a _complex, deterministic_ series of numbers which have some properties.
+
+You can set the starting point of the series. It's called the **seed**.
+
+---
+
+
+```r
+*set.seed(28954)
+
+dd &lt;- data.frame(x = rnorm(100))
+
+dd$y &lt;- rnorm(100)
+
+plt1 &lt;- ggplot(dd, aes(x))+geom_histogram()
+plt2 &lt;- ggplot(dd, aes( y)) + geom_histogram()
+
+cowplot::plot_grid(plt1, plt2, nrow=1)
+```
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-4-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+*set.seed(28954)
+
+dd &lt;- data.frame(x = rnorm(100))
+*set.seed(28954)
+dd$y &lt;- rnorm(100)
+
+plt1 &lt;- ggplot(dd, aes(x))+geom_histogram()
+plt2 &lt;- ggplot(dd, aes( y)) + geom_histogram()
+
+cowplot::plot_grid(plt1, plt2, nrow=1)
+```
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-5-1.png)&lt;!-- --&gt;
+
+---
+class: middle, center
+
+## Always set a seed to ensure replicability of simulation experiments
+
+---
+
+## Permutation tests
+
+We will use the R package `infer` for this section, as well as the `pbc` data. We'll first do a permutation test to see if bilirubin is significantly different by treatment group.
+
+A classical thing to do would be a `t.test` or a `wilcox.test`. 
+
+
+```r
+library(survival)
+
+t.test(bili~trt, data=pbc)
+```
+
+```
+
+	Welch Two Sample t-test
+
+data:  bili by trt
+t = -1.5074, df = 270.39, p-value = 0.1329
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -1.7878314  0.2372643
+sample estimates:
+mean in group 1 mean in group 2 
+       2.873418        3.648701 
+```
+
+---
+
+## Permutation tests
+
+In a permution test, we assume the null hypothesis of no difference between the groups, which means 
+
+- if we shuffled the group memberships (re-assigned individuals to different treatments) nothing should change. 
+
+If we compute the test statistic over different permutations, we'll get the distribution of test statistic values we'd see if the null hypothesis was true. 
+
+---
+
+## Permutation tests
+
+.pull-left[
+
+```r
+library(infer)
+
+set.seed(10193)
+sims &lt;- pbc %&gt;% 
+  mutate(trt = as.factor(trt)) %&gt;% 
+  specify(bili ~ trt) %&gt;% 
+  hypothesize(null = 'independence') %&gt;% 
+  generate(reps = 1000, type = 'permute') %&gt;% 
+  calculate(stat = 'diff in means', order = c('1','2'))
+
+visualize(sims)
+```
+
+
+```r
+library(infer)
+(obs_stat &lt;- pbc %&gt;% mutate(trt=as.factor(trt)) %&gt;% 
+  specify(bili ~ trt) %&gt;% 
+  calculate(stat='diff in means',order = c('1','2')))
+```
+
+```
+# A tibble: 1 x 1
+    stat
+   &lt;dbl&gt;
+1 -0.775
+```
+
+]
+.pull-right[
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-8-1.png)&lt;!-- --&gt;
+
+]
+
+
+---
+
+## Permutation tests
+
+.pull-left[
+
+```r
+library(infer)
+
+set.seed(10193)
+sims &lt;- pbc %&gt;% 
+  mutate(trt = as.factor(trt)) %&gt;% 
+  specify(bili ~ trt) %&gt;% # trt must be a factor
+  hypothesize(null = 'independence') %&gt;% 
+  generate(reps = 1000, type = 'permute') %&gt;% 
+  calculate(stat = 'diff in means', order = c('1','2'))
+
+visualize(sims) + shade_p_value(obs_stat, direction = 'both')
+```
+
+
+```r
+sims %&gt;% get_pvalue(obs_stat, direction ='both')
+```
+
+```
+# A tibble: 1 x 1
+  p_value
+    &lt;dbl&gt;
+1   0.158
+```
+
+]
+.pull-right[
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-10-1.png)&lt;!-- --&gt;
+
+]
+---
+
+## Bootstrapping for confidence intervals
+
+Suppose we want to get a confidence interval for the mean bilirubin level overall. 
+
+The bootstrap samples the original data **with replacement** to get a dataset of the same size.
+
+Since sampling is with replacement, some observations are repeated, some are omitted.
+
+Strong theory from the 80s and 90s says that if we repeatedly take bootstrap samples of our data and compute the sample means, their distribution will be very close to the true sampling distribution of the sample mean. 
+
+---
+
+## Bootstrapping for confidence intervals
+
+.pull-left[
+
+```r
+x &lt;- pbc %&gt;% 
+  specify(response = bili) %&gt;% 
+* generate(reps = 1000, type = 'bootstrap') %&gt;%
+  calculate('mean')
+```
+
+
+
+
+
+```r
+(ci &lt;- x %&gt;% get_confidence_interval())
+```
+
+```
+# A tibble: 1 x 2
+  lower_ci upper_ci
+     &lt;dbl&gt;    &lt;dbl&gt;
+1     2.84     3.66
+```
+]
+.pull-right[
+![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-13-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+## Resources
+
+1. Several [infer](https://infer.netlify.com/articles/two_sample_t.html) [examples](https://infer.netlify.com/articles/flights_examples.html)
+1. The [R Companion](https://rcompanion.org/handbook/K_01.html) chapter on permuation tests
+1. [This site](https://mac-theobio.github.io/QMEE/permutation_examples.html) gives alternative methods for doing permutation tests in R
+1. The [coin](http://coin.r-forge.r-project.org/) package provides a richer set of permutation tests, but `infer` covers what you need most often.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../../js/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
