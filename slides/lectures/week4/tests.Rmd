@@ -1,0 +1,243 @@
+---
+title: "Statistical tests"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '', warning = FALSE, message = FALSE,
+                      cache=FALSE)
+library(pacman)
+p_load(char = c('tidyverse','knitr', 'htmlwidgets', 'kableExtra', 
+                'here', 'flipbookr', 'xaringanExtra','tableone','rio'))
+source(here::here('lib/R/update_header.R'))
+use_tachyons()
+use_extra_styles(hover_code_line = TRUE, mute_unhighlighted_code = TRUE)
+```
+
+
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+---
+class: middle, center
+
+# Comparing two groups
+
+```{r, echo=F, results='hide'}
+library(rio)
+brca1 <- import('../data/clinical_data_breast_cancer_hw.csv')
+brca2 <- import('../data/BreastCancer_Expression.csv')
+brca <- left_join(brca1, brca2, by=c('Complete.TCGA.ID' = 'TCGA_ID')) %>% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis =
+           as.numeric(Age.at.Initial.Pathologic.Diagnosis)) %>% 
+  mutate(ER.Status = ifelse(ER.Status %in% c('Positive','Negative'),
+                            ER.Status, NA))
+
+```
+
+---
+
+## The t-test
+
+The t-test compares whether the mean of a variable differs between two groups. 
+
+It does assume the normal distribution for the data, but is robust to deviations from normality
+
+Do **not** test for normality before doing the t-test. It isn't necessary and screws up your error rates
+
+---
+
+## The t-test
+
+In R, there is a convenient function `t.test`
+
+```{r 08-Summaries-24}
+t.test(NP_958782 ~ ER.Status, data = brca)
+```
+
+Read the code as 
+
+"Do a t-test to see if (the mean of) `NP_958782` differs by `ER.Status`, where
+both are taken from the data set `brca`"
+
+You can read the `~` as "by", as in "t-test of NP_958782 by ER.Status"
+
+---
+
+## The t-test
+
+The packge `broom` provides a function `tidy` that makes the results of these
+statistical tests tidy.
+
+```{r 08-Summaries-25}
+t.test(NP_958782 ~ ER.Status, data=brca) %>% 
+  broom::tidy()
+```
+
+--
+
+```{r 08-Summaries-26, echo=F}
+t.test(NP_958782 ~ ER.Status, data=brca)
+```
+
+---
+
+```{r through, include=FALSE, message=F, warning=F}
+brca %>% 
+  select(ER.Status, starts_with('NP')) %>% 
+  pivot_longer(names_to = 'protein',
+               values_to = 'expression', 
+               cols = c(-ER.Status)) %>% 
+  split(.$protein) %>% 
+  map(~broom::tidy(t.test(expression ~ ER.Status, 
+                          data=.))) %>% 
+  bind_rows(.id = 'Protein') %>% 
+  select(Protein, estimate, p.value, conf.low, conf.high)
+```
+
+`r chunk_reveal('through', title = '## Using <code>broom</code>
+The fact that <code>broom::tidy</code> makes the results of tests into tibbles is in fact extremely useful in high-throughput work', widths = c(60,40))`
+
+
+---
+class: center, middle
+
+# Back to testing
+
+---
+
+## Wilcoxon test, nonparametric t-test
+
+```{r 08-Summaries-32}
+wilcox.test(NP_958782 ~ ER.Status, data=brca) %>% 
+  broom::tidy()
+```
+
+--
+
+```{r 08-Summaries-33, echo=F}
+wilcox.test(NP_958782 ~ ER.Status, data=brca)
+```
+
+---
+
+## Wilcoxon test
+
+.pull-left[
+```{r test3, eval = F, echo = T}
+brca %>% 
+  select(ER.Status, starts_with('NP')) %>% 
+  tidyr::gather(protein,expression, -ER.Status) %>% 
+  split(.$protein) %>% 
+  map(~broom::tidy(wilcox.test(expression ~ ER.Status, 
+                          data=.))) %>% 
+  bind_rows(.id='Protein') %>% 
+  select(Protein, p.value)
+```
+]
+.pull-right[
+```{r 08-Summaries-34, eval=T, echo = F, ref.label="test3"}
+```
+]
+
+---
+
+## Using `tableone`
+
+
+```{r table4, eval = F, echo = T}
+CreateTableOne(
+  data = brca %>% filter(!is.na(ER.Status)),
+  vars = brca %>% 
+    select(starts_with('NP')) %>% 
+    names(),
+  strata = 'ER.Status',
+  test = T,
+  testNormal = t.test
+)
+```
+```{r 08-Summaries-35, eval=T, echo = F, ref.label="table4"}
+```
+
+--
+
+This is not quite the same results as before
+
+---
+
+## Using `tableone`
+
+
+```{r table4a, eval = F, echo = T}
+CreateTableOne(
+  data = brca %>% filter(!is.na(ER.Status)),
+  vars = brca %>% 
+    select(starts_with('NP')) %>% 
+    names(),
+  strata = 'ER.Status',
+  test = T,
+  testNormal = t.test,
+  argsNormal = list(var.equal=F) #<<
+)
+```
+```{r 08-Summaries-36, eval=T, echo = F, ref.label="table4a"}
+```
+
+---
+
+## Tests for discrete data
+
+Testing whether the distribution of a categorical variable differs by levels of 
+another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
+
+```{r 08-Summaries-37}
+fisher.test(table(brca$Tumor, brca$ER.Status))
+```
+
+---
+
+## Tests for discrete data
+
+Testing whether the distribution of a categorical variable differs by levels of 
+another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
+
+```{r 08-Summaries-38}
+chisq.test(table(brca$Tumor, brca$ER.Status))
+```
+
+---
+
+## Tests for discrete data
+
+We can use `broom::tidy` for either of these
+
+```{r 08-Summaries-39}
+chisq.test(table(brca$Tumor, brca$ER.Status)) %>% 
+  broom::tidy()
+```
+
+---
+
+## Using `tableone`
+
+```{r 08-Summaries-40}
+CreateCatTable(vars = c('Tumor','Node','Metastasis'),
+               data = filter(brca, !is.na(ER.Status)),
+               strata = 'ER.Status',
+               test = T) # chisq.test
+```
+
+---
+
+## Using `tableone`
+
+```{r 08-Summaries-41}
+c1 <- CreateCatTable(vars = c('Tumor','Node','Metastasis'),
+               data = filter(brca, !is.na(ER.Status)),
+               strata = 'ER.Status',
+               test = T)
+print(c1, exact = c('Tumor','Node','Metastasis')) # fisher.test
+```
