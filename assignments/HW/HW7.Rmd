@@ -5,8 +5,9 @@ date: "Due Monday, Novemeber 4"
 output: html_document
 ---
 
-<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
-
+<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
+background-color: wheat;font-size: 14pt;text-align:center">
+In this homework you will have to submit 3 files. (1) The R script from the Data preparation section, (2) the Rmd file from the Data analysis section and (3) the knitted HTML file from the Data analysis section. The results of the data analysis section should all be present in the Rmd and HTML files.
 </p>
 
 
