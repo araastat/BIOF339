@@ -6,7 +6,7 @@ output: html_document
 ---
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
-[**Submission Link**](https://www.dropbox.com/request/h9WqiR5UdFC2lNKg8i9y){target=_blank}
+
 </p>
 
 
@@ -20,19 +20,19 @@ The data are available as a zip file [here](https://www.dropbox.com/s/0fttg8r9ub
 experimental design is available [here](https://www.dropbox.com/s/b510c7fx82u5prh/GSE123519design.xlsx?dl=1).
 
 ### Prelim work
-1. Create a RStudio Project for this homework. Within the project, create a `data` directory. Note its path. 
 1. Download and unzip the data file in the data directory you just created. You should get 26 text files, perhaps in a sub-directory. Note this, since you'll need it
 in the next step. Also download the experimental design file here.
-1. Open a R script file in the RStudio Project you created. This will be your submission.
 
 ### Homework
 
-This homework is based on material covered in Lecture 7 and the in-class code, which 
-can be accessed from the [Lectures page](../../slides/index.html). 
+#### Data preparation
+
+Open a R script file in the RStudio Project you created. This will be Part 1 of your submission
+
 
 1. Read all 26 files into a list in R, where the list consists of 26 data frames
 1. For each of the data frames perform the following data processing
-    a. Keep only the variables `tracking_id`, `gend_id`, and `locus` through `FPKM`.
+    a. Keep only the variables `tracking_id`, `gene_id`, and `locus` through `FPKM`.
     b. Change the gene names in `gene_id` to capital letters (use `stringr::str_to_upper` or other equivalent functions)
     c. Split the `locus` variable into a `chromosome` and a `location` variable.
     d. Filter **out** all observations with FPKM less than 1 (no real scientific reason, just because)
@@ -43,5 +43,22 @@ the genetic dataset you created above, ensuring that ids and genotype specificat
 1. Note that there is an add-on to the genotype information, in the form `-1`, `-2` to specify which particular sample it is. This is unnecessary and would create problems for any comparative analyses using t-tests or ANOVA later. Please remove it so that you just have genotype information.
 1. There is one idiosyncratic genotype specification which is a re-rerun. Fix this to 
 match the other genotypes. 
+1. Clean the `chromosome` values so that you only have data of the form "chr##" where ## refers to the chromosome number.
+1. Save the dataset using `saveRDS` to a .rds file
 
 You can choose whether you fix all the genotype information before or after you join the design dataset to the genetic dataset. Whatever makes sense to you.
+
+#### Data analysis
+
+Open a R Markdown file and perform the following tasks. Knit this R Markdown file to HTML. 
+Both the Rmd and html files will be Part 2 of your submission
+
+1. Provide the following tables:
+    - median FPKM levels by Class
+    - How many unique genes are interrogated per chromosome
+1. How many unique genes of the form PIK3C* are present in the dataset
+1. What are the relative frequencies of each PIK3CA variant among the 26 mice. Assume a missing value means the variant is not present.
+1. Perform a statistical test to see if FPKM expression levels are different at PIK3C* genes compared to all other genes. (the correct test is actually complicated, but doing t-test, wilcoxon test or permutation tests are all allowed here)
+1. Draw a barplot showing the median FPKM levels by Class
+
+    
