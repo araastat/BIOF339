@@ -1,13 +1,12 @@
 ---
 title: "Homework 7: Lists and maps"
 author: "Abhijit Dasgupta"
-date: "Due Monday, Novemeber 4"
 output: html_document
 ---
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
 background-color: wheat;font-size: 14pt;text-align:center">
-In this homework you will have to submit 3 files. (1) The R script from the Data preparation section, (2) the Rmd file from the Data analysis section and (3) the knitted HTML file from the Data analysis section. The results of the data analysis section should all be present in the Rmd and HTML files.
+In this homework you will have to submit 3 files. (1) The R script from the Data preparation section, (2) the Rmd file from the Data analysis section and (3) the knitted HTML file from the Data analysis section. The results of the data analysis section should all be present in the Rmd and HTML files. The R script should be well-commented so that the reader can understand what each section of code is supposed to do. 
 </p>
 
 
@@ -28,7 +27,8 @@ in the next step. Also download the experimental design file here.
 
 #### Data preparation
 
-Open a R script file in the RStudio Project you created. This will be Part 1 of your submission
+Open a R script file in the RStudio Project you created. This will be Part 1 of your submission. Your code should be annotated with sufficient comments so that the reader/grader can understand what you are intending to do with each part of your code. 
+
 
 
 1. Read all 26 files into a list in R, where the list consists of 26 data frames
