@@ -1,0 +1,45 @@
+---
+title: "My Title"
+author: "Me"
+date: BIOF 339
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment = '', warning = FALSE, message = FALSE, cache = FALSE)
+library(flipbookr)
+library(tidyverse)
+
+update_header <- function(header = NULL){
+	txt <- paste(c('layout: true', '', '<div class="my-header">', '<span>BIOF 339: Practical R</span>', '</div>'),
+				 collapse = '\n')
+	if(!is.null(header)){
+		txt <- paste(c(txt, header), collapse = '\n\n')
+	}
+	return(cat(txt))
+}
+
+library(xaringanExtra)
+use_fit_screen()
+# use_animate()
+use_tachyons()
+use_panelset()
+use_extra_styles(hover_code_line=TRUE, mute_unhighlighted_code = TRUE)
+
+```
+
+```{r, echo=FALSE, results = 'asis'}
+update_header()
+```
+
+---
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph3.mt5[
+The only way to write good code is to write tons of bad code first. 
+Feeling shame about bad code stops you from getting to good code.
+
+.tr[
+— Hadley Wickham
+]]
+
+.cf[]
+
