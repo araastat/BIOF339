@@ -85,8 +85,8 @@ class: middle, center
 ```{r s1, eval = F, echo = T}
 brca <- rio::import('data/BreastCancer_Expression.csv')
 brca %>% 
-  summarize_at(vars(starts_with('NP')), 
-               mean, na.rm=T) #<<
+  summarize_at(across(starts_with('NP'), 
+               mean, na.rm=T)) #<<
 ```
 ]
 .pull-right[

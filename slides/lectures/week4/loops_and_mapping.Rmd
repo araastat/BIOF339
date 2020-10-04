@@ -1,0 +1,359 @@
+---
+title: "Using loops and map"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '', warning = FALSE, message = FALSE,
+                      cache=FALSE)
+library(pacman)
+p_load(char = c('tidyverse','knitr', 'htmlwidgets', 'kableExtra', 
+                'here', 'flipbookr', 'xaringanExtra'))
+source(here::here('lib/R/update_header.R'))
+use_tachyons()
+use_extra_styles(hover_code_line = TRUE, mute_unhighlighted_code = TRUE)
+```
+
+
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+
+---
+
+
+
+
+
+# Where we are
+
++ Got a start on plotting and creating panelled graphs with ggplot2
++ Can modify a data set somewhat
+    - `dplyr` verbs (mutate, filter, select, separate, unite)
+    - joins
+    - pivot_longer/wider
+
+---
+
+# Repetitive copying
+
+For the last homework you had to do the same operations on mutiple files and data sets: 
+
+- Had to do same processing on multiple data sets
+- Had to do same graphs from multiple data sets
+
+So you had to copy and paste code, changing the file name or the data name. 
+
+--
+
+.bg-washed-red.b--red.ba.bw2.br3.shadow-5.ph4.mt5.center.fl.w-40.f2[
+This is generally **dangerous**
+]
+---
+class: middle, center
+
+# For loops
+
+---
+
+## For loops
+
+For-loops are a computational structure that allows you to do the same thing
+repeatedly over a loop with some index. 
+
+The basic structure is
+
+```{r 07-Maps-Table1-1, eval=F}
+for (variable in vector) {
+  <code to execute for each iteration>
+}
+```
+
+---
+
+## For loops
+
+.pull-left[
+Using numeric indices
+
+```{r 07-Maps-Table1-2, eval = F, echo = T}
+library(fs)
+sites <- c('Brain','Colon','Esophagus','Lung','Oral')
+dats <- list() # Initialize empty list
+for(i in 1:length(sites)){
+  dats[[i]] <- 
+    read_csv(path('../data',
+                             paste0(sites[i], '.csv')), 
+                        skip=4)
+}
+```
+]
+.pull-right[
+Using names
+
+```{r 07-Maps-Table1-3, eval=T, echo = T, message=F, warning=F}
+library(fs)
+sites <- c('Brain','Colon','Esophagus','Lung','Oral')
+dats <- list() # Initialize empty list
+for(n in sites){
+  dats[[n]] <- 
+    read_csv(path('../data',
+                  paste0(n, '.csv')), 
+             skip=4)
+}
+```
+]
+
+.bg-washed-green.b--green.ba.bw2.br3.shadow-5.ph4.mt5.center.f3[
+**Why lists?** Because lists can keep any R object, and they're a great way to 
+store a bunch of data that we want to operate on in similar ways
+]
+
+---
+
+## Lists
+
+Directly using lists has efficiency advantages. `rio` can load all the datasets
+into a list, for example.
+
+```{r 07-Maps-Table1-4}
+dats <- rio::import_list(path('../data', paste0(sites,'.csv')))
+names(dats)
+str(dats[['Brain']])
+```
+
+---
+
+## A note on `rio::import` for reading CSV files
+
+The function `rio::import` reads CSV files using `data.table::fread`, and then converts the resulting `data.table` object into a `data.frame` object.
+
+`fread` is not only really fast, but also makes some great automatic choices.
+
+- It looks for and tries to omit non-standard header rows (so we don't need `skip=4`)
+- It automatically tries to figure out the right number of rows to import
+- With the `check.names=TRUE` option, it fixes issues with column names to make them conformant with R
+
+--
+
+.bg-washed-green.b--green.ba.bw2.br3.shadow-5.ph4.mt5[
+Using `rio::import` solves a lot of troublesome things in importing regular text files (CSV, TSV, etc), and is **recommended**
+]
+
+---
+
+## Lists
+
+```{r}
+dats <- rio::import_list(path('../data', paste0(sites,'.csv')),
+                         setclass = 'tbl',     # Output as tibble
+                         check.names = TRUE)   # Check and fix names
+str(dats[['Brain']])
+```
+
+---
+class: center, middle, inverse
+
+# `purrr::map`
+
+---
+
+```{r, echo=F, results='asis'}
+update_header('## map')
+```
+
+---
+
+
+`map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
+
+```{r 07-Maps-Table1-5, eval=F}
+map(<list>, <function>, <function arguments>)
+```
+
+For example, if we want to take out the first row of each dataset and make sure all 
+the variables are numeric, we could do:
+
+```{r 07-Maps-Table1-6, warning=F}
+dats <- map(dats, 
+            function(d){
+              d %>% slice(-1) %>%  # remove first row which contains summary data
+                mutate(across(everything(), as.numeric))
+            })
+str(dats[['Brain']])
+```
+
+---
+
+
+`map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
+
+```{r 07-Maps-Table1-7, eval=F}
+map(<list>, <function>, <function arguments>)
+```
+
+For example, if we want to take out the first row of each dataset and make sure all 
+the variables are numeric, we could do:
+
+```{r 07-Maps-Table1-8, warning=F, eval=F}
+dats <- map(dats, function(d){
+  d %>% slice(-1) %>%  # remove first row
+    mutate_all( as.numeric)
+})
+str(dats[['Brain']])
+```
+
+The argument for the function inside the `map` function is an element of the list. In this case, it is a data frame.
+
+The output of `map` is a list the same length as the input list.
+
+Here, we are overwriting the original data. This is fine if you're sure about the transformations, but normally you might want to save the result with a different name first until you're sure of what you're doing
+
+---
+
+
+I don't like the names with dots, say `r emo::ji('smile')`. I can just apply a function to each data set to fix that.
+
+```{r 07-Maps-Table1-9}
+dats <- map(dats, janitor::clean_names)
+str(dats[['Oral']])
+```
+
+.bg-washed-green.b--green.ba.bw2.br3.ph4.mt1[
+Note that `janitor::clean_names` takes a data.frame/tibble as its first argument (as all tidyverse functions), and `dats` is a list of tibbles. So `map` applies the `clean_names` function to each tibble in the list, and returns the result as a list
+]
+---
+
+
+Now let's split up by sexes
+
+```{r 07-Maps-Table1-10}
+dats_all <- map(dats, select, year_of_diagnosis, ends_with('sexes'))
+dats_male <- map(dats, select, year_of_diagnosis, ends_with('_males'))
+dats_female <- map(dats, select, year_of_diagnosis, ends_with('females'))
+str(dats_all[['Esophagus']])
+```
+
+--
+
+.bg-washed-green.b--green.ba.bw2.br3.ph4.mt2[
+Here I used the form `map(<list>, <function>, <function arguments>)`.
+
+Earlier I had used `map(<list>,<function definition>)` and `map(<list>, <function>)` with no (i.e., default) arguments.
+
+Note, `map` assumes that each element of the list is the **first** argument of the function, and so you only have to specify from the 2nd argument onwards
+]
+
+---
+
+
+Let's make the column headers of each dataset reflect the site, so that when we join we can keep the 
+sites separate
+
+```{r 07-Maps-Table1-11}
+for(n in sites){
+  names(dats_all[[n]]) <- str_replace(names(dats_all[[n]]), 'both_sexes',n)
+  names(dats_male[[n]]) <- str_replace(names(dats_male[[n]]), 'male',n)
+  names(dats_female[[n]]) <- str_replace(names(dats_female[[n]]), 'female',n)
+}
+names(dats_all[['Esophagus']])
+```
+
+---
+
+.pull-left[
+When we joined these data sets, we had to repeatedly use `left_join` to create the final data set. 
+
+```{r, eval=FALSE}
+joined_all <- dats_all[['Brain']]
+for(n in setdiff(names(dats2_all), 'Brain')){
+  joined_all <- joined %>% left_join(dats_all[['n']])
+}
+```
+]
+.pull-right[
+There is a shortcut to this repeated operation of a function with two inputs as applied to a list successively.
+
+```{r 07-Maps-Table1-12, message=F}
+joined_all <- Reduce(left_join, dats_all)
+joined_male <- Reduce(left_join, dats_male)
+joined_female <- Reduce(left_join, dats_female)
+```
+]
+
+--
+```{r 07-Maps-Table1-13, echo=FALSE}
+str(joined_all)
+```
+
+---
+
+Next, we want to separate the races from the sites, after a `gather`. The `all_races` will pose a problem if we split on `_`. Let's fix that.
+
+```{r 07-Maps-Table1-14}
+names(joined_all) <- str_replace(names(joined_all), 'all_races','allraces')
+names(joined_male) <- str_replace(names(joined_male), 'all_races','allraces')
+names(joined_female) <- str_replace(names(joined_female), 'all_races','allraces')
+```
+
+---
+
+Now, for each of these, we need to gather then separate. We'll put the data sets in a list first
+
+```{r 07-Maps-Table1-15}
+joined <- list('both'=joined_all, 'male'=joined_male, 'female'=joined_female)
+joined <- map(joined,
+             function(d){
+               d %>% 
+                pivot_longer(names_to='variable', values_to = 'rate',
+                             cols=c(-year_of_diagnosis)) %>% 
+                 separate(variable, c('race','site'), sep='_')
+             })
+str(joined[['both']])
+```
+
+.bg-lightest-blue.b--blue.ba.bw2.br3.ph4.mt1[
+Okay, this is voodoo `r emo::ji('devil')` Not really. Grab one of the datasets
+and work out what you need. Since you'll be doing the same to all of the datasets, you use `map` on the list of datasets
+]
+---
+
+```{r, echo=F, results='asis'}
+update_header()
+```
+
+---
+
+## Final graphing
+
+Now we're in a position to do the graphing. 
+
+.left-column70[
+```{r plt1, eval = F, echo = T}
+pltlist <- joined[['both']] %>% group_split(race) %>% 
+  map(function(d) {ggplot(d, 
+                          aes(x = year_of_diagnosis,
+                              y = rate,
+                              color=site))+
+  geom_point(show.legend = F) })
+cowplot::plot_grid(plotlist=pltlist, ncol=1, 
+                   labels=c('All','Whites','Blacks'))
+```
+
+I'm using quite advanced R here, but hopefully you'll learn by example. 
+
+`group_split` splits the dataset by the values of the grouping variable into a list
+
+(Yes, your homework asked for a different panel placement)
+]
+.right-column70[
+```{r 07-Maps-Table1-16, eval=T, echo = F, ref.label="plt1"}
+```
+]
+```{r 07-Maps-Table1-17}
+
+```
+

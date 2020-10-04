@@ -6,11 +6,11 @@ slides/**/*.html
 notes/**/*.html
 hw/**/*.html
 Tutorials/*.key
-
+__MACOSX*
 assignments/**/*.html
 **/*cache/*
 .drake/*
-
+GSE123519*
 docs/slides/lectures/05-Plotting_files/*
 slides/lectures/05-Plotting_files/*
 slides/lectures/data/*
