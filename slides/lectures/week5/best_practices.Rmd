@@ -2,25 +2,8 @@
 title: "Project Organization"
 author: "Abhijit Dasgupta"
 date: "BIOF 339"
-output:
-  xaringan::moon_reader:
-    css: [default, './robot.css', './robot-fonts.css']
-    #css: [default, metropolis, metropolis-fonts]
-    nature:
-      ratio: '16:9'
-      highlightLanguage: R
-      countIncrementalSlides: false
-      highlightStyle: zenburn
-      highlightLines: true
-
 ---
 
-layout: true
-
-<div class="my-header">
-<span>BIOF 339, Fall 2019</span></div>
-
----
 
 ```{r setup, include=FALSE, message = F, warning = F}
 knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, comment="", 
@@ -32,14 +15,20 @@ library(readxl)
 
 imgdir <- here('slides','lectures','img')
 datadir <- here('slides/lectures/data')
+source(here('lib/R/update_header.R'))
 ```
 
-# Objectives today
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+
+---
+
+# Objectives 
 
 + Project Organization
     - How to maintain long-term sanity
-+ Project Reporting
-    - Rich documents using RMarkdown
     
 ---
 
@@ -78,7 +67,7 @@ class: inverse, middle, center
 
 ---
 
-## Eight years ago
+## Many years ago
 
 + 25 year study of rheumatoid arthritis
 + 5600 individuals
@@ -87,31 +76,44 @@ class: inverse, middle, center
 + Lots of visualizations
 
 ---
+background-image: url(http://www.villaravioli.com/admin/incoming/20160930091420_Capellini.png)
+background-size: contain
 
 ## Eight years ago
 
+.left-column70[
 + Resulted in a muddle of 710 files (starting from 4 data files)
 + Unwanted cyclic dependencies for intermediate data creation
 + Lots of ad hoc decisions and function creation with scripts
 + Almost impossible to re-factor and clean up
 + Had to return to this project for 3 research papers and revision cycles!!!
+]
+.right-column30[![](../img/spaghetti.jpg)]    
 
 .center[![](https://media.giphy.com/media/4LsN0YwgIsvaU/giphy.gif)]
 
 ---
+class: center, middle
 
-# Who's the next consumer of your work
-
---
-
-+ Yourself in 
-    + 3 months
-    + 1 year
-    + 5 years
+# Who's the next consumer of your work??
 
 --
 
-+ Can't send your former self e-mail asking what the f**k you did.
+.pull-left[
+## Yourself in 
+
+3 months
+
+1 year
+
+5 years
+]
+.pull-right[
+![](https://media.giphy.com/media/kxAX99ncvbPk4/giphy.gif)
+]
+--
+
+####  Can't send your former self e-mail asking what the frak you did.
 
 ---
 class: inverse, middle, center
@@ -125,6 +127,8 @@ class: inverse, middle, center
 class: inverse, middle, center
 
 # RStudio Projects
+
+.footnote[.right[[description](#proj1)]]
 
 ---
 
@@ -185,6 +189,7 @@ image_scale(plt, "1600")
 ```
 
 ---
+name: proj1
 
 ## RStudio Projects
 
@@ -221,6 +226,7 @@ I use [Projects]() so that:
 4. I can version control them (Git) easily (topic for beyond this class)
 5. I can customize options per project
 
+.footnote[A great reference for git from a R user's perspective is Jenny Bryan's excellent [happygitwithr.com](https://happygitwithr.com/)]
 ---
 
 ## RStudio Projects
@@ -270,6 +276,11 @@ image_scale(plt, '600x')
     + File1.R, File4.R won't help you
     + DataMunging.R, RegressionModels.R will
 + Well-chosen names saves a lot of time and heartache
++ Another choice is to let yourself know the order of how things are to be run in a workflow by naming files
+    + 01-Ingestion.R
+    + 02-Munging.R
+    + 03-EDA.R
+    + 04-Modeling.R
 
 ---
 
@@ -338,6 +349,7 @@ runif(n = 135, min = 18, max = 80)
 ---
 
 ## Create functions rather than copy-paste code
+
 + If you're doing the same thing more than twice, write a function (_DRY principle_)
 + Put the function in its own file, stored in a particular place
     + I store them in `lib/R`.
@@ -346,15 +358,17 @@ runif(n = 135, min = 18, max = 80)
     + One function or a few related functions per file
 + Write the basic documentation __NOW__!
 
+-----
+
+An example from my own work is [here](https://github.com/webbedfeet/USRDS2015/tree/master/lib/R)
+
 ---
 
 ## Loading your functions
 
-```{r 10-BestPractice-15, echo = T, eval=T}
+```{r 10-BestPractice-15, echo = T, eval=F}
 funcfiles <- dir('lib/R', pattern = '.R')
-for(f in funcfiles){
-  source(f)
-}
+purrr::map(funcfiles, source)
 ```
 
 ---
@@ -369,11 +383,14 @@ You can use `require`:
 x <- require(ggiraph)
 x
 ```
-A more elegant solution is using the `pacman` package
+
+A more elegant solution is using the **pacman** package
+
 ```{r 10-BestPractice-17, echo=T, eval = F}
 if (!require("pacman")) install.packages("pacman") # make sure pacman is installed
 pacman::p_load(ggiraph, stargazer, kableExtra)
 ```
+
 This will install the package if it's not installed, and then load it up.
 
 ---
@@ -436,290 +453,3 @@ image_scale(plt, '1600x')
 
 + It's a long road to this point, so make sure things are good. 
 
----
-class: inverse, center, middle
-
-# RMarkdown
-
----
-
-## RMarkdown
-
-Many of you are already using RMarkdown in your R Notebooks.
-
---
-
-RMarkdown documents are text with code chunks. Great for reporting, not so great for development
-
---
-
-Ideally when you develop, you want an annotated R script (text as comments), and then transform it to a RMarkdown document for a nicely formatted document
-
---
-
-Take any RMarkdown document, and pass it through the function `knitr::purl`, and bring it back with `knitr::spin`
-
----
-class: center
-
-```{r 10-BestPractice-19, echo=F}
-plt <- image_read('../img/rmd.png')
-image_scale(plt, '400x')
-```
-
-> [https://webbedfeet.netlify.com/post/interchanging-rmarkdown-and-spinnable-r/](https://webbedfeet.netlify.com/post/interchanging-rmarkdown-and-spinnable-r/)
-
----
-class: center
-
-```{r 10-BestPractice-20, eval=F, echo=T}
-knitr::purl('finding-my-dropbox.Rmd', documentation=2)
-```
-```{r 10-BestPractice-21, echo=F}
-plt <- image_read('../img/purl.png')
-image_scale(plt, '600x')
-```
-
----
-class:center
-
-```{r 10-BestPractice-22, echo=T, eval=F}
-knitr::spin('finding-my-dropbox.R', knit = F, format='Rmd')
-```
-```{r 10-BestPractice-23, echo=F}
-plt <- image_read('../img/rmd.png')
-image_scale(plt, '600x')
-```
-
----
-class: inverse, center, middle
-
-# Rich RMarkdown Documents
-
----
-
-## What can you create from RMarkdown?
-
-+ Documents
-    - HTML
-    - Microsoft Word
-    - PDF (requires [LaTeX](http://www.latex-project.org))
-+ Presentations
-    - HTML (`ioslides`, `revealjs`, `xaringan`)
-    - PDF (`beamer`)
-    - PowerPoint
-
----
-
-## What can you create from RMarkdown?
-
-+ Interactive documents
-    - The `htmlwidgets` meta-package
-+ Dashboards
-    - The `flexdashboard` package
-+ Books
-    - The `bookdown` package
-+ Websites & Blogs
-    - RMarkdown
-    - `blogdown` package
-
----
-
-## What can you create with RMarkdown?
-
-+ Resumes/CVs
-    - The [`vitae`](https://github.com/ropenscilabs/vitae) package 
-+ Research papers
-    - include citations
-    - include appropriate formatting
-    - probably need [LaTeX](http://www.latex-project.org)
-    
---
-
-### See the [RMarkdown gallery](https://rmarkdown.rstudio.com/gallery.html)
----
-
-## What can you create with RMarkdown?
-
-The basic differences are in the front-matter at the top of your RMarkdown
-document
-
-### HTML document
-```
----
-title: "Lectures"
-date: "Fall 2018"
-output: html_document
----
-```
---
-### Word document
-```
----
-title: "Lectures"
-date: "Fall 2018"
-output: word_document
----
-```
-
----
-
-## Presentations
-
-.pull-left[
-### ioslides
-```
----
-title: "Lecture 2: \nData Frame, Matrix, List"
-author: "Abhijit Dasgupta"
-date: "September 19, 2018"
-output: ioslides_presentation
----
-```
-### revealjs
-```
----
-title: "Lecture 2: \nData Frame, Matrix, List"
-author: "Abhijit Dasgupta"
-date: "September 19, 2018"
-output:
-  revealjs::revealjs_presentation:
-    theme: default
-    highlight: default
-    transition: fade
-    slide_level: 1
-
----
-```
-]
-.pull-right[
-### Slides delimited by markdown sections 
-```
-# Slide 1
-
-This is my first slide
-
-# Slide 2
-
-This is my second slide
-```
-]
-
----
-
-## Presentations
-.pull-left[
-### Powerpoint
-```
----
-title: "Lecture 2: \nData Frame, Matrix, List"
-author: "Abhijit Dasgupta"
-date: "September 19, 2018"
-output: powerpoint_presentation
----
-```
-]
-.pull-right[
-### Slides delimited by markdown sections 
-```
-# Slide 1
-
-This is my first slide
-
-# Slide 2
-
-This is my second slide
-```
-]
-
----
-
-## Presentations
-
-.pull-left[
-### xaringan
-```
----
-title: "Lecture 2: \nData Frame, Matrix, List"
-author: "Abhijit Dasgupta"
-date: "September 19, 2018"
-output:
-  xaringan::moon_reader:
-    css: [default, './robot.css', './robot-fonts.css']
-    #css: [default, metropolis, metropolis-fonts]
-    nature:
-      ratio: '16:9'
-      highlightLanguage: R
-      countIncrementalSlides: false
-      highlightStyle: zenburn
-      highlightLines: true
----
-```
-]
-.pull-right[
-### Slides delimited by `---`
-```
----
-
-# Slide 1
-
-This is my first slide
-
----
-
-# Slide 2
-
-This is my second slide
-```
-]
-
----
-
-## RMarkdown Templates
-.pull-left[
-- Several packages provide RMarkdown templates
-- You can include citations
-    - EndNote, MEDLINE, RIS, BibTeX formats for references
-    - See <a href="https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html">https://rmarkdown.rstudio.com/
-    authoring_bibliographies_and_citations.html</a>
-]
-.pull-right[
-```{r 10-BestPractice-24}
-knitr::include_graphics('../img/templates.png')
-```
-
-]
-
----
-
-## Resources
-
-<table>
-<tr>
-<td rowspan=2>
-<a href="https://bookdown.org/yihui/rmarkdown" target='_blank'>
-```{r 10-BestPractice-25}
-plt <- image_read('../img/rmdcover.png')
-image_scale(plt, '200')
-```
-</a>
-</td>
-<td>
-<a href = "https://bookdown.org/yihui/bookdown" target='_blank'>
-```{r 10-BestPractice-26}
-plt = image_read("../img/bookdowncover.jpg")
-image_scale(plt, "100")
-```
-</a></td>
-</tr>
-<tr>
-<td>
-<a href = "https://bookdown.org/yihui/blogdown" target='_blank'>
-```{r 10-BestPractice-27}
-plt = image_read("../img/blogdowncover.png")
-image_scale(plt, "100")
-
-```
-</a>
-</td>
-</tr></table>

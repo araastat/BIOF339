@@ -9,6 +9,7 @@ date: BIOF 339
 knitr::opts_chunk$set(echo = TRUE, comment = '', warning = FALSE, message = FALSE,
                       cache=FALSE)
 library(pacman)
+
 p_load(char = c('tidyverse','knitr', 'htmlwidgets', 'kableExtra', 
                 'here', 'flipbookr', 'xaringanExtra','tableone','rio'))
 source(here::here('lib/R/update_header.R'))

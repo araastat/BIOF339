@@ -1,0 +1,631 @@
+---
+title: R Markdown
+author: Abhijit Dasgupta
+date: "BIOF 339"
+---
+
+
+```{r setup, include=FALSE, message = F, warning = F}
+knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, comment="", 
+                      cache = T)
+library(tidyverse)
+library(here)
+library(fs)
+library(readxl)
+library(magick)
+
+imgdir <- here('slides','lectures','img')
+datadir <- here('slides/lectures/data')
+source(here('lib/R/update_header.R'))
+```
+
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+---
+class: inverse, center, middle
+
+# R Markdown basics
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header('## A mashup of Markdown and R')
+```
+
+---
+
+- Markdown is a text markup format that was meant to make writing HTML easier
+- Convert Markdown to HTML, with simple text markup being converted to HTML code
+
+```{r}
+plt <- image_read('../img/md.png')
+plt
+```
+
+---
+
+.pull-left[
+Add pieces of R code
+
+Fence it inside a *code chunk*
+
+]
+.pull-right[
+
+````markdown   
+Looking at the *penguins* data.
+  
+`r ''```{r}
+library(tidyverse)
+library(palmerpenguins)
+
+penguins %>% group_by(species) %>% 
+  summarise(across(bill_length_mm:body_mass_g, 
+                  ~mean(., na.rm=T)))
+```
+````
+]
+
+---
+
+
+.pull-left[
+Add pieces of R code
+
+Fence it inside a *code chunk*
+
+Add options
+
+]
+.pull-right[
+
+````markdown   
+Looking at the *penguins* data.
+  
+`r ''```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+
+penguins %>% group_by(species) %>% 
+  summarise(across(bill_length_mm:body_mass_g, 
+                  ~mean(., na.rm=T)))
+```
+````
+]
+
+---
+
+
+.pull-left[
+Add pieces of R code
+
+Fence it inside a *code chunk*
+
+Add options
+
+Name the chunk
+
+]
+.pull-right[
+
+````markdown   
+Looking at the *penguins* data.
+  
+`r ''```{r means, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+
+penguins %>% group_by(species) %>% 
+  summarise(across(bill_length_mm:body_mass_g, 
+                  ~mean(., na.rm=T)))
+```
+````
+]
+
+---
+
+You can set the chunk options for the entire document at the beginning of the document.
+
+````markdown
+`r ''```{r setup, include=FALSE}
+knitr::opts_chunk()$set(echo = FALSE, eval = TRUE,
+  message=FALSE, warning=FALSE, comment = "")
+```
+````
+
+The option `include=FALSE` is equivalent to .acidinline[`echo = FALSE, eval = TRUE, results = 'hide'`]
+
+.footnote[Details of these options are [here](https://yihui.org/knitr/options/#chunk-options)]
+
+---
+
+.pull-left[
+The **rmarkdown** package leverages the [pandoc](https://pandoc.org) universal document converter 
+to allow a R Markdown document to be converted to several different formats, as we'll see later. 
+
+To specify this, and some metadata, R Markdown uses a YAML header at the very beginning
+of the R Markdown document
+
+The YAML section begins and ends with three dashes
+
+.footnote[YAML is another kind of structured text format.]
+]
+.pull-right[
+```markdown
+---
+title: "My report"
+author: "Abhijit"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: html_document
+---
+```
+]
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+---
+---
+class: inverse, center, middle
+
+# Rich R Markdown Documents
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header('## What can you create from R Markdown?')
+```
+
+---
+
++ Documents
+    - HTML
+    - Microsoft Word
+    - PDF (requires [LaTeX](http://www.latex-project.org))
++ Presentations
+    - HTML (`ioslides`, `revealjs`, `xaringan`)
+    - PDF (`beamer`)
+    - PowerPoint
+
+---
+
++ Interactive documents
+    - The [`htmlwidgets`](https://www.htmlwidgets.org/) meta-package
++ Dashboards
+    - The [`flexdashboard`](https://rmarkdown.rstudio.com/flexdashboard/) package
++ Books
+    - The [`bookdown`](https://bookdown.org/) package
++ Websites & Blogs
+    - [R Markdown](https://rmarkdown.rstudio.com/lesson-13.html)
+    - [`blogdown`](https://bookdown.org/yihui/blogdown/) package
+
+---
+
++ Resumes/CVs
+    - The [`vitae`](https://pkg.mitchelloharawild.com/vitae/) package 
++ Research papers
+    - include citations
+    - include appropriate formatting
+    - probably need [LaTeX](http://www.latex-project.org)
+    
+--
+
+### See the [RMarkdown gallery](https://rmarkdown.rstudio.com/gallery.html)
+
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+---
+
+The basic differences are in the front-matter at the top of your RMarkdown
+document
+
+### HTML document
+```
+---
+title: "Lectures"
+date: "Fall 2018"
+output: html_document
+---
+```
+--
+### Word document
+```
+---
+title: "Lectures"
+date: "Fall 2018"
+output: word_document
+---
+```
+
+---
+
+## Presentations
+
+.pull-left[
+### ioslides
+```
+---
+title: "Lecture 2: \nData Frame, Matrix, List"
+author: "Abhijit Dasgupta"
+date: "September 19, 2018"
+output: ioslides_presentation
+---
+```
+### revealjs
+```
+---
+title: "Lecture 2: \nData Frame, Matrix, List"
+author: "Abhijit Dasgupta"
+date: "September 19, 2018"
+output:
+  revealjs::revealjs_presentation:
+    theme: default
+    highlight: default
+    transition: fade
+    slide_level: 1
+
+---
+```
+]
+.pull-right[
+### Slides delimited by markdown sections 
+```
+# Slide 1
+
+This is my first slide
+
+# Slide 2
+
+This is my second slide
+```
+]
+
+---
+
+## Presentations
+.pull-left[
+### Powerpoint
+```
+---
+title: "Lecture 2: \nData Frame, Matrix, List"
+author: "Abhijit Dasgupta"
+date: "September 19, 2018"
+output: powerpoint_presentation
+---
+```
+]
+.pull-right[
+### Slides delimited by markdown sections 
+```
+# Slide 1
+
+This is my first slide
+
+# Slide 2
+
+This is my second slide
+```
+]
+
+---
+
+## Presentations
+
+.pull-left[
+### xaringan
+```
+---
+title: "Lecture 2: \nData Frame, Matrix, List"
+author: "Abhijit Dasgupta"
+date: "September 19, 2018"
+output:
+  xaringan::moon_reader:
+    css: [default, './robot.css', './robot-fonts.css']
+    #css: [default, metropolis, metropolis-fonts]
+    nature:
+      ratio: '16:9'
+      highlightLanguage: R
+      countIncrementalSlides: false
+      highlightStyle: zenburn
+      highlightLines: true
+---
+```
+]
+.pull-right[
+### Slides delimited by `---`
+```
+---
+
+# Slide 1
+
+This is my first slide
+
+---
+
+# Slide 2
+
+This is my second slide
+```
+]
+
+---
+
+## R Markdown Templates
+.pull-left[
+- Several packages provide RMarkdown templates
+- You can include citations
+    - EndNote, MEDLINE, RIS, BibTeX formats for references
+    - See <a href="https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html">https://rmarkdown.rstudio.com/
+    authoring_bibliographies_and_citations.html</a>
+]
+.pull-right[
+```{r 10-BestPractice-24}
+knitr::include_graphics('../img/templates.png')
+```
+
+]
+
+---
+
+## You can even use other coding languages in R Markdown!!
+
+The **knitr** package allows for [many](https://bookdown.org/yihui/rmarkdown/language-engines.html) other computer languages to be run within a R Markdown document. 
+
+Of particular note are Python and Julia, which can be interfaced from R using the **reticulate** and **JuliaCall** packages, respectively
+
+.left-column30[
+This is an example of a Python manual written using R Markdown
+]
+.right-column30[
+<a href="https://www.araastat.com/BIOF085" target="_blank">
+```{r}
+plt <- image_read('../img/biof085.png')
+plt
+```
+</a>
+]
+
+---
+class: middle, center, inverse
+
+# Creating documents from R scripts
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header('## Creating documents from R scripts')
+```
+
+---
+
+A typical R workflow is to do your analyses using R scripts (`.R`) and then,
+at the end, copy-and-paste code to create a R Markdown file for reporting.
+
+.acidinline[This is actually not necessary]
+
+You can actually create R Markdown-based documents .heatinline[directly from R scripts]
+
+This is done using `rmarkdown::render` applied to a R script formatted in a particular way, as we will see.
+
+This can also be done in RStudio using the shortcut Ctrl/Cmd-Shift-K or the small binder icon. 
+
+---
+
+.pull-left[
+```{r purl1, echo=T, eval=F}
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species)
+
+```
+]
+.pull-right[
+```{r, ref.label='purl1', echo=F, eval=T }
+
+```
+
+]
+
+---
+
+.pull-left[
+```{r, echo=T, eval=F}
+#' # Exploring the penguins dataset
+#' 
+#' The following is relative frequencies of the different species of penguins
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species)
+
+
+```
+
+You write lines starting with `#'`, i.e, hash and then single-quote
+
+These are interpreted as Markdown lines
+]
+.pull-right[
+```{r, echo=FALSE}
+plt <- image_read('../img/spin1.png')
+image_scale(plt, '400')
+```
+
+]
+
+---
+
+.pull-left[
+```{r, eval=F, echo=T}
+#' # Exploring the penguins dataset 
+#' 
+#' The following is relative frequencies of the different species of penguins
+#+ message=FALSE, warning=FALSE #<<
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species) 
+
+```
+
+You can then add code chunk options by starting a line with `#+`.
+
+]
+.pull-right[
+```{r}
+plt <- image_read('../img/spin2.png')
+image_scale(plt, '400')
+```
+
+
+]
+---
+
+.pull-left[
+```{r, eval=F, echo=T}
+#' # Exploring the penguins dataset 
+#' 
+#' The following is relative frequencies of the different species of penguins
+#+ message=FALSE, warning=FALSE 
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species) %>% 
+  adorn_pct_formatting() %>% 
+  knitr::kable() #<<
+
+```
+
+Format the output for HTML
+
+]
+.pull-right[
+```{r}
+plt <- image_read('../img/spin4.png')
+image_scale(plt, '400')
+```
+
+
+]
+---
+
+.pull-left[
+```{r, eval=F, echo=T}
+#' ---
+#' title: Exploring penguins
+#' author: Abhijit
+#' date: "`r format(Sys.Date(), '%B %d, %Y')`"
+#' output: 
+#'     html_document:
+#'         theme: cerulean
+#' ---
+#' 
+#' # Exploring the penguins dataset 
+#' 
+#' The following is relative frequencies of the different species of penguins
+#+ message=FALSE, warning=FALSE 
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species) %>% 
+  adorn_pct_formatting() %>% 
+  knitr::kable() 
+
+```
+
+Add header information, starting lines with `#'`, since these lines need to be text in the corresponding Rmd file
+
+]
+.pull-right[
+```{r}
+plt <- image_read('../img/spin5.png')
+image_scale(plt, '400')
+```
+]
+
+---
+
+.pull-left[
+```{r, eval=F, echo=T}
+#' ---
+#' title: Exploring penguins
+#' author: Abhijit
+#' date: "`r format(Sys.Date(), '%B %d, %Y')`"
+#' output: 
+#'     html_document:
+#'         theme: cerulean
+#' ---
+#' 
+#' # Exploring the penguins dataset 
+#' 
+#' The following is relative frequencies of the different species of penguins
+#+ message=FALSE, warning=FALSE, echo=FALSE #<<
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species) %>% 
+  adorn_pct_formatting() %>% 
+  knitr::kable() 
+
+```
+
+Remove code to clean up HTML    
+
+]
+.pull-right[
+```{r}
+plt <- image_read('../img/spin6.png')
+image_scale(plt, '400')
+```
+]
+
+---
+
+## Resources
+
+<table>
+<tr>
+<td rowspan=2>
+<a href="https://bookdown.org/yihui/rmarkdown" target='_blank'>
+```{r 10-BestPractice-25}
+plt <- image_read('../img/rmdcover.png')
+image_scale(plt, '200')
+```
+</a>
+</td>
+<td>
+<a href = "https://bookdown.org/yihui/bookdown" target='_blank'>
+```{r 10-BestPractice-26}
+plt = image_read("../img/bookdowncover.jpg")
+image_scale(plt, "100")
+```
+</a></td>
+</tr>
+<tr>
+<td>
+<a href = "https://bookdown.org/yihui/blogdown" target='_blank'>
+```{r 10-BestPractice-27}
+plt = image_read("../img/blogdowncover.png")
+image_scale(plt, "100")
+
+```
+</a>
+</td>
+</tr></table>

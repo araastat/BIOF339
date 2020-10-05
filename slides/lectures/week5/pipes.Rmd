@@ -1,0 +1,343 @@
+---
+title: "Pipelines and workflows"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '',warning=T, message=F,
+                      fig.height=5)
+library(tidyverse)
+library(here)
+library(magick)
+library(palmerpenguins)
+imgdir <- here('slides/lectures/img')
+datadir <- here('slides/lectures/data')
+source(here('lib/R/update_header.R'))
+library(extrafont)
+extrafont::font_import()
+
+```
+
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+---
+class: inverse, middle, center
+
+# Pipes in the tidyverse
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header('## Pipes')
+```
+
+---
+
+We've seen two types of pipes in R. 
+
+.pull-left[
+The pipe operator `%>%` from the **magrittr** package
+
+```{r, eval=FALSE}
+library(tidyverse) # includes magrittr
+library(palmerpenguins)
+
+penguins %>% 
+  group_by(species) %>% 
+  mutate(across(bill_length_mm:body_mass_g,
+                function(x) replace_na(x, mean(x, na.rm=T)))) %>% 
+  ungroup() %>% 
+  summarise(across(bill_length_mm:body_mass_g, median))
+```
+
+]
+.pull-right[
+The `+` symbol used as a pipe-like operator  in **ggplot2**
+
+```{r, eval=FALSE}
+ggplot(penguins, 
+       aes(x = bill_length_mm,
+           y = body_mass_g))+
+  geom_point(aes(color = species, shape = island))
+```
+
+]
+
+---
+
+You can combine the two pipes into a workflow to create a visualization
+
+.pull-left[
+```{r peng1, eval=F, echo=TRUE}
+penguins %>% 
+  group_by(species) %>% 
+  mutate(across(bill_length_mm:body_mass_g,
+                function(x) replace_na(x, mean(x, na.rm=T)))) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = bill_length_mm,
+             y = body_mass_g)) + #<<
+    geom_point(aes(shape = island,
+                   color = species))+
+    labs(x = 'Bill length(mm)',
+         y = 'Body mass (g)') +
+    hrbrthemes::theme_ipsum()
+```
+
+The **ggplot** pipe has to be at the end of the workflow. Also note, we're not adding the data argument to `ggplot` since it is tidyverse-compatible and slots the end of the previous pipe into the `data` argument
+]
+.pull-right[
+```{r, eval=T, echo=F, ref.label="peng1"}
+
+```
+]
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header('## Rowwise operations')
+```
+
+---
+
+The **dplyr** package allows you to do rowwise operations much more easily than before within a pipe using
+the `rowwise` function. For example
+
+.pull-left[
+```{r}
+mpg %>%
+  select(manufacturer, year, cty, hwy) %>% 
+  rowwise() %>% 
+  mutate(avg_mpg = mean(c(hwy, cty)))
+```
+]
+.pull-right[
+The `rowwise` function creates groups, one per row, and allows operations to occur along rows and across columns.
+
+> What would the result be if you omitted the `rowwise` function in the pipe?
+
+]
+
+---
+
+If you want to continue the pipe to incorporate the more traditonal column-wise operations, you need to use `ungroup` before proceeding
+
+.pull-left[
+```{r row1, eval = F, echo = T}
+mpg %>% 
+  select(manufacturer, year, cty, hwy) %>% 
+  rowwise() %>% 
+  mutate(avg_mpg = mean(c(hwy, cty))) %>% 
+  ungroup() %>% #<<
+  ggplot(aes(x = avg_mpg)) +
+    geom_histogram(bins = 50)+
+    ggthemes::theme_few()
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="row1"}
+```
+]
+
+---
+
+There are some nice shortcuts, in line with the `select` function, even with rowwise operations
+
+.pull-left[
+```{r diam1, echo=T, eval=F}
+diamonds %>% 
+  select(carat, x:z) %>% 
+  rowwise() %>% 
+  mutate(vol = prod(c_across(x:z))) %>% #<<
+  ungroup() %>% 
+  ggplot(aes(x = vol,
+             y = carat))+
+    geom_point() + 
+    ggthemes::theme_fivethirtyeight()
+```
+
+.footnote[Much more details about the possibilities of the `rowwise` function are available [here](https://dplyr.tidyverse.org/articles/rowwise.html)]
+]
+.pull-right[
+```{r, echo=F, eval=T, ref.label="diam1"}
+
+```
+
+]
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+---
+class: inverse, center, middle
+
+# Prepping data for modeling
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header('## Recipes')
+```
+
+---
+
+.acid[
+The idea of the **recipes** package is to define a recipe or blueprint that can be used to sequentially define the encodings and preprocessing of the data (i.e. “feature engineering”)
+]
+
+This is done in the context of supervised modeling, e.g. regression, decision trees
+
+The idea is to define the dependent and independent variables, and then creating a pipeline to 
+modify the independent variables through various statistical procedures. 
+
+---
+
+We'll start with the credit data in the **modeldata** package
+
+```{r}
+library(recipes)
+library(modeldata)
+data("credit_data")
+
+glimpse(credit_data)
+```
+
+---
+
+Create an initial recipe based on the model that will be fit
+
+```{r}
+rec <- recipe(Status ~ Seniority + Time + Age + Records, data = credit_data)
+```
+
+.pull-left[
+```{r}
+rec
+```
+
+]
+.pull-right[
+```{r}
+summary(rec, original=TRUE)   
+```
+
+]
+
+---
+
+.pull-left[
+Add a step to convert nominal variables into dummies
+
+```{r}
+(dummied <- rec %>% step_dummy(Records))
+```
+]
+.pull-right[
+Then apply it to your data
+
+```{r}
+dummied <- prep(dummied, training = credit_data)
+with_dummy <- bake(dummied, new_data = credit_data)
+head(with_dummy)
+```
+
+]
+
+---
+
+The **recipes** package provides a rich variety of data steps that can be used to prepare a data set. 
+
+```{r}
+
+iris_recipe <- iris %>% 
+  recipe(Species ~ .) %>% 
+  step_corr(all_predictors()) %>% 
+  step_center(all_predictors(), -all_outcomes()) %>% 
+  step_scale(all_predictors() , -all_outcomes()) %>% 
+  prep()
+iris_recipe
+```
+
+---
+
+This recipe can then be applied to the same or a different dataset
+
+```{r}
+iris1 <- bake(iris_recipe, iris)
+glimpse(iris1)
+```
+
+.footnote[You can go into more details at [tidymodels.org](https://www.tidymodels.org/), 
+with a nice introduction [here](https://rviews.rstudio.com/2019/06/19/a-gentle-intro-to-tidymodels/)]
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+---
+class: inverse, middle, center
+
+# Workflows
+
+---
+```{r, echo=FALSE, results='asis'}
+update_header('## Workflows')
+```
+
+
+---
+background-image: url(../img/0246OS_00_02.png)
+background-size: contain
+
+---
+background-image: url(../img/data-science-explore.png)
+background-size: contain
+
+---
+background-image: url(../img/tidypipeline.jpg)
+background-size: contain
+
+---
+
++ Create one script file for each node in your workflow
++ Save intermediate data or objects using `saveRDS` so that
+    - they can be imported quickly by the next step
+    - Each link in the chain can be checked and verified
++ You can summarize your entire workflow within one script:
+
+```{r, eval=F}
+source('01-ingest.R')
+source('02-munge.R')
+source('03-exploreviz.R')
+source('04-eda.R')
+source('05-models.R')
+source('06-results.R')
+```
+
+---
+
+### A personal story
+
+I wrote a paper using R Markdown with a reasonable pipeline for data analyses, modeling and visualization
+
+Output to Word for submission to a journal
+
+Three months later, reviews came in asking for using updated data
+
+Changed the data at the beginning of my workflow, ran the workflow, and had revised manuscript in 10 minutes. 
+
+.center[.heat[Quickest turnaround ever!!]]
+
+
+---
+
+### Some ideas ([*Efficient Programming*](https://csgillespie.github.io/efficientR/workflow.html) by Gillespie and Lovelace)
+
+1. Start without writing code but with a clear mind and perhaps a pen and paper. This will ensure you keep your objectives at the forefront of your mind, without getting lost in the technology.
+1. Make a plan. The size and nature will depend on the project but timelines, resources and ‘chunking’ the work will make you more effective when you start.
+1. Select the packages you will use for implementing the plan early. Minutes spent researching and selecting from the available options could save hours in the future.
+1. Document your work at every stage; work can only be effective if it’s communicated clearly and code can only be efficiently understood if it’s commented.
+1. Make your entire workflow as reproducible as possible. knitr can help with this in the phase of documentation.
