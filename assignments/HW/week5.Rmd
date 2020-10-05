@@ -1,0 +1,83 @@
+---
+title: "Homework 5"
+author: "BIOF 339"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+pacman::p_load(char=c('tidyverse','gtsummary','mlbench','visdat','naniar','labelled'))
+data("PimaIndiansDiabetes2")
+```
+
+<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
+background-color: wheat;font-size: 14pt;text-align:center">
+In this homework you will have to submit 2 files: the R Markdown file that you will create to answer this homework, and the knitted HTML file derived from it. 
+</p>
+
+## Readings
+
+Our discussion this week will be based on this paper
+
+1. *Good enough practices in scientific computing" by Wilson et al ([pdf](https://journals.plos.org/ploscompbiol/article/file?id=10.1371/journal.pcbi.1005510&type=printable))
+
+## Homework
+
+1. The **mlbench** packages has several data sets available as exemplar data for machine learning. Please load it in your R session using `pacman::p_load('mlbench')`. Then enable access to the Pima Indians Diabetes data by running `data("PimaIndiansDiabetes2")`. You'll notice that the `PimaIndiansDiabetes2` object appears in your Environment pane.
+1. Visualize and assess this data set for missingness patterns using functions from the **visdat** and **naniar** packages.
+    a. Visualize the data using the `vis_dat` function
+    b. Visualize missing data patterns using the heatmap and the upset plot. Are there any missing data patterns that stick out
+    c. Provide a plot that shows the percent of data missing by variable.
+    d. Provide the same information as a table using `miss_var_summary`. Please make sure the output is prettified for HTML and not raw output
+1. Generate a summary of the `PimaIndiansDiabetes2` data using `skimr::skim`. Make sure that this R chunk has the option `results='asis'` for this question.
+    ```{r, include=FALSE, results='asis'}
+    skimr::skim(PimaIndiansDiabetes2)
+    ```
+1. Generate another summary table for this data using the **gtsummary** package
+    a. First use `labelled::var_label` to set labels for each of the variables. You can continue the following code to label all the variables.
+    ```{r}
+    var_label(PimaIndiansDiabetes2) <- 
+      list(pregnant = 'Times pregnant',
+           glucose = 'Plasma glucose',
+           triceps = 'Triceps skin fold (mm)',
+           pressure = 'Diastolic BP (mmHg)'
+      )
+    ```
+    ```{r, include=FALSE}
+    var_label(PimaIndiansDiabetes2) <- 
+      list(pregnant = 'Times pregnant',
+           glucose = 'Plasma glucose',
+           triceps = 'Triceps skin fold (mm)',
+           pressure = 'Diastolic BP (mmHg)',
+           insulin = "Serum insulin (mm U/ml)",
+           mass = "BMI",
+           pedigree = 'Diabetes pedigree',
+           age = 'Age (years)',
+           diabetes = 'Diabetes (Y/N)'
+      )
+      
+    ```
+    
+    b. Then use `gtsummary::tbl_summary` to create a summary table stratified by diabetes status. See the documentation for `tbl_summary` tutorial to see what kinds of options you might add. This is available if you go to the Packages pane, find `gtsummary`, click on it, and then click on "User guides, package vignettes and other documentation.". 
+    ```{r, include=FALSE}
+    library(gtsummary)
+    gtsummary::tbl_summary(PimaIndiansDiabetes2, by=diabetes) %>% 
+      add_p()
+    ```
+1. The `msleep` data is included in **ggplot2**. Create a single pipeline that
+    a. filters the data to include just carnivores and omnivores,
+    b. creates a new variable that identifies which quintile of the body weight distribution each animal falls in (see `quantile` and `cut`; quintiles divides data into fifths). Call this variable `bodywt_cat`. [Be careful of creating missing values when you discretize. Identify and solve tha problem too]
+    c. imputes the missing values in `sleep_rem` with the median of the `bodywt_cat` and `vore` group each animal falls in,
+    d. plots boxplots of `sleep_rem` by `bodywt_cat`, facetted by `vore`
+1. Install the **limma** package from Bioconductor using the following code:
+    ```{r, eval=F}
+    pacman::p_load('BiocManager')
+    BiocManager::install('limma')
+    ```
+    a. Load the `BreastCancer_Clinical.csv` file and call it `brca`. Use `janitor::clean_names` to update the column names
+    b. Create a new data.frame `brca1` that contains the columns `complete_tcga_id`, `er_status`, `pr_status` and `her2_final_status` from `brca`
+    c. Use `rowwise()` to create a new variable `triple_neg` which is 'Yes' if all the ER, PR and HER2 statuses are negative, and 'No' otherwise. I suggest first converting the ER, PR, and HER2 statuses to 0/1 variables (0 = "Negative"), and then creating `triple_neg` based on whether the sum of the statuses is 0 or not.
+    d. Report the number of triple negative cancers.
+    e. **limma** has two functions `vennCounts` and `vennDiagram`. Pass the ER, PR and HER2 columns from the transformed `brca1` dataset from c. together into `vennCounts` and pipe the results into `vennDiagram`. This will create a venn diagram for the ER, PR and HER2 status. Verify that the count of triple negatives from the venn diagram (the number outside the circles but inside the rectangle) matches what you found in d.
+    
+    
+    
