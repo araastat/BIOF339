@@ -4,7 +4,6 @@
     <title>Practical R: Data Munging</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="munging_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="munging_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
     <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
@@ -1307,7 +1306,7 @@ mpg_final &lt;- mpg %&gt;%
 The important things to note here are:
 
 1. When using pipes, the results of one operation are automatically entered into the **first argument** of the next function, so the actual specification omits the first argument
-1. If you need the results of one step to go to some other argument of the next function, you can represent that input by `.`, for example, .fatinline[`mpg %&gt;% lm(cty ~ hwy, data = .)`] takes the dataset `mpg` and places it in the argument for `data` in the `lm` function. 
+1. If you need the results of one step to go to some other argument of the next function, you can represent that input by `.`, for example, .fatinline[`mpg %&gt;% lm(cty ~ hwy, data = .)`] takes the dataset `mpg` and places it in the argument for `data` in the `lm` function.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
