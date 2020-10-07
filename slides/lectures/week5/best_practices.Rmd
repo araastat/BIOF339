@@ -139,57 +139,64 @@ class: inverse, middle, center
 ## RStudio Projects
 
 ```{r 10-BestPractice-1,  echo=F, message=F, warning=F}
-library(magick)
-plt <- image_read(path(path_rel(imgdir),'project1.png'))
-image_scale(plt, "1600")
+knitr::include_graphics('../img/project1.png')
+# library(magick)
+# plt <- image_read(path(path_rel(imgdir),'project1.png'))
+# image_scale(plt, "1600")
 ```
 
 ---
 
 ## RStudio Projects
 ```{r 10-BestPractice-2, echo=F, message=F, warning=F}
-plt <- image_read('../img/project2.png')
-image_scale(plt, "1600")
+knitr::include_graphics('../img/project2.png')
+# plt <- image_read('../img/project2.png')
+# image_scale(plt, "1600")
 ```
 
 ---
 
 ## RStudio Projects
 ```{r 10-BestPractice-3,  echo=F, message=F, warning=F}
-plt <- image_read('../img/project3.png')
-image_scale(plt, "1600")
+knitr::include_graphics('../img/project3.png')
+# plt <- image_read('../img/project3.png')
+# image_scale(plt, "1600")
 ```
 
 ---
 
 ## RStudio Projects
 ```{r 10-BestPractice-4,  echo=F, message=F, warning=F}
-plt <- image_read('../img/project4.png')
-image_scale(plt, "1600")
+knitr::include_graphics('../img/project4.png')
+# plt <- image_read('../img/project4.png')
+# image_scale(plt, "1600")
 ```
 
 ---
 
 ## RStudio Projects
 ```{r 10-BestPractice-5,  echo=F, message=F, warning=F}
-plt <- image_read('../img/project5.png')
-image_scale(plt, "1600")
+knitr::include_graphics('../img/project5.png')
+# plt <- image_read('../img/project5.png')
+# image_scale(plt, "1600")
 ```
 
 ---
 
 ## RStudio Projects
 ```{r 10-BestPractice-6,  echo=F, message=F, warning=F}
-plt <- image_read('../img/project6.png')
-image_scale(plt, "1600")
+knitr::include_graphics('../img/project6.png')
+# plt <- image_read('../img/project6.png')
+# image_scale(plt, "1600")
 ```
 
 ---
 
 ## RStudio Projects
 ```{r 10-BestPractice-7,  echo=F, message=F, warning=F}
-plt <- image_read('../img/project7.png')
-image_scale(plt, "1600")
+knitr::include_graphics('../img/project7.png')
+# plt <- image_read('../img/project7.png')
+# image_scale(plt, "1600")
 ```
 
 ---
@@ -267,8 +274,9 @@ However, each project needs to maintain a file structure to know where to find t
 class: center
 
 ```{r 10-BestPractice-9, echo=F}
-plt <- image_read('../img/best_practices_structure.png')
-image_scale(plt, '600x')
+knitr::include_graphics('../img/best_practices_structure.png')
+# plt <- image_read('../img/best_practices_structure.png')
+# image_scale(plt, '600x')
 ```
 
 ---
@@ -312,22 +320,22 @@ image_scale(plt, '600x')
 ---
 
 ```{r 10-BestPractice-10, echo=F}
-plt <- image_read('../img/roxygen.png')
-image_scale(plt, '1700')
+knitr::include_graphics('../img/roxygen.png')
+# image_scale(plt, '1700')
 ```
 
 ---
 
 ```{r 10-BestPractice-11, echo=F}
-plt <- image_read('../img/roxygen2.png')
-image_scale(plt, '1700')
+knitr::include_graphics('../img/roxygen2.png')
+# image_scale(plt, '1700')
 ```
 
 ----
 
 ```{r 10-BestPractice-12, echo=F}
-plt <- image_read('../img/roxygen3.png')
-image_scale(plt, '1700')
+knitr::include_graphics('../img/roxygen3.png')
+# image_scale(plt, '1700')
 ```
 
 ---
@@ -443,8 +451,8 @@ This will install the package if it's not installed, and then load it up.
 
 ## A general pipeline
 ```{r 10-BestPractice-18, echo=F}
-plt <- image_read('../img/tidypipeline.jpg')
-image_scale(plt, '1600x')
+knitr::include_graphics('../img/tidypipeline.jpg')
+# image_scale(plt, '1600x')
 ```
 <p style="text-align:right; font-size:70%"> David Robinson, 2016</p>
 
