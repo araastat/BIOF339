@@ -4,10 +4,16 @@
     <title>Data validation and exploration</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
+    <script src="eda_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="eda_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="eda_files/xaringanExtra-extra-styles-0.2.2/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link href="eda_files/tile-view-0.2.2/tile-view.css" rel="stylesheet" />
     <script src="eda_files/tile-view-0.2.2/tile-view.js"></script>
+    <script src="eda_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="eda_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="eda_files/shareon-1.4.1/shareon.min.js"></script>
+    <link href="eda_files/xaringanExtra-shareagain-0.2.2/shareagain.css" rel="stylesheet" />
+    <script src="eda_files/xaringanExtra-shareagain-0.2.2/shareagain.js"></script>
     <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
     <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
     <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
@@ -69,7 +75,7 @@ vis_dat(beaches)
 ```
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/12-CleaningExploring-1-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/12-CleaningExploring-1-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -84,7 +90,7 @@ vis_dat(brca)
 ```
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/12-CleaningExploring-2-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/12-CleaningExploring-2-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -104,7 +110,7 @@ These plots give a nice insight into
 
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/12-CleaningExploring-3-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/12-CleaningExploring-3-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -375,7 +381,7 @@ weather %&gt;% summarize_all(pct_complete)
 gg_miss_case(weather, show_pct = T)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/12-CleaningExploring-13-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/12-CleaningExploring-13-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -386,7 +392,7 @@ gg_miss_case(weather, show_pct = T)
 gg_miss_var(weather, show_pct=T)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/12-CleaningExploring-14-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/12-CleaningExploring-14-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -417,7 +423,7 @@ gg_miss_var(weather, show_pct=T)
 gg_miss_upset(airquality)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/v4-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/v4-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 
@@ -425,7 +431,7 @@ gg_miss_upset(airquality)
 gg_miss_upset(riskfactors)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/v5-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/v5-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -445,7 +451,7 @@ geom_point()
 Warning: Removed 42 rows containing missing values (geom_point).
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/d1-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/d1-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 
@@ -456,7 +462,7 @@ ggplot(airquality,
  geom_miss_point()
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/12-CleaningExploring-15-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/12-CleaningExploring-15-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -468,7 +474,7 @@ ggplot(airquality,
 gg_miss_fct(x = riskfactors, fct = marital)
 ```
 
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/eda_files/figure-html/12-CleaningExploring-16-1.png)&lt;!-- --&gt;
+![](eda_files/figure-html/12-CleaningExploring-16-1.png)&lt;!-- --&gt;
 
 ---
 

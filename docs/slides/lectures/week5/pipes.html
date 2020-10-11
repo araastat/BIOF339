@@ -4,10 +4,16 @@
     <title>Pipelines and workflows</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
+    <script src="pipes_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="pipes_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="pipes_files/xaringanExtra-extra-styles-0.2.2/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link href="pipes_files/tile-view-0.2.2/tile-view.css" rel="stylesheet" />
     <script src="pipes_files/tile-view-0.2.2/tile-view.js"></script>
+    <script src="pipes_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="pipes_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="pipes_files/shareon-1.4.1/shareon.min.js"></script>
+    <link href="pipes_files/xaringanExtra-shareagain-0.2.2/shareagain.css" rel="stylesheet" />
+    <script src="pipes_files/xaringanExtra-shareagain-0.2.2/shareagain.js"></script>
     <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
     <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
     <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
@@ -103,7 +109,7 @@ penguins %&gt;%
 The **ggplot** pipe has to be at the end of the workflow. Also note, we're not adding the data argument to `ggplot` since it is tidyverse-compatible and slots the end of the previous pipe into the `data` argument
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/pipes_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](pipes_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -172,7 +178,7 @@ mpg %&gt;%
 ```
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/pipes_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](pipes_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -196,7 +202,7 @@ diamonds %&gt;%
 .footnote[Much more details about the possibilities of the `rowwise` function are available [here](https://dplyr.tidyverse.org/articles/rowwise.html)]
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week5/pipes_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](pipes_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ]
 
