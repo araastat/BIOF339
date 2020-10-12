@@ -25,7 +25,7 @@ class: middle,center,inverse
 ---
 
 ```{r, echo=FALSE, results='asis'}
-update_header('The `ggpubr` package')
+update_header('## The `ggpubr` package')
 ```
 
 ---
@@ -273,25 +273,11 @@ ggarrange(dens_plt, stable_plt,
           ncol=1, heights=c(2,1))
 ```
 ]
-
----
-
-```{r, echo=FALSE, results='asis'}
-update_header('Modeling results')
-```
-
----
-
-Let's start with a somewhat naive multiple linear regression model
-
-```{r}
-m1 <- lm(body_mass_g ~ ., data=penguins)
-
-```
-
 .pull-right[
-```{r, eval=T, echo = F, ref.label="dens2"}
+```{r, ref.label='dens2',echo=F, eval=T}
+
 ```
+
 ]
 
 ---

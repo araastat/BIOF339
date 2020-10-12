@@ -55,7 +55,7 @@ layout: true
 &lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
 &lt;/div&gt;
 
-The `ggpubr` package
+## The `ggpubr` package
 
 ---
 
@@ -433,28 +433,9 @@ ggarrange(dens_plt, stable_plt,
           ncol=1, heights=c(2,1))
 ```
 ]
-
----
-
-layout: true
-
-&lt;div class="my-header"&gt;
-&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
-&lt;/div&gt;
-
-Modeling results
-
----
-
-Let's start with a somewhat naive multiple linear regression model
-
-
-```r
-m1 &lt;- lm(body_mass_g ~ ., data=penguins)
-```
-
 .pull-right[
-![](vis_analytics_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](vis_analytics_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
 ]
 
 ---
@@ -473,7 +454,7 @@ ggscatter(penguins,
 ```
 ]
 .pull-right[
-![](vis_analytics_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](vis_analytics_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -4937,7 +4918,7 @@ knitr::kable(out, digits = 2) %&gt;%
 
 ]
 .pull-right[
-![](vis_analytics_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+![](vis_analytics_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -4970,7 +4951,7 @@ ggpubr::ggarrange(plt1, plt2, nrow=1, widths=c(2,1), align='h')
 
 ]
 .pull-right[
-![](vis_analytics_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+![](vis_analytics_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -4999,7 +4980,7 @@ ggsurvplot(m, pval=TRUE, risk.table=T)
 ```
 ]
 .pull-right[
-![](vis_analytics_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+![](vis_analytics_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -5870,7 +5851,7 @@ out %&gt;%
   theme_classic()
 ```
 
-![](vis_analytics_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+![](vis_analytics_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 
 ]
     </textarea>
