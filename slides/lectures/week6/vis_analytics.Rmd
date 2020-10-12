@@ -1,0 +1,599 @@
+---
+title: "Displaying analytic results"
+author: Abhijit Dasgupta
+date: BIOF 339
+---
+
+```{r setup, include=F, child=here::here('slides/templates/setup.Rmd')}
+```
+
+```{r setup1, include=F}
+library(ggpubr)
+library(survival)
+```
+
+
+```{r, echo=FALSE, results='asis'}
+update_header()
+```
+
+---
+class: middle,center,inverse
+
+# Comparing groups
+
+---
+
+```{r, echo=FALSE, results='asis'}
+update_header('The `ggpubr` package')
+```
+
+---
+
+The **ggpubr** package, which extends **ggplot2** functionality, has several 
+functions that allow the computation and visualization of different statistical analyses
+
+Under the hood, it's just fancy application of R for statistical tests and then 
+translating the results to ggplot geometries.
+
+---
+
+
+.pull-left[
+```{r boxes, echo=T, eval=F}
+plt <- ggboxplot(penguins,
+          x = 'species',
+          y = 'body_mass_g',
+          color = 'species',
+          add='jitter',
+          add.params = list(color='grey', size=0.5))
+summary.stats <- penguins %>% 
+  select(body_mass_g, species) %>% 
+  group_by(species) %>% 
+  get_summary_stats(type='common')
+plt2 <- ggsummarytable(
+  summary.stats, x = 'species', y = c('n','median','iqr')
+) + 
+    theme_minimal()+
+    theme(panel.grid=element_blank(),
+          axis.text.x = element_blank())+
+    labs(x='', y='')
+ggarrange(plt, plt2, ncol=1, heights=c(3,1))
+
+```
+]
+.pull-right[
+```{r, eval=T,echo=F, ref.label='boxes'}
+```
+
+]
+
+---
+
+.pull-left[
+```{r box1, echo=T, eval=F}
+(plt <- ggplot(penguins,
+              aes(x=species,
+                  y=body_mass_g,
+                  color=species))+
+  geom_boxplot()+
+  geom_jitter(color='grey', size=0.5)+
+  theme_classic()+
+  theme(legend.position = 'top'))
+```
+]
+.pull-right[
+```{r, eval=T, echo=F, ref.label='box1'}
+
+```
+
+]
+
+---
+
+.pull-left[
+```{r, ref.label='box1', echo=T, eval=F}
+(plt <- ggplot(penguins,
+              aes(x=species,
+                  y=body_mass_g,
+                  color=species))+
+  geom_boxplot()+
+  geom_jitter(color='grey')+
+  theme_classic()+
+  theme(legend.position = 'top'))
+```
+
+```{r box2, echo=T, eval=F}
+summary.stats <- penguins %>% 
+  select(body_mass_g, species) %>% 
+  group_by(species) %>% 
+  get_summary_stats(type='common')
+(plt2 <- ggsummarytable(
+  summary.stats, x = 'species', 
+  y = c('n','median','iqr'),
+  color='species'
+  ) + 
+    theme_minimal()+
+    theme(panel.grid=element_blank(),
+          axis.text.x = element_blank())+
+    labs(x='', y=''))
+```
+
+]
+.pull-right[
+```{r, eval=T, echo=F, ref.label='box2'}
+
+```
+
+]
+
+---
+
+.pull-left[
+```{r, ref.label='box1', echo=T, eval=F}
+
+```
+```{r, ref.label='box2',echo=T, eval=F}
+
+```
+```{r box3, eval=F, echo=T}
+ggarrange(plt, plt2, ncol=1, heights = c(4,1))
+```
+
+
+]
+.pull-right[
+```{r, eval=T, echo=F, ref.label='box3'}
+
+```
+
+]
+
+---
+
+.pull-left[
+```{r box4, eval = F, echo = T}
+(summ_plt <- ggsummarystats(
+  penguins,
+  x = 'species',
+  y = 'body_mass_g',
+  ggfunc = ggboxplot, add='jitter',
+  color='species',
+  add.params=list(color='grey', size=0.5)
+))
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="box4"}
+```
+]
+
+---
+
+.pull-left[
+```{r, eval=F, echo=T, ref.label='box4'}
+
+```
+
+```{r box5, eval = F, echo = T}
+my_comparisons <- list(c('Adelie','Chinstrap'),
+                       c('Chinstrap','Gentoo'),
+                       c('Adelie','Gentoo'))
+summ_plt$main.plot <- summ_plt$main.plot + 
+  stat_compare_means(comparisons = my_comparisons)+
+  stat_compare_means(label.y = 8000)
+summ_plt
+```
+
+-----
+You can also add facets using the argument `facet.by` in `ggsummarystats`
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="box5"}
+```
+]
+
+---
+
+```{r corr, include=FALSE}
+
+ggscatter(penguins, 
+          x = 'bill_length_mm', 
+          y = 'body_mass_g', 
+          color='grey', 
+          add='reg.line',
+          add.params=list(color='blue')) +
+  labs(x = 'Bill length (mm)',
+       y = 'Body mass (g)') +
+  stat_cor( label.x=30, label.y=6000, 
+            label.sep='\n') + 
+  facet_wrap(~species)
+```
+
+`r chunk_reveal('corr', title="Scatter plots")`
+
+---
+
+### Add tables to a graphic
+
+.pull-left[
+```{r dens1, eval = F, echo = T}
+library(ggsci)
+dens_plt <- ggplot(penguins, 
+                   aes(x = body_mass_g))+
+  geom_density(aes(fill=species))+
+  scale_fill_jco(alpha=0.3)+
+  theme_classic() +
+  theme(axis.text.y = element_blank(),
+        legend.position='top') 
+
+stable <- desc_statby(penguins, 
+                   measure.var='body_mass_g',
+                   grps='species')
+stable <- stable[,c('species','length','mean','sd')]
+stable_plt <- ggtexttable(stable, rows=NULL)
+
+ggarrange(dens_plt, stable_plt,
+          ncol=1, heights=c(2,1))
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="dens1"}
+```
+]
+
+---
+
+### Add tables to a graphic
+
+.pull-left[
+```{r dens2, eval = F, echo = T}
+library(ggsci)
+dens_plt <- ggplot(penguins, 
+                   aes(x = body_mass_g))+
+  geom_density(aes(fill=species))+
+  scale_fill_jco(alpha=0.3)+
+  theme_classic() +
+  theme(axis.text.y = element_blank(),
+        legend.position='top') +
+  stat_central_tendency( #<<
+    aes(color=species), #<<
+    type='mean', #<<
+    geom='line', linetype=2 #<<
+  ) + #<<
+  scale_color_jco() #<<
+
+stable <- desc_statby(penguins, 
+                   measure.var='body_mass_g',
+                   grps='species')
+stable <- stable[,c('species','length','mean','sd')]
+stable_plt <- ggtexttable(stable, rows=NULL)
+
+ggarrange(dens_plt, stable_plt,
+          ncol=1, heights=c(2,1))
+```
+]
+
+---
+
+```{r, echo=FALSE, results='asis'}
+update_header('Modeling results')
+```
+
+---
+
+Let's start with a somewhat naive multiple linear regression model
+
+```{r}
+m1 <- lm(body_mass_g ~ ., data=penguins)
+
+```
+
+.pull-right[
+```{r, eval=T, echo = F, ref.label="dens2"}
+```
+]
+
+---
+
+.pull-left[
+```{r ellipse1, eval = F, echo = T}
+ggscatter(penguins,
+          x='bill_length_mm',
+          y='body_mass_g',
+          color='species',
+          shape='species',
+          size=0.5,
+          ellipse=TRUE)+
+  stat_mean(aes(color=species, shape=species), size=4)
+```
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="ellipse1"}
+```
+]
+
+---
+
+```{r, echo=FALSE, results='asis'}
+update_header('## Model results')
+```
+
+---
+
+Let's start with a fairly naive multiple regression model
+
+```{r, echo=T}
+m1 <- lm(body_mass_g ~., data=penguins)
+summary(m1)$coef
+```
+
+---
+
+```{r mod1, include=F}
+library(gtsummary)
+theme_gtsummary_compact()
+tbl_regression(m1,
+  label = list(bill_length_mm ~ 'Bill length (mm)',
+               bill_depth_mm ~ 'Bill depth (mm)')) %>% 
+  add_global_p() %>% 
+  bold_p(t = 0.05) %>% 
+  bold_labels() %>% 
+  italicize_levels()
+```
+
+`r chunk_reveal('mod1')`
+
+---
+
+### Putting together multiple models
+
+.pull-left[
+```{r m1, echo=T, eval=F}
+(gt_r1 <- glm(response ~ trt + grade, trial, 
+              family = binomial) %>%
+  tbl_regression(exponentiate = TRUE))
+```
+```{r m2, echo=F, eval=F}
+(gt_r2 <- coxph(Surv(ttdeath, death) ~ trt + grade,
+                trial) %>%
+  tbl_regression(exponentiate = TRUE))
+```
+```{r m3, echo=F, eval=F}
+(gt_t1 <- trial[c("trt", "grade")] %>% 
+  tbl_summary(missing = "no") %>% 
+  add_n() %>%
+  modify_header(stat_0 ~ "**n (%)**") %>%
+  modify_footnote(stat_0 ~ NA_character_))
+```
+```{r m4, echo=F, eval=F}
+tbl_merge(
+  list(gt_t1, gt_r1, gt_r2),
+  tab_spanner = c(NA_character_, "**Tumor Response**", "**Time to Death**")
+)
+```
+]
+.pull-right[
+```{r, eval=T, echo=F, ref.label='m1'}
+
+```
+]
+
+---
+
+### Putting together multiple models
+
+.pull-left[
+```{r, eval=F, echo=T, ref.label='m2'}
+```
+
+]
+.pull-right[
+```{r, eval=T, echo=F, ref.label='m2'}
+
+```
+
+]
+
+---
+
+### Putting together multiple models
+
+.pull-left[
+```{r, eval=F, echo=T, ref.label='m3'}
+
+```
+
+]
+.pull-right[
+```{r, eval=T, echo=F, ref.label='m3'}
+
+```
+
+]
+
+---
+
+### Putting together multiple models
+
+```{r, eval=T, echo=T, ref.label='m4'}
+
+```
+
+---
+
+### The finalfit package
+
+```{r, echo=T}
+explanatory <- setdiff(names(penguins), 'body_mass_g')
+dependent <- 'body_mass_g'
+t2 <- penguins %>% 
+  finalfit::finalfit(dependent, explanatory, metrics=TRUE)
+knitr::kable(t2[[1]], row.names = F)
+```
+
+---
+
+### Other packages
+
++ **stargazer**
++ **sjPlot**
+
+#### Utility packages
+
++ **gt**
++ **flextable**
+* **huxtable**
+
+---
+
+```{r, echo=FALSE, results='asis'}
+update_header('## Model results\n### Plotting results')
+```
+
+---
+
+.pull-left[
+```{r model1, echo=T, eval=F}
+out <- broom::tidy(m1) %>% 
+  slice(-1) %>% 
+  mutate(lcb = estimate - 2*std.error,
+         ucb = estimate + 2*std.error) %>% 
+  select(term, estimate, lcb, ucb)
+knitr::kable(out, digits = 2) %>% 
+  kable_styling()
+
+```
+```{r model2, echo=F, eval=F}
+(plt1 <- out %>% 
+  ggplot(aes(x = term, y = estimate,
+             ymin = lcb, ymax = ucb))+
+  geom_pointrange()+
+  geom_hline(yintercept=0, linetype=2)+
+  xlab('') + geom_vline(xintercept=0, linetype=2)+
+  coord_flip() + theme_classic())
+```
+
+
+]
+.pull-right[
+```{r, echo=F, eval=T, ref.label='model1'}
+
+```
+
+]
+
+---
+
+.pull-left[
+```{r, ref.label='model1', echo=F, eval=F}
+
+```
+```{r , ref.label='model2', echo=T, eval=F}
+```
+
+]
+.pull-right[
+```{r, echo=F, eval=T, ref.label='model2', fig.height=5}
+
+```
+
+]
+
+---
+
+.pull-left[
+```{r, echo=F, eval=F, ref.label='model1'}
+
+```
+```{r, echo=T, eval=F, ref.label='model2'}
+
+```
+```{r model3, echo=T, eval=F}
+out <- out %>% 
+  mutate(across(-term, round, 2)) %>% 
+  mutate(ci = glue::glue('{estimate} ({lcb},{ucb})'))
+plt2 <- ggplot(out, aes(x = term, y = 0))+
+  geom_text(aes(label=ci), size=3, hjust=0)+
+  coord_flip()+theme_void() + scale_y_continuous(limits = c(-0.1, 0.2))
+ggpubr::ggarrange(plt1, plt2, nrow=1, widths=c(2,1), align='h')
+```
+
+
+
+]
+.pull-right[
+```{r, echo=F, eval=T, ref.label='model3', fig.height=5}
+
+```
+
+]
+
+---
+
+```{r, echo=FALSE, results='asis'}
+update_header('## Model results \n### Survival analysis')
+```
+
+---
+
+.pull-left[
+```{r surv, echo=T, eval=F}
+library(survival)
+library(survminer)
+library(gtsummary)
+pbc <- pbc %>% mutate(trt = as.factor(trt), stage = as.factor(stage))
+m <- survfit(Surv(time, status==2)~trt, data=pbc)
+ggsurvplot(m, pval=TRUE, risk.table=T)
+```
+]
+.pull-right[
+```{r, ref.label='surv', eval=T, echo=F}
+
+```
+
+]
+
+---
+
+.pull-left[
+```{r, ref.label='surv', echo=T, eval=F}
+
+```
+```{r surv2, echo=T, eval=F}
+m2 <- coxph(Surv(time, status==2) ~ trt, data = pbc)
+gtsummary::tbl_regression(m2, exponentiate=T)
+```
+]
+.pull-right[
+```{r, ref.label='surv2', echo=F, eval=T}
+
+```
+
+]
+
+---
+
+.pull-left[
+```{r, echo=T, eval=T}
+m3 <- coxph(Surv(time, status==2) ~ trt + sex + 
+              age + stage, data=pbc)
+out <- broom::tidy(m3) %>% 
+  mutate(lcb = estimate - 2*std.error,
+         ucb = estimate + 2*std.error) %>% 
+  mutate(across(c(estimate,lcb,ucb), exp))
+tbl_regression(m3, exponentiate = T)
+```
+]
+.pull-right[
+```{r, echo=T, fig.height=4}
+out %>% 
+  ggplot(aes(x = term, y = estimate,
+             ymin = lcb, ymax=ucb))+
+  geom_pointrange()+
+  geom_hline(yintercept=1, linetype=2)+
+  coord_flip()+
+  theme_classic()
+```
+
+]

@@ -4,12 +4,11 @@ author: Abhijit Dasgupta, PhD
 
 ---
 
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
+```
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message=F, warning=F, comment = ' ', cache=TRUE)
+```{r setup1,  include=FALSE}
 setwd(here::here('slides/lectures'))
-library(tidyverse)
-library(palmerpenguins)
 theme_set(theme_classic()+theme(axis.text = element_text(size=14),
                                 axis.title = element_text(size=16),
                                 legend.text = element_text(size=14),

@@ -5,13 +5,15 @@ date: BIOF 339
 
 ---
 
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
+```
+
 layout: true
 
 <div class="my-header">
 <span>BIOF 339: Practical R</span></div>
 
 ```{r, include=FALSE}
-library(tidyverse)
 get_description <- function(pkgs){
   tibble(Package = pkgs) %>% 
     mutate(Description = map_chr(Package, ~packageDescription(.)$Title)) %>% 

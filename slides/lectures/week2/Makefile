@@ -5,7 +5,7 @@ SLIDES_OUT = $(patsubst %.Rmd, $(OUTDIR)/%.html, $(SLIDES))
 .PHONY: all
 all: $(SLIDES_OUT)
 
-$(OUTDIR)/%.html: %.Rmd _output.yml
+$(OUTDIR)/%.html: %.Rmd _output.yml ../../templates/setup.Rmd
 	Rscript -e "rmarkdown::render('$(*F).Rmd', output_yaml = '_output.yml')"
 	rm -rf $(OUTDIR)/$(*F)_files
 	mv $(*F).html $(OUTDIR)

@@ -4,24 +4,9 @@ author: Abhijit Dasgupta
 date: BIOF 339
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = '', warning=F, message=F,
-                      cache=T)
-library(flipbookr)
-library(tidyverse)
-# source('https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal.R')
-# options(htmltools.dir.version = TRUE)
-
-update_header <- function(header = NULL){
-	txt <- paste(c('layout: true', '', '<div class="my-header">', '<span>BIOF 339: Practical R</span>', '</div>'),
-				 collapse = '\n')
-	if(!is.null(header)){
-		txt <- paste(c(txt, header), collapse = '\n\n')
-	}
-	return(cat(txt))
-}
-
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
 ```
+
 
 ```{r, echo=FALSE, results='asis'}
 update_header('## The failed promise of data summaries')
@@ -188,7 +173,6 @@ ggsurvplot(fit, pval = TRUE, conf.int = TRUE,
 ```{r 05-Plotting-8, echo = F, fig.align = 'center'}
 pacman::p_load('cowplot')
 
-library(cowplot)
 p1 <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) + 
   geom_point() + facet_grid(. ~ Species) + stat_smooth(method = "lm") +
   background_grid(major = 'y', minor = "none") + 
@@ -209,11 +193,12 @@ legend <- get_legend(p2)
 
 
 # align all plots vertically
-plots <- align_plots(p1, p2a, p3, align = 'v', axis = 'l')
+plots <- cowplot::align_plots(p1, p2a, p3, align = 'v', axis = 'l')
 
 # put together bottom row and then everything
-bottom_row <- plot_grid(plots[[2]], plots[[3]], legend, labels = c("B", "C"), rel_widths = c(1, 1, .3), nrow = 1)
-plot_grid(plots[[1]], bottom_row, labels = c("A"), ncol = 1)
+bottom_row <- cowplot::plot_grid(plots[[2]], plots[[3]], legend, 
+                                 labels = c("B", "C"), rel_widths = c(1, 1, .3), nrow = 1)
+cowplot::plot_grid(plots[[1]], bottom_row, labels = c("A"), ncol = 1)
 
 detach('package:cowplot')
 ```

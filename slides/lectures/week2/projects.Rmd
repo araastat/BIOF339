@@ -5,6 +5,9 @@ date: "BIOF 339"
 
 ---
 
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
+```
+
 layout: true
 
 <div class="my-header">
@@ -12,10 +15,7 @@ layout: true
 
 ---
 
-```{r setup, include=FALSE, message = F, warning = F}
-knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, comment="", 
-                      cache = T)
-library(tidyverse)
+```{r setup1, include=FALSE, message = F, warning = F}
 library(readxl)
 ```
 

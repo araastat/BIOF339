@@ -5,6 +5,15 @@
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
     <link href="munging_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="munging_files/xaringanExtra-extra-styles-0.2.2/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="munging_files/tile-view-0.2.2/tile-view.css" rel="stylesheet" />
+    <script src="munging_files/tile-view-0.2.2/tile-view.js"></script>
+    <script src="munging_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="munging_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="munging_files/shareon-1.4.1/shareon.min.js"></script>
+    <link href="munging_files/xaringanExtra-shareagain-0.2.2/shareagain.css" rel="stylesheet" />
+    <script src="munging_files/xaringanExtra-shareagain-0.2.2/shareagain.js"></script>
+    <script src="munging_files/kePrint-0.0.1/kePrint.js"></script>
     <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
     <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
     <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
@@ -18,6 +27,8 @@ class: center, middle, inverse, title-slide
 ### BIOF 339
 
 ---
+
+
 
 
 
@@ -1003,16 +1014,44 @@ Strings: `str_detect(&lt;variable&gt;, "&lt;string&gt;")` or `str_detect(&lt;var
 
 Regex or regular expression basics:
 
-
-|Expression |Meaning                                  |
-|:----------|:----------------------------------------|
-|[a,b,c]    |Matches "a", "b" or "c"                  |
-|[a-z]      |Matches letters between "a" and "z"      |
-|[^abc]     |Matches anything except "a", "b" and "c" |
-|[:alpha:]  |letters                                  |
-|[:digit:]  |digits                                   |
-|[:alnum:]  |letters or numbers                       |
-|[:punct:]  |punctuation                              |
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Expression &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Meaning &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; [a,b,c] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Matches "a", "b" or "c" &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; [a-z] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Matches letters between "a" and "z" &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; [^abc] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Matches anything except "a", "b" and "c" &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; [:alpha:] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; letters &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; [:digit:] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; digits &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; [:alnum:] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; letters or numbers &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; [:punct:] &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; punctuation &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 .footnote[Many more details are available [here](https://stringr.tidyverse.org/articles/regular-expressions.html#special-characters-1) and a cheatsheet is available [here](https://github.com/rstudio/cheatsheets/raw/master/strings.pdf)]
 
@@ -1211,8 +1250,10 @@ ls()
 ```
 
 ```
- [1] "dat"          "january"      "mpg1"         "tidy_pkgs"    "weather_data"
- [6] "weather1"     "weather2"     "weather3"     "weather4"     "weather5"    
+ [1] "dat"           "datadir"       "imgdir"        "january"      
+ [5] "mpg1"          "tidy_pkgs"     "update_header" "weather_data" 
+ [9] "weather1"      "weather2"      "weather3"      "weather4"     
+[13] "weather5"     
 ```
 
 We see a lot of intermediate datasets we've created, that we aren't going to really use anymore

@@ -5,11 +5,13 @@ date: BIOF 339
 
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = '', message=F, warning=F)
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
+```
+
+
+```{r setup1, include=FALSE}
 library(countdown)
 library(fontawesome)
-library(tidyverse)
 ```
 
 layout: true

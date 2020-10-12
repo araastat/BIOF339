@@ -3,10 +3,9 @@ title: "Practical R: Joining datasets"
 author: Abhijit Dasgupta, PhD
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message=F, warning=F, comment = ' ', cache=TRUE,
-                      fig.height=5)
-library(tidyverse)
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
+```
+```{r setup1, include=FALSE}
 theme_set(theme_classic()+theme(axis.text = element_text(size=14),
                                 axis.title = element_text(size=16),
                                 legend.text = element_text(size=14),
