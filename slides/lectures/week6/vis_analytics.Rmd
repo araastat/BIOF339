@@ -25,7 +25,7 @@ class: middle,center,inverse
 ---
 
 ```{r, echo=FALSE, results='asis'}
-update_header('## The `ggpubr` package')
+update_header('The `ggpubr` package')
 ```
 
 ---
@@ -273,11 +273,25 @@ ggarrange(dens_plt, stable_plt,
           ncol=1, heights=c(2,1))
 ```
 ]
-.pull-right[
-```{r, ref.label='dens2',echo=F, eval=T}
+
+---
+
+```{r, echo=FALSE, results='asis'}
+update_header('Modeling results')
+```
+
+---
+
+Let's start with a somewhat naive multiple linear regression model
+
+```{r}
+m1 <- lm(body_mass_g ~ ., data=penguins)
 
 ```
 
+.pull-right[
+```{r, eval=T, echo = F, ref.label="dens2"}
+```
 ]
 
 ---
@@ -527,7 +541,6 @@ update_header('## Model results \n### Survival analysis')
 ```{r surv, echo=T, eval=F}
 library(survival)
 library(survminer)
-library(gtsummary)
 pbc <- pbc %>% mutate(trt = as.factor(trt), stage = as.factor(stage))
 m <- survfit(Surv(time, status==2)~trt, data=pbc)
 ggsurvplot(m, pval=TRUE, risk.table=T)
@@ -561,18 +574,18 @@ gtsummary::tbl_regression(m2, exponentiate=T)
 ---
 
 .pull-left[
-```{r, echo=T, eval=T}
+```{r, echo=T, eval=F}
 m3 <- coxph(Surv(time, status==2) ~ trt + sex + 
               age + stage, data=pbc)
 out <- broom::tidy(m3) %>% 
   mutate(lcb = estimate - 2*std.error,
          ucb = estimate + 2*std.error) %>% 
   mutate(across(c(estimate,lcb,ucb), exp))
-tbl_regression(m3, exponentiate = T)
+gtsummary::tbl_regression(m3, exponentiate = T)
 ```
 ]
 .pull-right[
-```{r, echo=T, fig.height=4}
+```{r, echo=T}
 out %>% 
   ggplot(aes(x = term, y = estimate,
              ymin = lcb, ymax=ucb))+
