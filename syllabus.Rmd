@@ -23,7 +23,7 @@ h4 {
 <div style="text-align: center;">
 <p>BIOF 339: Practical R 
 <p>Number of credits : 2
-<p>Fall 2020 Term A
+<p>Fall 2020 Term B
 <p>Syllabus
 </div>
 
@@ -90,7 +90,7 @@ This course should take around 4-6 hours of time weekly, depending on the week.
 #### Communication
 
 This class will communicate primarily via Slack. 
-You will see a channel `#fall2020-a`. Please join this channel. Please use Slack for broadcasting messages, answering questions and the like. When you ask a question, please ask it under the `#general` or `#fall2020-a` channels, so others can learn as well. I should respond within 24 hours.
+You will see a channel `#fall2020-b`. Please join this channel. Please use Slack for broadcasting messages, answering questions and the like. When you ask a question, please ask it under the `#general` or `#fall2020-b` channels, so others can learn as well. I should respond within 24 hours.
 
 The Canvas Discussion forum will be used for guided class discussions.
 
