@@ -38,3 +38,6 @@ docs/slides_top/*
 *.tex
 docs/make_subdirs
 *.log
+
+assignments/HW/*_files/*
+assignments/WH/*_cache/*
