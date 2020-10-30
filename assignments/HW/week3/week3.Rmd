@@ -50,7 +50,7 @@ of R4DS. This is a really nice reference. If you're interested, look at [section
 
 Our goal is to create a single graphic showing the patterns of incidence rates over this time period for the 5 cancers, something like the one below: 
 
-![](img/hw6.png)
+![](../img/hw6.png)
 
 1. Each csv file is in the same format. Open one in a text editor like Notepad (Windows) or TextEdit (Mac) to see lines you may need to skip. (I don't suggest Excel since it has a habit of changing formating and adding columns when you save back into csv). Then read each of the five files into R. For convenience I'll refer to these datasets as `brain`, `colon`, `esophagus`, `lung` and `oral`.
     - Confirm that each dataset has 43 rows and 10 columns
