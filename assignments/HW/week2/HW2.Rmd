@@ -1,0 +1,193 @@
+---
+title: "Homework 2"
+author: "BIOF 339"
+output: html_document
+---
+
+```{r setup, eval = FALSE, include=FALSE} 
+# First modify this chunk to activate the packages you will need for this HW.
+# Ensure you have `tidyverse`, `knitr` and `rmarkdown` installed
+# Add statements like `library(tidyverse)`
+
+library(_____)
+p_load(_______)
+p_load(_______)
+
+# add more p_load statements 
+# if you need to. Or you can do it in one go with 
+# 
+# p_load(char = c("______", "________", "________"))
+```
+
+# Instructions
+
+You are expected to edit this R Markdown document, especially the R code chunks. Once
+you're done, please change `eval=F` to `eval=T`  in each chunk in order to make the code run. Most of the 
+R chunks are fill-in-the-blanks, with a few left empty for you to completely fill in. 
+
+Your submission for this week will comprise 2 files:
+
+1. This file, after editing to complete the assignments
+1. The HTML file obtained by knitting this file
+
+# Exercises
+
+1. Fix the code in the following code to ensure they work without errors.
+
+```{r, eval = F}
+my_variable <-  1:5
+my_var1able
+```
+
+```{r, eval = F}
+mean(airquality$wind)
+```
+
+```{r, eval = F}
+table(iris$Sepal_Length)
+```
+
+
+2. Download the data "clinical_data_breast_cancer_modified.csv" from the data link on Canvas and save it
+in the `data` folder of your RStudio Project for this class.
+
+  a. Import the data into R, calling it `breast_cancer`. 
+
+```{r, eval = F}
+# Code to import data file here
+
+__________ <- __::______("data/clinical_data_breast_cancer_modified.csv")
+
+```
+  
+  b. Check the data types for each of the variables
+```{r, eval = F}
+# Check for data types
+
+____(breast_cancer)
+
+```
+  c. Convert the Gender, ER Status, PR Status and HER2 status variables to factors
+```{r, eval = F}
+# Convert here
+
+breast_cancer$Gender <- as.factor(breast_cancer$Gender)
+
+## You can repeat this for the other variables, making sure you spell them properly. Or you can comment 
+## proceed as follows:
+
+breast_cancer <- breast_cancer %>%
+    mutate(Gender = as.factor(Gender), 
+           ______= ________(_______),
+           ..... # fill this in with the other variables
+          )
+
+## Comment out one of the two strategies for your submission
+
+```
+  d. Identify any other variables that might be the wrong type and convert them
+```{r}
+# Convert any new variables here
+```
+  e. Verify that all the variables in `breast_cancer` match the modifications you made
+```{r, echo = F, eval = F}
+# Don't edit this chunk. It is for verification.
+breast_cancer %>% 
+  dplyr::summarize_all(class) %>% 
+  tidyr::pivot_longer(names_to = "Variable", values_to = "Class", cols = everything()) %>% 
+  knitr::kable()
+```
+
+3. The dataset "clinical_data_breast_cancer_hw.csv" provides clinical and
+pathological data for 105 breast cancer patients. 
+
+a. Read this data into R, calling it `brca_data`. 
+
+```{r, eval=FALSE}
+brca_data <- ____::________('data/clinical_data_breast_cancer_hw.csv')
+```
+
+b. This data is in tidy format, but needs cleaning. 
+    a. Evaluate whether all the variables are of the correct type. If not, evaluate why, and correct the problem.
+
+```{r, eval=FALSE}
+___(brca_data)
+
+## Add code here to correct any problems in the data set
+
+
+```
+
+b. For the molecular results for ER, PR and HER2, any entry that is not Positive or Negative should be changed to a missing value.
+
+```{r, eval=FALSE}
+## There are two approaches here. The first looks at the data and finds out the actual values that aren't Positive or Negative
+brca_data1 <- brca_data %>%
+    mutate(ER.Status = ifelse(ER.Status == 'Indeterminate', NA, ER.Status)) %>%
+    mutate(________ = ifelse(_______ == '_________', NA, __________))
+
+## The other is to run the same function on the columns for ER, PR and HER2 status
+
+clean_markers <- function(x){
+  x <- ifelse(x == "Positive" | x == "_______", x, NA) # If you don't understand this logic, discuss on Slack
+  return(x)
+ }
+
+ brca_data2 <- brca_data %>%
+    mutate(across(c(____, ____, ____), ________))
+
+## Verify that both data sets are identical
+
+all(brca_data1 == brca_data2)
+
+```
+
+
+c. Create a new dataset that contains patient ID, ER, PR and HER2 status. 
+
+```{r, eval=FALSE}
+brca_data3 <- _______(brca_data, ______, ______, _______, _______)
+```
+
+
+d. Creating new variables (what `dplyr` function will you use for all of these?): ___________
+
+e. Create a variable giving the TNM status of each patient. The T, N and M statuses are given separately. I want a single variable encoded as, for example, "T2N0M0". [Hint: The function `paste` is your friend]
+
+```{r, eval=FALSE}
+brca_data <- brca_data %>%
+    ______(tnm_status = ___________(Tumor, Node, Metastasis), sep = "")
+brca_data3$tnm_status <- brca_data$tnm_status
+```
+
+f. Create a variable that divides the patients into 3 categories based on molecular profiles [Hint: The function `case_when` might help]:
+        - Luminal (ER positive and/or PR positive)
+        - HER2 (HER2 positive)
+        - Basal-like (ER, PR and HER2 negative)
+
+```{r, eval=FALSE}
+
+brca_data3 <- brca_data3 %>%
+    mutate(mol_cat = case_when( # fill in the next 4 lines
+
+      
+      
+      )
+```
+
+
+d. Create a variable that equals the time of death if they are dead (see the variable `Vital.Status`) or the time of last contact if they are alive. This is a common computation for survival analysis studies, and is called the overall survival time. [Hint: the function `ifelse` might be useful]
+
+```{r, eval=FALSE}
+## Fill this in yourself. Time to start leaving the nest
+brca_data <- brca_data %>% 
+  mutate(event_time = ___________(Vital.Status == 1, _____________, _______________))
+brca_data3$event_time <- brca_data$event_time
+
+```
+
+
+Save the cleaned breast cancer dataset as `brca_cleaned`. You can save this to your computer using `saveRDS(brca_cleaned, file="<a filename of your choice>.rds")`. We'll be using this dataset again whe we do plots and modeling.
+
+
+    
