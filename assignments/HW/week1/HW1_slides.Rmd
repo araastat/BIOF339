@@ -4,7 +4,6 @@ author: "Dr. Dasgupta"
 output: ioslides_presentation
 ---
 
-***
 
 The data `airquality` comprises daily air quality measurements in New York, 
 May to September, 1973. 
