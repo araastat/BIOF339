@@ -2,6 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+.Rprofile
+
 slides/**/*.html
 notes/**/*.html
 hw/**/*.html
