@@ -1,0 +1,52 @@
+---
+title: "Practical R: [Introductions](#about)"
+author: Abhijit Dasgupta
+date: BIOF 339
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#> ')
+knitr::opts_chunk$set( warning=F, message = F, fig.retina=3)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+library(pander)
+library(fontawesome)
+library(emo)
+library(countdown)
+```
+
+layout: true
+
+<div class="my-header">
+<span>BIOF339</span></div>
+</div>
+
+---
+
+# Is there a difference in ozone between months
+
+.pull-left[
+```{r 01-intro-20, echo=T}
+summary(aov(Ozone ~ Month, data=airquality))
+```
+
+Whoops!! Only 1 df but 5 months!! 
+
+This is doing ANCOVA/Regression
+]
+
+--
+
+.pull-right[
+```{r 01-intro-21, echo=T}
+summary(aov(Ozone~factor(Month), data=airquality))
+```
+
+`factor` can convert a numerical or character variable into a categorical variable
+]
+
+--
+
+> I'm doing a lot of things on the fly here. We'll work through these at a saner pace in the coming weeks. Don't panic!! Breathe!!!
