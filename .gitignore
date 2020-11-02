@@ -4,6 +4,8 @@
 .Ruserdata
 .Rprofile
 
+manual/*
+
 slides/**/*.html
 notes/**/*.html
 hw/**/*.html
