@@ -45,3 +45,5 @@ docs/make_subdirs
 
 assignments/HW/*_files/*
 assignments/WH/*_cache/*
+
+Personal/*.xlsx
