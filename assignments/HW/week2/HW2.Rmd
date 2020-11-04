@@ -123,13 +123,13 @@ b. For the molecular results for ER, PR and HER2, any entry that is not Positive
 ```{r, eval=FALSE}
 ## There are two approaches here. The first looks at the data and finds out the actual values that aren't Positive or Negative
 brca_data1 <- brca_data %>%
-    mutate(ER.Status = ifelse(ER.Status == 'Indeterminate', NA, ER.Status)) %>%
-    mutate(________ = ifelse(_______ == '_________', NA, __________))
+    mutate(ER.Status = recode_factor(ER.Status, Indeterminate = NA_character_),
+    mutate(________ = recode_factor(_______,  '_________' = NA_character_))
 
 ## The other is to run the same function on the columns for ER, PR and HER2 status
 
 clean_markers <- function(x){
-  x <- ifelse(x == "Positive" | x == "_______", x, NA) # If you don't understand this logic, discuss on Slack
+  x <- recode_factor(x, Positive = 'Positive', _______ = '________', .default = NA_character_)
   return(x)
  }
 
@@ -138,7 +138,7 @@ clean_markers <- function(x){
 
 ## Verify that both data sets are identical
 
-all(brca_data1 == brca_data2)
+ll(brca_data1 == brca_data2, na.rm=TRUE)
 
 ```
 
