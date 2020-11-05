@@ -1,7 +1,8 @@
 ---
 title: "Homework 2"
 author: "BIOF 339"
-output: html_document
+output: html_document 
+
 ---
 
 ```{r setup, eval = FALSE, include=FALSE} 
@@ -123,9 +124,11 @@ b. For the molecular results for ER, PR and HER2, any entry that is not Positive
 ```{r, eval=FALSE}
 ## There are two approaches here. The first looks at the data and finds out the actual values that aren't Positive or Negative
 brca_data1 <- brca_data %>%
-    mutate(ER.Status = recode_factor(ER.Status, Indeterminate = NA_character_),
+    mutate(ER.Status = recode_factor(ER.Status, Indeterminate = NA_character_), 
     mutate(________ = recode_factor(_______,  '_________' = NA_character_))
 
+## There is an error in the above code, and a couple of solutions.
+  
 ## The other is to run the same function on the columns for ER, PR and HER2 status
 
 clean_markers <- function(x){
@@ -138,7 +141,7 @@ clean_markers <- function(x){
 
 ## Verify that both data sets are identical
 
-ll(brca_data1 == brca_data2, na.rm=TRUE)
+all(brca_data1 == brca_data2, na.rm=TRUE)
 
 ```
 
@@ -187,7 +190,7 @@ brca_data3$event_time <- brca_data$event_time
 ```
 
 
-Save the cleaned breast cancer dataset as `brca_cleaned`. You can save this to your computer using `saveRDS(brca_cleaned, file="<a filename of your choice>.rds")`. We'll be using this dataset again whe we do plots and modeling.
+Save the cleaned breast cancer dataset as `brca_cleaned`. You can save this to your computer using `saveRDS(brca_cleaned, file="<a filename of your choice>.rds")`. We'll be using this dataset again when we do plots and modeling.
 
 
     

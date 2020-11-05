@@ -507,9 +507,11 @@ breast_cancer &lt;- breast_cancer %&gt;%
 </ol>
 <pre class="r"><code>## There are two approaches here. The first looks at the data and finds out the actual values that aren&#39;t Positive or Negative
 brca_data1 &lt;- brca_data %&gt;%
-    mutate(ER.Status = recode_factor(ER.Status, Indeterminate = NA_character_),
+    mutate(ER.Status = recode_factor(ER.Status, Indeterminate = NA_character_), 
     mutate(________ = recode_factor(_______,  &#39;_________&#39; = NA_character_))
 
+## There is an error in the above code, and a couple of solutions.
+  
 ## The other is to run the same function on the columns for ER, PR and HER2 status
 
 clean_markers &lt;- function(x){
@@ -522,7 +524,7 @@ clean_markers &lt;- function(x){
 
 ## Verify that both data sets are identical
 
-ll(brca_data1 == brca_data2, na.rm=TRUE)</code></pre>
+all(brca_data1 == brca_data2, na.rm=TRUE)</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Create a new dataset that contains patient ID, ER, PR and HER2 status.</li>
 </ol>
@@ -550,7 +552,7 @@ brca_data3$tnm_status &lt;- brca_data$tnm_status</code></pre>
 brca_data &lt;- brca_data %&gt;% 
   mutate(event_time = ___________(Vital.Status == 1, _____________, _______________))
 brca_data3$event_time &lt;- brca_data$event_time</code></pre>
-<p>Save the cleaned breast cancer dataset as <code>brca_cleaned</code>. You can save this to your computer using <code>saveRDS(brca_cleaned, file=&quot;&lt;a filename of your choice&gt;.rds&quot;)</code>. We’ll be using this dataset again whe we do plots and modeling.</p>
+<p>Save the cleaned breast cancer dataset as <code>brca_cleaned</code>. You can save this to your computer using <code>saveRDS(brca_cleaned, file=&quot;&lt;a filename of your choice&gt;.rds&quot;)</code>. We’ll be using this dataset again when we do plots and modeling.</p>
 </div>
 
 
