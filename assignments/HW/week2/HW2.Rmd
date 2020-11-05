@@ -156,7 +156,7 @@ e. Create a variable giving the TNM status of each patient. The T, N and M statu
 
 ```{r, eval=FALSE}
 brca_data <- brca_data %>%
-    ______(tnm_status = ___________(Tumor, Node, Metastasis), sep = "")
+    ______(tnm_status = ___________(Tumor, Node, Metastasis, sep = ""))
 brca_data3$tnm_status <- brca_data$tnm_status
 ```
 
