@@ -1,5 +1,6 @@
 So I’m going to be changing the last 2 weeks in some sense. Next week, I’ve decided the topics will be
 
+1. rowwise
 1. tidymodels: recipes and data prep
 1. pipelines, workflows and reproducible projects
 1. data preservation, provenance and good practice
