@@ -4,13 +4,9 @@ author: Abhijit Dasgupta, PhD
 abstract: ""
 ---
 
-```{r setup, include=FALSE, message = F}
-knitr::opts_chunk$set(echo = TRUE, comment = '#> ', 
-                      message = F, warning = F,
-                      cache=TRUE)
-library(tidyverse)
-library(palmerpenguins)
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
 ```
+
 
 layout: true
 

@@ -3,9 +3,10 @@ title: Annotating a plot
 author: Abhijit Dasgupta, PhD
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message=F, warning=F, comment = ' ', cache=TRUE,
-                      fig.height=5)
+```{r setup, include=FALSE, child = here::here('slides/templates/setup.Rmd')}
+```
+
+```{r setup1, include=FALSE}
 setwd(here::here('slides/lectures'))
 library(tidyverse)
 theme_set(theme_classic()+theme(axis.text = element_text(size=14),

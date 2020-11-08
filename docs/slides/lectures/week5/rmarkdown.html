@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R Markdown</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <link href="rmarkdown_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="rmarkdown_files/xaringanExtra-extra-styles-0.2.2/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="rmarkdown_files/tile-view-0.2.2/tile-view.css" rel="stylesheet" />
+    <script src="rmarkdown_files/tile-view-0.2.2/tile-view.js"></script>
+    <script src="rmarkdown_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="rmarkdown_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="rmarkdown_files/shareon-1.4.1/shareon.min.js"></script>
+    <link href="rmarkdown_files/xaringanExtra-shareagain-0.2.2/shareagain.css" rel="stylesheet" />
+    <script src="rmarkdown_files/xaringanExtra-shareagain-0.2.2/shareagain.js"></script>
+    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# R Markdown
+### Abhijit Dasgupta
+### BIOF 339
+
+---
+
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
+&lt;/div&gt;
+
+---
+class: inverse, center, middle
+
+# R Markdown basics
+
+---
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
+&lt;/div&gt;
+
+## A mashup of Markdown and R
+
+---
+
+- Markdown is a text markup format that was meant to make writing HTML easier
+- Convert Markdown to HTML, with simple text markup being converted to HTML code
+
+&lt;img src="rmarkdown_files/figure-html/unnamed-chunk-3-1.png" width="1028" /&gt;
+
+---
+
+.pull-left[
+Add pieces of R code
+
+Fence it inside a *code chunk*
+
+]
+.pull-right[
+
+````markdown   
+Looking at the *penguins* data.
+  
+``{r}
+library(tidyverse)
+library(palmerpenguins)
+
+penguins %&gt;% group_by(species) %&gt;% 
+  summarise(across(bill_length_mm:body_mass_g, 
+                  ~mean(., na.rm=T)))
+```
+````
+]
+
+---
+
+
+.pull-left[
+Add pieces of R code
+
+Fence it inside a *code chunk*
+
+Add options
+
+]
+.pull-right[
+
+````markdown   
+Looking at the *penguins* data.
+  
+``{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+
+penguins %&gt;% group_by(species) %&gt;% 
+  summarise(across(bill_length_mm:body_mass_g, 
+                  ~mean(., na.rm=T)))
+```
+````
+]
+
+---
+
+
+.pull-left[
+Add pieces of R code
+
+Fence it inside a *code chunk*
+
+Add options
+
+Name the chunk
+
+]
+.pull-right[
+
+````markdown   
+Looking at the *penguins* data.
+  
+``{r means, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+
+penguins %&gt;% group_by(species) %&gt;% 
+  summarise(across(bill_length_mm:body_mass_g, 
+                  ~mean(., na.rm=T)))
+```
+````
+]
+
+---
+
+You can set the chunk options for the entire document at the beginning of the document.
+
+````markdown
+``{r setup, include=FALSE}
+knitr::opts_chunk()$set(echo = FALSE, eval = TRUE,
+  message=FALSE, warning=FALSE, comment = "")
+```
+````
+
+The option `include=FALSE` is equivalent to .acidinline[`echo = FALSE, eval = TRUE, results = 'hide'`]
+
+.footnote[Details of these options are [here](https://yihui.org/knitr/options/#chunk-options)]
+
+---
+
+.pull-left[
+The **rmarkdown** package leverages the [pandoc](https://pandoc.org) universal document converter 
+to allow a R Markdown document to be converted to several different formats, as we'll see later. 
+
+To specify this, and some metadata, R Markdown uses a YAML header at the very beginning
+of the R Markdown document
+
+The YAML section begins and ends with three dashes
+
+.footnote[YAML is another kind of structured text format.]
+]
+.pull-right[
+```markdown
+---
+title: "My report"
+author: "Abhijit"
+date: 'October 12, 2020'
+output: html_document
+---
+```
+]
+
+---
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
+&lt;/div&gt;
+
+---
+---
+class: inverse, center, middle
+
+# Rich R Markdown Documents
+
+---
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
+&lt;/div&gt;
+
+## What can you create from R Markdown?
+
+---
+
++ Documents
+    - HTML
+    - Microsoft Word
+    - PDF (requires [LaTeX](http://www.latex-project.org))
++ Presentations
+    - HTML (`ioslides`, `revealjs`, `xaringan`)
+    - PDF (`beamer`)
+    - PowerPoint
+
+---
+
++ Interactive documents
+    - The [`htmlwidgets`](https://www.htmlwidgets.org/) meta-package
++ Dashboards
+    - The [`flexdashboard`](https://rmarkdown.rstudio.com/flexdashboard/) package
++ Books
+    - The [`bookdown`](https://bookdown.org/) package
++ Websites &amp; Blogs
+    - [R Markdown](https://rmarkdown.rstudio.com/lesson-13.html)
+    - [`blogdown`](https://bookdown.org/yihui/blogdown/) package
+
+---
+
++ Resumes/CVs
+    - The [`vitae`](https://pkg.mitchelloharawild.com/vitae/) package 
++ Research papers
+    - include citations
+    - include appropriate formatting
+    - probably need [LaTeX](http://www.latex-project.org)
+    
+--
+
+### See the [RMarkdown gallery](https://rmarkdown.rstudio.com/gallery.html)
+
+
+---
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
+&lt;/div&gt;
+
+---
+
+The basic differences are in the front-matter at the top of your RMarkdown
+document
+
+### HTML document
+```
+---
+title: "Lectures"
+date: "Fall 2018"
+output: html_document
+---
+```
+--
+### Word document
+```
+---
+title: "Lectures"
+date: "Fall 2018"
+output: word_document
+---
+```
+
+---
+
+## Presentations
+
+.pull-left[
+### ioslides
+```
+---
+title: "Lecture 2: \nData Frame, Matrix, List"
+author: "Abhijit Dasgupta"
+date: "September 19, 2018"
+output: ioslides_presentation
+---
+```
+### revealjs
+```
+---
+title: "Lecture 2: \nData Frame, Matrix, List"
+author: "Abhijit Dasgupta"
+date: "September 19, 2018"
+output:
+  revealjs::revealjs_presentation:
+    theme: default
+    highlight: default
+    transition: fade
+    slide_level: 1
+
+---
+```
+]
+.pull-right[
+### Slides delimited by markdown sections 
+```
+# Slide 1
+
+This is my first slide
+
+# Slide 2
+
+This is my second slide
+```
+]
+
+---
+
+## Presentations
+.pull-left[
+### Powerpoint
+```
+---
+title: "Lecture 2: \nData Frame, Matrix, List"
+author: "Abhijit Dasgupta"
+date: "September 19, 2018"
+output: powerpoint_presentation
+---
+```
+]
+.pull-right[
+### Slides delimited by markdown sections 
+```
+# Slide 1
+
+This is my first slide
+
+# Slide 2
+
+This is my second slide
+```
+]
+
+---
+
+## Presentations
+
+.pull-left[
+### xaringan
+```
+---
+title: "Lecture 2: \nData Frame, Matrix, List"
+author: "Abhijit Dasgupta"
+date: "September 19, 2018"
+output:
+  xaringan::moon_reader:
+    css: [default, './robot.css', './robot-fonts.css']
+    #css: [default, metropolis, metropolis-fonts]
+    nature:
+      ratio: '16:9'
+      highlightLanguage: R
+      countIncrementalSlides: false
+      highlightStyle: zenburn
+      highlightLines: true
+---
+```
+]
+.pull-right[
+### Slides delimited by `---`
+```
+---
+
+# Slide 1
+
+This is my first slide
+
+---
+
+# Slide 2
+
+This is my second slide
+```
+]
+
+---
+
+## R Markdown Templates
+.pull-left[
+- Several packages provide RMarkdown templates
+- You can include citations
+    - EndNote, MEDLINE, RIS, BibTeX formats for references
+    - See &lt;a href="https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html"&gt;https://rmarkdown.rstudio.com/
+    authoring_bibliographies_and_citations.html&lt;/a&gt;
+]
+.pull-right[
+&lt;img src="../img/templates.png" width="708" /&gt;
+
+]
+
+---
+
+## You can even use other coding languages in R Markdown!!
+
+The **knitr** package allows for [many](https://bookdown.org/yihui/rmarkdown/language-engines.html) other computer languages to be run within a R Markdown document. 
+
+Of particular note are Python and Julia, which can be interfaced from R using the **reticulate** and **JuliaCall** packages, respectively
+
+.left-column30[
+This is an example of a Python manual written using R Markdown
+]
+.right-column30[
+&lt;a href="https://www.araastat.com/BIOF085" target="_blank"&gt;
+&lt;img src="rmarkdown_files/figure-html/unnamed-chunk-7-1.png" width="2560" /&gt;
+&lt;/a&gt;
+]
+
+---
+class: middle, center, inverse
+
+# Creating documents from R scripts
+
+---
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
+&lt;/div&gt;
+
+## Creating documents from R scripts
+
+---
+
+A typical R workflow is to do your analyses using R scripts (`.R`) and then,
+at the end, copy-and-paste code to create a R Markdown file for reporting.
+
+.acidinline[This is actually not necessary]
+
+You can actually create R Markdown-based documents .heatinline[directly from R scripts]
+
+This is done using `rmarkdown::render` applied to a R script formatted in a particular way, as we will see.
+
+This can also be done in RStudio using the shortcut Ctrl/Cmd-Shift-K or the small binder icon. 
+
+---
+
+.pull-left[
+
+```r
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species)
+```
+]
+.pull-right[
+
+```
+   species   n   percent
+    Adelie 152 0.4418605
+ Chinstrap  68 0.1976744
+    Gentoo 124 0.3604651
+```
+
+]
+
+---
+
+.pull-left[
+
+```r
+#' # Exploring the penguins dataset
+#' 
+#' The following is relative frequencies of the different species of penguins
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species)
+```
+
+You write lines starting with `#'`, i.e, hash and then single-quote
+
+These are interpreted as Markdown lines
+]
+.pull-right[
+&lt;img src="rmarkdown_files/figure-html/unnamed-chunk-11-1.png" width="533" /&gt;
+
+]
+
+---
+
+.pull-left[
+
+```r
+#' # Exploring the penguins dataset 
+#' 
+#' The following is relative frequencies of the different species of penguins
+*#+ message=FALSE, warning=FALSE
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species) 
+```
+
+You can then add code chunk options by starting a line with `#+`.
+
+]
+.pull-right[
+&lt;img src="rmarkdown_files/figure-html/unnamed-chunk-13-1.png" width="533" /&gt;
+
+
+]
+---
+
+.pull-left[
+
+```r
+#' # Exploring the penguins dataset 
+#' 
+#' The following is relative frequencies of the different species of penguins
+#+ message=FALSE, warning=FALSE 
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species) %&gt;% 
+  adorn_pct_formatting() %&gt;% 
+* knitr::kable()
+```
+
+Format the output for HTML
+
+]
+.pull-right[
+&lt;img src="rmarkdown_files/figure-html/unnamed-chunk-15-1.png" width="533" /&gt;
+
+
+]
+---
+
+.pull-left[
+
+```r
+#' ---
+#' title: Exploring penguins
+#' author: Abhijit
+#' date: "`r format(Sys.Date(), '%B %d, %Y')`"
+#' output: 
+#'     html_document:
+#'         theme: cerulean
+#' ---
+#' 
+#' # Exploring the penguins dataset 
+#' 
+#' The following is relative frequencies of the different species of penguins
+#+ message=FALSE, warning=FALSE 
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species) %&gt;% 
+  adorn_pct_formatting() %&gt;% 
+  knitr::kable() 
+```
+
+Add header information, starting lines with `#'`, since these lines need to be text in the corresponding Rmd file
+
+]
+.pull-right[
+&lt;img src="rmarkdown_files/figure-html/unnamed-chunk-17-1.png" width="533" /&gt;
+]
+
+---
+
+.pull-left[
+
+```r
+#' ---
+#' title: Exploring penguins
+#' author: Abhijit
+#' date: "`r format(Sys.Date(), '%B %d, %Y')`"
+#' output: 
+#'     html_document:
+#'         theme: cerulean
+#' ---
+#' 
+#' # Exploring the penguins dataset 
+#' 
+#' The following is relative frequencies of the different species of penguins
+*#+ message=FALSE, warning=FALSE, echo=FALSE
+
+library(palmerpenguins)
+library(tidyverse)
+library(janitor)
+
+tabyl(penguins, species) %&gt;% 
+  adorn_pct_formatting() %&gt;% 
+  knitr::kable() 
+```
+
+Remove code to clean up HTML    
+
+]
+.pull-right[
+&lt;img src="rmarkdown_files/figure-html/unnamed-chunk-19-1.png" width="533" /&gt;
+]
+
+---
+
+## Resources
+
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td rowspan=2&gt;
+&lt;a href="https://bookdown.org/yihui/rmarkdown" target='_blank'&gt;
+&lt;img src="rmarkdown_files/figure-html/10-BestPractice-25-1.png" width="267" /&gt;
+&lt;/a&gt;
+&lt;/td&gt;
+&lt;td&gt;
+&lt;a href = "https://bookdown.org/yihui/bookdown" target='_blank'&gt;
+&lt;img src="rmarkdown_files/figure-html/10-BestPractice-26-1.png" width="133" /&gt;
+&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;a href = "https://bookdown.org/yihui/blogdown" target='_blank'&gt;
+&lt;img src="rmarkdown_files/figure-html/10-BestPractice-27-1.png" width="133" /&gt;
+&lt;/a&gt;
+&lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../../js/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

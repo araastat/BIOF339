@@ -4,21 +4,10 @@ author: "Abhijit Dasgupta"
 date: "BIOF 339"
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = '', warning = FALSE, message = FALSE, cache = TRUE)
-library(flipbookr)
-library(tidyverse)
 
-update_header <- function(header = NULL){
-	txt <- paste(c('layout: true', '', '<div class="my-header">', '<span>BIOF 339: Practical R</span>', '</div>'),
-				 collapse = '\n')
-	if(!is.null(header)){
-		txt <- paste(c(txt, header), collapse = '\n\n')
-	}
-	return(cat(txt))
-}
-
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
 ```
+
 
 ```{r, echo=FALSE, results = 'asis'}
 update_header()

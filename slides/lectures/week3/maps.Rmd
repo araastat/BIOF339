@@ -3,12 +3,11 @@ title: Maps and spatial data
 author: Abhijit Dasgupta, PhD
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message=F, 
-                      warning=F, comment = ' ',
-                      fig.height=5, cache=TRUE)
-setwd(here::here('slides/lectures'))
-library(tidyverse)
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
+```
+
+```{r setup1, include=F}
+
 theme_439 <- theme_classic()+theme(axis.text = element_text(size=14),
                                 axis.title = element_text(size=16),
                                 legend.text = element_text(size=14),

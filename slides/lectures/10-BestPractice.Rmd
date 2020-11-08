@@ -26,7 +26,12 @@ layout: true
 knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, comment="", 
                       cache = T)
 library(tidyverse)
+library(here)
+library(fs)
 library(readxl)
+
+imgdir <- here('slides','lectures','img')
+datadir <- here('slides/lectures/data')
 ```
 
 # Objectives today
@@ -91,6 +96,8 @@ class: inverse, middle, center
 + Almost impossible to re-factor and clean up
 + Had to return to this project for 3 research papers and revision cycles!!!
 
+.center[![](https://media.giphy.com/media/4LsN0YwgIsvaU/giphy.gif)]
+
 ---
 
 # Who's the next consumer of your work
@@ -125,7 +132,7 @@ class: inverse, middle, center
 
 ```{r 10-BestPractice-1,  echo=F, message=F, warning=F}
 library(magick)
-plt <- image_read('img/project1.png')
+plt <- image_read(path(path_rel(imgdir),'project1.png'))
 image_scale(plt, "1600")
 ```
 
@@ -133,7 +140,7 @@ image_scale(plt, "1600")
 
 ## RStudio Projects
 ```{r 10-BestPractice-2, echo=F, message=F, warning=F}
-plt <- image_read('img/project2.png')
+plt <- image_read('../img/project2.png')
 image_scale(plt, "1600")
 ```
 
@@ -141,7 +148,7 @@ image_scale(plt, "1600")
 
 ## RStudio Projects
 ```{r 10-BestPractice-3,  echo=F, message=F, warning=F}
-plt <- image_read('img/project3.png')
+plt <- image_read('../img/project3.png')
 image_scale(plt, "1600")
 ```
 
@@ -149,7 +156,7 @@ image_scale(plt, "1600")
 
 ## RStudio Projects
 ```{r 10-BestPractice-4,  echo=F, message=F, warning=F}
-plt <- image_read('img/project4.png')
+plt <- image_read('../img/project4.png')
 image_scale(plt, "1600")
 ```
 
@@ -157,7 +164,7 @@ image_scale(plt, "1600")
 
 ## RStudio Projects
 ```{r 10-BestPractice-5,  echo=F, message=F, warning=F}
-plt <- image_read('img/project5.png')
+plt <- image_read('../img/project5.png')
 image_scale(plt, "1600")
 ```
 
@@ -165,7 +172,7 @@ image_scale(plt, "1600")
 
 ## RStudio Projects
 ```{r 10-BestPractice-6,  echo=F, message=F, warning=F}
-plt <- image_read('img/project6.png')
+plt <- image_read('../img/project6.png')
 image_scale(plt, "1600")
 ```
 
@@ -173,7 +180,7 @@ image_scale(plt, "1600")
 
 ## RStudio Projects
 ```{r 10-BestPractice-7,  echo=F, message=F, warning=F}
-plt <- image_read('img/project7.png')
+plt <- image_read('../img/project7.png')
 image_scale(plt, "1600")
 ```
 
@@ -218,7 +225,7 @@ I use [Projects]() so that:
 
 ## RStudio Projects
 ```{r 10-BestPractice-8, echo=F}
-plt <- image_read('img/project8.png')
+plt <- image_read('../img/project8.png')
 image_scale(plt, "1600")
 ```
 
@@ -250,7 +257,7 @@ However, each project needs to maintain a file structure to know where to find t
 class: center
 
 ```{r 10-BestPractice-9, echo=F}
-plt <- image_read('img/best_practices_structure.png')
+plt <- image_read('../img/best_practices_structure.png')
 image_scale(plt, '600x')
 ```
 
@@ -290,21 +297,21 @@ image_scale(plt, '600x')
 ---
 
 ```{r 10-BestPractice-10, echo=F}
-plt <- image_read('img/roxygen.png')
+plt <- image_read('../img/roxygen.png')
 image_scale(plt, '1700')
 ```
 
 ---
 
 ```{r 10-BestPractice-11, echo=F}
-plt <- image_read('img/roxygen2.png')
+plt <- image_read('../img/roxygen2.png')
 image_scale(plt, '1700')
 ```
 
 ----
 
 ```{r 10-BestPractice-12, echo=F}
-plt <- image_read('img/roxygen3.png')
+plt <- image_read('../img/roxygen3.png')
 image_scale(plt, '1700')
 ```
 
@@ -415,7 +422,7 @@ This will install the package if it's not installed, and then load it up.
 
 ## A general pipeline
 ```{r 10-BestPractice-18, echo=F}
-plt <- image_read('img/tidypipeline.jpg')
+plt <- image_read('../img/tidypipeline.jpg')
 image_scale(plt, '1600x')
 ```
 <p style="text-align:right; font-size:70%"> David Robinson, 2016</p>
@@ -456,7 +463,7 @@ Take any RMarkdown document, and pass it through the function `knitr::purl`, and
 class: center
 
 ```{r 10-BestPractice-19, echo=F}
-plt <- image_read('img/rmd.png')
+plt <- image_read('../img/rmd.png')
 image_scale(plt, '400x')
 ```
 
@@ -469,7 +476,7 @@ class: center
 knitr::purl('finding-my-dropbox.Rmd', documentation=2)
 ```
 ```{r 10-BestPractice-21, echo=F}
-plt <- image_read('img/purl.png')
+plt <- image_read('../img/purl.png')
 image_scale(plt, '600x')
 ```
 
@@ -480,7 +487,7 @@ class:center
 knitr::spin('finding-my-dropbox.R', knit = F, format='Rmd')
 ```
 ```{r 10-BestPractice-23, echo=F}
-plt <- image_read('img/rmd.png')
+plt <- image_read('../img/rmd.png')
 image_scale(plt, '600x')
 ```
 
@@ -678,7 +685,7 @@ This is my second slide
 ]
 .pull-right[
 ```{r 10-BestPractice-24}
-knitr::include_graphics('img/templates.png')
+knitr::include_graphics('../img/templates.png')
 ```
 
 ]
@@ -692,7 +699,7 @@ knitr::include_graphics('img/templates.png')
 <td rowspan=2>
 <a href="https://bookdown.org/yihui/rmarkdown" target='_blank'>
 ```{r 10-BestPractice-25}
-plt <- image_read('img/rmdcover.png')
+plt <- image_read('../img/rmdcover.png')
 image_scale(plt, '200')
 ```
 </a>
@@ -700,7 +707,7 @@ image_scale(plt, '200')
 <td>
 <a href = "https://bookdown.org/yihui/bookdown" target='_blank'>
 ```{r 10-BestPractice-26}
-plt = image_read("img/bookdowncover.jpg")
+plt = image_read("../img/bookdowncover.jpg")
 image_scale(plt, "100")
 ```
 </a></td>
@@ -709,7 +716,7 @@ image_scale(plt, "100")
 <td>
 <a href = "https://bookdown.org/yihui/blogdown" target='_blank'>
 ```{r 10-BestPractice-27}
-plt = image_read("img/blogdowncover.png")
+plt = image_read("../img/blogdowncover.png")
 image_scale(plt, "100")
 
 ```

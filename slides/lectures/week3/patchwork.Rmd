@@ -3,12 +3,11 @@ title: Putting plots together
 author: Abhijit Dasgupta, PhD
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message=F, warning=F, comment = ' ', cache=TRUE,
-                      fig.height=5)
+```{r setup, include=F, child = here::here('slides/templates/setup.Rmd')}
+```
+
+```{r setup1, include=FALSE}
 setwd(here::here('slides/lectures'))
-library(tidyverse)
-library(palmerpenguins)
 library(ggpubr)
 library(cowplot)
 library(patchwork)

@@ -4,16 +4,13 @@ author: Abhijit Dasgupta, PhD
 abstract: Animated graphics in R, with mouseovers
 ---
 
+```{r setup, include=FALSE, child = here::here('slides/templates/setup.Rmd')}
+```
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message=F, warning=F, comment = ' ', cache=TRUE)
-setwd(here::here('slides/lectures'))
-library(tidyverse)
-library(knitr)
-library(kableExtra)
-library(plotly)
-library(palmerpenguins)
+
+```{r setup1, include=FALSE}
 library(htmlwidgets)
+library(plotly)
 library(widgetframe)
 theme_set(theme_classic()+theme(axis.text = element_text(size=14),
                                 axis.title = element_text(size=16),

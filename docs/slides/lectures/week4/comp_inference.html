@@ -4,10 +4,15 @@
     <title>Using the computer for statistical inference</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="comp_inference_files/header-attrs-2.3/header-attrs.js"></script>
     <link href="comp_inference_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="comp_inference_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
     <link href="comp_inference_files/xaringanExtra-extra-styles-0.2.2/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="comp_inference_files/tile-view-0.2.2/tile-view.css" rel="stylesheet" />
+    <script src="comp_inference_files/tile-view-0.2.2/tile-view.js"></script>
+    <script src="comp_inference_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="comp_inference_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="comp_inference_files/shareon-1.4.1/shareon.min.js"></script>
+    <link href="comp_inference_files/xaringanExtra-shareagain-0.2.2/shareagain.css" rel="stylesheet" />
+    <script src="comp_inference_files/xaringanExtra-shareagain-0.2.2/shareagain.js"></script>
     <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
     <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
     <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
@@ -21,6 +26,8 @@ class: center, middle, inverse, title-slide
 ### BIOF 339
 
 ---
+
+
 
 
 
@@ -67,7 +74,7 @@ hist(x) # This is the base R way to create a histogram
 ```
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-1-1.png)&lt;!-- --&gt;
+![](comp_inference_files/figure-html/09-Modeling-1-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -84,7 +91,7 @@ hist(x)
 ```
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-2-1.png)&lt;!-- --&gt;
+![](comp_inference_files/figure-html/09-Modeling-2-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -102,7 +109,7 @@ hist(x)
 ```
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-3-1.png)&lt;!-- --&gt;
+![](comp_inference_files/figure-html/09-Modeling-3-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -128,7 +135,7 @@ plt2 &lt;- ggplot(dd, aes( y)) + geom_histogram()
 
 cowplot::plot_grid(plt1, plt2, nrow=1)
 ```
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-4-1.png)&lt;!-- --&gt;
+![](comp_inference_files/figure-html/09-Modeling-4-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -145,7 +152,7 @@ plt2 &lt;- ggplot(dd, aes( y)) + geom_histogram()
 
 cowplot::plot_grid(plt1, plt2, nrow=1)
 ```
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-5-1.png)&lt;!-- --&gt;
+![](comp_inference_files/figure-html/09-Modeling-5-1.png)&lt;!-- --&gt;
 
 ---
 class: middle, center
@@ -228,7 +235,7 @@ library(infer)
 
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-8-1.png)&lt;!-- --&gt;
+![](comp_inference_files/figure-html/09-Modeling-8-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -267,7 +274,7 @@ sims %&gt;% get_pvalue(obs_stat, direction ='both')
 
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-10-1.png)&lt;!-- --&gt;
+![](comp_inference_files/figure-html/09-Modeling-10-1.png)&lt;!-- --&gt;
 
 ]
 ---
@@ -311,7 +318,7 @@ x &lt;- pbc %&gt;%
 ```
 ]
 .pull-right[
-![](/Users/abhijit/ARAASTAT/Teaching/BIOF339/docs/slides/lectures/week4/comp_inference_files/figure-html/09-Modeling-13-1.png)&lt;!-- --&gt;
+![](comp_inference_files/figure-html/09-Modeling-13-1.png)&lt;!-- --&gt;
 
 ]
 

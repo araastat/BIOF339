@@ -1,0 +1,11 @@
+---
+title: "A brief introduction to Machine Learning"
+author: Abhijit Dasgupta
+date: BIOF 339
+---
+
+```{r setup, include=F, child=here::here('slides/templates/setup.Rmd')}
+```
+
+
+
