@@ -1,0 +1,251 @@
+---
+title: "Homework 2"
+author: "BIOF 339"
+output: html_document 
+
+---
+
+```{r setup0, include=F}
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+
+```{r setup} 
+# First modify this chunk to activate the packages you will need for this HW.
+# Ensure you have `tidyverse`, `knitr` and `rmarkdown` installed
+# Add statements like `library(tidyverse)`
+
+library(pacman)
+p_load(tidyverse) # library(tidyverse)
+p_load(knitr)
+p_load(rmarkdown)
+p_load(janitor)
+
+# add more p_load statements 
+# if you need to. Or you can do it in one go with 
+# 
+# p_load(char = c("tidyverse", "knitr", "rmarkdown"))
+```
+
+# Instructions
+
+You are expected to edit this R Markdown document, especially the R code chunks. Once
+you're done, please change `eval=F` to `eval=T`  in each chunk in order to make the code run. Most of the 
+R chunks are fill-in-the-blanks, with a few left empty for you to completely fill in. 
+
+Your submission for this week will comprise 2 files:
+
+1. This file, after editing to complete the assignments
+1. The HTML file obtained by knitting this file
+
+# Exercises
+
+1. Fix the code in the following code to ensure they work without errors.
+
+```{r eval = TRUE}
+my_variable <-  1:5
+my_variable # Change 1 to i)
+```
+
+```{r eval = FALSE}
+mean(airquality$Wind) # Wind should be capitalized
+```
+
+```{r eval = F}
+table(iris$Sepal.Length) # The actual variable uses ., not _
+```
+
+
+2. Download the data "clinical_data_breast_cancer_modified.csv" from the data link on Canvas and save it
+in the `data` folder of your RStudio Project for this class.
+
+  a. Import the data into r calling it `breast_cancer`. 
+
+```{r}
+# Code to import data file here
+p_load(here)
+breast_cancer <- rio::import(here("data/clinical_data_breast_cancer_modified.csv"), check.names=TRUE)
+
+## I've added check.names=TRUE to help with removing spaces in the names. 
+## 
+## Other alternatives are below
+
+# breast_cancer <- data.table::fread("data/clinical_data_breast_cancer_modified.csv")
+# breast_cancer <- readr::read_csv('data/clinical_data_breast_cancer_modified.csv')
+# breast_cancer <- read.csv('data/clinica_data_breast_cancer_modified.csv', 
+#                           stringsAsFactors = FALSE)
+
+```
+  
+  b. Check the data types for each of the variables
+```{r eval = F}
+# Check for data types
+
+glimpse(breast_cancer)
+
+# str(breast_cancer)
+
+```
+  c. Convert the Gender ER Status, PR Status and HER2 status variables to factors
+```{r, eval=FALSE}
+# Convert here
+
+# breast_cancer$Gender <- as.factor(breast_cancer$Gender)
+# breast_cancer$ER.Status <- as.factor(breast_cancer$ER.Status)
+
+## You can repeat this for the other variables, making sure you spell them properly. Or you can comment 
+## proceed as follows:
+
+# breast_cancer <- breast_cancer %>%
+#     mutate(Gender = as.factor(Gender), 
+#            ER.Status= as.factor(ER.Status),
+#            ..... # fill this in with the other variables
+#           )
+
+## Comment out one of the two strategies for your submission
+
+
+## Instead of the repetition of code in the above two strategies, 
+## you can use the `across` function to make things more succint
+
+breast_cancer <- breast_cancer %>% 
+  mutate(across(c(Gender ER.Status, PR.Status, HER2.Final.Status), as.factor))
+
+# Not correct (Why?): 
+# breast_cancer <- breast_cancer %>%
+#   mutate(across(c(Gender,  ends_with("Status")), as.factor))
+
+```
+  d. Identify any other variables that might be the wrong type and convert them
+```{r}
+# Convert any new variables here. I don't think there is an entirely right
+# answer here, but as long as the process was followed, I'm fine with different
+# choices
+
+breast_cancer <- breast_cancer %>% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis = as.numeric(Age.at.Initial.Pathologic.Diagnosis)) %>% 
+  mutate(across(c(Tumor, Node, Metastasis),as.factor))
+```
+  e. Verify that all the variables in `breast_cancer` match the modifications you made
+```{r}
+# Don't edit this chunk. It is for verification.
+breast_cancer %>% 
+  dplyr::summarize_all(class) %>% 
+  tidyr::pivot_longer(names_to = "Variable", values_to = "Class", cols = everything()) %>% 
+  knitr::kable()
+```
+
+3. The dataset "clinical_data_breast_cancer_hw.csv" provides clinical and
+pathological data for 105 breast cancer patients. 
+
+a. Read this data into r calling it `brca_data`. 
+
+```{r }
+brca_data <- rio::import(here('data/clinical_data_breast_cancer_hw.csv'))
+```
+
+b. This data is in tidy format, but needs cleaning. 
+    a. Evaluate whether all the variables are of the correct type. If not, evaluate why, and correct the problem.
+
+```{r }
+glimpse(brca_data)
+
+## Add code here to correct any problems in the data set
+
+brca_data <- brca_data %>% 
+  mutate(across(c(Gender, ends_with("Status"), Tumor:AJCC.Stage), as.factor)) %>% 
+  mutate(Age.at.Initial.Pathologic.Diagnosis = as.numeric(Age.at.Initial.Pathologic.Diagnosis))
+
+```
+
+b. For the molecular results for ER, PR and HER2, any entry that is not Positive or Negative should be changed to a missing value.
+
+```{r }
+## There are two approaches here. The first looks at the data and finds out the actual values that aren't Positive or Negative
+brca_data1 <- brca_data %>%
+    mutate(ER.Status = recode_factor(ER.Status, Indeterminate = NA_character_)) %>% 
+    mutate(HER2.Final.Status = recode_factor(HER2.Final.Status,  'Equivocal' = NA_character_))
+
+## Alternatively
+# brca_data1 <- brca_data %>%
+#     mutate(ER.Status = na_if(ER.Status, 'Indeterminate')) %>% 
+#     mutate(HER2.Final.Status = na_if(HER2.Final.Status, 'Equivocal'))
+
+
+
+## The other is to run the same function on the columns for ER, PR and HER2 status
+
+clean_markers <- function(x){
+  x <- recode_factor(x, Positive = 'Positive', Negative = 'Negative', .default = NA_character_)
+  return(x)
+ }
+
+ brca_data2 <- brca_data %>%
+mutate(across(c(ER.Status, PR.Status, HER2.Final.Status), clean_markers))
+
+## Verify that both data sets are identical
+
+all(brca_data1 == brca_data2, na.rm=TRUE)
+
+```
+
+
+c. Create a new dataset that contains patient ID, Er PR and HER2 status. 
+
+```{r }
+brca_data3 <- select(brca_data, Complete.TCGA.ID, ER.Status, PR.Status, HER2.Final.Status)
+
+# brca_data3 <- brca_data %>% 
+#   select(Complete.TCGA.ID, ER.Status, PR.Status, HER2.Final.Status)
+```
+
+
+d. Creating new variables (what `dplyr` function will you use for all of these?): mutate
+
+e. Create a variable giving the TNM status of each patient. The T, N and M statuses are given separately. I want a single variable encoded as, for example, "T2N0M0". [Hint: The function `paste` is your friend]
+
+```{r }
+brca_data <- brca_data %>%
+    mutate(tnm_status = paste(Tumor, Node, Metastasis, sep = ""))
+brca_data3$tnm_status <- brca_data$tnm_status
+
+brca_data <- unite(brca_data, tnm_status, c('Tumor','Node', 'Metastasis'), 
+                   sep='', remove=FALSE)
+```
+
+f. Create a variable that divides the patients into 3 categories based on molecular profiles [Hint: The function `case_when` might help]:
+        - Luminal (ER positive and/or PR positive)
+        - HER2 (HER2 positive)
+        - Basal-like (Er PR and HER2 negative)
+
+```{r }
+
+brca_data3 <- brca_data3 %>%
+    mutate(mol_cat = case_when( # fill in the next 4 lines
+      (ER.Status =='Positive') | (PR.Status=="Positive") ~ "Luminal",
+      (HER2.Final.Status == 'Positive') ~ "HER2",
+      (ER.Status=='Negative') & (PR.Status=='Negative') & (HER2.Final.Status=="Negative") ~ 'Basal_like',
+      TRUE ~ 'Other'
+  ))
+```
+
+
+g. Create a variable that equals the time of death if they are dead (see the variable `Vital.Status`) or the time of last contact if they are alive. This is a common computation for survival analysis studies, and is called the overall survival time. [Hint: the function `ifelse` might be useful]
+
+```{r }
+## Fill this in yourself. Time to start leaving the nest
+brca_data <- brca_data %>% 
+  mutate(event_time = ifelse(Vital.Status == 'DECEASED', Days.to.date.of.Death, Days.to.Date.of.Last.Contact))
+brca_data3$event_time <- brca_data$event_time
+
+```
+
+
+Save the cleaned breast cancer dataset as `brca_cleaned`. You can save this to your computer using `saveRDS(brca_cleaned, file="<a filename of your choice>.rds")`. We'll be using this dataset again when we do plots and modeling.
+
+```{r}
+brca_cleaned <- brca_data1
+saveRDS(brca_cleaned, file = here('data/brca_data.rds'))
+```
+
+    
