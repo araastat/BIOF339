@@ -5,7 +5,8 @@ output: html_document
 ---
 
 ```{r setup, include=F}
-knitr::opts_chunk$set(include=TRUE, message=F, warning=F, cache=TRUE)
+knitr::opts_chunk$set(echo=F, eval=FALSE, message=F, warning=F, cache=TRUE)
+library(here)
 ```
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
@@ -23,7 +24,7 @@ experimental design is available [here](https://www.dropbox.com/s/b510c7fx82u5pr
 
 ### Prelim work
 1. Download and unzip the data file in the data directory you just created. You should get 26 text files, perhaps in a sub-directory. Note this, since you'll need it
-in the next step. Also download the experimental design file here.
+in the next step. Also download the experimental design file.
 
 ### Homework
 
@@ -36,7 +37,7 @@ Open a R script file in the RStudio Project you created. This will be Part 1 of 
 1. Read all 26 files into a list in R, where the list consists of 26 data frames
     ```{r}
     library(rio)
-    dat <- import_list(dir('data/GSE123519_RAW/', full.names = TRUE))
+    dat <- import_list(dir(here('data/GSE123519_RAW/'), full.names = TRUE))
     ```
 1. For each of the data frames perform the following data processing
     a. Keep only the variables `tracking_id`, `gene_id`, and `locus` through `FPKM`.
@@ -61,13 +62,13 @@ specifies the sample identifier of each observation. You might like to call this
 the genetic dataset you created above, ensuring that ids and genotype
 specification (stored in the column `Class`) are aligned.
     ```{r}
-    design <- import('data/GSE123519design.xlsx')
+    design <- import(here('data/GSE123519design.xlsx'))
     dat2 <- dat2 %>% left_join(design)
     ```
 1. Note that there is an add-on to the genotype information, in the form `-1`,
 `-2` to specify which particular sample it is. This is unnecessary and would
 create problems for any comparative analyses using t-tests or ANOVA later.
-Please removeit so that you just have genotype information.
+Please remove it so that you just have genotype information.
     ```{r}
     dat2 <- dat2 %>% 
         mutate(Class = str_remove(Class, '-[0-9]'))
@@ -109,13 +110,13 @@ Both the Rmd and html files will be Part 2 of your submission
     dat2 %>% group_by(chromosome) %>% summarize(N = length(unique(gene_id)))
     ```
     
-1. How many unique genes of the form PIK3C* are present in the dataset
+1. How many unique genes of the form PIK3C* are present in the dataset (i.e., start with the string "PIK3C")
 ```{r}
 dat2 %>% filter(str_detect(gene_id, 'PIK3C')) %>%
     summarize(length(unique(gene_id)))
 ```
 
-1. What are the relative frequencies of each PIK3CA variant among the 26 mice. Assume a missing value means the variant is not present.
+1. What are the relative frequencies of each PIK3C* variant among the 26 mice. Assume a missing value means the variant is not present. The table should be the proportion of the 26 mice have each of the PIK3C* variants.
 ```{r}
 dat2 %>% filter(str_detect(gene_id, 'PIK3C')) %>%
     select(sampleID, gene_id) %>% 
