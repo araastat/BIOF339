@@ -1,0 +1,158 @@
+---
+title: "Homework 3"
+author: "BIOF 339"
+output: html_document
+---
+
+```{r setup, results='hide'}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+```
+
+<div style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;">
+
+Instructions:
+
+I suggest you start working on this week's assignment using just a R script file, and work out the different things you have to do using just R code. 
+
+The submission, of course, has to be a R Markdown file and the corresponding knitted HTML file. You will create this R Markdown file on your own, adding R chunks in it with code copied from your scirpt file. You also have to write in the question numbers and a minimal narrative in markdown as part of the R Markdown file, so that it reads more like a report. 
+
+The submission will consist of your R markdown file and knitted HTML file. You have to make 
+sure that the HTML file is properly rendered. **Both files are required, and omitting one is an incomplete assignment**
+
+Also, please remove any and all template-based text from the R markdown file before you submit it. We don't want to see the template materials in any submissions. 
+</div>
+
+## Reading
+
+1. Please read [Chapter 3](https://r4ds.had.co.nz/data-visualisation.html#introduction-1) 
+of R4DS. This is a really nice reference. If you're interested, look at [section 3.7](https://r4ds.had.co.nz/data-visualisation.html#statistical-transformations) for a deeper understanding of how different statistical transformations can be accommodated within different geometries in ggplot2. 
+
+## Exercises
+```{r}
+library(tidyverse)
+library(here)
+
+```
+
+<ol>
+<li> Let's look at the  [breast cancer data set](data/clinical_data_breast_cancer_hw.csv) we'be been using.  
+
+<ol>
+  <li> Create a bar plot of the frequencies of ER status (Hint: `geom_bar`. How would you modify the dataset
+  so that there is no separate bar for NA's?
+```{r}
+dat <- rio::import(here('data/clinical_data_breast_cancer_hw.csv')) %>% 
+  janitor::clean_names() %>% 
+  mutate(er_status = na_if(er_status, 'Indeterminate'),
+         her2_final_status = na_if(her2_final_status, 'Equivocal'))
+ggplot(dat, aes(x = er_status))+geom_bar()+
+  labs(x = 'ER Status', y = 'Frequency')
+ggplot(dat %>% drop_na(er_status), aes(x = er_status))+geom_bar() +
+  labs(x = 'ER Status', y = 'Frequency')
+```
+  
+  <li> Color each bar by the frequencies of HER2 status within each group. (Hint: you can add `aes(color='HER2.Status')` or `aes(fill='HER2.Status')` to the `geom_bar` statement. What is the difference in these two choices?)
+```{r}
+ggplot(dat %>% drop_na(er_status, her2_final_status), aes(x = er_status, fill = her2_final_status))+
+  geom_bar() + 
+  labs(x = 'ER Status', y = 'Frequency', fill = 'HER2 status')
+```
+  
+  <li> I would like to see a graph showing the relative frequencies of HER2 status within each ER group. Read the documentation `?geom_bar` as well as section 3.8 of R4DS to find this solution. 
+```{r}
+ggplot(dat %>% drop_na(er_status, her2_final_status), 
+       aes(x = er_status, fill = her2_final_status))+
+  geom_bar(position='fill') + 
+  scale_y_continuous(name='Percent', 
+                     labels  = scales::label_percent())+
+  labs(x = 'ER Status', fill = 'HER2 Status')
+```
+  
+</ol>
+
+<li> The `diamonds` dataset is included in the `ggplot2` package. 
+<ol>
+<li> Add a column to the diamonds dataset that is the volume of each diamond (multiplying the `x`, `y` and `z` variables)
+```{r}
+diamonds <- diamonds %>% 
+  mutate(volume = x * y * z)
+```
+
+<li> Plot a scatter plot of diamond price against diamond volume
+```{r}
+ggplot(diamonds, aes(x = volume, y = price))+
+  geom_point()
+```
+
+<li> Modify the plot to add colors based on the cut of each diamond
+```{r}
+ggplot(diamonds, aes(x = volume, y = price,
+                     color = cut))+
+  geom_point()
+```
+
+<li> Modify the previous plot to construct a facetted plot where each facet is based on a color.
+```{r}
+ggplot(diamonds, aes(x = volume, y = price))+
+  geom_point()+
+  facet_wrap(~cut)
+```
+
+</ol>
+
+<li> The following links provide data for U.S. incidence rates per 100,000, standardized to the 2000 standard U.S. population,  for 
+[brain](data/Brain.csv), [colon](data/Colon.csv), [esophageal](data/Esophagus.csv), [lung](data/Lung.csv) and [oral](data/Oral.csv) cancers for the period 1975-2016. These data/HW6 are provided from the [SEER program](https://seer.cancer.gov){target=_blank}. 
+
+Our goal is to create a single graphic showing the patterns of incidence rates over this time period for the 5 cancers, something like the one below: 
+
+![](../img/hw6.png)
+
+1. Each csv file is in the same format. Open one in a text editor like Notepad (Windows) or TextEdit (Mac) to see lines you may need to skip. (I don't suggest Excel since it has a habit of changing formatting and adding columns when you save back into csv). Then read each of the five files into R. For convenience I'll refer to these datasets as `brain`, `colon`, `esophagus`, `lung` and `oral`.
+    - Confirm that each dataset has 43 rows and 10 columns
+```{r}
+brain <- rio::import(here('data/Brain.csv'), skip=4)
+colon <- rio::import(here('data/Colon.csv'), skip=4)
+esophagus <- rio::import(here('data/Esophagus.csv'), skip=4)
+lung <- rio::import(here('data/Lung.csv'), skip=4)
+oral <- rio::import(here('data/Oral.csv'), skip=4)
+
+## I'm not a fan of this, since this is brute force. See
+## below for a couple of strategies
+
+# or, more sophisticated
+# 
+# organs <- c('brain','colon','esophagus','lung','oral')
+# files <- paste0('data/', stringr::str_to_title(organs),'.csv')
+# d <- rio::import_list(here(files))
+# names(d) <- stringr::str_to_lower(names(d))
+# list2env(d, globalenv()) # globalenv() is the environment you see in the Environment pane
+
+# or,
+
+# organs <- c('brain','colon','esophagus','lung','oral')
+# for(o in organs){
+#   f <- here(paste0('data/', stringr::str_to_title(o),'.csv'))
+#   assign(o, rio::import(f))
+# }
+
+```
+
+1. Create three separate datasets for each site, one for both sexes, one for males and one for females. Each dataset should still have year of diagnosis. So each dataset should have 43 rows and 4 columns.
+
+<li> For the next few points, I will refer to the both sexes datasets. You'll do the same for the male and female datasets.
+
+1. Each dataset has the same column headers. We'll be joining the data sets into a single data set using the year of diagnosis as the **key**, i.e. the common variable that will determine the joins. This means we have to make the column names for the different data sets (except the year column) distinctive. Change the column names replacing `both_sexes` with the names of the cancer sites
+    - *Hints: `names(brain)` gives the column names for the brain data. You can also change column names using `names(brain) <- ...` since this is just a vector. In particular, you can try something like `names(brain) <- stringr::str_replace(names(brain), 'both_sexes', 'brain')`*
+
+<li> Create a new composite dataset by repeatedly using `left_join` or `inner_join` to add each site-specific dataset to the composite data set. What I mean is, create a dataset joining A and B, then join C to the result, then join D to the result and so on.
+
+
+1. For each of these datasets:
+    a. Remove the row with the overall 1975-2016 rates
+    b. Use `pivot_longer` to make a dataset with 3 columns: year, type of cancer and cancer incidence rate
+
+<li> Create 3 plots like the one above, one for all races, one for whites and one for blacks. Assign the ggplot code for each to a name, i.e. something like `plt1 <- ggplot(...) + ...`. Display the graph for all races, and create and display a panelled plot where the white and black plots are presented side-by-side. You can use functions from **cowplot**, **ggpubr** or **patchwork** as you like.
+    
+1. Make sure you have labelled everything properly, including titles, so that the graphical information is self-evident.
+
+</ol>
