@@ -63,7 +63,7 @@ miss_var_summary(PimaIndiansDiabetes2) %>%
            pressure = 'Diastolic BP (mmHg)'
       )
     ```
-    ```{r, include=TRUE}
+    ```{r, include=FALSE}
     var_label(PimaIndiansDiabetes2) <- 
       list(pregnant = 'Times pregnant',
            glucose = 'Plasma glucose',
@@ -79,7 +79,7 @@ miss_var_summary(PimaIndiansDiabetes2) %>%
     ```
     
     b. Then use `gtsummary::tbl_summary` to create a summary table stratified by diabetes status. See the documentation for `tbl_summary` tutorial to see what kinds of options you might add. This is available if you go to the Packages pane, find `gtsummary`, click on it, and then click on "User guides, package vignettes and other documentation.". 
-    ```{r, include=TRUE}
+    ```{r, include=FALSE}
     library(gtsummary)
     gtsummary::tbl_summary(PimaIndiansDiabetes2, by=diabetes) %>% 
       add_p()
