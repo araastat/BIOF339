@@ -55,7 +55,7 @@ miss_var_summary(PimaIndiansDiabetes2) %>%
     ```
 1. Generate another summary table for this data using the **gtsummary** package
     a. First use `labelled::var_label` to set labels for each of the variables. You can continue the following code to label all the variables.
-    ```{r}
+    ```{r, echo=TRUE, include=TRUE}
     var_label(PimaIndiansDiabetes2) <- 
       list(pregnant = 'Times pregnant',
            glucose = 'Plasma glucose',

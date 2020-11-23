@@ -406,8 +406,16 @@ In this homework you will have to submit 2 files: the R Markdown file that you w
 <li><p>Generate a summary of the <code>PimaIndiansDiabetes2</code> data using <code>skimr::skim</code>. Make sure that this R chunk has the option <code>results=&#39;asis&#39;</code> for this question.</p></li>
 <li><p>Generate another summary table for this data using the <strong>gtsummary</strong> package</p>
 <ol style="list-style-type: lower-alpha">
-<li><p>First use <code>labelled::var_label</code> to set labels for each of the variables. You can continue the following code to label all the variables.</p></li>
-<li><p>Then use <code>gtsummary::tbl_summary</code> to create a summary table stratified by diabetes status. See the documentation for <code>tbl_summary</code> tutorial to see what kinds of options you might add. This is available if you go to the Packages pane, find <code>gtsummary</code>, click on it, and then click on “User guides, package vignettes and other documentation.”.</p></li>
+<li>First use <code>labelled::var_label</code> to set labels for each of the variables. You can continue the following code to label all the variables.</li>
+</ol>
+<pre class="r"><code>var_label(PimaIndiansDiabetes2) &lt;- 
+  list(pregnant = &#39;Times pregnant&#39;,
+       glucose = &#39;Plasma glucose&#39;,
+       triceps = &#39;Triceps skin fold (mm)&#39;,
+       pressure = &#39;Diastolic BP (mmHg)&#39;
+  )</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Then use <code>gtsummary::tbl_summary</code> to create a summary table stratified by diabetes status. See the documentation for <code>tbl_summary</code> tutorial to see what kinds of options you might add. This is available if you go to the Packages pane, find <code>gtsummary</code>, click on it, and then click on “User guides, package vignettes and other documentation.”.</li>
 </ol></li>
 <li><p>The <code>msleep</code> data is included in <strong>ggplot2</strong>. Create a single pipeline that</p>
 <ol style="list-style-type: lower-alpha">
