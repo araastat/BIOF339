@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Abhijit Dasgupta" />
 
 
-<title>Homework 4</title>
+<title>Homework 5: Plotting</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -375,60 +374,53 @@ summary {
 
 
 
-<h1 class="title toc-ignore">Homework 4</h1>
-<h4 class="author">Abhijit Dasgupta</h4>
+<h1 class="title toc-ignore">Homework 5: Plotting</h1>
+<h4 class="author"></h4>
+<h4 class="date">Due Wednesday October 16, 2019</h4>
 
 </div>
 
 
-<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
-background-color: wheat;font-size: 14pt;text-align:center">
-In this homework you will have to submit 3 files. (1) The R script from the Data preparation section, (2) the Rmd file from the Data analysis section and (3) the knitted HTML file from the Data analysis section. The results of the data analysis section should all be present in the Rmd and HTML files. The R script should be well-commented so that the reader can understand what each section of code is supposed to do.
+<p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;text-align:center">
+<a href="https://www.dropbox.com/request/MTY0A7xHdxVdwj1GTRBO" target="_blank"><strong>Submission Link</strong></a>
 </p>
-<p>In this homework we will play with some publicly available RNA-Seq data. Information about the experiment is available <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE123519">here</a>. Briefly, this is a mouse experiment where the authors were interested in PIK3CA mutation variants. This interest is derived from PIK3CA’s implication in glioblastoma tumorogenesis. There are 26 mice with different engineered genetics.</p>
-<p>The data are available as a zip file <a href="https://www.dropbox.com/s/0fttg8r9ub3gm82/GSE123519_RAW.zip?dl=1">here</a>. The experimental design is available <a href="https://www.dropbox.com/s/b510c7fx82u5prh/GSE123519design.xlsx?dl=1">here</a>.</p>
-<div id="prelim-work" class="section level3">
-<h3>Prelim work</h3>
+<div id="reading" class="section level2">
+<h2>Reading</h2>
 <ol style="list-style-type: decimal">
-<li>Download and unzip the data file in the data directory you just created. You should get 26 text files, perhaps in a sub-directory. Note this, since you’ll need it in the next step. Also download the experimental design file here.</li>
+<li>Please read <a href="https://r4ds.had.co.nz/data-visualisation.html#introduction-1">Chapter 3</a> of R4DS. This is a really nice reference. If you’re interested, look at <a href="https://r4ds.had.co.nz/data-visualisation.html#statistical-transformations">section 3.7</a> for a deeper understanding of how different statistical transformations can be accommodated within different geometries in ggplot2.</li>
 </ol>
 </div>
-<div id="homework" class="section level3">
-<h3>Homework</h3>
-<div id="data-preparation" class="section level4">
-<h4>Data preparation</h4>
-<p>Open a R script file in the RStudio Project you created. This will be Part 1 of your submission. Your code should be annotated with sufficient comments so that the reader/grader can understand what you are intending to do with each part of your code.</p>
-<ol style="list-style-type: decimal">
-<li><p>Read all 26 files into a list in R, where the list consists of 26 data frames</p></li>
-<li><p>For each of the data frames perform the following data processing</p>
-<ol style="list-style-type: lower-alpha">
-<li>Keep only the variables <code>tracking_id</code>, <code>gene_id</code>, and <code>locus</code> through <code>FPKM</code>.</li>
-<li>Change the gene names in <code>gene_id</code> to capital letters (use <code>stringr::str_to_upper</code> or other equivalent functions)</li>
-<li>Split the <code>locus</code> variable into a <code>chromosome</code> and a <code>location</code> variable.</li>
-<li>Filter <strong>out</strong> all observations with FPKM less than 1 (no real scientific reason, just because)</li>
-</ol></li>
-<li><p>Now make a single data set stacking the processed datasets, adding a column that specifies the sample identifier of each observation. You might like to call this column <code>sampleID</code> to make the next step simpler</p></li>
-<li><p>Import the design information into a data frame. Add the design information to the genetic dataset you created above, ensuring that ids and genotype specification (stored in the column <code>Class</code>) are aligned.</p></li>
-<li><p>Note that there is an add-on to the genotype information, in the form <code>-1</code>, <code>-2</code> to specify which particular sample it is. This is unnecessary and would create problems for any comparative analyses using t-tests or ANOVA later. Please removeit so that you just have genotype information.</p></li>
-<li><p>There is one idiosyncratic genotype specification which is a re-rerun. Fix this to match the other genotypes.</p></li>
-<li><p>Clean the <code>chromosome</code> values so that you only have data of the form “chr##” where ## refers to the chromosome number.</p></li>
-<li><p>Save the dataset using <code>saveRDS</code> to a .rds file</p></li>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<ol>
+<li>
+<p>Let’s look at the <a href="data/clinical_data_breast_cancer_hw.csv">breast cancer data set</a> we’be been using.</p>
+<ol>
+<li>
+Create a bar plot of the frequencies of ER status (Hint: <code>geom_bar</code>. How would you modify the dataset so that there is no separate bar for NA’s?
+<li>
+Color each bar by the frequencies of HER2 status within each group. (Hint: you can add <code>aes(color=&#39;HER2.Status&#39;)</code> or <code>aes(fill=&#39;HER2.Status&#39;)</code> to the <code>geom_bar</code> statement. What is the difference in these two choices?)
+<li>
+I would like to see a graph showing the relative frequencies of HER2 status within each ER group. Read the documentation <code>?geom_bar</code> as well as section 3.8 of R4DS to find this solution.
 </ol>
-<p>You can choose whether you fix all the genotype information before or after you join the design dataset to the genetic dataset. Whatever makes sense to you.</p>
-</div>
-<div id="data-analysis" class="section level4">
-<h4>Data analysis</h4>
-<p>Open a R Markdown file and perform the following tasks. Knit this R Markdown file to HTML. Both the Rmd and html files will be Part 2 of your submission</p>
+<li>
+The <code>diamonds</code> dataset is included in the <code>ggplot2</code> package.
+<ol>
+<li>
+Add a column to the diamonds dataset that is the volume of each diamond (multiplying the <code>x</code>, <code>y</code> and <code>z</code> variables)
+<li>
+Plot a scatter plot of diamond price against diamond volume
+<li>
+Modify the plot to add colors based on the cut of each diamond
+<li>
+Modify the previous plot to construct a facetted plot where each facet is based on a color.
+</ol>
+</ol>
+<div id="extra-credit" class="section level3">
+<h3>Extra credit</h3>
+<p>The <a href="data/BreastCancer_Expression.xlsx">breast cancer expression</a> dataset contains log-expression levels of 10 probes for the same individuals that are in the clinical dataset.</p>
 <ol style="list-style-type: decimal">
-<li><p>Provide the following tables:</p>
-<ul>
-<li>median FPKM levels by Class</li>
-<li>How many unique genes are interrogated per chromosome</li>
-</ul></li>
-<li><p>How many unique genes of the form PIK3C* are present in the dataset</p></li>
-<li><p>What are the relative frequencies of each PIK3CA variant among the 26 mice. Assume a missing value means the variant is not present.</p></li>
-<li><p>Perform a statistical test to see if FPKM expression levels are different at PIK3C* genes compared to all other genes. (the correct test is actually complicated, but doing t-test, wilcoxon test or permutation tests are all allowed here)</p></li>
-<li><p>Draw a barplot showing the median FPKM levels by Class</p></li>
+<li>Modify the dataset appropriately and draw a facetted plot where each facet is a histogram of the expression levels of each probe.</li>
 </ol>
 </div>
 </div>

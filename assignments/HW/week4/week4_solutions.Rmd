@@ -5,7 +5,7 @@ output: html_document
 ---
 
 ```{r setup, include=F}
-knitr::opts_chunk$set(include=FALSE, message=F, warning=F, cache=TRUE)
+knitr::opts_chunk$set(include=TRUE, message=F, warning=F, cache=FALSE)
 ```
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
@@ -68,7 +68,7 @@ specification (stored in the column `Class`) are aligned.
 1. Note that there is an add-on to the genotype information, in the form `-1`,
 `-2` to specify which particular sample it is. This is unnecessary and would
 create problems for any comparative analyses using t-tests or ANOVA later.
-Please removeit so that you just have genotype information.
+Please remove it so that you just have genotype information.
     ```{r}
     dat2 <- dat2 %>% 
         mutate(Class = str_remove(Class, '-[0-9]'))
@@ -111,13 +111,13 @@ Both the Rmd and html files will be Part 2 of your submission
     ```
     
 1. How many unique genes of the form PIK3C* are present in the dataset
-```{r week4-1}
+```{r week4-solutions-1}
 dat2 %>% filter(str_detect(gene_id, 'PIK3C')) %>%
     summarize(length(unique(gene_id)))
 ```
 
 1. What are the relative frequencies of each PIK3CA variant among the 26 mice. Assume a missing value means the variant is not present.
-```{r week4-2}
+```{r week4-solutions-2}
 dat2 %>% filter(str_detect(gene_id, 'PIK3C')) %>%
     select(sampleID, gene_id) %>% 
     distinct() %>% count(gene_id) %>% mutate(rel_freq = n/26)
@@ -125,14 +125,14 @@ dat2 %>% filter(str_detect(gene_id, 'PIK3C')) %>%
 ```
 
 1. Perform a statistical test to see if FPKM expression levels are different at PIK3C* genes compared to all other genes. (the correct test is actually complicated, but doing t-test, wilcoxon test or permutation tests are all allowed here)
-```{r week4-3}
+```{r week4-solutions-3}
 dat2 %>% mutate(pik3c_ind = ifelse(str_detect(gene_id, 'PIK3C'), 1, 0)) %>% 
     t.test(FPKM ~ pik3c_ind, data = .) %>% 
     broom::tidy()
 ```
 
 1. Draw a barplot showing the median FPKM levels by Class
-```{r week4-4}
+```{r week4-solutions-4}
 dat2 %>% group_by(Class) %>% summarize(FPKM = median(FPKM, na.rm=T)) %>% 
     ggplot(aes(Class, FPKM))+geom_bar(stat='identity') + coord_flip()
 
