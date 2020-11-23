@@ -110,34 +110,41 @@ Our goal is to create a single graphic showing the patterns of incidence rates o
 1. Each csv file is in the same format. Open one in a text editor like Notepad (Windows) or TextEdit (Mac) to see lines you may need to skip. (I don't suggest Excel since it has a habit of changing formatting and adding columns when you save back into csv). Then read each of the five files into R. For convenience I'll refer to these datasets as `brain`, `colon`, `esophagus`, `lung` and `oral`.
     - Confirm that each dataset has 43 rows and 10 columns
 ```{r}
-brain <- rio::import(here('data/Brain.csv'), skip=4)
-colon <- rio::import(here('data/Colon.csv'), skip=4)
-esophagus <- rio::import(here('data/Esophagus.csv'), skip=4)
-lung <- rio::import(here('data/Lung.csv'), skip=4)
-oral <- rio::import(here('data/Oral.csv'), skip=4)
+brain <- rio::import(here('data/Brain.csv'), skip=4, check.names=T)
+colon <- rio::import(here('data/Colon.csv'), skip=4, check.names=T)
+esophagus <- rio::import(here('data/Esophagus.csv'), skip=4, check.names=T)
+lung <- rio::import(here('data/Lung.csv'), skip=4, check.names=T)
+oral <- rio::import(here('data/Oral.csv'), skip=4, check.names=T)
+
+dim(brain)
+## and so on
 
 ## I'm not a fan of this, since this is brute force. See
 ## below for a couple of strategies
 
 # or, more sophisticated
 # 
-# organs <- c('brain','colon','esophagus','lung','oral')
-# files <- paste0('data/', stringr::str_to_title(organs),'.csv')
-# d <- rio::import_list(here(files))
-# names(d) <- stringr::str_to_lower(names(d))
-# list2env(d, globalenv()) # globalenv() is the environment you see in the Environment pane
+organs <- c('brain','colon','esophagus','lung','oral')
+files <- paste0('data/', stringr::str_to_title(organs),'.csv')
+d <- rio::import_list(here(files), check.names=T)
+names(d) <- stringr::str_to_lower(names(d))
+list2env(d, globalenv()) # globalenv() is the environment you see in the Environment pane
 
 # or,
 
-# organs <- c('brain','colon','esophagus','lung','oral')
-# for(o in organs){
-#   f <- here(paste0('data/', stringr::str_to_title(o),'.csv'))
-#   assign(o, rio::import(f))
-# }
+organs <- c('brain','colon','esophagus','lung','oral')
+for(o in organs){
+  f <- here(paste0('data/', stringr::str_to_title(o),'.csv'))
+  assign(o, rio::import(f, check.names=TRUE))
+}
 
 ```
 
 1. Create three separate datasets for each site, one for both sexes, one for males and one for females. Each dataset should still have year of diagnosis. So each dataset should have 43 rows and 4 columns.
+
+```{r}
+
+```
 
 <li> For the next few points, I will refer to the both sexes datasets. You'll do the same for the male and female datasets.
 
@@ -153,6 +160,6 @@ oral <- rio::import(here('data/Oral.csv'), skip=4)
 
 <li> Create 3 plots like the one above, one for all races, one for whites and one for blacks. Assign the ggplot code for each to a name, i.e. something like `plt1 <- ggplot(...) + ...`. Display the graph for all races, and create and display a panelled plot where the white and black plots are presented side-by-side. You can use functions from **cowplot**, **ggpubr** or **patchwork** as you like.
     
-1. Make sure you have labelled everything properly, including titles, so that the graphical information is self-evident.
+1. Make sure you have labeled everything properly, including titles, so that the graphical information is self-evident.
 
 </ol>

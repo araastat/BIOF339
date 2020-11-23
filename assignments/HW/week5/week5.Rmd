@@ -7,7 +7,7 @@ output: html_document
 ```{r setup, include=FALSE}
 pacman::p_load(char=c('tidyverse','gtsummary','mlbench','visdat','naniar','labelled', 'rio'))
 data("PimaIndiansDiabetes2")
-knitr::opts_chunk$set(warning=F, message=F, cache=F)
+knitr::opts_chunk$set(warning=F, message=F, cache=F, include=FALSE)
 ```
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
@@ -43,7 +43,7 @@ Our discussion this week will be based on this paper
     gg_miss_var(PimaIndiansDiabetes2, show_pct=TRUE)
     ```
     d. Provide the same information as a table using `miss_var_summary`. Please make sure the output is prettified for HTML and not raw output
-```{r}
+```{r week5-1}
 miss_var_summary(PimaIndiansDiabetes2) %>% 
   knitr::kable(digits=2) %>% 
   kableExtra::kable_classic()
@@ -109,7 +109,8 @@ miss_var_summary(PimaIndiansDiabetes2) %>%
     ```
     a. Load the `BreastCancer_Clinical.csv` file and call it `brca`. Use `janitor::clean_names` to update the column names
     ```{r}
-    brca <- import('data/BreastCancer_Clinical.csv') %>% 
+    library(here)
+    brca <- import(here('data/BreastCancer_Clinical.csv')) %>% 
       janitor::clean_names()
     ```
     b. Create a new data.frame `brca1` that contains the columns `complete_tcga_id`, `er_status`, `pr_status` and `her2_final_status` from `brca`
@@ -130,7 +131,7 @@ miss_var_summary(PimaIndiansDiabetes2) %>%
     sum(brca1$triple_neg)
     ```
     e. **limma** has two functions `vennCounts` and `vennDiagram`. Pass the ER, PR and HER2 columns from the transformed `brca1` dataset from c. together into `vennCounts` and pipe the results into `vennDiagram`. This will create a venn diagram for the ER, PR and HER2 status. Verify that the count of triple negatives from the venn diagram (the number outside the circles but inside the rectangle) matches what you found in d.
-```{r}
+```{r week5-2}
 library(limma)
 brca1 %>% select(ends_with('status')) %>% 
   vennCounts() %>% vennDiagram()

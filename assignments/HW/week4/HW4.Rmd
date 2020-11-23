@@ -14,7 +14,7 @@ output: html_document
 
 1. [Section 5.6.4](https://r4ds.had.co.nz/transform.html#summarise-funs) of *R for Data Science* gives examples of various summary functions in R. They are using a dataset in those examples derived from the `flights` dataset, which you can create using the following code:
 
-```{r, eval = F}
+```{r HW4-1, eval = F}
 library(nycflights13) # Install this package if you don't have it
 
 not_cancelled <- flights %>% 
