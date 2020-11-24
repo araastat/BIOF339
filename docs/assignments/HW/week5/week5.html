@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Abhijit Dasgupta" />
+<meta name="author" content="BIOF 339" />
 
 
-<title>Homework 4</title>
+<title>Homework 5</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -375,62 +375,64 @@ summary {
 
 
 
-<h1 class="title toc-ignore">Homework 4</h1>
-<h4 class="author">Abhijit Dasgupta</h4>
+<h1 class="title toc-ignore">Homework 5</h1>
+<h4 class="author">BIOF 339</h4>
 
 </div>
 
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
 background-color: wheat;font-size: 14pt;text-align:center">
-In this homework you will have to submit 3 files. (1) The R script from the Data preparation section, (2) the Rmd file from the Data analysis section and (3) the knitted HTML file from the Data analysis section. The results of the data analysis section should all be present in the Rmd and HTML files. The R script should be well-commented so that the reader can understand what each section of code is supposed to do.
+In this homework you will have to submit 2 files: the R Markdown file that you will create to answer this homework, and the knitted HTML file derived from it.
 </p>
-<p>In this homework we will play with some publicly available RNA-Seq data. Information about the experiment is available <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE123519">here</a>. Briefly, this is a mouse experiment where the authors were interested in PIK3CA mutation variants. This interest is derived from PIK3CA’s implication in glioblastoma tumorogenesis. There are 26 mice with different engineered genetics.</p>
-<p>The data are available as a zip file <a href="https://www.dropbox.com/s/0fttg8r9ub3gm82/GSE123519_RAW.zip?dl=1">here</a>. The experimental design is available <a href="https://www.dropbox.com/s/b510c7fx82u5prh/GSE123519design.xlsx?dl=1">here</a>.</p>
-<div id="prelim-work" class="section level3">
-<h3>Prelim work</h3>
+<div id="readings" class="section level2">
+<h2>Readings</h2>
+<p>Our discussion this week will be based on this paper</p>
 <ol style="list-style-type: decimal">
-<li>Download and unzip the data file in the data directory you just created. You should get 26 text files, perhaps in a sub-directory. Note this, since you’ll need it in the next step. Also download the experimental design file here.</li>
+<li>*Good enough practices in scientific computing&quot; by Wilson et al (<a href="https://journals.plos.org/ploscompbiol/article/file?id=10.1371/journal.pcbi.1005510&amp;type=printable">pdf</a>)</li>
 </ol>
 </div>
-<div id="homework" class="section level3">
-<h3>Homework</h3>
-<div id="data-preparation" class="section level4">
-<h4>Data preparation</h4>
-<p>Open a R script file in the RStudio Project you created. This will be Part 1 of your submission. Your code should be annotated with sufficient comments so that the reader/grader can understand what you are intending to do with each part of your code.</p>
+<div id="homework" class="section level2">
+<h2>Homework</h2>
 <ol style="list-style-type: decimal">
-<li><p>Read all 26 files into a list in R, where the list consists of 26 data frames</p></li>
-<li><p>For each of the data frames perform the following data processing</p>
+<li><p>The <strong>mlbench</strong> packages has several data sets available as exemplar data for machine learning. Please load it in your R session using <code>pacman::p_load(&#39;mlbench&#39;)</code>. Then enable access to the Pima Indians Diabetes data by running <code>data(&quot;PimaIndiansDiabetes2&quot;)</code>. You’ll notice that the <code>PimaIndiansDiabetes2</code> object appears in your Environment pane.</p></li>
+<li><p>Visualize and assess this data set for missingness patterns using functions from the <strong>visdat</strong> and <strong>naniar</strong> packages.</p>
 <ol style="list-style-type: lower-alpha">
-<li>Keep only the variables <code>tracking_id</code>, <code>gene_id</code>, and <code>locus</code> through <code>FPKM</code>.</li>
-<li>Change the gene names in <code>gene_id</code> to capital letters (use <code>stringr::str_to_upper</code> or other equivalent functions)</li>
-<li>Split the <code>locus</code> variable into a <code>chromosome</code> and a <code>location</code> variable.</li>
-<li>Filter <strong>out</strong> all observations with FPKM less than 1 (no real scientific reason, just because)</li>
+<li><p>Visualize the data using the <code>vis_dat</code> function</p></li>
+<li><p>Visualize missing data patterns using the heatmap and the upset plot. Are there any missing data patterns that stick out</p></li>
+<li><p>Provide a plot that shows the percent of data missing by variable.</p></li>
+<li><p>Provide the same information as a table using <code>miss_var_summary</code>. Please make sure the output is prettified for HTML and not raw output</p></li>
 </ol></li>
-<li><p>Now make a single data set stacking the processed datasets, adding a column that specifies the sample identifier of each observation. You might like to call this column <code>sampleID</code> to make the next step simpler</p></li>
-<li><p>Import the design information into a data frame. Add the design information to the genetic dataset you created above, ensuring that ids and genotype specification (stored in the column <code>Class</code>) are aligned.</p></li>
-<li><p>Note that there is an add-on to the genotype information, in the form <code>-1</code>, <code>-2</code> to specify which particular sample it is. This is unnecessary and would create problems for any comparative analyses using t-tests or ANOVA later. Please removeit so that you just have genotype information.</p></li>
-<li><p>There is one idiosyncratic genotype specification which is a re-rerun. Fix this to match the other genotypes.</p></li>
-<li><p>Clean the <code>chromosome</code> values so that you only have data of the form “chr##” where ## refers to the chromosome number.</p></li>
-<li><p>Save the dataset using <code>saveRDS</code> to a .rds file</p></li>
+<li><p>Generate a summary of the <code>PimaIndiansDiabetes2</code> data using <code>skimr::skim</code>. Make sure that this R chunk has the option <code>results=&#39;asis&#39;</code> for this question.</p></li>
+<li><p>Generate another summary table for this data using the <strong>gtsummary</strong> package</p>
+<ol style="list-style-type: lower-alpha">
+<li>First use <code>labelled::var_label</code> to set labels for each of the variables. You can continue the following code to label all the variables.</li>
 </ol>
-<p>You can choose whether you fix all the genotype information before or after you join the design dataset to the genetic dataset. Whatever makes sense to you.</p>
-</div>
-<div id="data-analysis" class="section level4">
-<h4>Data analysis</h4>
-<p>Open a R Markdown file and perform the following tasks. Knit this R Markdown file to HTML. Both the Rmd and html files will be Part 2 of your submission</p>
-<ol style="list-style-type: decimal">
-<li><p>Provide the following tables:</p>
-<ul>
-<li>median FPKM levels by Class</li>
-<li>How many unique genes are interrogated per chromosome</li>
-</ul></li>
-<li><p>How many unique genes of the form PIK3C* are present in the dataset</p></li>
-<li><p>What are the relative frequencies of each PIK3CA variant among the 26 mice. Assume a missing value means the variant is not present.</p></li>
-<li><p>Perform a statistical test to see if FPKM expression levels are different at PIK3C* genes compared to all other genes. (the correct test is actually complicated, but doing t-test, wilcoxon test or permutation tests are all allowed here)</p></li>
-<li><p>Draw a barplot showing the median FPKM levels by Class</p></li>
+<pre class="r"><code>var_label(PimaIndiansDiabetes2) &lt;- 
+  list(pregnant = &#39;Times pregnant&#39;,
+       glucose = &#39;Plasma glucose&#39;,
+       triceps = &#39;Triceps skin fold (mm)&#39;,
+       pressure = &#39;Diastolic BP (mmHg)&#39;
+  )</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Then use <code>gtsummary::tbl_summary</code> to create a summary table stratified by diabetes status. See the documentation for <code>tbl_summary</code> tutorial to see what kinds of options you might add. This is available if you go to the Packages pane, find <code>gtsummary</code>, click on it, and then click on “User guides, package vignettes and other documentation.”.</li>
+</ol></li>
+<li><p>The <code>msleep</code> data is included in <strong>ggplot2</strong>. Create a single pipeline that</p>
+<ol style="list-style-type: lower-alpha">
+<li>filters the data to include just carnivores and omnivores,</li>
+<li>creates a new variable that identifies which quintile of the body weight distribution each animal falls in (see <code>quantile</code> and <code>cut</code>; quintiles divides data into fifths). Call this variable <code>bodywt_cat</code>. [Be careful of creating missing values when you discretize. Identify and solve tha problem too]</li>
+<li>imputes the missing values in <code>sleep_rem</code> with the median of the <code>bodywt_cat</code> and <code>vore</code> group each animal falls in,</li>
+<li>plots boxplots of <code>sleep_rem</code> by <code>bodywt_cat</code>, facetted by <code>vore</code></li>
+</ol></li>
+<li><p>Install the <strong>limma</strong> package from Bioconductor using the following code:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Load the <code>BreastCancer_Clinical.csv</code> file and call it <code>brca</code>. Use <code>janitor::clean_names</code> to update the column names</p></li>
+<li><p>Create a new data.frame <code>brca1</code> that contains the columns <code>complete_tcga_id</code>, <code>er_status</code>, <code>pr_status</code> and <code>her2_final_status</code> from <code>brca</code></p></li>
+<li><p>Use <code>rowwise()</code> to create a new variable <code>triple_neg</code> which is ‘Yes’ if all the ER, PR and HER2 statuses are negative, and ‘No’ otherwise. I suggest first converting the ER, PR, and HER2 statuses to 0/1 variables (0 = “Negative”), and then creating <code>triple_neg</code> based on whether the sum of the statuses is 0 or not.</p></li>
+<li><p>Report the number of triple negative cancers.</p></li>
+<li><p><strong>limma</strong> has two functions <code>vennCounts</code> and <code>vennDiagram</code>. Pass the ER, PR and HER2 columns from the transformed <code>brca1</code> dataset from c. together into <code>vennCounts</code> and pipe the results into <code>vennDiagram</code>. This will create a venn diagram for the ER, PR and HER2 status. Verify that the count of triple negatives from the venn diagram (the number outside the circles but inside the rectangle) matches what you found in d.</p></li>
+</ol></li>
 </ol>
-</div>
 </div>
 
 

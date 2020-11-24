@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Abhijit Dasgupta" />
+<meta name="author" content="BIOF 339" />
 
 
-<title>Homework 4</title>
+<title>Homework 6</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -375,62 +375,43 @@ summary {
 
 
 
-<h1 class="title toc-ignore">Homework 4</h1>
-<h4 class="author">Abhijit Dasgupta</h4>
+<h1 class="title toc-ignore">Homework 6</h1>
+<h4 class="author">BIOF 339</h4>
 
 </div>
 
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
 background-color: wheat;font-size: 14pt;text-align:center">
-In this homework you will have to submit 3 files. (1) The R script from the Data preparation section, (2) the Rmd file from the Data analysis section and (3) the knitted HTML file from the Data analysis section. The results of the data analysis section should all be present in the Rmd and HTML files. The R script should be well-commented so that the reader can understand what each section of code is supposed to do.
+In this homework you will have to submit 2 files: the R Markdown file that you will create to answer this homework, and the knitted HTML file derived from it.
 </p>
-<p>In this homework we will play with some publicly available RNA-Seq data. Information about the experiment is available <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE123519">here</a>. Briefly, this is a mouse experiment where the authors were interested in PIK3CA mutation variants. This interest is derived from PIK3CA’s implication in glioblastoma tumorogenesis. There are 26 mice with different engineered genetics.</p>
-<p>The data are available as a zip file <a href="https://www.dropbox.com/s/0fttg8r9ub3gm82/GSE123519_RAW.zip?dl=1">here</a>. The experimental design is available <a href="https://www.dropbox.com/s/b510c7fx82u5prh/GSE123519design.xlsx?dl=1">here</a>.</p>
-<div id="prelim-work" class="section level3">
-<h3>Prelim work</h3>
 <ol style="list-style-type: decimal">
-<li>Download and unzip the data file in the data directory you just created. You should get 26 text files, perhaps in a sub-directory. Note this, since you’ll need it in the next step. Also download the experimental design file here.</li>
-</ol>
-</div>
-<div id="homework" class="section level3">
-<h3>Homework</h3>
-<div id="data-preparation" class="section level4">
-<h4>Data preparation</h4>
-<p>Open a R script file in the RStudio Project you created. This will be Part 1 of your submission. Your code should be annotated with sufficient comments so that the reader/grader can understand what you are intending to do with each part of your code.</p>
-<ol style="list-style-type: decimal">
-<li><p>Read all 26 files into a list in R, where the list consists of 26 data frames</p></li>
-<li><p>For each of the data frames perform the following data processing</p>
+<li>Start with the <code>PimaIndiansDiabetes2</code> dataset from the <strong>mlbench</strong> package. Your objective is to analyze the factors that are associated with getting diabetes in this data.
 <ol style="list-style-type: lower-alpha">
-<li>Keep only the variables <code>tracking_id</code>, <code>gene_id</code>, and <code>locus</code> through <code>FPKM</code>.</li>
-<li>Change the gene names in <code>gene_id</code> to capital letters (use <code>stringr::str_to_upper</code> or other equivalent functions)</li>
-<li>Split the <code>locus</code> variable into a <code>chromosome</code> and a <code>location</code> variable.</li>
-<li>Filter <strong>out</strong> all observations with FPKM less than 1 (no real scientific reason, just because)</li>
+<li>Explore the dataset to see if there are any variables that you might need to omit. Justify your decisions</li>
+<li>Fit a logistic regression with <code>diabetes</code> as the dependent variable and the rest of the variables you chose to keep in as the independent variables.</li>
+<li>Create a proper formatted table (not raw output) of the results (slopes, confidence intervals, and p-values)</li>
+<li>Present these results graphically</li>
 </ol></li>
-<li><p>Now make a single data set stacking the processed datasets, adding a column that specifies the sample identifier of each observation. You might like to call this column <code>sampleID</code> to make the next step simpler</p></li>
-<li><p>Import the design information into a data frame. Add the design information to the genetic dataset you created above, ensuring that ids and genotype specification (stored in the column <code>Class</code>) are aligned.</p></li>
-<li><p>Note that there is an add-on to the genotype information, in the form <code>-1</code>, <code>-2</code> to specify which particular sample it is. This is unnecessary and would create problems for any comparative analyses using t-tests or ANOVA later. Please removeit so that you just have genotype information.</p></li>
-<li><p>There is one idiosyncratic genotype specification which is a re-rerun. Fix this to match the other genotypes.</p></li>
-<li><p>Clean the <code>chromosome</code> values so that you only have data of the form “chr##” where ## refers to the chromosome number.</p></li>
-<li><p>Save the dataset using <code>saveRDS</code> to a .rds file</p></li>
+<li>We have on presidential approval ratings going back to Franklin D. Roosevelt available from the <a href="https://www.presidency.ucsb.edu/statistics/data/presidential-job-approval">American Presidency Project</a>. Download this data (stored in an Excel file) from the class data link.
+<ol style="list-style-type: lower-alpha">
+<li>Load this data into a list of data frames, one per president</li>
+<li>Combine this data into a single data frame, with a column designating the president. Also, clean the column names.</li>
+<li>If you look at the structure of the data, you’ll see that <code>start_date</code> and <code>end_date</code> are datetime objects, so they are treated as dates in R. Plot the approval percent at each end date against the date as a line graph, colored by which president is in office at the time. Do <strong>not</strong> make a legend.</li>
+<li>Plot the percentage of uncertain respondents by end date, similar to c. Put dotted vertical lines corresponding to each inauguration date (inaugurations in the US occur on January 20 of the year following a presidential election, and the election years are years divisible by 4; you can count back from 2020 if you like).</li>
+<li>Use <code>gtsummary::tbl_summary</code> to create a table summarizing approving, disapproving and unsure percentages by president. Transform the original dataset so that this table has columns in chronological order.</li>
+<li>Create a new column for days in office using the following code (I named my data frame <code>approve</code>, and my variable names might be slightly different from yours.)</li>
 </ol>
-<p>You can choose whether you fix all the genotype information before or after you join the design dataset to the genetic dataset. Whatever makes sense to you.</p>
-</div>
-<div id="data-analysis" class="section level4">
-<h4>Data analysis</h4>
-<p>Open a R Markdown file and perform the following tasks. Knit this R Markdown file to HTML. Both the Rmd and html files will be Part 2 of your submission</p>
-<ol style="list-style-type: decimal">
-<li><p>Provide the following tables:</p>
-<ul>
-<li>median FPKM levels by Class</li>
-<li>How many unique genes are interrogated per chromosome</li>
-</ul></li>
-<li><p>How many unique genes of the form PIK3C* are present in the dataset</p></li>
-<li><p>What are the relative frequencies of each PIK3CA variant among the 26 mice. Assume a missing value means the variant is not present.</p></li>
-<li><p>Perform a statistical test to see if FPKM expression levels are different at PIK3C* genes compared to all other genes. (the correct test is actually complicated, but doing t-test, wilcoxon test or permutation tests are all allowed here)</p></li>
-<li><p>Draw a barplot showing the median FPKM levels by Class</p></li>
+<pre class="r"><code>library(lubridate)
+approve &lt;- approve %&gt;% 
+    group_by(president) %&gt;% 
+    mutate(days = end_date - min(start_date)) %&gt;% 
+    mtuate(days = as.duration(days)/ddays(1))</code></pre>
+Then create a facetted plot showing approval percent against days in office by president, and add a regression line and the correlation coefficient to each plot. You should probably throw out President Roosevelt since his term was before presidential term limits were implemented. The facets should follow chronological order.</li>
 </ol>
-</div>
+<hr />
+<div style=" background-color: lightgrey; margin-left:1cm;margin-right:1cm;">
+For question 2d, you can create a compatible vector of inauguration dates, by formatting strings in the form “YYYY-MM-DD”, and then passing them through <code>lubridate::as_datetime</code>. The <strong>lubridate</strong> package is the tidyverse package that addresses dates. You can then pass that vector of inauguration dates into <code>geom_vline</code> as the <code>xintercept</code> argument.
 </div>
 
 
