@@ -201,3 +201,7 @@ plot_grid(plt1,
 ```
 
 </ol>
+
+<div style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em; background-color: wheat;font-size: 14pt;">
+The code I developed in the screencast is available [here](HW3.R)
+</div>
