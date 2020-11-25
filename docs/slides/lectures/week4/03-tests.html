@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistical tests</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <script src="03-tests_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="03-tests_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="03-tests_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="03-tests_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
+    <script src="03-tests_files/tile-view-0.2.3.9000/tile-view.js"></script>
+    <script src="03-tests_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="03-tests_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="03-tests_files/shareon-1.4.1/shareon.min.js"></script>
+    <link href="03-tests_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
+    <script src="03-tests_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
+    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Statistical tests
+### Abhijit Dasgupta
+### BIOF 339
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-header"&gt;
+&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
+&lt;/div&gt;
+
+---
+class: middle, center
+
+# Comparing two groups
+
+
+
+---
+
+## The t-test
+
+The t-test compares whether the mean of a variable differs between two groups. 
+
+It does assume the normal distribution for the data, but is robust to deviations from normality
+
+Do **not** test for normality before doing the t-test. It isn't necessary and screws up your error rates
+
+---
+
+## The t-test
+
+In R, there is a convenient function `t.test`
+
+
+```r
+t.test(NP_958782 ~ ER.Status, data = brca)
+```
+
+```
+
+	Welch Two Sample t-test
+
+data:  NP_958782 by ER.Status
+t = 0.63522, df = 41.807, p-value = 0.5287
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.3523151  0.6759226
+sample estimates:
+mean in group Negative mean in group Positive 
+             0.4292798              0.2674761 
+```
+
+Read the code as 
+
+"Do a t-test to see if (the mean of) `NP_958782` differs by `ER.Status`, where
+both are taken from the data set `brca`"
+
+You can read the `~` as "by", as in "t-test of NP_958782 by ER.Status"
+
+---
+
+## The t-test
+
+The packge `broom` provides a function `tidy` that makes the results of these
+statistical tests tidy.
+
+
+```r
+t.test(NP_958782 ~ ER.Status, data=brca) %&gt;% 
+  broom::tidy()
+```
+
+```
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352     0.676
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+```
+
+--
+
+
+```
+
+	Welch Two Sample t-test
+
+data:  NP_958782 by ER.Status
+t = 0.63522, df = 41.807, p-value = 0.5287
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.3523151  0.6759226
+sample estimates:
+mean in group Negative mean in group Positive 
+             0.4292798              0.2674761 
+```
+
+---
+
+
+
+count: false
+ 
+## Using &lt;code&gt;broom&lt;/code&gt;
+The fact that &lt;code&gt;broom::tidy&lt;/code&gt; makes the results of tests into tibbles is in fact extremely useful in high-throughput work
+.panel1-through-auto[
+
+```r
+*brca
+```
+]
+ 
+.panel2-through-auto[
+
+```
+    Complete.TCGA.ID Gender Age.at.Initial.Pathologic.Diagnosis ER.Status
+1       TCGA-A2-A0T2 FEMALE                                  66  Negative
+2       TCGA-A2-A0CM FEMALE                                  40  Negative
+3       TCGA-BH-A18V FEMALE                                  48  Negative
+4       TCGA-BH-A18Q FEMALE                                  56  Negative
+5       TCGA-BH-A0E0 FEMALE                                  38  Negative
+6       TCGA-A7-A0CE FEMALE                                  57  Negative
+7       TCGA-D8-A142 FEMALE                                  74  Negative
+8       TCGA-A2-A0D0 FEMALE                                  60  Negative
+9       TCGA-AO-A0J6 FEMALE                                  61  Negative
+10      TCGA-A2-A0YM FEMALE                                  NA  Negative
+11      TCGA-A2-A0D2 FEMALE                                  45  Negative
+12      TCGA-A2-A0SX FEMALE                                  48  Negative
+13      TCGA-AO-A0JL FEMALE                                  59  Negative
+14      TCGA-AO-A12F FEMALE                                  36  Negative
+15      TCGA-AN-A0AL FEMALE                                  41  Negative
+16      TCGA-AN-A0FL FEMALE                                  62  Negative
+17      TCGA-AR-A0U4 FEMALE                                  54  Negative
+18      TCGA-AR-A1AQ FEMALE                                  49  Negative
+19      TCGA-BH-A0AV FEMALE                                  52  Negative
+20      TCGA-C8-A12V FEMALE                                  55  Negative
+21      TCGA-C8-A131 FEMALE                                  82  Negative
+22      TCGA-C8-A131 FEMALE                                  82  Negative
+23      TCGA-C8-A134 FEMALE                                  52  Negative
+24      TCGA-E2-A150 FEMALE                                  48  Negative
+25      TCGA-E2-A158 FEMALE                                  43  Negative
+26      TCGA-E2-A159 FEMALE                                  50  Negative
+27      TCGA-BH-A18R FEMALE                                  50      &lt;NA&gt;
+28      TCGA-A2-A0T1 FEMALE                                  55  Negative
+29      TCGA-BH-A0EE FEMALE                                  68  Negative
+30      TCGA-A2-A0D1 FEMALE                                  76  Negative
+31      TCGA-AO-A12D FEMALE                                  43  Negative
+32      TCGA-AO-A12D FEMALE                                  43  Negative
+33      TCGA-AO-A0JE FEMALE                                  53  Negative
+34      TCGA-A2-A0EQ FEMALE                                  64  Negative
+35      TCGA-A8-A076 FEMALE                                  66  Positive
+36      TCGA-A8-A09G FEMALE                                  79  Positive
+37      TCGA-AR-A0TX FEMALE                                  64  Positive
+38      TCGA-C8-A12L FEMALE                                  67  Negative
+39      TCGA-C8-A12P FEMALE                                  55  Negative
+40      TCGA-C8-A12Q FEMALE                                  78  Negative
+41      TCGA-C8-A12T FEMALE                                  43  Positive
+42      TCGA-C8-A12Z FEMALE                                  45  Negative
+43      TCGA-C8-A130 FEMALE                                  52  Positive
+44      TCGA-C8-A135 FEMALE                                  64  Negative
+45      TCGA-C8-A138 FEMALE                                  54  Positive
+46      TCGA-AR-A0TR FEMALE                                  68  Positive
+47      TCGA-BH-A18N FEMALE                                  88  Positive
+48      TCGA-BH-A0HK FEMALE                                  81  Positive
+49      TCGA-A7-A0CD FEMALE                                  66  Positive
+50      TCGA-BH-A0HP FEMALE                                  65  Positive
+51      TCGA-A2-A0YI FEMALE                                  62  Positive
+52      TCGA-A2-A0YL FEMALE                                  48  Positive
+53      TCGA-A2-A0YF FEMALE                                  67  Positive
+54      TCGA-BH-A0E1 FEMALE                                  52  Positive
+55      TCGA-A2-A0T6 FEMALE                                  50  Positive
+56      TCGA-A2-A0T7 FEMALE                                  51  Positive
+57      TCGA-A2-A0YD FEMALE                                  63  Positive
+58      TCGA-A2-A0EV FEMALE                                  80  Positive
+59      TCGA-A2-A0YC FEMALE                                  59  Positive
+60      TCGA-AO-A0J9 FEMALE                                  61  Positive
+61      TCGA-BH-A0BV FEMALE                                  78  Positive
+62      TCGA-AO-A12E FEMALE                                  51  Positive
+63      TCGA-AO-A126 FEMALE                                  39  Positive
+64      TCGA-A2-A0EX FEMALE                                  46  Positive
+65      TCGA-AO-A0JJ FEMALE                                  54  Positive
+66      TCGA-A8-A08Z FEMALE                                  76  Positive
+67      TCGA-AN-A04A FEMALE                                  36  Positive
+68      TCGA-AR-A1AP FEMALE                                  80  Positive
+69      TCGA-AR-A1AS FEMALE                                  54  Positive
+70      TCGA-AR-A1AW FEMALE                                  65  Positive
+71      TCGA-BH-A0C1 FEMALE                                  61  Positive
+72      TCGA-BH-A0DG FEMALE                                  30  Positive
+73      TCGA-BH-A0E9 FEMALE                                  53  Positive
+74      TCGA-E2-A154 FEMALE                                  68  Positive
+75      TCGA-AO-A03O FEMALE                                  69  Positive
+76      TCGA-A2-A0SW FEMALE                                  82  Positive
+77      TCGA-BH-A18U FEMALE                                  72  Positive
+78      TCGA-AR-A0TY FEMALE                                  54  Positive
+79      TCGA-D8-A13Y FEMALE                                  52  Positive
+80      TCGA-A7-A13F FEMALE                                  44  Positive
+81      TCGA-A7-A0CJ FEMALE                                  57  Positive
+82      TCGA-A2-A0T3 FEMALE                                  37  Positive
+83      TCGA-A2-A0YG FEMALE                                  63  Positive
+84      TCGA-A2-A0EY FEMALE                                  62  Positive
+85      TCGA-E2-A10A FEMALE                                  41  Positive
+86      TCGA-BH-A0C0 FEMALE                                  62  Positive
+87      TCGA-AO-A0JC FEMALE                                  64  Positive
+88      TCGA-AO-A0JM FEMALE                                  40  Positive
+89      TCGA-AO-A12B FEMALE                                  63  Positive
+90      TCGA-AO-A12B FEMALE                                  63  Positive
+91      TCGA-A8-A06N FEMALE                                  66  Positive
+92      TCGA-A8-A06Z FEMALE                                  84  Positive
+93      TCGA-A8-A079 FEMALE                                  69  Positive
+94      TCGA-A8-A08G FEMALE                                  41  Positive
+95      TCGA-A8-A09I FEMALE                                  84  Positive
+96      TCGA-AN-A0AJ FEMALE                                  79  Positive
+97      TCGA-AN-A0AM FEMALE                                  56  Positive
+98      TCGA-AN-A0AS FEMALE                                  70  Positive
+99      TCGA-AN-A0FK FEMALE                                  88  Positive
+100     TCGA-AR-A0TT FEMALE                                  53  Positive
+101     TCGA-AR-A0TV FEMALE                                  66  Positive
+102     TCGA-AR-A1AV   MALE                                  68  Positive
+103     TCGA-BH-A0BZ FEMALE                                  59  Positive
+104     TCGA-BH-A0C7 FEMALE                                  48  Positive
+105     TCGA-BH-A0DD   MALE                                  58  Positive
+106     TCGA-C8-A12U FEMALE                                  46  Positive
+107     TCGA-C8-A12W FEMALE                                  49  Positive
+108     TCGA-E2-A15A FEMALE                                  45  Positive
+    PR.Status HER2.Final.Status Tumor Node Metastasis AJCC.Stage Vital.Status
+1    Negative          Negative    T3   N3         M1   Stage IV     DECEASED
+2    Negative          Negative    T2   N0         M0  Stage IIA     DECEASED
+3    Negative          Negative    T2   N1         M0  Stage IIB     DECEASED
+4    Negative          Negative    T2   N1         M0  Stage IIB     DECEASED
+5    Negative          Negative    T3   N3         M0 Stage IIIC       LIVING
+6    Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+7    Negative          Negative    T3   N0         M0  Stage IIB       LIVING
+8    Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+9    Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+10   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+11   Negative          Negative    T2   N0         M0  Stage IIB       LIVING
+12   Negative          Negative    T1   N0         M0   Stage IA       LIVING
+13   Negative          Negative    T2   N2         M0 Stage IIIA       LIVING
+14   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+15   Negative          Negative    T4   N0         M0 Stage IIIB       LIVING
+16   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+17   Negative          Negative    T2   N0         M0   Stage II       LIVING
+18   Negative          Negative    T2   N0         M0   Stage II       LIVING
+19   Negative          Negative    T1   N0         M0    Stage I       LIVING
+20   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+21   Negative          Negative    T2   N2         M0  Stage III       LIVING
+22   Negative          Negative    T2   N2         M0  Stage III       LIVING
+23   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+24   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+25   Negative          Negative    T1   N1         M0  Stage IIA       LIVING
+26   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+27   Negative          Positive    T2   N1         M0   Stage IB     DECEASED
+28   Negative          Positive    T3   N3         M0 Stage IIIC       LIVING
+29   Negative          Positive    T3   N0         M0  Stage IIB       LIVING
+30   Negative          Positive    T2   N0         M0  Stage IIA       LIVING
+31   Negative          Positive    T1   N1         M0  Stage IIA       LIVING
+32   Negative          Positive    T1   N1         M0  Stage IIA       LIVING
+33   Negative          Positive    T2   N2         M0 Stage IIIA       LIVING
+34   Negative          Positive    T2   N0         M0  Stage IIA       LIVING
+35   Positive          Positive    T2   N0         M0  Stage IIA       LIVING
+36   Negative          Positive    T3   N3         M0 Stage IIIC       LIVING
+37   Positive          Positive    T1   N1         M0   Stage II       LIVING
+38   Negative          Positive    T2   N0         M0  Stage IIA       LIVING
+39   Negative          Positive    T2   N1         M0  Stage IIB       LIVING
+40   Negative          Positive    T1   N2         M0 Stage IIIA       LIVING
+41   Positive          Positive    T2   N0         M0  Stage IIA       LIVING
+42   Negative          Positive    T2   N1         M0   Stage II       LIVING
+43   Positive         Equivocal    T3   N2         M0 Stage IIIA       LIVING
+44   Negative          Positive    T2   N1         M0   Stage II       LIVING
+45   Negative          Positive    T2   N2         M0  Stage III       LIVING
+46   Positive          Negative    T2   N1         M0   Stage II     DECEASED
+47   Positive          Negative    T2   N1         M0  Stage IIA     DECEASED
+48   Negative          Negative    T2   N1         M0  Stage IIB       LIVING
+49   Positive          Negative    T1   N0         M0   Stage IA       LIVING
+50   Negative          Negative    T3   N2         M0 Stage IIIA       LIVING
+51   Positive          Negative    T1   N0         M0   Stage IA       LIVING
+52   Positive          Negative    T3   N2         M0 Stage IIIA       LIVING
+53   Negative          Negative    T1   N0         M0   Stage IA       LIVING
+54   Positive          Negative    T2   N1         M0  Stage IIB       LIVING
+55   Positive          Negative    T3   N0         M0  Stage IIB       LIVING
+56   Positive          Negative    T2   N0         M0  Stage IIA       LIVING
+57   Positive          Negative    T3   N0         M0  Stage IIB       LIVING
+58   Positive          Negative    T1   N0         M0   Stage IA       LIVING
+59   Positive          Negative    T2   N1         M0  Stage IIB       LIVING
+60   Positive          Negative    T2   N3         M0 Stage IIIC       LIVING
+61   Positive          Negative    T2   N1         M0  Stage IIB       LIVING
+62   Positive          Negative    T3   N0         M0  Stage IIB       LIVING
+63   Positive          Negative    T2   N0         M0  Stage IIA       LIVING
+64   Positive          Negative    T3   N0         M0  Stage IIB       LIVING
+65   Positive          Negative    T2   N1         M0  Stage IIB       LIVING
+66   Positive          Negative    T4   N3         M0 Stage IIIB       LIVING
+67   Positive          Negative    T2   N2         M0 Stage IIIA       LIVING
+68   Positive          Negative    T1   N0         M0    Stage I       LIVING
+69   Positive          Negative    T2   N1         M0   Stage II       LIVING
+70   Positive          Negative    T2   N0         M0   Stage II       LIVING
+71   Positive          Negative    T3   N2         M0 Stage IIIA       LIVING
+72   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+73   Positive          Negative    T2   N1         M0  Stage IIB       LIVING
+74   Positive          Negative    T1   N0         M0    Stage I       LIVING
+75   Positive          Negative    T2   N0         M0  Stage IIA     DECEASED
+76   Negative          Negative    T2   N2         M1   Stage IV     DECEASED
+77   Positive          Positive    T2   N2         M0 Stage IIIA     DECEASED
+78   Negative          Negative    T2   N0         M0   Stage II     DECEASED
+79   Positive          Negative    T1   N0         M0   Stage IA       LIVING
+80   Positive          Negative    T3   N1         M0 Stage IIIA       LIVING
+81   Positive          Negative    T2   N0         M0  Stage IIA       LIVING
+82   Positive          Negative    T1   N1         M0   Stage IA       LIVING
+83   Positive          Positive    T2   N3         M0 Stage IIIC       LIVING
+84   Negative          Positive    T2   N1         M0  Stage IIB       LIVING
+85   Positive          Negative    T3   N0         M0  Stage IIB       LIVING
+86   Positive          Positive    T1   N1         M0  Stage IIA       LIVING
+87   Positive          Negative    T2   N0         M0  Stage IIA       LIVING
+88   Positive          Positive    T2   N1         M0  Stage IIB       LIVING
+89   Positive          Negative    T2   N0         M0  Stage IIA       LIVING
+90   Positive          Negative    T2   N0         M0  Stage IIA       LIVING
+91   Negative          Negative    T4   N0         M0 Stage IIIB       LIVING
+92   Positive          Negative    T3   N0         M0  Stage IIB       LIVING
+93   Positive          Negative    T4   N3         M0 Stage IIIB       LIVING
+94   Positive          Positive    T2   N0         M0  Stage IIA       LIVING
+95   Positive          Positive    T2   N0         M0  Stage IIA       LIVING
+96   Positive          Positive    T3   N0         M0  Stage IIB       LIVING
+97   Negative          Negative    T2   N0         M0  Stage IIA       LIVING
+98   Negative          Negative    T2   N2         M0 Stage IIIA       LIVING
+99   Positive          Negative    T4   N0         M0 Stage IIIB       LIVING
+100  Negative          Negative    T2   N2         M0  Stage III       LIVING
+101  Positive          Negative    T2   N0         M0   Stage II       LIVING
+102  Positive          Negative    T2   N1         M0   Stage II       LIVING
+103  Positive          Negative    T3   N1         M0 Stage IIIA       LIVING
+104  Negative          Positive    T2   N1         M0  Stage IIB       LIVING
+105  Positive          Positive    T2   N1         M0  Stage IIB       LIVING
+106  Positive          Negative    T2   N1         M0   Stage IB       LIVING
+107  Positive          Negative    T4   N1         M0 Stage IIIB       LIVING
+108  Positive          Negative    T2   N3         M0 Stage IIIC       LIVING
+    Days.to.Date.of.Last.Contact Days.to.date.of.Death   NP_958782   NP_958785
+1                            240                   240          NA          NA
+2                            754                   754  0.68340354  0.69442409
+3                           1555                  1555          NA          NA
+4                           1692                  1692  0.19534065  0.21541294
+5                            133                    NA          NA          NA
+6                            309                    NA -1.12317308 -1.12317308
+7                            425                    NA  0.53859578  0.54221052
+8                            643                    NA          NA          NA
+9                            775                    NA  0.83113175  0.85653983
+10                           964                    NA  0.65584968  0.65814259
+11                          1027                    NA  0.10749090  0.10416449
+12                          1288                    NA -0.39855983 -0.39260141
+13                          1319                    NA -0.10667998 -0.10667998
+14                          1471                    NA -1.94779243 -1.95271766
+15                           197                    NA  0.32366271  0.32697264
+16                           230                    NA  2.45513793  2.48013666
+17                          1627                    NA -0.03322133 -0.03021642
+18                          1309                    NA          NA          NA
+19                          1180                    NA  0.35053566  0.36740533
+20                             0                    NA  0.67390470  0.68871756
+21                             0                    NA  2.60994298  2.65042179
+22                             0                    NA  2.70725015  2.73383192
+23                             0                    NA  0.14018179  0.12605376
+24                           591                    NA          NA          NA
+25                           450                    NA -1.08652907 -1.09549238
+26                           515                    NA          NA          NA
+27                          1099                  1141          NA          NA
+28                           520                    NA          NA          NA
+29                           943                    NA          NA          NA
+30                          1051                    NA          NA          NA
+31                          1948                    NA  1.09613118  1.11137037
+32                          1948                    NA  1.10068807  1.10068807
+33                          1965                    NA  0.55977697  0.56340687
+34                          2426                    NA -0.91267028 -0.92797866
+35                          1641                    NA  1.87398183  1.87038310
+36                             0                    NA -1.52334349 -1.51264622
+37                            15                    NA -0.58342864 -0.57254887
+38                             0                    NA  1.40757026  1.40757026
+39                             0                    NA          NA          NA
+40                             0                    NA          NA          NA
+41                             0                    NA -0.20491791 -0.16241849
+42                             0                    NA -0.78719498 -0.75594056
+43                             0                    NA -0.49405958 -0.50389919
+44                             0                    NA  1.12050183  1.13761779
+45                             7                    NA  2.76508066  2.77970922
+46                            21                   160 -1.10167521 -1.10878258
+47                          1148                  1148  1.10126053  1.10126053
+48                           178                    NA          NA          NA
+49                           372                    NA          NA          NA
+50                           414                    NA          NA          NA
+51                           441                    NA          NA          NA
+52                           445                    NA          NA          NA
+53                           469                    NA  0.31131919  0.29617712
+54                           477                    NA  0.76204441  0.76204441
+55                           575                    NA  0.79397556  0.81818151
+56                           631                    NA          NA          NA
+57                           769                    NA  0.06377853  0.09333637
+58                           968                    NA  0.45298593  0.47259013
+59                           989                    NA  0.81882406  0.81487725
+60                          1255                    NA  0.02000705  0.01195532
+61                          1519                    NA -0.06583842 -0.05589267
+62                          1742                    NA  0.26485911  0.27571131
+63                          2850                    NA  0.19587669  0.19587669
+64                           549                    NA  1.18510823  1.19261195
+65                          1512                    NA  0.75718813  0.78087066
+66                          1217                    NA  0.56889458  0.56889458
+67                            89                    NA  0.38458773  0.37139283
+68                          1215                    NA  0.46108752  0.46108752
+69                          1242                    NA  1.22250730  1.21897360
+70                          1072                    NA  0.57830868  0.58221285
+71                          1338                    NA -0.51836650 -0.51000200
+72                           713                    NA -0.20563748 -0.20563748
+73                          1405                    NA  1.46666516  1.48228346
+74                           325                    NA  0.86265926  0.87018604
+75                           993                  2483  1.05322494  1.05594815
+76                          1364                  1364 -0.48777247 -0.48777247
+77                          1317                  1563 -0.26503035 -0.25164229
+78                           544                  1699          NA          NA
+79                           362                    NA          NA          NA
+80                           387                    NA  1.27918472  1.27516713
+81                           409                    NA -1.00123984 -1.00461982
+82                           569                    NA  0.58371325  0.58062313
+83                           665                    NA -0.07820182 -0.06805814
+84                           735                    NA  1.17488099  1.18320879
+85                          1229                    NA          NA          NA
+86                          1270                    NA          NA          NA
+87                          1547                    NA -0.30726684 -0.30726684
+88                          1826                    NA  1.39524718  1.40892213
+89                          2359                    NA -0.65982805 -0.64874215
+90                          2359                    NA -0.96390393 -0.93820953
+91                             0                    NA  0.23854713  0.24981815
+92                            31                    NA -0.49640909 -0.49850890
+93                           274                    NA  1.04895925  1.05225694
+94                           606                    NA          NA          NA
+95                          1006                    NA          NA          NA
+96                           243                    NA -0.42818149 -0.40637805
+97                             5                    NA  1.50196696  1.51034838
+98                             9                    NA          NA          NA
+99                           212                    NA  0.97356417  0.97747606
+100                         1679                    NA -0.51142119 -0.52606668
+101                          904                    NA -1.51427833 -1.52828543
+102                         1295                    NA -0.75982306 -0.75982306
+103                         1492                    NA          NA          NA
+104                         1305                    NA -0.55221197 -0.54774937
+105                         1393                    NA -0.69231577 -0.65946866
+106                            0                    NA -0.48155015 -0.47788983
+107                            0                    NA          NA          NA
+108                          502                    NA  2.18012330  2.18012330
+      NP_958786    NP_000436   NP_958781   NP_958780   NP_958783   NP_958784
+1            NA           NA          NA          NA          NA          NA
+2    0.69809760  0.687077054  0.68707705  0.69809760  0.69809760  0.69809760
+3            NA           NA          NA          NA          NA          NA
+4    0.21541294  0.205376799  0.21541294  0.21541294  0.21541294  0.21541294
+5            NA           NA          NA          NA          NA          NA
+6   -1.11686051 -1.129485657 -1.12948566 -1.12001680 -1.12317308 -1.12317308
+7    0.54221052  0.534981038  0.54221052  0.54221052  0.54221052  0.54221052
+8            NA           NA          NA          NA          NA          NA
+9    0.85653983  0.836777987  0.86500919  0.85653983  0.85089359  0.85089359
+10   0.65584968  0.655849679  0.65126386  0.65814259  0.65584968  0.65584968
+11   0.10749090  0.097511661  0.10416449  0.10416449  0.10416449  0.10416449
+12  -0.39260141 -0.392601414 -0.39558063 -0.39260141 -0.39260141 -0.39260141
+13  -0.10667998 -0.106679982 -0.10667998 -0.10667998 -0.10667998 -0.10667998
+14  -1.95518028 -1.947792427 -1.95764289 -1.95518028 -1.95518028 -1.95518028
+15   0.32697264  0.330282575  0.32697264  0.32697264  0.32697264  0.32697264
+16   2.48013666  2.461955765  2.47786405  2.47104621  2.48013666  2.48013666
+17  -0.02721152 -0.030216424 -0.03021642 -0.03021642 -0.03021642 -0.03021642
+18           NA           NA          NA          NA          NA          NA
+19   0.36740533  0.360657461  0.37077926  0.36740533  0.36065746  0.36065746
+20   0.68871756  0.677607916  0.68871756  0.68871756  0.68871756  0.68871756
+21   2.65042179  2.646373906  2.64637391  2.64637391  2.65042179  2.65042179
+22   2.73762932  2.733831920  2.75281890  2.73762932  2.73762932  2.73762932
+23   0.13311778  0.111925718  0.12605376  0.12605376  0.11545773  0.11545773
+24           NA           NA          NA          NA          NA          NA
+25  -1.09549238 -1.095492377 -1.09549238 -1.09325155 -1.09325155 -1.09325155
+26           NA           NA          NA          NA          NA          NA
+27           NA           NA          NA          NA          NA          NA
+28           NA           NA          NA          NA          NA          NA
+29           NA           NA          NA          NA          NA          NA
+30           NA           NA          NA          NA          NA          NA
+31   1.11137037  1.107560577  1.11518017  1.10756058  1.11137037  1.11137037
+32   1.10068807  1.100688066  1.09335835  1.09702321  1.09702321  1.09702321
+33   0.55977697  0.541627447  0.55977697  0.55977697  0.55977697  0.55977697
+34  -0.92797866 -0.931805750 -0.92797866 -0.92797866 -0.92797866 -0.92797866
+35   1.87038310  1.859586885  1.87038310  1.87038310  1.87038310  1.87038310
+36  -1.50997191 -1.517994857 -1.50997191 -1.51264622 -1.51532054 -1.51532054
+37  -0.56710898 -0.583428637 -0.57254887 -0.57798875 -0.57798875 -0.57798875
+38   1.41031183  1.407570262  1.41305339  1.40757026  1.41031183  1.41305339
+39           NA           NA          NA          NA          NA          NA
+40           NA           NA          NA          NA          NA          NA
+41  -0.16666843 -0.183668200 -0.16666843 -0.16666843 -0.16666843 -0.16666843
+42  -0.75594056 -0.774693215 -0.77156777 -0.77156777 -0.77156777 -0.77156777
+43  -0.50061932 -0.510458925 -0.50389919 -0.50389919 -0.50061932 -0.50061932
+44   1.13761779  1.137617791  1.12050183  1.12734822  1.13761779  1.13761779
+45   2.77970922  2.797994911  2.78702349  2.77970922  2.78336636  2.78336636
+46  -1.10878258 -1.096936966 -1.11115170 -1.10641345 -1.10878258 -1.10878258
+47   1.09776669  1.090778991  1.10824823  1.10126053  1.10126053  1.10126053
+48           NA           NA          NA          NA          NA          NA
+49           NA           NA          NA          NA          NA          NA
+50           NA           NA          NA          NA          NA          NA
+51           NA           NA          NA          NA          NA          NA
+52           NA           NA          NA          NA          NA          NA
+53   0.29617712  0.296177120  0.29617712  0.29617712  0.29617712  0.29617712
+54   0.76638435  0.757704463  0.76638435  0.76204441  0.76204441  0.76204441
+55   0.81472351  0.800891541  0.81818151  0.81126552  0.81126552  0.81126552
+56           NA           NA          NA          NA          NA          NA
+57   0.08446902  0.066734311  0.08446902  0.09333637  0.08446902  0.08446902
+58   0.47259013  0.458587127  0.47259013  0.47259013  0.47259013  0.47259013
+59   0.81487725  0.799089996  0.81882406  0.81487725  0.81487725  0.81487725
+60   0.01195532  0.003903587  0.01195532  0.01195532  0.01195532  0.01195532
+61  -0.06583842 -0.055892667 -0.06252317 -0.05589267 -0.06252317 -0.06252317
+62   0.27571131  0.278424357  0.27842436  0.27299826  0.27571131  0.27571131
+63   0.19587669  0.218934622  0.19971968  0.19971968  0.19971968  0.19971968
+64   1.18886009  1.185108231  1.20011567  1.18886009  1.18886009  1.19261195
+65   0.77410422  0.763954564  0.77072100  0.77748744  0.77748744  0.77748744
+66   0.56889458  0.568894580  0.56889458  0.56889458  0.56889458  0.56889458
+67   0.37139283  0.377990280  0.37469156  0.37799028  0.37469156  0.37469156
+68   0.46108752  0.461087521  0.46108752  0.46108752  0.46108752  0.46108752
+69   1.22250730  1.204838793  1.22250730  1.21897360  1.22250730  1.22250730
+70   0.57830868  0.590021204  0.58611703  0.57830868  0.58221285  0.58221285
+71  -0.50721383 -0.518366498 -0.51279017 -0.50721383 -0.51000200 -0.51000200
+72  -0.20563748 -0.215006194 -0.20563748 -0.21032184 -0.20563748 -0.20563748
+73   1.47447431  1.458856017  1.47447431  1.47447431  1.47447431  1.47447431
+74   0.87018604  0.866422649  0.87018604  0.87018604  0.87018604  0.87018604
+75   1.05594815  1.058671367  1.05867137  1.05594815  1.05867137  1.05867137
+76  -0.48777247 -0.487772474 -0.50385322 -0.48777247 -0.48777247 -0.48777247
+77  -0.25164229 -0.251642291 -0.25164229 -0.25164229 -0.25164229 -0.25164229
+78           NA           NA          NA          NA          NA          NA
+79           NA           NA          NA          NA          NA          NA
+80   1.27516713  1.279184725  1.27918472  1.27918472  1.27918472  1.27918472
+81  -1.00461982 -0.997859864 -1.00123984 -1.00123984 -1.00123984 -1.00123984
+82   0.58062313  0.586803375  0.58680338  0.58680338  0.58680338  0.58680338
+83  -0.07143937 -0.057914451 -0.06467691 -0.06805814 -0.07143937 -0.07143937
+84   1.18320879  1.174880993  1.17904489  1.18320879  1.18320879  1.18320879
+85           NA           NA          NA          NA          NA          NA
+86           NA           NA          NA          NA          NA          NA
+87  -0.30726684 -0.307266841 -0.30103274 -0.30726684 -0.30726684 -0.30726684
+88   1.41234087  1.408922131  1.40892213  1.41234087  1.41234087  1.41234087
+89  -0.65428510 -0.632113308 -0.64042773 -0.65428510 -0.64874215 -0.64874215
+90  -0.94391940 -0.935354600 -0.93535460 -0.93820953 -0.94391940 -0.94391940
+91   0.24418264  0.249818154  0.24981815  0.24981815  0.24418264  0.24418264
+92  -0.49640909 -0.492209483 -0.48800987 -0.49640909 -0.49640909 -0.49640909
+93   1.05225694  1.058852321  1.05225694  1.05225694  1.05225694  1.05225694
+94           NA           NA          NA          NA          NA          NA
+95           NA           NA          NA          NA          NA          NA
+96  -0.40637805 -0.406378045 -0.40637805 -0.40637805 -0.40637805 -0.40637805
+97   1.50196696  1.501966964  1.50196696  1.51034838  1.50615767  1.50615767
+98           NA           NA          NA          NA          NA          NA
+99   0.97747606  0.969652277  0.98529984  0.97747606  0.97747606  0.97747606
+100 -0.52606668 -0.533389425 -0.52972805 -0.52972805 -0.52972805 -0.52972805
+101 -1.52828543 -1.531086848 -1.51427833 -1.52548401 -1.52548401 -1.52548401
+102 -0.74911369 -0.735726982 -0.74911369 -0.74375901 -0.75446837 -0.75446837
+103          NA           NA          NA          NA          NA          NA
+104 -0.55221197 -0.552211965 -0.55667457 -0.54774937 -0.55221197 -0.55221197
+105 -0.66416111 -0.657122443 -0.66181489 -0.66181489 -0.66416111 -0.66416111
+106 -0.48155015 -0.470569197 -0.48155015 -0.48521047 -0.48155015 -0.48155015
+107          NA           NA          NA          NA          NA          NA
+108  2.18012330  2.180123300  2.18012330  2.18012330  2.18012330  2.18012330
+       NP_112598    NP_001611
+1             NA           NA
+2   -2.652150067 -0.984373265
+3             NA           NA
+4   -1.035759872 -0.517225683
+5             NA           NA
+6    2.244584354 -2.575064764
+7   -0.148204900  0.267490247
+8             NA           NA
+9   -0.967196074  2.838370489
+10  -1.969533682  1.307036469
+11  -0.880454146 -1.512472865
+12  -2.504861658  0.694810418
+13   0.025188599 -1.177327273
+14  -1.004610594 -2.551133287
+15   1.932290343 -1.910542340
+16   3.959606744 -1.858278696
+17  -2.551331119 -2.100595477
+18            NA           NA
+19  -1.650206386  0.401144652
+20  -2.733052927 -2.133132127
+21   3.909312755 -1.045293501
+22   4.089502075 -1.120524403
+23  -0.725160560 -2.360481012
+24            NA           NA
+25   0.096627356 -1.149272214
+26            NA           NA
+27            NA           NA
+28            NA           NA
+29            NA           NA
+30            NA           NA
+31  -1.517390359  0.482753678
+32  -2.413909374  0.543629869
+33  -1.698023696  1.754015586
+34  -3.071151471 -2.278942948
+35   1.539299286  1.377356118
+36  -2.194596901  0.134732665
+37   0.730303716  1.638764597
+38   3.195070488 -0.007077155
+39            NA           NA
+40            NA           NA
+41   2.425796388  0.470822918
+42   2.363250927  0.025420032
+43  -1.845365554 -0.405503121
+44   0.589907135  2.257001446
+45   2.205538366  0.749996978
+46  -1.324372713  1.075548247
+47  -3.444234673  2.103994679
+48            NA           NA
+49            NA           NA
+50            NA           NA
+51            NA           NA
+52            NA           NA
+53  -3.254639306  2.351713708
+54  -0.583338181  2.185545984
+55   1.381834372  1.565108003
+56            NA           NA
+57  -0.237711460  1.305207881
+58  -0.742870654  1.811277356
+59  -1.537423401  1.051686039
+60   0.225326195  0.325972835
+61  -2.187599782  0.709930573
+62  -0.001019793  0.131919657
+63  -2.624877344  0.653192395
+64   1.046289383  2.138080861
+65  -2.494085562  1.927781982
+66   3.263024321  0.887747701
+67  -0.242169869  0.051416585
+68   2.318731725 -0.283625077
+69  -0.473668945  1.741961269
+70  -1.627550800 -1.697825970
+71  -2.439413060 -2.174537264
+72  -1.151877145  0.272166701
+73  -0.352866070  2.813743010
+74   1.920170648  2.349196620
+75  -0.332890890 -1.250613945
+76  -1.626289437  0.731148229
+77  -1.613877425 -0.646590070
+78            NA           NA
+79            NA           NA
+80   3.026839582  0.961794533
+81  -1.379797505  0.563690494
+82   0.052212450  1.501479177
+83   0.351214199 -0.287837990
+84   4.955701511  0.825113456
+85            NA           NA
+86            NA           NA
+87  -1.460574599  1.170213908
+88   1.008929830  1.802076956
+89  -0.618255939  1.222002715
+90  -1.252252127  1.325752082
+91  -1.860681139 -0.229200377
+92  -1.300634341  1.349319349
+93   0.679617968  3.436486828
+94            NA           NA
+95            NA           NA
+96   2.258487365  0.972084153
+97   2.151527016  1.552255484
+98            NA           NA
+99  -1.811702422  3.262020566
+100 -4.952665524 -0.526066681
+101 -3.147505566 -1.738391848
+102 -0.700921541  0.726101526
+103           NA           NA
+104  0.679465615  0.487573818
+105  0.234441727  0.980540164
+106 -2.802192305 -0.997655112
+107           NA           NA
+108  1.911710702  0.896216374
+```
+]
+
+---
+count: false
+ 
+## Using &lt;code&gt;broom&lt;/code&gt;
+The fact that &lt;code&gt;broom::tidy&lt;/code&gt; makes the results of tests into tibbles is in fact extremely useful in high-throughput work
+.panel1-through-auto[
+
+```r
+brca %&gt;%
+* select(ER.Status, starts_with('NP'))
+```
+]
+ 
+.panel2-through-auto[
+
+```
+    ER.Status   NP_958782   NP_958785   NP_958786    NP_000436   NP_958781
+1    Negative          NA          NA          NA           NA          NA
+2    Negative  0.68340354  0.69442409  0.69809760  0.687077054  0.68707705
+3    Negative          NA          NA          NA           NA          NA
+4    Negative  0.19534065  0.21541294  0.21541294  0.205376799  0.21541294
+5    Negative          NA          NA          NA           NA          NA
+6    Negative -1.12317308 -1.12317308 -1.11686051 -1.129485657 -1.12948566
+7    Negative  0.53859578  0.54221052  0.54221052  0.534981038  0.54221052
+8    Negative          NA          NA          NA           NA          NA
+9    Negative  0.83113175  0.85653983  0.85653983  0.836777987  0.86500919
+10   Negative  0.65584968  0.65814259  0.65584968  0.655849679  0.65126386
+11   Negative  0.10749090  0.10416449  0.10749090  0.097511661  0.10416449
+12   Negative -0.39855983 -0.39260141 -0.39260141 -0.392601414 -0.39558063
+13   Negative -0.10667998 -0.10667998 -0.10667998 -0.106679982 -0.10667998
+14   Negative -1.94779243 -1.95271766 -1.95518028 -1.947792427 -1.95764289
+15   Negative  0.32366271  0.32697264  0.32697264  0.330282575  0.32697264
+16   Negative  2.45513793  2.48013666  2.48013666  2.461955765  2.47786405
+17   Negative -0.03322133 -0.03021642 -0.02721152 -0.030216424 -0.03021642
+18   Negative          NA          NA          NA           NA          NA
+19   Negative  0.35053566  0.36740533  0.36740533  0.360657461  0.37077926
+20   Negative  0.67390470  0.68871756  0.68871756  0.677607916  0.68871756
+21   Negative  2.60994298  2.65042179  2.65042179  2.646373906  2.64637391
+22   Negative  2.70725015  2.73383192  2.73762932  2.733831920  2.75281890
+23   Negative  0.14018179  0.12605376  0.13311778  0.111925718  0.12605376
+24   Negative          NA          NA          NA           NA          NA
+25   Negative -1.08652907 -1.09549238 -1.09549238 -1.095492377 -1.09549238
+26   Negative          NA          NA          NA           NA          NA
+27       &lt;NA&gt;          NA          NA          NA           NA          NA
+28   Negative          NA          NA          NA           NA          NA
+29   Negative          NA          NA          NA           NA          NA
+30   Negative          NA          NA          NA           NA          NA
+31   Negative  1.09613118  1.11137037  1.11137037  1.107560577  1.11518017
+32   Negative  1.10068807  1.10068807  1.10068807  1.100688066  1.09335835
+33   Negative  0.55977697  0.56340687  0.55977697  0.541627447  0.55977697
+34   Negative -0.91267028 -0.92797866 -0.92797866 -0.931805750 -0.92797866
+35   Positive  1.87398183  1.87038310  1.87038310  1.859586885  1.87038310
+36   Positive -1.52334349 -1.51264622 -1.50997191 -1.517994857 -1.50997191
+37   Positive -0.58342864 -0.57254887 -0.56710898 -0.583428637 -0.57254887
+38   Negative  1.40757026  1.40757026  1.41031183  1.407570262  1.41305339
+39   Negative          NA          NA          NA           NA          NA
+40   Negative          NA          NA          NA           NA          NA
+41   Positive -0.20491791 -0.16241849 -0.16666843 -0.183668200 -0.16666843
+42   Negative -0.78719498 -0.75594056 -0.75594056 -0.774693215 -0.77156777
+43   Positive -0.49405958 -0.50389919 -0.50061932 -0.510458925 -0.50389919
+44   Negative  1.12050183  1.13761779  1.13761779  1.137617791  1.12050183
+45   Positive  2.76508066  2.77970922  2.77970922  2.797994911  2.78702349
+46   Positive -1.10167521 -1.10878258 -1.10878258 -1.096936966 -1.11115170
+47   Positive  1.10126053  1.10126053  1.09776669  1.090778991  1.10824823
+48   Positive          NA          NA          NA           NA          NA
+49   Positive          NA          NA          NA           NA          NA
+50   Positive          NA          NA          NA           NA          NA
+51   Positive          NA          NA          NA           NA          NA
+52   Positive          NA          NA          NA           NA          NA
+53   Positive  0.31131919  0.29617712  0.29617712  0.296177120  0.29617712
+54   Positive  0.76204441  0.76204441  0.76638435  0.757704463  0.76638435
+55   Positive  0.79397556  0.81818151  0.81472351  0.800891541  0.81818151
+56   Positive          NA          NA          NA           NA          NA
+57   Positive  0.06377853  0.09333637  0.08446902  0.066734311  0.08446902
+58   Positive  0.45298593  0.47259013  0.47259013  0.458587127  0.47259013
+59   Positive  0.81882406  0.81487725  0.81487725  0.799089996  0.81882406
+60   Positive  0.02000705  0.01195532  0.01195532  0.003903587  0.01195532
+61   Positive -0.06583842 -0.05589267 -0.06583842 -0.055892667 -0.06252317
+62   Positive  0.26485911  0.27571131  0.27571131  0.278424357  0.27842436
+63   Positive  0.19587669  0.19587669  0.19587669  0.218934622  0.19971968
+64   Positive  1.18510823  1.19261195  1.18886009  1.185108231  1.20011567
+65   Positive  0.75718813  0.78087066  0.77410422  0.763954564  0.77072100
+66   Positive  0.56889458  0.56889458  0.56889458  0.568894580  0.56889458
+67   Positive  0.38458773  0.37139283  0.37139283  0.377990280  0.37469156
+68   Positive  0.46108752  0.46108752  0.46108752  0.461087521  0.46108752
+69   Positive  1.22250730  1.21897360  1.22250730  1.204838793  1.22250730
+70   Positive  0.57830868  0.58221285  0.57830868  0.590021204  0.58611703
+71   Positive -0.51836650 -0.51000200 -0.50721383 -0.518366498 -0.51279017
+72   Positive -0.20563748 -0.20563748 -0.20563748 -0.215006194 -0.20563748
+73   Positive  1.46666516  1.48228346  1.47447431  1.458856017  1.47447431
+74   Positive  0.86265926  0.87018604  0.87018604  0.866422649  0.87018604
+75   Positive  1.05322494  1.05594815  1.05594815  1.058671367  1.05867137
+76   Positive -0.48777247 -0.48777247 -0.48777247 -0.487772474 -0.50385322
+77   Positive -0.26503035 -0.25164229 -0.25164229 -0.251642291 -0.25164229
+78   Positive          NA          NA          NA           NA          NA
+79   Positive          NA          NA          NA           NA          NA
+80   Positive  1.27918472  1.27516713  1.27516713  1.279184725  1.27918472
+81   Positive -1.00123984 -1.00461982 -1.00461982 -0.997859864 -1.00123984
+82   Positive  0.58371325  0.58062313  0.58062313  0.586803375  0.58680338
+83   Positive -0.07820182 -0.06805814 -0.07143937 -0.057914451 -0.06467691
+84   Positive  1.17488099  1.18320879  1.18320879  1.174880993  1.17904489
+85   Positive          NA          NA          NA           NA          NA
+86   Positive          NA          NA          NA           NA          NA
+87   Positive -0.30726684 -0.30726684 -0.30726684 -0.307266841 -0.30103274
+88   Positive  1.39524718  1.40892213  1.41234087  1.408922131  1.40892213
+89   Positive -0.65982805 -0.64874215 -0.65428510 -0.632113308 -0.64042773
+90   Positive -0.96390393 -0.93820953 -0.94391940 -0.935354600 -0.93535460
+91   Positive  0.23854713  0.24981815  0.24418264  0.249818154  0.24981815
+92   Positive -0.49640909 -0.49850890 -0.49640909 -0.492209483 -0.48800987
+93   Positive  1.04895925  1.05225694  1.05225694  1.058852321  1.05225694
+94   Positive          NA          NA          NA           NA          NA
+95   Positive          NA          NA          NA           NA          NA
+96   Positive -0.42818149 -0.40637805 -0.40637805 -0.406378045 -0.40637805
+97   Positive  1.50196696  1.51034838  1.50196696  1.501966964  1.50196696
+98   Positive          NA          NA          NA           NA          NA
+99   Positive  0.97356417  0.97747606  0.97747606  0.969652277  0.98529984
+100  Positive -0.51142119 -0.52606668 -0.52606668 -0.533389425 -0.52972805
+101  Positive -1.51427833 -1.52828543 -1.52828543 -1.531086848 -1.51427833
+102  Positive -0.75982306 -0.75982306 -0.74911369 -0.735726982 -0.74911369
+103  Positive          NA          NA          NA           NA          NA
+104  Positive -0.55221197 -0.54774937 -0.55221197 -0.552211965 -0.55667457
+105  Positive -0.69231577 -0.65946866 -0.66416111 -0.657122443 -0.66181489
+106  Positive -0.48155015 -0.47788983 -0.48155015 -0.470569197 -0.48155015
+107  Positive          NA          NA          NA           NA          NA
+108  Positive  2.18012330  2.18012330  2.18012330  2.180123300  2.18012330
+      NP_958780   NP_958783   NP_958784    NP_112598    NP_001611
+1            NA          NA          NA           NA           NA
+2    0.69809760  0.69809760  0.69809760 -2.652150067 -0.984373265
+3            NA          NA          NA           NA           NA
+4    0.21541294  0.21541294  0.21541294 -1.035759872 -0.517225683
+5            NA          NA          NA           NA           NA
+6   -1.12001680 -1.12317308 -1.12317308  2.244584354 -2.575064764
+7    0.54221052  0.54221052  0.54221052 -0.148204900  0.267490247
+8            NA          NA          NA           NA           NA
+9    0.85653983  0.85089359  0.85089359 -0.967196074  2.838370489
+10   0.65814259  0.65584968  0.65584968 -1.969533682  1.307036469
+11   0.10416449  0.10416449  0.10416449 -0.880454146 -1.512472865
+12  -0.39260141 -0.39260141 -0.39260141 -2.504861658  0.694810418
+13  -0.10667998 -0.10667998 -0.10667998  0.025188599 -1.177327273
+14  -1.95518028 -1.95518028 -1.95518028 -1.004610594 -2.551133287
+15   0.32697264  0.32697264  0.32697264  1.932290343 -1.910542340
+16   2.47104621  2.48013666  2.48013666  3.959606744 -1.858278696
+17  -0.03021642 -0.03021642 -0.03021642 -2.551331119 -2.100595477
+18           NA          NA          NA           NA           NA
+19   0.36740533  0.36065746  0.36065746 -1.650206386  0.401144652
+20   0.68871756  0.68871756  0.68871756 -2.733052927 -2.133132127
+21   2.64637391  2.65042179  2.65042179  3.909312755 -1.045293501
+22   2.73762932  2.73762932  2.73762932  4.089502075 -1.120524403
+23   0.12605376  0.11545773  0.11545773 -0.725160560 -2.360481012
+24           NA          NA          NA           NA           NA
+25  -1.09325155 -1.09325155 -1.09325155  0.096627356 -1.149272214
+26           NA          NA          NA           NA           NA
+27           NA          NA          NA           NA           NA
+28           NA          NA          NA           NA           NA
+29           NA          NA          NA           NA           NA
+30           NA          NA          NA           NA           NA
+31   1.10756058  1.11137037  1.11137037 -1.517390359  0.482753678
+32   1.09702321  1.09702321  1.09702321 -2.413909374  0.543629869
+33   0.55977697  0.55977697  0.55977697 -1.698023696  1.754015586
+34  -0.92797866 -0.92797866 -0.92797866 -3.071151471 -2.278942948
+35   1.87038310  1.87038310  1.87038310  1.539299286  1.377356118
+36  -1.51264622 -1.51532054 -1.51532054 -2.194596901  0.134732665
+37  -0.57798875 -0.57798875 -0.57798875  0.730303716  1.638764597
+38   1.40757026  1.41031183  1.41305339  3.195070488 -0.007077155
+39           NA          NA          NA           NA           NA
+40           NA          NA          NA           NA           NA
+41  -0.16666843 -0.16666843 -0.16666843  2.425796388  0.470822918
+42  -0.77156777 -0.77156777 -0.77156777  2.363250927  0.025420032
+43  -0.50389919 -0.50061932 -0.50061932 -1.845365554 -0.405503121
+44   1.12734822  1.13761779  1.13761779  0.589907135  2.257001446
+45   2.77970922  2.78336636  2.78336636  2.205538366  0.749996978
+46  -1.10641345 -1.10878258 -1.10878258 -1.324372713  1.075548247
+47   1.10126053  1.10126053  1.10126053 -3.444234673  2.103994679
+48           NA          NA          NA           NA           NA
+49           NA          NA          NA           NA           NA
+50           NA          NA          NA           NA           NA
+51           NA          NA          NA           NA           NA
+52           NA          NA          NA           NA           NA
+53   0.29617712  0.29617712  0.29617712 -3.254639306  2.351713708
+54   0.76204441  0.76204441  0.76204441 -0.583338181  2.185545984
+55   0.81126552  0.81126552  0.81126552  1.381834372  1.565108003
+56           NA          NA          NA           NA           NA
+57   0.09333637  0.08446902  0.08446902 -0.237711460  1.305207881
+58   0.47259013  0.47259013  0.47259013 -0.742870654  1.811277356
+59   0.81487725  0.81487725  0.81487725 -1.537423401  1.051686039
+60   0.01195532  0.01195532  0.01195532  0.225326195  0.325972835
+61  -0.05589267 -0.06252317 -0.06252317 -2.187599782  0.709930573
+62   0.27299826  0.27571131  0.27571131 -0.001019793  0.131919657
+63   0.19971968  0.19971968  0.19971968 -2.624877344  0.653192395
+64   1.18886009  1.18886009  1.19261195  1.046289383  2.138080861
+65   0.77748744  0.77748744  0.77748744 -2.494085562  1.927781982
+66   0.56889458  0.56889458  0.56889458  3.263024321  0.887747701
+67   0.37799028  0.37469156  0.37469156 -0.242169869  0.051416585
+68   0.46108752  0.46108752  0.46108752  2.318731725 -0.283625077
+69   1.21897360  1.22250730  1.22250730 -0.473668945  1.741961269
+70   0.57830868  0.58221285  0.58221285 -1.627550800 -1.697825970
+71  -0.50721383 -0.51000200 -0.51000200 -2.439413060 -2.174537264
+72  -0.21032184 -0.20563748 -0.20563748 -1.151877145  0.272166701
+73   1.47447431  1.47447431  1.47447431 -0.352866070  2.813743010
+74   0.87018604  0.87018604  0.87018604  1.920170648  2.349196620
+75   1.05594815  1.05867137  1.05867137 -0.332890890 -1.250613945
+76  -0.48777247 -0.48777247 -0.48777247 -1.626289437  0.731148229
+77  -0.25164229 -0.25164229 -0.25164229 -1.613877425 -0.646590070
+78           NA          NA          NA           NA           NA
+79           NA          NA          NA           NA           NA
+80   1.27918472  1.27918472  1.27918472  3.026839582  0.961794533
+81  -1.00123984 -1.00123984 -1.00123984 -1.379797505  0.563690494
+82   0.58680338  0.58680338  0.58680338  0.052212450  1.501479177
+83  -0.06805814 -0.07143937 -0.07143937  0.351214199 -0.287837990
+84   1.18320879  1.18320879  1.18320879  4.955701511  0.825113456
+85           NA          NA          NA           NA           NA
+86           NA          NA          NA           NA           NA
+87  -0.30726684 -0.30726684 -0.30726684 -1.460574599  1.170213908
+88   1.41234087  1.41234087  1.41234087  1.008929830  1.802076956
+89  -0.65428510 -0.64874215 -0.64874215 -0.618255939  1.222002715
+90  -0.93820953 -0.94391940 -0.94391940 -1.252252127  1.325752082
+91   0.24981815  0.24418264  0.24418264 -1.860681139 -0.229200377
+92  -0.49640909 -0.49640909 -0.49640909 -1.300634341  1.349319349
+93   1.05225694  1.05225694  1.05225694  0.679617968  3.436486828
+94           NA          NA          NA           NA           NA
+95           NA          NA          NA           NA           NA
+96  -0.40637805 -0.40637805 -0.40637805  2.258487365  0.972084153
+97   1.51034838  1.50615767  1.50615767  2.151527016  1.552255484
+98           NA          NA          NA           NA           NA
+99   0.97747606  0.97747606  0.97747606 -1.811702422  3.262020566
+100 -0.52972805 -0.52972805 -0.52972805 -4.952665524 -0.526066681
+101 -1.52548401 -1.52548401 -1.52548401 -3.147505566 -1.738391848
+102 -0.74375901 -0.75446837 -0.75446837 -0.700921541  0.726101526
+103          NA          NA          NA           NA           NA
+104 -0.54774937 -0.55221197 -0.55221197  0.679465615  0.487573818
+105 -0.66181489 -0.66416111 -0.66416111  0.234441727  0.980540164
+106 -0.48521047 -0.48155015 -0.48155015 -2.802192305 -0.997655112
+107          NA          NA          NA           NA           NA
+108  2.18012330  2.18012330  2.18012330  1.911710702  0.896216374
+```
+]
+
+---
+count: false
+ 
+## Using &lt;code&gt;broom&lt;/code&gt;
+The fact that &lt;code&gt;broom::tidy&lt;/code&gt; makes the results of tests into tibbles is in fact extremely useful in high-throughput work
+.panel1-through-auto[
+
+```r
+brca %&gt;%
+  select(ER.Status, starts_with('NP')) %&gt;%
+* pivot_longer(names_to = 'protein',
+*              values_to = 'expression',
+*              cols = c(-ER.Status))
+```
+]
+ 
+.panel2-through-auto[
+
+```
+# A tibble: 1,080 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_958782         NA
+ 2 Negative  NP_958785         NA
+ 3 Negative  NP_958786         NA
+ 4 Negative  NP_000436         NA
+ 5 Negative  NP_958781         NA
+ 6 Negative  NP_958780         NA
+ 7 Negative  NP_958783         NA
+ 8 Negative  NP_958784         NA
+ 9 Negative  NP_112598         NA
+10 Negative  NP_001611         NA
+# … with 1,070 more rows
+```
+]
+
+---
+count: false
+ 
+## Using &lt;code&gt;broom&lt;/code&gt;
+The fact that &lt;code&gt;broom::tidy&lt;/code&gt; makes the results of tests into tibbles is in fact extremely useful in high-throughput work
+.panel1-through-auto[
+
+```r
+brca %&gt;%
+  select(ER.Status, starts_with('NP')) %&gt;%
+  pivot_longer(names_to = 'protein',
+               values_to = 'expression',
+               cols = c(-ER.Status)) %&gt;%
+* split(.$protein)
+```
+]
+ 
+.panel2-through-auto[
+
+```
+$NP_000436
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_000436     NA    
+ 2 Negative  NP_000436      0.687
+ 3 Negative  NP_000436     NA    
+ 4 Negative  NP_000436      0.205
+ 5 Negative  NP_000436     NA    
+ 6 Negative  NP_000436     -1.13 
+ 7 Negative  NP_000436      0.535
+ 8 Negative  NP_000436     NA    
+ 9 Negative  NP_000436      0.837
+10 Negative  NP_000436      0.656
+# … with 98 more rows
+
+$NP_001611
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_001611     NA    
+ 2 Negative  NP_001611     -0.984
+ 3 Negative  NP_001611     NA    
+ 4 Negative  NP_001611     -0.517
+ 5 Negative  NP_001611     NA    
+ 6 Negative  NP_001611     -2.58 
+ 7 Negative  NP_001611      0.267
+ 8 Negative  NP_001611     NA    
+ 9 Negative  NP_001611      2.84 
+10 Negative  NP_001611      1.31 
+# … with 98 more rows
+
+$NP_112598
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_112598     NA    
+ 2 Negative  NP_112598     -2.65 
+ 3 Negative  NP_112598     NA    
+ 4 Negative  NP_112598     -1.04 
+ 5 Negative  NP_112598     NA    
+ 6 Negative  NP_112598      2.24 
+ 7 Negative  NP_112598     -0.148
+ 8 Negative  NP_112598     NA    
+ 9 Negative  NP_112598     -0.967
+10 Negative  NP_112598     -1.97 
+# … with 98 more rows
+
+$NP_958780
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_958780     NA    
+ 2 Negative  NP_958780      0.698
+ 3 Negative  NP_958780     NA    
+ 4 Negative  NP_958780      0.215
+ 5 Negative  NP_958780     NA    
+ 6 Negative  NP_958780     -1.12 
+ 7 Negative  NP_958780      0.542
+ 8 Negative  NP_958780     NA    
+ 9 Negative  NP_958780      0.857
+10 Negative  NP_958780      0.658
+# … with 98 more rows
+
+$NP_958781
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_958781     NA    
+ 2 Negative  NP_958781      0.687
+ 3 Negative  NP_958781     NA    
+ 4 Negative  NP_958781      0.215
+ 5 Negative  NP_958781     NA    
+ 6 Negative  NP_958781     -1.13 
+ 7 Negative  NP_958781      0.542
+ 8 Negative  NP_958781     NA    
+ 9 Negative  NP_958781      0.865
+10 Negative  NP_958781      0.651
+# … with 98 more rows
+
+$NP_958782
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_958782     NA    
+ 2 Negative  NP_958782      0.683
+ 3 Negative  NP_958782     NA    
+ 4 Negative  NP_958782      0.195
+ 5 Negative  NP_958782     NA    
+ 6 Negative  NP_958782     -1.12 
+ 7 Negative  NP_958782      0.539
+ 8 Negative  NP_958782     NA    
+ 9 Negative  NP_958782      0.831
+10 Negative  NP_958782      0.656
+# … with 98 more rows
+
+$NP_958783
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_958783     NA    
+ 2 Negative  NP_958783      0.698
+ 3 Negative  NP_958783     NA    
+ 4 Negative  NP_958783      0.215
+ 5 Negative  NP_958783     NA    
+ 6 Negative  NP_958783     -1.12 
+ 7 Negative  NP_958783      0.542
+ 8 Negative  NP_958783     NA    
+ 9 Negative  NP_958783      0.851
+10 Negative  NP_958783      0.656
+# … with 98 more rows
+
+$NP_958784
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_958784     NA    
+ 2 Negative  NP_958784      0.698
+ 3 Negative  NP_958784     NA    
+ 4 Negative  NP_958784      0.215
+ 5 Negative  NP_958784     NA    
+ 6 Negative  NP_958784     -1.12 
+ 7 Negative  NP_958784      0.542
+ 8 Negative  NP_958784     NA    
+ 9 Negative  NP_958784      0.851
+10 Negative  NP_958784      0.656
+# … with 98 more rows
+
+$NP_958785
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_958785     NA    
+ 2 Negative  NP_958785      0.694
+ 3 Negative  NP_958785     NA    
+ 4 Negative  NP_958785      0.215
+ 5 Negative  NP_958785     NA    
+ 6 Negative  NP_958785     -1.12 
+ 7 Negative  NP_958785      0.542
+ 8 Negative  NP_958785     NA    
+ 9 Negative  NP_958785      0.857
+10 Negative  NP_958785      0.658
+# … with 98 more rows
+
+$NP_958786
+# A tibble: 108 x 3
+   ER.Status protein   expression
+   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+ 1 Negative  NP_958786     NA    
+ 2 Negative  NP_958786      0.698
+ 3 Negative  NP_958786     NA    
+ 4 Negative  NP_958786      0.215
+ 5 Negative  NP_958786     NA    
+ 6 Negative  NP_958786     -1.12 
+ 7 Negative  NP_958786      0.542
+ 8 Negative  NP_958786     NA    
+ 9 Negative  NP_958786      0.857
+10 Negative  NP_958786      0.656
+# … with 98 more rows
+```
+]
+
+---
+count: false
+ 
+## Using &lt;code&gt;broom&lt;/code&gt;
+The fact that &lt;code&gt;broom::tidy&lt;/code&gt; makes the results of tests into tibbles is in fact extremely useful in high-throughput work
+.panel1-through-auto[
+
+```r
+brca %&gt;%
+  select(ER.Status, starts_with('NP')) %&gt;%
+  pivot_longer(names_to = 'protein',
+               values_to = 'expression',
+               cols = c(-ER.Status)) %&gt;%
+  split(.$protein) %&gt;%
+* map(~broom::tidy(t.test(expression ~ ER.Status,
+*                         data=.)))
+```
+]
+ 
+.panel2-through-auto[
+
+```
+$NP_000436
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.161     0.432     0.271     0.628   0.534      41.5   -0.356     0.677
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_001611
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    -1.41    -0.566     0.840     -4.10 1.99e-4      39.9    -2.10    -0.712
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_112598
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.160    -0.197    -0.357     0.306   0.761      43.5   -0.892      1.21
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_958780
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.163     0.436     0.273     0.637   0.528      41.6   -0.354     0.680
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_958781
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.162     0.436     0.274     0.633   0.530      41.5   -0.356     0.680
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_958782
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352     0.676
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_958783
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.164     0.436     0.272     0.639   0.527      41.5   -0.354     0.681
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_958784
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.164     0.436     0.273     0.639   0.527      41.5   -0.354     0.681
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_958785
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.165     0.438     0.273     0.642   0.524      41.6   -0.353     0.682
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+
+$NP_958786
+# A tibble: 1 x 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.166     0.439     0.272     0.649   0.520      41.6   -0.351     0.684
+# … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+```
+]
+
+---
+count: false
+ 
+## Using &lt;code&gt;broom&lt;/code&gt;
+The fact that &lt;code&gt;broom::tidy&lt;/code&gt; makes the results of tests into tibbles is in fact extremely useful in high-throughput work
+.panel1-through-auto[
+
+```r
+brca %&gt;%
+  select(ER.Status, starts_with('NP')) %&gt;%
+  pivot_longer(names_to = 'protein',
+               values_to = 'expression',
+               cols = c(-ER.Status)) %&gt;%
+  split(.$protein) %&gt;%
+  map(~broom::tidy(t.test(expression ~ ER.Status,
+                          data=.))) %&gt;%
+* bind_rows(.id = 'Protein')
+```
+]
+ 
+.panel2-through-auto[
+
+```
+# A tibble: 10 x 11
+   Protein estimate estimate1 estimate2 statistic p.value parameter conf.low
+   &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 NP_000…    0.161     0.432     0.271     0.628 5.34e-1      41.5   -0.356
+ 2 NP_001…   -1.41     -0.566     0.840    -4.10  1.99e-4      39.9   -2.10 
+ 3 NP_112…    0.160    -0.197    -0.357     0.306 7.61e-1      43.5   -0.892
+ 4 NP_958…    0.163     0.436     0.273     0.637 5.28e-1      41.6   -0.354
+ 5 NP_958…    0.162     0.436     0.274     0.633 5.30e-1      41.5   -0.356
+ 6 NP_958…    0.162     0.429     0.267     0.635 5.29e-1      41.8   -0.352
+ 7 NP_958…    0.164     0.436     0.272     0.639 5.27e-1      41.5   -0.354
+ 8 NP_958…    0.164     0.436     0.273     0.639 5.27e-1      41.5   -0.354
+ 9 NP_958…    0.165     0.438     0.273     0.642 5.24e-1      41.6   -0.353
+10 NP_958…    0.166     0.439     0.272     0.649 5.20e-1      41.6   -0.351
+# … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;, alternative &lt;chr&gt;
+```
+]
+
+---
+count: false
+ 
+## Using &lt;code&gt;broom&lt;/code&gt;
+The fact that &lt;code&gt;broom::tidy&lt;/code&gt; makes the results of tests into tibbles is in fact extremely useful in high-throughput work
+.panel1-through-auto[
+
+```r
+brca %&gt;%
+  select(ER.Status, starts_with('NP')) %&gt;%
+  pivot_longer(names_to = 'protein',
+               values_to = 'expression',
+               cols = c(-ER.Status)) %&gt;%
+  split(.$protein) %&gt;%
+  map(~broom::tidy(t.test(expression ~ ER.Status,
+                          data=.))) %&gt;%
+  bind_rows(.id = 'Protein') %&gt;%
+* select(Protein, estimate, p.value, conf.low, conf.high)
+```
+]
+ 
+.panel2-through-auto[
+
+```
+# A tibble: 10 x 5
+   Protein   estimate  p.value conf.low conf.high
+   &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+ 1 NP_000436    0.161 0.534      -0.356     0.677
+ 2 NP_001611   -1.41  0.000199   -2.10     -0.712
+ 3 NP_112598    0.160 0.761      -0.892     1.21 
+ 4 NP_958780    0.163 0.528      -0.354     0.680
+ 5 NP_958781    0.162 0.530      -0.356     0.680
+ 6 NP_958782    0.162 0.529      -0.352     0.676
+ 7 NP_958783    0.164 0.527      -0.354     0.681
+ 8 NP_958784    0.164 0.527      -0.354     0.681
+ 9 NP_958785    0.165 0.524      -0.353     0.682
+10 NP_958786    0.166 0.520      -0.351     0.684
+```
+]
+
+&lt;style&gt;
+.panel1-through-auto {
+  color: black;
+  width: 58.8%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-through-auto {
+  color: black;
+  width: 39.2%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-through-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+---
+class: center, middle
+
+# Back to testing
+
+---
+
+## Wilcoxon test, nonparametric t-test
+
+
+```r
+wilcox.test(NP_958782 ~ ER.Status, data=brca) %&gt;% 
+  broom::tidy()
+```
+
+```
+# A tibble: 1 x 4
+  statistic p.value method                                           alternative
+      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                                            &lt;chr&gt;      
+1       755   0.590 Wilcoxon rank sum test with continuity correcti… two.sided  
+```
+
+--
+
+
+```
+
+	Wilcoxon rank sum test with continuity correction
+
+data:  NP_958782 by ER.Status
+W = 755, p-value = 0.5897
+alternative hypothesis: true location shift is not equal to 0
+```
+
+---
+
+## Wilcoxon test
+
+.pull-left[
+
+```r
+brca %&gt;% 
+  select(ER.Status, starts_with('NP')) %&gt;% 
+  tidyr::gather(protein,expression, -ER.Status) %&gt;% 
+  split(.$protein) %&gt;% 
+  map(~broom::tidy(wilcox.test(expression ~ ER.Status, 
+                          data=.))) %&gt;% 
+  bind_rows(.id='Protein') %&gt;% 
+  select(Protein, p.value)
+```
+]
+.pull-right[
+
+```
+# A tibble: 10 x 2
+   Protein     p.value
+   &lt;chr&gt;         &lt;dbl&gt;
+ 1 NP_000436 0.583    
+ 2 NP_001611 0.0000928
+ 3 NP_112598 0.939    
+ 4 NP_958780 0.583    
+ 5 NP_958781 0.576    
+ 6 NP_958782 0.590    
+ 7 NP_958783 0.583    
+ 8 NP_958784 0.576    
+ 9 NP_958785 0.576    
+10 NP_958786 0.576    
+```
+]
+
+---
+
+## Using `tableone`
+
+
+
+```r
+CreateTableOne(
+  data = brca %&gt;% filter(!is.na(ER.Status)),
+  vars = brca %&gt;% 
+    select(starts_with('NP')) %&gt;% 
+    names(),
+  strata = 'ER.Status',
+  test = T,
+  testNormal = t.test
+)
+```
+
+```
+                       Stratified by ER.Status
+                        Negative     Positive     p      test
+  n                        38           69                   
+  NP_958782 (mean (SD))  0.43 (1.13)  0.27 (0.93)  0.498     
+  NP_958785 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.492     
+  NP_958786 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.487     
+  NP_000436 (mean (SD))  0.43 (1.14)  0.27 (0.93)  0.502     
+  NP_958781 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.499     
+  NP_958780 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.496     
+  NP_958783 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.495     
+  NP_958784 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.495     
+  NP_112598 (mean (SD)) -0.20 (2.28) -0.36 (1.97)  0.748     
+  NP_001611 (mean (SD)) -0.57 (1.54)  0.84 (1.19) &lt;0.001     
+```
+
+--
+
+This is not quite the same results as before
+
+---
+
+## Using `tableone`
+
+
+
+```r
+CreateTableOne(
+  data = brca %&gt;% filter(!is.na(ER.Status)),
+  vars = brca %&gt;% 
+    select(starts_with('NP')) %&gt;% 
+    names(),
+  strata = 'ER.Status',
+  test = T,
+  testNormal = t.test,
+* argsNormal = list(var.equal=F)
+)
+```
+
+```
+                       Stratified by ER.Status
+                        Negative     Positive     p      test
+  n                        38           69                   
+  NP_958782 (mean (SD))  0.43 (1.13)  0.27 (0.93)  0.529     
+  NP_958785 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.524     
+  NP_958786 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.520     
+  NP_000436 (mean (SD))  0.43 (1.14)  0.27 (0.93)  0.534     
+  NP_958781 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.530     
+  NP_958780 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.528     
+  NP_958783 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.527     
+  NP_958784 (mean (SD))  0.44 (1.14)  0.27 (0.93)  0.527     
+  NP_112598 (mean (SD)) -0.20 (2.28) -0.36 (1.97)  0.761     
+  NP_001611 (mean (SD)) -0.57 (1.54)  0.84 (1.19) &lt;0.001     
+```
+
+---
+
+## Tests for discrete data
+
+Testing whether the distribution of a categorical variable differs by levels of 
+another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
+
+
+```r
+fisher.test(table(brca$Tumor, brca$ER.Status))
+```
+
+```
+
+	Fisher's Exact Test for Count Data
+
+data:  table(brca$Tumor, brca$ER.Status)
+p-value = 0.6003
+alternative hypothesis: two.sided
+```
+
+---
+
+## Tests for discrete data
+
+Testing whether the distribution of a categorical variable differs by levels of 
+another categorical variable can be done using either the Chi-square test (`chisq.test`) or the Fisher's test (`fisher.test`). Both require you to create a 2x2 table first.
+
+
+```r
+chisq.test(table(brca$Tumor, brca$ER.Status))
+```
+
+```
+
+	Pearson's Chi-squared test
+
+data:  table(brca$Tumor, brca$ER.Status)
+X-squared = 2.094, df = 3, p-value = 0.5531
+```
+
+---
+
+## Tests for discrete data
+
+We can use `broom::tidy` for either of these
+
+
+```r
+chisq.test(table(brca$Tumor, brca$ER.Status)) %&gt;% 
+  broom::tidy()
+```
+
+```
+# A tibble: 1 x 4
+  statistic p.value parameter method                    
+      &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
+1      2.09   0.553         3 Pearson's Chi-squared test
+```
+
+---
+
+## Using `tableone`
+
+
+```r
+CreateCatTable(vars = c('Tumor','Node','Metastasis'),
+               data = filter(brca, !is.na(ER.Status)),
+               strata = 'ER.Status',
+               test = T) # chisq.test
+```
+
+```
+                     Stratified by ER.Status
+                      Negative   Positive   p      test
+  n                   38         69                    
+  Tumor (%)                                  0.553     
+     T1                6 (15.8)  10 (14.5)             
+     T2               26 (68.4)  40 (58.0)             
+     T3                5 (13.2)  14 (20.3)             
+     T4                1 ( 2.6)   5 ( 7.2)             
+  Node (%)                                   0.685     
+     N0               22 (57.9)  32 (46.4)             
+     N1                8 (21.1)  21 (30.4)             
+     N2                5 (13.2)  10 (14.5)             
+     N3                3 ( 7.9)   6 ( 8.7)             
+  Metastasis = M1 (%)  1 ( 2.6)   1 ( 1.4)   1.000     
+```
+
+---
+
+## Using `tableone`
+
+
+```r
+c1 &lt;- CreateCatTable(vars = c('Tumor','Node','Metastasis'),
+               data = filter(brca, !is.na(ER.Status)),
+               strata = 'ER.Status',
+               test = T)
+print(c1, exact = c('Tumor','Node','Metastasis')) # fisher.test
+```
+
+```
+                     Stratified by ER.Status
+                      Negative   Positive   p      test 
+  n                   38         69                     
+  Tumor (%)                                  0.600 exact
+     T1                6 (15.8)  10 (14.5)              
+     T2               26 (68.4)  40 (58.0)              
+     T3                5 (13.2)  14 (20.3)              
+     T4                1 ( 2.6)   5 ( 7.2)              
+  Node (%)                                   0.695 exact
+     N0               22 (57.9)  32 (46.4)              
+     N1                8 (21.1)  21 (30.4)              
+     N2                5 (13.2)  10 (14.5)              
+     N3                3 ( 7.9)   6 ( 8.7)              
+  Metastasis = M1 (%)  1 ( 2.6)   1 ( 1.4)   1.000 exact
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../../js/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
