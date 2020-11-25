@@ -37,18 +37,18 @@ tbl <- tibble(Week = str_extract(rmdfiles, 'week\\d'),
          Unit = parse_number(basename(Source)),
          Title = map_chr(rmdfiles, parse_title),
          Title = str_remove(Title, 'Practical R: ')) %>% 
-  mutate(HTML = glue('[HTML]({str_replace(Source, "Rmd","html")}){{target=_blank}}'))
+  mutate(HTML = glue('<a href="{str_replace(Source, "Rmd","html")}" target="_blank">HTML</a>'))
 
 pdffiles <- path('docs','slides',str_replace(rmdfiles, 'Rmd','pdf'))
 pdf_exists <- file_exists(here(pdffiles))
-pdf_urls <- glue("[PDF]({str_replace(rmdfiles, 'Rmd','pdf')})")
+pdf_urls <- glue('<a href="{str_replace(rmdfiles, "Rmd","pdf")}" target="_blank">PDF</a>')
 pdf_urls[!pdf_exists] <- ''
 tbl <- tbl %>% 
   mutate(PDF = pdf_urls)
 
 rmd_url_lead <- 'https://raw.githubusercontent.com/araastat/BIOF339/main/slides'
 tbl <- tbl %>% 
-  mutate(`R Markdown` = glue('[Rmd]({paste(rmd_url_lead, rmdfiles, sep="/")})'))
+  mutate(`R Markdown` = glue('<a href="{paste(rmd_url_lead, rmdfiles, sep="/")}" target="_blank">Rmd</a>'))
 
 ## Cleanup
 tbl <- tbl %>% 
@@ -65,7 +65,7 @@ tbl %>%
     rowname_col = 'Unit',
     groupname_col = 'Week'
   ) %>% 
-  fmt_markdown(columns=TRUE) %>% 
+  fmt_markdown(columns=TRUE) %>%
   tab_header(title='Contents') %>% 
   tab_style(
     style = list(

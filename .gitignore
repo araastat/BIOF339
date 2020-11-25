@@ -27,6 +27,9 @@ docs/Makefile
 docs/Personal/*
 docs/data/*
 data/*
+docs/slides/lectures/**/img/*
+docs/slides/lectures/**/css/*
+docs/slides/lectures/**/js/*
 
 assignments/**/*_files/*
 *.swp
