@@ -24,6 +24,11 @@ docs/notes/*
 docs/assignments/HW/*.R
 docs/toplevel/*
 docs/Makefile
+docs/Personal/*
+docs/data/*
+data/*
+
+assignments/**/*_files/*
 *.swp
 slides/lectures/*files/*
 docs/slides/lectures/**/*cache/*

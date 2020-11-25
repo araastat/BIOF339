@@ -31,7 +31,7 @@ h4 {
 Abhijit Dasgupta, PhD
 
 #### Contact information:
-+ E-mail: [adasgupta+biof339@araastat.com](mailto:adasgupta+biof339@araastat.com)
++ E-mail: [dasgupta.faes@gmail.com](mailto:dasgupta.faes@gmail.com)
 + Preferred method of communcation: via [Slack](https://biof339.slack.com){target=_blank}. Sign up via [this link](https:/join.slack.com/t/biof339/shared_invite/zt-hczp2mg1-Yh0yqms52wAA8H445jkBUg){target=_blank}
 
 ### Course information

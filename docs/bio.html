@@ -13,6 +13,7 @@
 
 <title>BIOF 339: Practical R</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -22,8 +23,19 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -321,7 +333,7 @@ $(document).ready(function () {
 
 <div id="abhijit-dasgupta-phd" class="section level2">
 <h2><a href="https://webbedfeet.netlify.com" target="_blank">Abhijit Dasgupta, PhD</a></h2>
-<p>Dr. Dasgupta is a biostatistician and data scientist with experience in statistical modeling and machine learning, bioinformatics, optimization, signal processing, and data visualization. He holds a PhD in Biostatistics with earlier training in Mathematical Statistics. He has been using R for over 20 years for a wide variety of applications in biomedical research, as well as for data-driven reports and presentations. He co-founded and organized the <a href="http://www.meetup.com/stats-prog-dc">Statistical Programming DC</a> meetup (formerly R Users Group DC) and served on the Board of <a href="http://www.datacommunitydc.org">Data Community DC</a>. He regularly gives workshops and webinars on using R and Python for data analysis, machine learning and visualization. He currently serves as co-chair of the <a href="https://faes.org/content/bioinformatics-and-data-science" target="_blank">Bioinformatics and Data Science</a> department at <a href="https://faes.org" target="_blank">FAES/NIH</a>.</p>
+<p>Dr. Dasgupta is a biostatistician and data scientist with vast experience in statistical modeling and machine learning, bioinformatics, optimization, signal processing, and data visualization. He holds a PhD in Biostatistics with earlier training in Mathematical Statistics. He has been using R for over 20 years for a wide variety of applications in biomedical research, as well as for data-driven reports and presentations. He co-founded and organized the <a href="http://www.meetup.com/stats-prog-dc">Statistical Programming DC</a> meetup (formerly R Users Group DC) and served on the Board of <a href="http://www.datacommunitydc.org">Data Community DC</a>. He regularly gives workshops and webinars on using R and Python for data analysis, machine learning and visualization. He currently serves as co-chair of the <a href="https://faes.org/content/bioinformatics-and-data-science" target="_blank">Bioinformatics and Data Science</a> department at <a href="https://faes.org" target="_blank">FAES/NIH</a>.</p>
 <p>Dr. Dasgupta currently is Principal Data Scientist at <a href="https://www.astrazeneca.com">AstraZeneca</a>. He previously served for 10+ years as a consultant to the <a href="https://www.niams.nih.gov/about/directory/abhijit-dasgupta-phd" target="_blank">National Institute of Arthritis, Musculoskeletal and Skin Disorders</a>, part of the NIH, where he worked on complex analyses of healthcare databases as well as outcomes research. He also is Co-Founder and Chief Data Scientist at <a href="http://www.zansors.com" target="_blank">Zansors</a>, a healthcare wearable and analytics company based in Arlington, Virginia. He maintains his clinical trial chops by serving as a reviewer on <a href="http://nimh.nih.gov">NIMH</a> Data Safety Monitoring Boards, as well as on <a href="https://public.csr.nih.gov/StudySections/SmallBusinessAndTechnologyTransfer" target="_blank">NIH SBIR</a> review panels.</p>
 <p>Dr. Dasgupta is a certified <a href="http://www.carpentries.org" target="_blank">Carpentries</a> instructor, and, with <a href="http://www.districtdatalabs.com" target="_blank">District Data Labs</a>, he provides high quality cirruculum development and training in data science programming using R and Python.</p>
 </div>
@@ -335,7 +347,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
