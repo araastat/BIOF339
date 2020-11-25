@@ -3,12 +3,7 @@ title: |
   | BIOF339: Practical R
   | Lectures
 author: Abhijit Dasgupta
-output:
-  html_document:
-    theme: cosmo
-    highlight: textmate
-    css: css/styles.css
-
+output: html_document
 ---
 
 ```{r, include = FALSE, eval = knitr::opts_knit$get("rmarkdown.pandoc.to") == "html"}
@@ -19,7 +14,6 @@ htmltools::tagList(fa)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-### Contents
 
 ```{r top-table, echo = F, message=F, warning=F}
 pacman::p_load(char = c('tidyverse','fs','glue','kableExtra','knitr','here', 'gt'))
@@ -66,7 +60,7 @@ tbl %>%
     groupname_col = 'Week'
   ) %>% 
   fmt_markdown(columns=TRUE) %>%
-  tab_header(title='Contents') %>% 
+  tab_header(title='Contents', subtitle = 'Fall, 2020') %>% 
   tab_style(
     style = list(
       cell_text(align='right')

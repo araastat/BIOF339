@@ -3,7 +3,6 @@ title: "BIOF 339: Practical R"
 output:
   html_document:
     theme: cosmo
-    highlight: textmate
 ---
 
 ## [Abhijit Dasgupta, PhD](https://webbedfeet.netlify.com){target=_blank}
