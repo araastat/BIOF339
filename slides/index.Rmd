@@ -46,7 +46,7 @@ pdf_urls[!pdf_exists] <- ''
 tbl <- tbl %>% 
   mutate(PDF = pdf_urls)
 
-rmd_url_lead <- 'https://raw.githubusercontent.com/araastat/BIOF339/master/slides'
+rmd_url_lead <- 'https://raw.githubusercontent.com/araastat/BIOF339/main/slides'
 tbl <- tbl %>% 
   mutate(`R Markdown` = glue('[Rmd]({paste(rmd_url_lead, rmdfiles, sep="/")})'))
 
