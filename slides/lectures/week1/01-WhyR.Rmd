@@ -1,5 +1,5 @@
 ---
-title: "Practical R: Introduction"
+title: "Practical R: Why use R"
 author: Abhijit Dasgupta
 date: BIOF 339
 

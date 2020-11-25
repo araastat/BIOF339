@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE, message = F, warning = F}
-knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, comment="", 
-                      cache = T)
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment="", 
+                      cache = F)
 library(tidyverse)
 library(here)
 library(fs)
