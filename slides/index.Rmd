@@ -37,7 +37,7 @@ tbl <- tibble(Week = str_extract(rmdfiles, 'week\\d'),
          Unit = parse_number(basename(Source)),
          Title = map_chr(rmdfiles, parse_title),
          Title = str_remove(Title, 'Practical R: ')) %>% 
-  mutate(HTML = glue('[HTML]({str_replace(Source, "Rmd","html")})'))
+  mutate(HTML = glue('[HTML]({str_replace(Source, "Rmd","html")}){{target=_blank}}'))
 
 pdffiles <- path('docs','slides',str_replace(rmdfiles, 'Rmd','pdf'))
 pdf_exists <- file_exists(here(pdffiles))
