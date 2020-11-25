@@ -248,6 +248,7 @@ different themes and colors, animations, etc.
 **Data description**
 
 ```{r, echo=FALSE}
+pacman::p_load(char=c('tableone','table1','stargazer', 'arsenal','gtsummary', 'flextable', 'Hmisc'))
 get_description(c('tableone','table1','stargazer', 'arsenal','gtsummary', 'flextable', 'Hmisc'))
 ```
 
@@ -257,6 +258,7 @@ get_description(c('tableone','table1','stargazer', 'arsenal','gtsummary', 'flext
 
 **Analysis**
 ```{r, echo=F}
+pacman::p_load(char = c('stats','survival','infer','rsample','broom', 'finalfit'))
 get_description(c('stats','survival','infer','rsample','broom', 'finalfit'))
 ```
 
@@ -266,6 +268,7 @@ get_description(c('stats','survival','infer','rsample','broom', 'finalfit'))
 ## Statistical modeling
 
 ```{r, echo=F}
+pacman::p_load(char=c('stats','survival','recipes', 'rms', 'broom', 'rsample'))
 get_description(c('stats','survival','recipes', 'rms', 'broom', 'rsample'))
 ```
 
@@ -274,6 +277,7 @@ get_description(c('stats','survival','recipes', 'rms', 'broom', 'rsample'))
 ## Machine Learning
 
 ```{r, echo=F}
+pacman::p_load(char = c('caret','parsnip','yardstick', 'rpart','party','randomForest','baguette', 'kernlab','earth'))
 get_description(c('caret','parsnip','yardstick', 'rpart','party','randomForest','baguette', 'kernlab','earth'))
 ```
 
@@ -282,6 +286,7 @@ get_description(c('caret','parsnip','yardstick', 'rpart','party','randomForest',
 ## Reporting
 
 ```{r, echo=F}
+pacman::p_load(char = c('rmarkdown','knitr','bookdown','distill', 'rticles','blogdown','flexdashboard', 'shiny', 'officer'))
 get_description(c('rmarkdown','knitr','bookdown','distill', 'rticles','blogdown','flexdashboard', 'shiny', 'officer'))
 ```
 

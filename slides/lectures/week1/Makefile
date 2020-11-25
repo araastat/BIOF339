@@ -23,7 +23,6 @@ $(OUTDIR)/%.pdf: $(OUTDIR)/%.html
 	rm -rf js
 	rm -rf img
 
-
 .PHONY: files
 files: 
 	@echo $(OUTDIR)
