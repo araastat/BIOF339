@@ -7,7 +7,7 @@ output: html_document
 ```{r setup, include=FALSE}
 pacman::p_load(char=c('tidyverse','gtsummary','mlbench','visdat','naniar','labelled'))
 data("PimaIndiansDiabetes2")
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(include=FALSE)
 
 ```
 
@@ -19,14 +19,61 @@ In this homework you will have to submit 2 files: the R Markdown file that you w
 
 1. Start with the `PimaIndiansDiabetes2` dataset from the **mlbench** package. Your objective is to analyze the factors that are associated with getting diabetes in this data.
     a. Explore the dataset to see if there are any variables that you might need to omit. Justify your decisions
+```{r}
+library(mlbench)
+data("PimaIndiansDiabetes2")
+library(visdat)
+vis_dat(PimaIndiansDiabetes2)
+# We'll consider omitting the insulin and triceps measurements since so many are missing
+# 
+naniar::miss_var_summary(PimaIndiansDiabetes2)
+```
+    
     b. Fit a logistic regression with `diabetes` as the dependent variable and the rest of the variables you chose to keep in as the independent variables.
+```{r}
+mod1 <- glm(diabetes ~ ., data=select(PimaIndiansDiabetes2, -insulin, -triceps ),
+            family=binomial)
+```
+    
     c. Create a proper formatted table (not raw output) of the results (slopes, confidence intervals, and p-values)
+```{r}
+library(gtsummary)
+gtsummary::tbl_regression(mod1)
+```
+  
     d. Present these results graphically
-2. We have on presidential approval ratings going back to Franklin D. Roosevelt available from the [American Presidency Project](https://www.presidency.ucsb.edu/statistics/data/presidential-job-approval). Download this data (stored in an Excel file) from the class data link.
+```{r}
+tbl <- broom::tidy(mod1)
+tbl %>% filter(term != '(Intercept)') %>% 
+ggplot( aes(x = term, y = estimate, 
+                ymin = estimate - 2*std.error,
+                ymax = estimate + 2*std.error))+
+  geom_pointrange()+ 
+  geom_hline(yintercept=0, linetype=2)+
+  coord_flip()
+
+
+```
+    
+2. We have presidential approval ratings going back to Franklin D. Roosevelt available from the [American Presidency Project](https://www.presidency.ucsb.edu/statistics/data/presidential-job-approval). Download this data (stored in an Excel file) from the class data link.
     a. Load this data into a list of data frames, one per president
+```{r}
+dat <- rio::import_list(here::here('data','American Presidency Project - Approval Ratings for POTUS.xlsx'))
+```
+    
     b. Combine this data into a single data frame, with a column designating the president. Also, clean the column names. 
+```{r}
+approve <- bind_rows(dat, .id='President') %>% janitor::clean_names()
+```
+    
     c. If you look at the structure of the data, you'll see that `start_date` and `end_date` are datetime objects, so they are treated as dates in R. Plot the approval percent at each end date against the date as a line graph, colored by which president is in office at the time. Do **not** make a legend.
+```{r}
+ggplot(approve, aes(end_date, approving, color=president))+
+  geom_line(show.legend = F)
+```
+    
     d. Plot the percentage of uncertain respondents by end date, similar to c. Put dotted vertical lines corresponding to each inauguration date (inaugurations in the US occur on January 20 of the year following a presidential election, and the election years are years divisible by 4; you can count back from 2020 if you like).
+    
     e. Use `gtsummary::tbl_summary` to create a table summarizing approving, disapproving and unsure percentages by president. Transform the original dataset so that this table has columns in chronological order.
     f. Create a new column for days in office using the following code (I named my data frame `approve`, and my variable names might be slightly different from yours.)
       ```{r, eval=F, echo=TRUE}
