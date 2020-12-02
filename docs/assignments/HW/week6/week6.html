@@ -433,24 +433,47 @@ summary {
 background-color: wheat;font-size: 14pt;text-align:center">
 In this homework you will have to submit 2 files: the R Markdown file that you will create to answer this homework, and the knitted HTML file derived from it.
 </p>
-<ol style="list-style-type: decimal">
-<li>Start with the <code>PimaIndiansDiabetes2</code> dataset from the <strong>mlbench</strong> package. Your objective is to analyze the factors that are associated with getting diabetes in this data.
-<ol style="list-style-type: lower-alpha">
-<li><p>Explore the dataset to see if there are any variables that you might need to omit. Justify your decisions</p></li>
-<li><p>Fit a logistic regression with <code>diabetes</code> as the dependent variable and the rest of the variables you chose to keep in as the independent variables.</p></li>
-<li><p>Create a proper formatted table (not raw output) of the results (slopes, confidence intervals, and p-values)</p></li>
-<li><p>Present these results graphically</p></li>
-</ol></li>
-<li>We have presidential approval ratings going back to Franklin D. Roosevelt available from the <a href="https://www.presidency.ucsb.edu/statistics/data/presidential-job-approval">American Presidency Project</a>. Download this data (stored in an Excel file) from the class data link.
-<ol style="list-style-type: lower-alpha">
-<li><p>Load this data into a list of data frames, one per president</p></li>
-<li><p>Combine this data into a single data frame, with a column designating the president. Also, clean the column names.</p></li>
-<li><p>If you look at the structure of the data, you’ll see that <code>start_date</code> and <code>end_date</code> are datetime objects, so they are treated as dates in R. Plot the approval percent at each end date against the date as a line graph, colored by which president is in office at the time. Do <strong>not</strong> make a legend.</p></li>
-<li><p>Plot the percentage of uncertain respondents by end date, similar to c. Put dotted vertical lines corresponding to each inauguration date (inaugurations in the US occur on January 20 of the year following a presidential election, and the election years are years divisible by 4; you can count back from 2020 if you like).</p></li>
-<li><p>Use <code>gtsummary::tbl_summary</code> to create a table summarizing approving, disapproving and unsure percentages by president. Transform the original dataset so that this table has columns in chronological order.</p></li>
-<li><p>Create a new column for days in office using the following code (I named my data frame <code>approve</code>, and my variable names might be slightly different from yours.)</p></li>
+<ol>
+<li>
+Start with the <code>PimaIndiansDiabetes2</code> dataset from the <strong>mlbench</strong> package. Your objective is to analyze the factors that are associated with getting diabetes in this data.
+<ol type="a">
+<li>
+<p>Explore the dataset to see if there are any variables that you might need to omit. Justify your decisions</p>
+<li>
+<p>Fit a logistic regression with <code>diabetes</code> as the dependent variable and the rest of the variables you chose to keep in as the independent variables.</p>
+<li>
+<p>Create a proper formatted table (not raw output) of the results (slopes, confidence intervals, and p-values)</p>
+<li>
+<p>Present these results graphically</p>
 </ol>
-Then create a facetted plot showing approval percent against days in office by president, and add a regression line and the correlation coefficient to each plot. You should probably throw out President Roosevelt since his term was before presidential term limits were implemented. The facets should follow chronological order.</li>
+<li>
+We have presidential approval ratings going back to Franklin D. Roosevelt available from the <a href="https://www.presidency.ucsb.edu/statistics/data/presidential-job-approval">American Presidency Project</a>. Download this data (stored in an Excel file) from the class data link.
+<ol type="a">
+<li>
+<p>Load this data into a list of data frames, one per president</p>
+</li>
+<li>
+<p>Combine this data into a single data frame, with a column designating the president. Also, clean the column names.</p>
+</li>
+<li>
+<p>If you look at the structure of the data, you’ll see that <code>start_date</code> and <code>end_date</code> are datetime objects, so they are treated as dates in R. Plot the approval percent at each end date against the date as a line graph, colored by which president is in office at the time. Do <strong>not</strong> make a legend.</p>
+</li>
+<li>
+<p>Plot the percentage of uncertain respondents by end date, similar to c. Put dotted vertical lines corresponding to each inauguration date (inaugurations in the US occur on January 20 of the year following a presidential election, and the election years are years divisible by 4; you can count back from 2020 if you like).</p>
+</li>
+<li>
+<p>Use <code>gtsummary::tbl_summary</code> to create a table summarizing approving, disapproving and unsure percentages by president. Transform the original dataset so that this table has columns in chronological order.</p>
+</li>
+<li>
+<p>Create a new column for days in office using the following code (I named my data frame <code>approve</code>, and my variable names might be slightly different from yours.)</p>
+<pre class="r"><code>library(lubridate)
+approve &lt;- approve %&gt;% 
+    group_by(president) %&gt;% 
+    mutate(days = end_date - min(start_date)) %&gt;% 
+    mutate(days = as.duration(days)/ddays(1))</code></pre>
+<p>Then create a facetted plot showing approval percent against days in office by president, and add a regression line and the correlation coefficient to each plot. You should probably throw out President Roosevelt since his term was before presidential term limits were implemented. The facets should follow chronological order.</p>
+</li>
+</ol>
 </ol>
 <hr />
 <div style=" background-color: lightgrey; margin-left:1cm;margin-right:1cm;">
