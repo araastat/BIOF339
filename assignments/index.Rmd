@@ -8,7 +8,7 @@ output:
     css: style.css
 ---
 
-```{r}
+```{r, echo=FALSE}
 fa <- rmarkdown::html_dependency_font_awesome()
 fa$attachment <- "fonts/fontawesome-webfont.ttf"
 htmltools::tagList(fa)

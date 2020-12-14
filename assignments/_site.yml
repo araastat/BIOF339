@@ -1,5 +1,5 @@
 name: BIOF 339
-utput_dir: ../docs/hw_top
+output_dir: ../docs/hw_top
 exclude: ['HW']
 navbar:
   title: Practical R
