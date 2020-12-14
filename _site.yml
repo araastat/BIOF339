@@ -12,9 +12,11 @@ navbar:
     href: bio.html
   - text: Lectures
     href: slides/index.html
+  - text: Homework
+    href: assignments/index.html
+  right:
   - text: Resources
     href: resources.html
-  right:
   - text: Slack
     href: https://biof339.slack.com
     icon: fa-slack

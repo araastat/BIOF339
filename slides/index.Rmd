@@ -46,7 +46,7 @@ tbl <- tbl %>%
 
 ## Cleanup
 tbl <- tbl %>% 
-  mutate(Title = str_extract(Title, '[[:alpha:] ]+'))
+  mutate(Title = str_extract(Title, '[[:alpha:], ]+'))
 
 # tbl %>% 
 #   select(-Source) %>% 

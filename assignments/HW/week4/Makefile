@@ -1,12 +1,15 @@
 OUTDIR = $(shell Rscript -e "fs::path(here::here('docs', fs::path_rel(getwd(), start=here::here())))")
-SLIDES := $(wildcard *.Rmd)
+SLIDES := $(wildcard week*.Rmd)
 SLIDES_OUT = $(patsubst %.Rmd, $(OUTDIR)/%.html, $(SLIDES))
 
 .PHONY: all
 all: $(SLIDES_OUT)
 
 $(OUTDIR)/%.html: %.Rmd 
-	Rscript -e "rmarkdown::render('$(*F).Rmd', output_dir='$(OUTDIR)')"
+	Rscript -e "rmarkdown::render('$(*F).Rmd', output_dir = '$(OUTDIR)')"
+	rm -rf $(OUTDIR)/$(*F)_files
+#	mv $(*F).html $(OUTDIR)
+#	mv -f $(*F)_files $(OUTDIR)
 
 .PHONY: files
 files: 

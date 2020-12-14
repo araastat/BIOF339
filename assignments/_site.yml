@@ -1,5 +1,6 @@
 name: BIOF 339
-output_dir: ../docs/assignments
+utput_dir: ../docs/hw_top
+exclude: ['HW']
 navbar:
   title: Practical R
   left:
