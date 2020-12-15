@@ -17,8 +17,8 @@ navbar:
   right:
   - text: Resources
     href: ../resources.html
-  - text: Course Notes
-    href: ../notes/index.html
+  # - text: Course Notes
+    # href: ../notes/index.html
   - icon: fa-slack
     text: Slack
     href: https://biof339.slack.com
