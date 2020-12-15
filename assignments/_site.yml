@@ -14,9 +14,9 @@ navbar:
     href: ../slides/index.html
   - text: Homework
     href: index.html
+  right:
   - text: Resources
     href: ../resources.html
-  right:
   - text: Course Notes
     href: ../notes/index.html
   - icon: fa-slack

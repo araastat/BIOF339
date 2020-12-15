@@ -16,7 +16,7 @@ slides_web: FORCE ## Create website for slides
 
 hw_web: FORCE
 	Rscript -e "rmarkdown::render_site('assignments')"
-	cp -r docs/hw_top* docs/assignments
+	cp -r docs/hw_top/* docs/assignments
 
 toplevel: FORCE ## Create top level website
 	Rscript -e "rmarkdown::render_site('.')"
