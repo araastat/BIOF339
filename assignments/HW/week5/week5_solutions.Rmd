@@ -7,7 +7,8 @@ output: html_document
 ```{r setup, include=FALSE}
 pacman::p_load(char=c('tidyverse','gtsummary','mlbench','visdat','naniar','labelled', 'rio'))
 data("PimaIndiansDiabetes2")
-knitr::opts_chunk$set(warning=F, message=F, cache=F, include=TRUE)
+knitr::opts_chunk$set(warning=F, message=F, cache=F, include=TRUE,
+                      fig.height=3)
 ```
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
@@ -56,7 +57,7 @@ miss_var_summary(PimaIndiansDiabetes2) %>%
 skimr::skim(PimaIndiansDiabetes2)
 ```
 <li> Generate another summary table for this data using the **gtsummary** package
-<ol>
+<ol type='a'>
 <li> First use `labelled::var_label` to set labels for each of the variables. You can continue the following code to label all the variables.
 ```{r, echo=TRUE, include=TRUE}
 var_label(PimaIndiansDiabetes2) <- 
@@ -88,7 +89,7 @@ gtsummary::tbl_summary(PimaIndiansDiabetes2, by=diabetes) %>%
 ```
 </ol>
 <li> The `msleep` data is included in **ggplot2**. Create a single pipeline that
-<ol>
+<ol type='a'>
 <li> filters the data to include just carnivores and omnivores,
 <li> creates a new variable that identifies which quintile of the body weight distribution each animal falls in (see `quantile` and `cut`; quintiles divides data into fifths). Call this variable `bodywt_cat`. [Be careful of creating missing values when you discretize. Identify and solve tha problem too]
 <li> imputes the missing values in `sleep_rem` with the median of the `bodywt_cat` and `vore` group each animal falls in,
@@ -111,7 +112,7 @@ msleep %>%
 pacman::p_load('BiocManager')
 BiocManager::install('limma')
 ```
-<ol>
+<ol type='a'>
 <li> Load the `BreastCancer_Clinical.csv` file and call it `brca`. Use `janitor::clean_names` to update the column names
 ```{r}
 library(here)
@@ -136,7 +137,7 @@ brca1 <- brca1 %>%
 sum(brca1$triple_neg)
 ```
 <li> **limma** has two functions `vennCounts` and `vennDiagram`. Pass the ER, PR and HER2 columns from the transformed `brca1` dataset from c. together into `vennCounts` and pipe the results into `vennDiagram`. This will create a venn diagram for the ER, PR and HER2 status. Verify that the count of triple negatives from the venn diagram (the number outside the circles but inside the rectangle) matches what you found in d.
-```{r week5-2}
+```{r week5-2, fig.height=5}
 library(limma)
 brca1 %>% select(ends_with('status')) %>% 
   vennCounts() %>% vennDiagram()
