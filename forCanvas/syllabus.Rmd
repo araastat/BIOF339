@@ -1,7 +1,6 @@
 ---
 title: ''
 output: 
-  pdf_document: default
   html_document:
     css: ../styles.css
     toc: false
@@ -24,7 +23,7 @@ h4 {
 <div style="text-align: center;">
 <p>BIOF 339: Practical R 
 <p>Number of credits : 2
-<p>Fall 2020 Term A
+<p>Fall 2021 Term A
 <p>Syllabus
 </div>
 
@@ -32,8 +31,8 @@ h4 {
 Abhijit Dasgupta, PhD
 
 #### Contact information:
-+ E-mail: [adasgupta+biof339@araastat.com](mailto:adasgupta+biof339@araastat.com)
-+ Preferred method of communcation: via [Slack](https://biof339.slack.com){target=_blank}. Sign up via [this link](https:/join.slack.com/t/biof339/shared_invite/zt-hczp2mg1-Yh0yqms52wAA8H445jkBUg){target=_blank}
++ E-mail: [dasgupta.faes@gmail.com](mailto:dasgupta.faes@gmail.com)
++ Preferred method of communcation: via [Slack](https://biof339.slack.com){target=_blank}. Sign up via [this link](https://join.slack.com/t/biof339/shared_invite/zt-ul6zz6ub-ujZD_Jox7xWNPCBjZGXdXg){target=_blank}
 
 ### Course information
 
@@ -43,12 +42,12 @@ Prerequisites, if any: None
 The goal of this course is to introduce R as an analysis platform and tool for data science rather than a programming language. Throughout the course, emphasis will be placed on example-driven learning. Topics to be covered include: installation of R and R packages; command line R; R data types; loading data in R; manipulating data; exploring data through visualization; statistical tests; correcting for multiple comparisons; building models; generating publication-quality graphics; creating reports using R Markdown. No prior programming experience is required
 
 #### Course Website (Canvas)
-Course materials will be posted at 10 am on Monday of each week. Homework will be submitted on Canvas by Sunday 11:59 pm at the end of each week.
+Course materials will be posted at 10 am on Monday of each week. Homework will be submitted on Canvas by Monday 11:59 pm the following week.
 
 #### Learning Materials
-Required and Recommended Texts: There are no required texts for this class
+Required and Recommended Texts: There are no required texts for this class.
 
-Required Journal Articles: There are no required journal articles for this class
+Required Journal Articles: There are no required journal articles for this class.
 
 #### Course Goals
 When you complete the course successfully, you will be able to:
@@ -91,7 +90,7 @@ This course should take around 4-6 hours of time weekly, depending on the week.
 #### Communication
 
 This class will communicate primarily via Slack. 
-You will see a channel `#fall2020-a`. Please join this channel. Please use Slack for broadcasting messages, answering questions and the like. When you ask a question, please ask it under the `#general` or `#fall2020-a` channels, so others can learn as well. I should respond within 24 hours.
+You will see a channel `#fall2021-a`. Please join this channel. Please use Slack for broadcasting messages, answering questions and the like. When you ask a question, please ask it under the `#general` or `#fall2021-a` channels, so others can learn as well. I should respond within 24 hours.
 
 The Canvas Discussion forum will be used for guided class discussions.
 
@@ -129,7 +128,7 @@ Participation will be judged through the assigned discussions as well as through
 Assignment submission is through Canvas. Each submission will consist of a R Markdown file and the corresponding HTML file. **Both are required**. Just submitting the R Markdown doesn’t let us see the results easily, and just submitting the HTML doesn’t let us evaluate your code. If you have trouble knitting the R Markdown to HTML, let me know and I can help. If it’s really impossible and you’re tearing your hair out, reach out to me at least by Saturday so I can see if (a) I can help, or (b) I can see if reasonable accommodation can be made. The latter will be a rarity, generally. 
 
 #### Due Dates
-Homework is assigned at 10am each Monday and is due by 11:59pm the following Sunday. 
+Homework is assigned at 10am each Monday and is due by 11:59pm the following Monday. 
 
 #### Late Submission Policies
 No late submissions of homework or discussion are allowed. However, for homework, I will only use the top 4 scores for your grade, so you will have the option of not submitting or doing poorly on 2 of them. 
@@ -144,11 +143,11 @@ We will get your assignment grades and feedback to you within a week of submissi
 
 Grades will be based on the following requirements:
 
-1.	Homeworks for each week are due Sunday at 11:59pm (50%) 
+1.	Homeworks for each week are due Monday at 11:59pm (50%) 
     - No late homeworks
     - We’ll have 6 homeworks, I’ll score the top 4 for grade
 2.	Final project: A R Markdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (30%)
-3.	Class participation (20%): Discussion topics in weeks 2-6
+3.	Class participation (20%): Discussion topics in weeks 2-6, as well as participation on Slack.
 
 **Final project**
 
@@ -160,5 +159,5 @@ Grades will be based on the following requirements:
     - perform some analysis on the data
     - create a visualization
     - create a report in R Markdown
-+	5 minute lightning talks that can be recorded using Quicktime or [Screencastify](https://www.screencastify.com){target=_blank    }, which requires the Chrome browser
++	5 minute lightning talks that can be recorded using Quicktime or [Screencastify](https://www.screencastify.com){target=_blank}, which requires the Chrome browser. Any method that can produce a mp4 file is okay, but must be limited to 5 minutes.
 
