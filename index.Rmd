@@ -16,13 +16,13 @@ fa$attachment <- "fonts/fontawesome-webfont.ttf"
 htmltools::tagList(fa)
 ```
 
-This course is part of the [FAES Graduate School](https://faes.org/content/graduate-school) and is being offered Fall 2020. 
+This course is part of the [FAES Graduate School](https://faes.org/content/graduate-school) and is being offered Fall 2021. 
 
 This course is a fully asynchronous 7 week online course.
 
 ### Contact info: 
 
-- Abhijit Dasgupta: Via Slack (primary) 
+- Abhijit Dasgupta: Via Slack (primary) or dasgupta.faes@gmail.com
 
 
 -------

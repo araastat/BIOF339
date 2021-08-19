@@ -11,19 +11,27 @@
 
 
 
-<title>syllabus.utf8</title>
+<title>syllabus.knit</title>
 
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -39,11 +47,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -56,34 +59,9 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
 
-<link rel="stylesheet" href="styles.css" type="text/css" />
+
+<link rel="stylesheet" href="../styles.css" type="text/css" />
 
 
 
@@ -92,10 +70,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -112,40 +86,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -173,7 +120,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -185,7 +132,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -196,10 +143,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -211,7 +171,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -326,7 +285,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -345,14 +304,14 @@ h4 {
   font-weight: bold;
 }
 </style>
-<p><img class='center' height="80" src='img/faes.png'></p>
+<p><img class='center' height="80" src='../img/faes.png'></p>
 <div style="text-align: center;">
 <p>
 BIOF 339: Practical R
 <p>
 Number of credits : 2
 <p>
-Fall 2020 Term B
+Fall 2021 Term A
 <p>
 Syllabus
 </div>
@@ -364,7 +323,7 @@ Syllabus
 <h4>Contact information:</h4>
 <ul>
 <li>E-mail: <a href="mailto:dasgupta.faes@gmail.com">dasgupta.faes@gmail.com</a></li>
-<li>Preferred method of communcation: via <a href="https://biof339.slack.com" target="_blank">Slack</a>. Sign up via <a href="https:/join.slack.com/t/biof339/shared_invite/zt-hczp2mg1-Yh0yqms52wAA8H445jkBUg" target="_blank">this link</a></li>
+<li>Preferred method of communcation: via <a href="https://biof339.slack.com" target="_blank">Slack</a>. Sign up via <a href="https://join.slack.com/t/biof339/shared_invite/zt-ul6zz6ub-ujZD_Jox7xWNPCBjZGXdXg" target="_blank">this link</a></li>
 </ul>
 </div>
 <div id="course-information" class="section level3">
@@ -376,12 +335,12 @@ Syllabus
 </div>
 <div id="course-website-canvas" class="section level4">
 <h4>Course Website (Canvas)</h4>
-<p>Course materials will be posted at 10 am on Monday of each week. Homework will be submitted on Canvas by Sunday 11:59 pm at the end of each week.</p>
+<p>Course materials will be posted at 10 am on Monday of each week. Homework will be submitted on Canvas by Monday 11:59 pm the following week.</p>
 </div>
 <div id="learning-materials" class="section level4">
 <h4>Learning Materials</h4>
-<p>Required and Recommended Texts: There are no required texts for this class</p>
-<p>Required Journal Articles: There are no required journal articles for this class</p>
+<p>Required and Recommended Texts: There are no required texts for this class.</p>
+<p>Required Journal Articles: There are no required journal articles for this class.</p>
 </div>
 <div id="course-goals" class="section level4">
 <h4>Course Goals</h4>
@@ -476,7 +435,7 @@ Reproducible documents for analytic reporting
 </div>
 <div id="communication" class="section level4">
 <h4>Communication</h4>
-<p>This class will communicate primarily via Slack. You will see a channel <code>#fall2020-b</code>. Please join this channel. Please use Slack for broadcasting messages, answering questions and the like. When you ask a question, please ask it under the <code>#general</code> or <code>#fall2020-b</code> channels, so others can learn as well. I should respond within 24 hours.</p>
+<p>This class will communicate primarily via Slack. You will see a channel <code>#fall2021-a</code>. Please join this channel. Please use Slack for broadcasting messages, answering questions and the like. When you ask a question, please ask it under the <code>#general</code> or <code>#fall2021-a</code> channels, so others can learn as well. I should respond within 24 hours.</p>
 <p>The Canvas Discussion forum will be used for guided class discussions.</p>
 </div>
 <div id="etiquette" class="section level4">
@@ -520,7 +479,7 @@ Reproducible documents for analytic reporting
 </div>
 <div id="due-dates" class="section level4">
 <h4>Due Dates</h4>
-<p>Homework is assigned at 10am each Monday and is due by 11:59pm the following Sunday.</p>
+<p>Homework is assigned at 10am each Monday and is due by 11:59pm the following Monday.</p>
 </div>
 <div id="late-submission-policies" class="section level4">
 <h4>Late Submission Policies</h4>
@@ -538,13 +497,13 @@ Reproducible documents for analytic reporting
 <h4>Major Assignments</h4>
 <p>Grades will be based on the following requirements:</p>
 <ol style="list-style-type: decimal">
-<li>Homeworks for each week are due Sunday at 11:59pm (50%)
+<li>Homeworks for each week are due Monday at 11:59pm (50%)
 <ul>
 <li>No late homeworks</li>
 <li>We’ll have 6 homeworks, I’ll score the top 4 for grade</li>
 </ul></li>
 <li>Final project: A R Markdown report/presentation demonstrating an end-to-end data analysis in R using your own data, from data ingestion to munging to analyses and graphics, with a brief introduction and conclusion (30%)</li>
-<li>Class participation (20%): Discussion topics in weeks 2-6</li>
+<li>Class participation (20%): Discussion topics in weeks 2-6, as well as participation on Slack.</li>
 </ol>
 <p><strong>Final project</strong></p>
 <ul>
@@ -558,7 +517,7 @@ Reproducible documents for analytic reporting
 <li>create a visualization</li>
 <li>create a report in R Markdown</li>
 </ul></li>
-<li>5 minute lightning talks that can be recorded using Quicktime or <a href="https://www.screencastify.com" target="_blank">Screencastify</a>, which requires the Chrome browser</li>
+<li>5 minute lightning talks that can be recorded using Quicktime or <a href="https://www.screencastify.com" target="_blank">Screencastify</a>, which requires the Chrome browser. Any method that can produce a mp4 file is okay, but must be limited to 5 minutes.</li>
 </ul>
 </div>
 </div>
@@ -590,7 +549,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
