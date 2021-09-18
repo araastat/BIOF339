@@ -12,22 +12,29 @@
 <meta name="author" content="Abhijit Dasgupta" />
 
 
-<title>index.utf8</title>
+<title>BIOF339: Practical R   Lectures</title>
 
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-<link id="font-awesome-1-attachment" rel="attachment" href="site_libs/font-awesome-5.1.0/fonts/fontawesome-webfont.ttf"/>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -39,11 +46,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -56,34 +58,9 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
 
-<link rel="stylesheet" href="../styles.css" type="text/css" />
+
+<link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/styles.css" type="text/css" />
 
 
 
@@ -92,10 +69,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -112,40 +85,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -173,7 +119,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -185,7 +131,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -196,10 +142,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -211,7 +170,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -326,12 +284,11 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><div class="line-block">BIOF339: Practical R<br />
-Lectures</div></h1>
+<h1 class="title toc-ignore">BIOF339: Practical R <br> Lectures</h1>
 <h4 class="author">Abhijit Dasgupta</h4>
 
 </div>
@@ -341,7 +298,7 @@ Lectures</div></h1>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#iohukyhspb .gt_table {
+#wemwhntmnj .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -366,7 +323,7 @@ Lectures</div></h1>
   border-left-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_heading {
+#wemwhntmnj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -378,7 +335,7 @@ Lectures</div></h1>
   border-right-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_title {
+#wemwhntmnj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -388,7 +345,7 @@ Lectures</div></h1>
   border-bottom-width: 0;
 }
 
-#iohukyhspb .gt_subtitle {
+#wemwhntmnj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -398,13 +355,13 @@ Lectures</div></h1>
   border-top-width: 0;
 }
 
-#iohukyhspb .gt_bottom_border {
+#wemwhntmnj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_col_headings {
+#wemwhntmnj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -419,7 +376,7 @@ Lectures</div></h1>
   border-right-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_col_heading {
+#wemwhntmnj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -439,7 +396,7 @@ Lectures</div></h1>
   overflow-x: hidden;
 }
 
-#iohukyhspb .gt_column_spanner_outer {
+#wemwhntmnj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -451,15 +408,15 @@ Lectures</div></h1>
   padding-right: 4px;
 }
 
-#iohukyhspb .gt_column_spanner_outer:first-child {
+#wemwhntmnj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#iohukyhspb .gt_column_spanner_outer:last-child {
+#wemwhntmnj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#iohukyhspb .gt_column_spanner {
+#wemwhntmnj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -471,7 +428,7 @@ Lectures</div></h1>
   width: 100%;
 }
 
-#iohukyhspb .gt_group_heading {
+#wemwhntmnj .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -493,7 +450,7 @@ Lectures</div></h1>
   vertical-align: middle;
 }
 
-#iohukyhspb .gt_empty_group_heading {
+#wemwhntmnj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -508,15 +465,15 @@ Lectures</div></h1>
   vertical-align: middle;
 }
 
-#iohukyhspb .gt_from_md > :first-child {
+#wemwhntmnj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iohukyhspb .gt_from_md > :last-child {
+#wemwhntmnj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iohukyhspb .gt_row {
+#wemwhntmnj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -535,7 +492,7 @@ Lectures</div></h1>
   overflow-x: hidden;
 }
 
-#iohukyhspb .gt_stub {
+#wemwhntmnj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -547,7 +504,7 @@ Lectures</div></h1>
   padding-left: 12px;
 }
 
-#iohukyhspb .gt_summary_row {
+#wemwhntmnj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -557,7 +514,7 @@ Lectures</div></h1>
   padding-right: 5px;
 }
 
-#iohukyhspb .gt_first_summary_row {
+#wemwhntmnj .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -567,7 +524,7 @@ Lectures</div></h1>
   border-top-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_grand_summary_row {
+#wemwhntmnj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -577,7 +534,7 @@ Lectures</div></h1>
   padding-right: 5px;
 }
 
-#iohukyhspb .gt_first_grand_summary_row {
+#wemwhntmnj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -587,11 +544,11 @@ Lectures</div></h1>
   border-top-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_striped {
+#wemwhntmnj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#iohukyhspb .gt_table_body {
+#wemwhntmnj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -600,7 +557,7 @@ Lectures</div></h1>
   border-bottom-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_footnotes {
+#wemwhntmnj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -614,13 +571,13 @@ Lectures</div></h1>
   border-right-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_footnote {
+#wemwhntmnj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#iohukyhspb .gt_sourcenotes {
+#wemwhntmnj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -634,52 +591,52 @@ Lectures</div></h1>
   border-right-color: #D3D3D3;
 }
 
-#iohukyhspb .gt_sourcenote {
+#wemwhntmnj .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#iohukyhspb .gt_left {
+#wemwhntmnj .gt_left {
   text-align: left;
 }
 
-#iohukyhspb .gt_center {
+#wemwhntmnj .gt_center {
   text-align: center;
 }
 
-#iohukyhspb .gt_right {
+#wemwhntmnj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iohukyhspb .gt_font_normal {
+#wemwhntmnj .gt_font_normal {
   font-weight: normal;
 }
 
-#iohukyhspb .gt_font_bold {
+#wemwhntmnj .gt_font_bold {
   font-weight: bold;
 }
 
-#iohukyhspb .gt_font_italic {
+#wemwhntmnj .gt_font_italic {
   font-style: italic;
 }
 
-#iohukyhspb .gt_super {
+#wemwhntmnj .gt_super {
   font-size: 65%;
 }
 
-#iohukyhspb .gt_footnote_marks {
+#wemwhntmnj .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="iohukyhspb" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="wemwhntmnj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="5" class="gt_heading gt_title gt_font_normal" style>Contents</th>
     </tr>
     <tr>
-      <th colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Fall, 2020</th>
+      <th colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Fall, 2021</th>
     </tr>
   </thead>
   <thead class="gt_col_headings">
@@ -770,7 +727,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week2/01-packages.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week2/01-packages.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week2/01-packages.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -780,7 +738,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week2/02-names.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week2/02-names.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week2/02-names.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -790,7 +749,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week2/03-functions.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week2/03-functions.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week2/03-functions.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -800,7 +760,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week2/04-ingest.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week2/04-ingest.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week2/04-ingest.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -810,7 +771,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week2/05-munging.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week2/05-munging.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week2/05-munging.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -820,7 +782,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week2/06-factors.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week2/06-factors.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week2/06-factors.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -830,7 +793,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week2/07-joins.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week2/07-joins.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week2/07-joins.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -843,7 +807,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/01-why_plot.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/01-why_plot.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/01-why_plot.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -853,7 +818,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/02-ggplot1.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/02-ggplot1.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/02-ggplot1.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -863,7 +829,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/03-saving.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/03-saving.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/03-saving.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -873,7 +840,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/04-visdat.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/04-visdat.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/04-visdat.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -883,7 +851,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/05-themes.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/05-themes.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/05-themes.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -893,7 +862,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/06-patchwork.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/06-patchwork.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/06-patchwork.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -903,7 +873,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/07-maps.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/07-maps.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/07-maps.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -913,7 +884,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/08-annotate.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/08-annotate.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/08-annotate.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -923,7 +895,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week3/09-animation.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week3/09-animation.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week3/09-animation.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -936,7 +909,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week4/01-loops_and_mapping.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week4/01-loops_and_mapping.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week4/01-loops_and_mapping.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -946,7 +920,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week4/02-stat_summaries.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week4/02-stat_summaries.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week4/02-stat_summaries.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -956,7 +931,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week4/03-tests.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week4/03-tests.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week4/03-tests.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -966,7 +942,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week4/04-stat_models.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week4/04-stat_models.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week4/04-stat_models.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -976,7 +953,8 @@ Lectures</div></h1>
 </div></td>
       <td class="gt_row gt_center" style="text-align: right;"><div class='gt_from_md'><p><a href="lectures/week4/05-comp_inference.html" target="_blank">HTML</a></p>
 </div></td>
-      <td class="gt_row gt_center"><div class='gt_from_md'></div></td>
+      <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="lectures/week4/05-comp_inference.pdf" target="_blank">PDF</a></p>
+</div></td>
       <td class="gt_row gt_center"><div class='gt_from_md'><p><a href="https://raw.githubusercontent.com/araastat/BIOF339/main/slides/lectures/week4/05-comp_inference.Rmd" target="_blank">Rmd</a></p>
 </div></td>
     </tr>
@@ -1088,7 +1066,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
