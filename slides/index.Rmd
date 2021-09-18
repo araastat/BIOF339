@@ -11,41 +11,50 @@ fa <- rmarkdown::html_dependency_font_awesome()
 #fa$attachment <- "fonts/fontawesome-webfont.ttf"
 htmltools::tagList(fa)
 knitr::opts_chunk$set(echo = FALSE)
+
+start_date <- "2021-08-30"
+
 ```
 
 
 ```{r top-table, echo = F, message=F, warning=F}
-pacman::p_load(char = c('tidyverse','fs','glue','kableExtra','knitr','here', 'gt'))
+pacman::p_load(tidyverse, fs, glue, kableExtra, knitr, here, gt,lubridate)
+start_date <- as_date(start_date)
+dts <- start_date + days(7* (0:6))
+curr_date <- as_date(Sys.Date())
+weeks <- data.frame("Week" = paste("Week", 1:6), "Start" = dts[1:6])
 
 parse_title <- function(f){
   if(is.na(f)) return(NA)
   rmarkdown::yaml_front_matter(f)$title
 }
-setwd(here::here('slides'))
-rmdfiles <- dir_ls('.', regex='week\\d/\\d+.*Rmd', recurse = TRUE)
 
-tbl <- tibble(Week = str_extract(rmdfiles, 'week\\d'), 
-              'Source' = rmdfiles) %>% 
-  mutate(Week = paste('Week', parse_number(Week)),
+setwd(here("slides"))
+rmdfiles <- dir_ls(".", regex="week\\d/\\d+.*Rmd", recurse = TRUE)
+
+
+tbl <- tibble(Week = str_extract(rmdfiles, "week\\d"), 
+              "Source" = rmdfiles) %>% 
+  mutate(Week = paste("Week", parse_number(Week)),
          Unit = parse_number(basename(Source)),
          Title = map_chr(rmdfiles, parse_title),
-         Title = str_remove(Title, 'Practical R: ')) %>% 
-  mutate(HTML = glue('<a href="{str_replace(Source, "Rmd","html")}" target="_blank">HTML</a>'))
+         Title = str_remove(Title, "Practical R: ")) %>% 
+  mutate(HTML = glue("<a href='{str_replace(Source, 'Rmd','html')}' target='_blank'>HTML</a>")) %>% right_join(weeks)
 
-pdffiles <- path('docs','slides',str_replace(rmdfiles, 'Rmd','pdf'))
-pdf_exists <- file_exists(here(pdffiles))
-pdf_urls <- glue('<a href="{str_replace(rmdfiles, "Rmd","pdf")}" target="_blank">PDF</a>')
-pdf_urls[!pdf_exists] <- ''
+pdffiles <- path('slides',str_replace(rmdfiles, 'Rmd','pdf'))
+pdf_exists <- file_exists(here('docs',pdffiles))
+pdf_urls <- glue("<a href='{pdffiles}' target='_blank'>PDF</a>")
+pdf_urls[!pdf_exists] <- ""
 tbl <- tbl %>% 
   mutate(PDF = pdf_urls)
 
-rmd_url_lead <- 'https://raw.githubusercontent.com/araastat/BIOF339/main/slides'
+rmd_url_lead <- "https://raw.githubusercontent.com/araastat/BIOF339/main/slides"
 tbl <- tbl %>% 
-  mutate(`R Markdown` = glue('<a href="{paste(rmd_url_lead, rmdfiles, sep="/")}" target="_blank">Rmd</a>'))
+  mutate(`R Markdown` = glue("<a href='{paste(rmd_url_lead, rmdfiles, sep='/')}' target='_blank'>Rmd</a>"))
 
 ## Cleanup
 tbl <- tbl %>% 
-  mutate(Title = str_extract(Title, '[[:alpha:], ]+'))
+  mutate(Title = str_extract(Title, "[[:alpha:], ]+"))
 
 # tbl %>% 
 #   select(-Source) %>% 
@@ -53,16 +62,17 @@ tbl <- tbl %>%
 #   kable_styling(full_width=FALSE)
 
 tbl %>% 
-  select(-Source) %>% 
+  filter(Start <= curr_date) %>% 
+  select(-Source, -Start) %>% 
   gt(
-    rowname_col = 'Unit',
-    groupname_col = 'Week'
+    rowname_col = "Unit",
+    groupname_col = "Week"
   ) %>% 
   fmt_markdown(columns=TRUE) %>%
-  tab_header(title='Contents', subtitle = 'Fall, 2021') %>% 
+  tab_header(title="Contents", subtitle = "Fall, 2021") %>% 
   tab_style(
     style = list(
-      cell_text(align='right')
+      cell_text(align="right")
     ),
     locations = cells_body(
       columns = vars(HTML)
