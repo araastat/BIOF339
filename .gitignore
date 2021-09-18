@@ -6,7 +6,9 @@
 
 manual/*
 
-data/*
+data
+slides/data/*
+docs/slides/data/*
 
 slides/**/*.html
 notes/**/*.html
@@ -32,6 +34,7 @@ data/*
 docs/slides/lectures/**/img/*
 docs/slides/lectures/**/css/*
 docs/slides/lectures/**/js/*
+*.rds
 
 assignments/**/*_files/*
 *.swp
