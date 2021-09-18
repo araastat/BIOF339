@@ -13,6 +13,7 @@ fa <- rmarkdown::html_dependency_font_awesome()
 fa$attachment <- "fonts/fontawesome-webfont.ttf"
 htmltools::tagList(fa)
 knitr::opts_chunk$set(echo = FALSE)
+start_date <- '2021-08-30'
 ```
 
 
@@ -26,6 +27,11 @@ library(here)
 library(gt)
 setwd(here('assignments'))
 
+pacman::p_load(tidyverse, fs, glue, kableExtra, knitr, here, gt,lubridate)
+start_date <- as_date(start_date)
+dts <- start_date + days(7* (0:6))
+curr_date <- as_date(Sys.Date())
+weeks <- data.frame("Week" = paste("Week", 1:6), "Start" = dts[1:6])
 
 hwfiles <- tibble(url = as.character(dir_ls('.', regex = 'HW/week\\d/week\\d.Rmd' , recurse=TRUE))) %>% 
   mutate(Week = str_extract(url, 'week\\d'))
@@ -43,7 +49,11 @@ hwfiles <- hwfiles %>% left_join(solutions) %>% relocate(Week) %>%
 
 out <- hwfiles %>% 
   mutate(Week = str_replace(Week, 'week(\\d)', 'Week \\1')) %>% 
-  select(-contains('url'))
+  select(-contains('url')) %>% 
+  right_join(weeks) %>% 
+  filter(Start <= curr_date) %>% 
+  mutate(Solution = ifelse(Start >= curr_date - days(7), '', Solution)) %>% 
+  select(-Start)
 
 gt(out) %>% 
   fmt_markdown(columns = TRUE)
