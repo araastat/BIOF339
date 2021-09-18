@@ -1,20 +1,57 @@
 ---
 title: "Homework 2"
 author: "BIOF 339"
-output: html_document 
+output: 
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
 
 ---
 
-```{r setup0, include=F}
-knitr::opts_chunk$set(echo=TRUE)
+```{css, echo=FALSE}
+blockquote {
+  font-size: 10pt;
+  background-color: lightgrey;
+  border: 1px solid grey;
+}
+
+p {
+  font-family: Charter, serif;
+}
+.infobox {
+  padding-left: 3em;
+  padding-right: 0.5em;
+  margin: 1px;
+  border: 1px solid grey;
+  background: #f5f5f5 5px center/3em no-repeat;
+  background-size: 30px 30px;
+  font-style: italic;
+  font-size: 10pt
+}
+
+.bold {
+  font-weight: bold;
+}
+.info {
+  background-image: url("../img/information-button.png");
+  background-size: 20px 20px;
+}
 ```
 
+```{r setup0, include=F}
+knitr::opts_chunk$set(echo=TRUE, warning=F)
+library(pacman)
+p_load(tidyverse, knitr, rmarkdown, janitor)
+```
 
-```{r setup} 
-# First modify this chunk to activate the packages you will need for this HW.
-# Ensure you have `tidyverse`, `knitr` and `rmarkdown` installed
-# Add statements like `library(tidyverse)`
+First modify the setup chunk to activate the packages you will need for this HW.
+Ensure you have **tidyverse**, **knitr** and **rmarkdown** installed.
+Add statements like `library(tidyverse)')`
 
+
+
+````r
+```{r setup}`r ''`
 library(pacman)
 p_load(tidyverse) # library(tidyverse)
 p_load(knitr)
@@ -24,8 +61,9 @@ p_load(janitor)
 # add more p_load statements 
 # if you need to. Or you can do it in one go with 
 # 
-# p_load(char = c("tidyverse", "knitr", "rmarkdown"))
+# p_load(tidyverse, knitr, rmarkdown, janitor)
 ```
+````
 
 # Instructions
 
@@ -63,6 +101,7 @@ in the `data` folder of your RStudio Project for this class.
 
 ```{r}
 # Code to import data file here
+library(pacman)
 p_load(here)
 breast_cancer <- rio::import(here("data/clinical_data_breast_cancer_modified.csv"), check.names=TRUE)
 
@@ -109,7 +148,7 @@ glimpse(breast_cancer)
 ## you can use the `across` function to make things more succint
 
 breast_cancer <- breast_cancer %>% 
-  mutate(across(c(Gender ER.Status, PR.Status, HER2.Final.Status), as.factor))
+  mutate(across(c(Gender, ER.Status, PR.Status, HER2.Final.Status), as.factor))
 
 # Not correct (Why?): 
 # breast_cancer <- breast_cancer %>%
@@ -158,23 +197,62 @@ brca_data <- brca_data %>%
 
 ```
 
-b. For the molecular results for ER, PR and HER2, any entry that is not Positive or Negative should be changed to a missing value.
+c. For the molecular results for ER, PR and HER2, any entry that is not Positive or Negative should be changed to a missing value.
+
+This is a rather comprehensive answer, using information from [StackOverflow](https://stackoverflow.com/questions/25354964/r-how-to-change-one-of-the-level-to-na).
+
+This is a non-trivial question since the obvious way doesn't quite work
 
 ```{r }
-## There are two approaches here. The first looks at the data and finds out the actual values that aren't Positive or Negative
+brca_data1 <- brca_data %>% 
+  mutate(ER.Status = ifelse(ER.Status=='Indeterminate', NA, ER.Status)) %>% 
+  mutate(HER2.Final.Status = ifelse(HER2.Final.Status=='Equivocal', NA, HER2.Final.Status))
+
+str(brca_data1 %>% select(ER.Status, HER2.Final.Status))
+```
+
+OhOh!! The type of the data changed to integers!!
+
+There are several ways to achieve this in a type-safe way. The one I like most is using `forcats::fct_recode`
+
+```{r}
+brca_data1 <- brca_data %>% 
+  mutate(ER.Status = fct_recode(ER.Status, NULL = 'Indeterminate')) %>% 
+  mutate(HER2.Final.Status = fct_recode(HER2.Final.Status, NULL = 'Equivocal'))
+
+str(brca_data1 %>% select(ER.Status, HER2.Final.Status))
+```
+
+::: {.infobox .info}
+Note that the **forcats** package is already loaded into R as part of the **tidyverse**
+:::
+
+Other options include:
+
+```{r, eval=FALSE}
 brca_data1 <- brca_data %>%
     mutate(ER.Status = recode_factor(ER.Status, Indeterminate = NA_character_)) %>% 
-    mutate(HER2.Final.Status = recode_factor(HER2.Final.Status,  'Equivocal' = NA_character_))
+    mutate(HER2.Final.Status = recode_factor(HER2.Final.Status,  
+                                             'Equivocal' = NA_character_))
+```
 
-## Alternatively
-# brca_data1 <- brca_data %>%
-#     mutate(ER.Status = na_if(ER.Status, 'Indeterminate')) %>% 
-#     mutate(HER2.Final.Status = na_if(HER2.Final.Status, 'Equivocal'))
+```{r, eval=F}
+brca_data1 <- brca_data %>%
+    mutate(ER.Status = na_if(ER.Status, 'Indeterminate')) %>% 
+    mutate(HER2.Final.Status = na_if(HER2.Final.Status, 'Equivocal'))
+```
+
+```{r, eval=F}
+brca_data1 <- brca_data %>%
+    mutate(ER.Status = factor(ER.Status, exclude = 'Indeterminate')) %>% 
+    mutate(HER2.Final.Status = factor(HER2.Final.Status, exclude = 'Equivocal'))
+```
 
 
+The other approach is to create a function that does the transformation and run 
+it on all the columns:
 
-## The other is to run the same function on the columns for ER, PR and HER2 status
-
+```{r}
 clean_markers <- function(x){
   x <- recode_factor(x, Positive = 'Positive', Negative = 'Negative', .default = NA_character_)
   return(x)
@@ -182,15 +260,16 @@ clean_markers <- function(x){
 
  brca_data2 <- brca_data %>%
 mutate(across(c(ER.Status, PR.Status, HER2.Final.Status), clean_markers))
+```
 
-## Verify that both data sets are identical
+You can verify that both data sets are identical
 
+```{r}
 all(brca_data1 == brca_data2, na.rm=TRUE)
-
 ```
 
 
-c. Create a new dataset that contains patient ID, Er PR and HER2 status. 
+c. Create a new dataset that contains patient ID, ER, PR and HER2 status. 
 
 ```{r }
 brca_data3 <- select(brca_data, Complete.TCGA.ID, ER.Status, PR.Status, HER2.Final.Status)
@@ -200,7 +279,7 @@ brca_data3 <- select(brca_data, Complete.TCGA.ID, ER.Status, PR.Status, HER2.Fin
 ```
 
 
-d. Creating new variables (what `dplyr` function will you use for all of these?): mutate
+d. Creating new variables (what `dplyr` function will you use for all of these?): <span style='text-color:red;'> `mutate`</span>
 
 e. Create a variable giving the TNM status of each patient. The T, N and M statuses are given separately. I want a single variable encoded as, for example, "T2N0M0". [Hint: The function `paste` is your friend]
 
