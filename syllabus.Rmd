@@ -2,7 +2,7 @@
 title: ''
 output: 
   html_document:
-    css: ../styles.css
+    css: styles.css
     toc: false
 ---
 
@@ -18,7 +18,7 @@ h4 {
 }
 ```
 
-<img class='center' height="80" src='../img/faes.png'>
+<img class='center' height="80" src='img/faes.png'>
 
 <div style="text-align: center;">
 <p>BIOF 339: Practical R 
