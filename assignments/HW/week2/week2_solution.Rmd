@@ -6,35 +6,6 @@ output: html_document
 
 ---
 
-```{css, echo=FALSE}
-blockquote {
-  font-size: 10pt;
-  background-color: lightgrey;
-  border: 1px solid grey;
-}
-
-p {
-  font-family: Charter, serif;
-}
-.infobox {
-  padding-left: 3em;
-  padding-right: 0.5em;
-  margin: 1px;
-  border: 1px solid grey;
-  background: #f5f5f5 5px center/3em no-repeat;
-  background-size: 30px 30px;
-  font-style: italic;
-  font-size: 10pt
-}
-
-.bold {
-  font-weight: bold;
-}
-.info {
-  background-image: url("../img/information-button.png");
-  background-size: 20px 20px;
-}
-```
 
 ```{r setup0, include=F}
 knitr::opts_chunk$set(echo=TRUE, warning=F)

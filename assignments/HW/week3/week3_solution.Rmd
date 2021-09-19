@@ -111,56 +111,58 @@ Our goal is to create a single graphic showing the patterns of incidence rates o
 
 1. Each csv file is in the same format. Open one in a text editor like Notepad (Windows) or TextEdit (Mac) to see lines you may need to skip. (I don't suggest Excel since it has a habit of changing formating and adding columns when you save back into csv). Then read each of the five files into R. For convenience I'll refer to these datasets as `brain`, `colon`, `esophagus`, `lung` and `oral`.
     - Confirm that each dataset has 43 rows and 10 columns
-  ```{r}
-  library(tidyverse)
-  library(rio)
-  library(here)
-  
-  brain <- import(here('data/Brain.csv'), skip=4)
-  colon <- import(here('data/Colon.csv'), skip=4)
-  esophagus <- import(here('data/Esophagus.csv'), skip=4)
-  lung <- import(here('data/Lung.csv'), skip=4)
-  oral <- import(here('data/Oral.csv'), skip=4)
+    
+```{r}
+library(tidyverse)
+library(rio)
+library(here)
 
-  str(brain)
-  str(colon)
-  ```   
+brain <- import(here('data/Brain.csv'), skip=4)
+colon <- import(here('data/Colon.csv'), skip=4)
+esophagus <- import(here('data/Esophagus.csv'), skip=4)
+lung <- import(here('data/Lung.csv'), skip=4)
+oral <- import(here('data/Oral.csv'), skip=4)
+
+str(brain)
+str(colon)
+```   
 
 1. Create three separate datasets for each site, one for both sexes, one for males and one for females. Each dataset should still have year of diagnosis. So each dataset should have 43 rows and 4 columns.
-  ```{r}
-  brain_both_sexes <- select(brain, `Year of Diagnosis`, ends_with('Sexes'))
-  brain_male <- select(brain, `Year of Diagnosis`, ends_with('Males'))
-  brain_female <- select(brain, `Year of Diagnosis`, ends_with('Females'))
-  
-  str(brain_both_sexes)
-  str(brain_male)
-  str(brain_female)
-  
-  colon_both_sexes <- select(colon, `Year of Diagnosis`, ends_with('Sexes'))
-  esophagus_both_sexes <- select(esophagus, `Year of Diagnosis`, ends_with('Sexes'))
-  lung_both_sexes <- select(lung, `Year of Diagnosis`, ends_with('Sexes'))
-  oral_both_sexes <- select(oral, `Year of Diagnosis`, ends_with('Sexes'))
-  ```
+```{r}
+brain_both_sexes <- select(brain, `Year of Diagnosis`, ends_with('Sexes'))
+brain_male <- select(brain, `Year of Diagnosis`, ends_with('Males'))
+brain_female <- select(brain, `Year of Diagnosis`, ends_with('Females'))
+
+str(brain_both_sexes)
+str(brain_male)
+str(brain_female)
+
+colon_both_sexes <- select(colon, `Year of Diagnosis`, ends_with('Sexes'))
+esophagus_both_sexes <- select(esophagus, `Year of Diagnosis`, ends_with('Sexes'))
+lung_both_sexes <- select(lung, `Year of Diagnosis`, ends_with('Sexes'))
+oral_both_sexes <- select(oral, `Year of Diagnosis`, ends_with('Sexes'))
+```
   
 <li> For the next few points, I will refer to the both sexes datasets. You'll do the same for the male and female datasets.
 
 1. Each dataset has the same column headers. We'll be joining the data sets into a single data set using the year of diagnosis as the **key**, i.e. the common variable that will determine the joins. This means we have to make the column names for the different data sets (except the year column) distinctive. Change the column names replacing `both_sexes` with the names of the cancer sites
     - *Hints: `names(brain)` gives the column names for the brain data. You can also change column names using `names(brain) <- ...` since this is just a vector. In particular, you can try something like `names(brain) <- stringr::str_replace(names(brain), 'both_sexes', 'brain')`*
-  ```{r}
-  names(brain_both_sexes) <- str_replace(names(brain_both_sexes), 'Both Sexes','brain')
-  names(colon_both_sexes) <- str_replace(names(colon_both_sexes), 'Both Sexes','colon')
-  names(esophagus_both_sexes) <- str_replace(names(esophagus_both_sexes), 'Both Sexes','esophagus')
-  names(lung_both_sexes) <- str_replace(names(lung_both_sexes), 'Both Sexes','lung')
-  names(oral_both_sexes) <- str_replace(names(oral_both_sexes), 'Both Sexes','oral')
-  ```
+    
+```{r}
+names(brain_both_sexes) <- str_replace(names(brain_both_sexes), 'Both Sexes','brain')
+names(colon_both_sexes) <- str_replace(names(colon_both_sexes), 'Both Sexes','colon')
+names(esophagus_both_sexes) <- str_replace(names(esophagus_both_sexes), 'Both Sexes','esophagus')
+names(lung_both_sexes) <- str_replace(names(lung_both_sexes), 'Both Sexes','lung')
+names(oral_both_sexes) <- str_replace(names(oral_both_sexes), 'Both Sexes','oral')
+```
   
 <li> Create a new composite dataset by repeatedly using `left_join` or `inner_join` to add each site-specific dataset to the composite data set. What I mean is, create a dataset joining A and B, then join C to the result, then join D to the result and so on.
-  ```{r}
-  both_sexes <- brain_both_sexes %>% left_join(colon_both_sexes) %>% 
-    left_join(esophagus_both_sexes) %>% 
-    left_join(lung_both_sexes) %>% 
-    left_join(oral_both_sexes)
-  ```
+```{r}
+both_sexes <- brain_both_sexes %>% left_join(colon_both_sexes) %>% 
+  left_join(esophagus_both_sexes) %>% 
+  left_join(lung_both_sexes) %>% 
+  left_join(oral_both_sexes)
+```
 
 
 1. For each of these datasets:

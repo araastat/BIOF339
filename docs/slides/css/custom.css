@@ -1,0 +1,77 @@
+/* custom.css */
+.left-code {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+
+.pull-left {
+  float: left;
+  width: 47%;
+}
+.pull-right {
+  float: right;
+  width: 47%;
+}
+.pull-right ~ * {
+  clear: both;
+}
+
+.bigblockquote {
+  border-left: solid 5px lightgray;
+  padding-left: 1em;
+  font-size: 200%;
+  font-style: italic;
+}
+
+.column:first-of-type {float:left;}
+.column:last-of-type {float:right;}
+
+.split-40 .column:first-of-type {width: 40%;}
+.split-40 .column:last-of-type {width: 57%;}
+.split-30 .column:first-of-type {width: 30%;}
+.split-30 .column:last-of-type {width: 67%;}
+
+.left-column30 {
+  color: #777;
+  width: 30%;
+  height: 92%;
+  float: left;
+}
+.right-column30 {
+  width: 67%;
+  float: right;
+}
+
+.left-column70 {
+  color: #777;
+  width: 67%;
+  height: 92%;
+  float: left;
+}
+.right-column70 {
+  width: 30%;
+  float: right;
+}
+.left-column30 {
+  color: #777;
+  width: 30%;
+  height: 92%;
+  float: left;
+}
+.right-column30 {
+  width: 67%;
+  float: right;
+}
+
+.title-hex{
+  height: 50px;
+  align: middle;
+  float: right;
+}

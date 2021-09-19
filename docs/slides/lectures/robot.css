@@ -160,3 +160,9 @@ div.my-header span{
   width: 67%;
   float: right;
 }
+
+.title-hex{
+  height: 50px;
+  align: middle;
+  float: right;
+}

@@ -41,8 +41,8 @@ tbl <- tibble(Week = str_extract(rmdfiles, "week\\d"),
          Title = str_remove(Title, "Practical R: ")) %>% 
   mutate(HTML = glue("<a href='{str_replace(Source, 'Rmd','html')}' target='_blank'>HTML</a>")) %>% right_join(weeks)
 
-pdffiles <- path('slides',str_replace(rmdfiles, 'Rmd','pdf'))
-pdf_exists <- file_exists(here('docs',pdffiles))
+pdffiles <- str_replace(rmdfiles, 'Rmd','pdf')
+pdf_exists <- file_exists(here('docs','slides',pdffiles))
 pdf_urls <- glue("<a href='{pdffiles}' target='_blank'>PDF</a>")
 pdf_urls[!pdf_exists] <- ""
 tbl <- tbl %>% 
