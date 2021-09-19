@@ -8,13 +8,6 @@ date: BIOF 339
 ```{r setup, include=FALSE, child = here::here('slides/templates/setup.Rmd')}
 ```
 
-
-
-```{r, echo=FALSE, results='asis'}
-update_header()
-```
-
-
 ---
 
 
@@ -33,7 +26,7 @@ update_header()
 
 # Repetitive copying
 
-For the last homework you had to do the same operations on mutiple files and data sets: 
+For the last homework you had to do the same operations on multiple files and data sets: 
 
 - Had to do same processing on multiple data sets
 - Had to do same graphs from multiple data sets
@@ -42,9 +35,23 @@ So you had to copy and paste code, changing the file name or the data name.
 
 --
 
+
 .bg-washed-red.b--red.ba.bw2.br3.shadow-5.ph4.mt5.center.fl.w-40.f2[
 This is generally **dangerous**
 ]
+
+
+--
+
+.ph4.mt5.fl.w-60.f2[
+You're better off having the computer do it!!
+]
+
+---
+class: middle, center
+
+## This week is a bit complicated. Learn by doing, taking the code apart and understanding what each part does. 
+
 ---
 class: middle, center
 
@@ -64,6 +71,9 @@ for (variable in vector) {
   <code to execute for each iteration>
 }
 ```
+
+
+![](https://media.giphy.com/media/nQ4INexHqOX4oO8Mcp/giphy.gif)
 
 ---
 
@@ -103,6 +113,13 @@ for(n in sites){
 .bg-washed-green.b--green.ba.bw2.br3.shadow-5.ph4.mt5.center.f3[
 **Why lists?** Because lists can keep any R object, and they're a great way to 
 store a bunch of data that we want to operate on in similar ways
+]
+
+--
+
+.bg-washed-blue.b--blue.ba.bw2.br3.shadow-5.mt2.center.f4[
+For loops can work on vectors or lists, so basically something array-like where you
+can count things either by name or by index
 ]
 
 ---
@@ -150,15 +167,16 @@ str(dats[['Brain']])
 ---
 class: center, middle, inverse
 
-# `purrr::map`
+# purrr::map
 
 ---
 
-```{r, echo=F, results='asis'}
-update_header('## map')
-```
+layout: true
+
+## `map` `r hexes("purrr")`
 
 ---
+
 
 
 `map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
@@ -218,6 +236,7 @@ str(dats[['Oral']])
 .bg-washed-green.b--green.ba.bw2.br3.ph4.mt1[
 Note that `janitor::clean_names` takes a data.frame/tibble as its first argument (as all tidyverse functions), and `dats` is a list of tibbles. So `map` applies the `clean_names` function to each tibble in the list, and returns the result as a list
 ]
+
 ---
 
 
@@ -312,13 +331,10 @@ str(joined[['both']])
 Okay, this is voodoo `r emo::ji('devil')` Not really. Grab one of the datasets
 and work out what you need. Since you'll be doing the same to all of the datasets, you use `map` on the list of datasets
 ]
----
-
-```{r, echo=F, results='asis'}
-update_header()
-```
 
 ---
+
+layout: false
 
 ## Final graphing
 
@@ -346,7 +362,3 @@ I'm using quite advanced R here, but hopefully you'll learn by example.
 ```{r 07-Maps-Table1-16, eval=T, echo = F, ref.label="plt1"}
 ```
 ]
-```{r 07-Maps-Table1-17}
-
-```
-

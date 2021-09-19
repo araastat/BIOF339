@@ -9,11 +9,6 @@ date: BIOF 339
 
 
 
-```{r, echo=FALSE, results='asis'}
-update_header()
-```
-
-
 ---
 class: middle, center, inverse
 

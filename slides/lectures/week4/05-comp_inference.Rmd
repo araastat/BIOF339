@@ -9,11 +9,6 @@ date: BIOF 339
 ```
 
 
-
-```{r, echo=FALSE, results='asis'}
-update_header()
-```
-
 ---
 class: middle, center
 
@@ -129,6 +124,8 @@ cowplot::plot_grid(plt1, plt2, nrow=1)
 ```
 ```{r 09-Modeling-5, eval=T, echo = F, ref.label="sim4", fig.height=3.5}
 ```
+
+.bg-washed-blue.b
 
 ---
 class: middle, center

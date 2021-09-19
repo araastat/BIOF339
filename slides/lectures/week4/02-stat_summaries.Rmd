@@ -8,13 +8,6 @@ date: BIOF 339
 ```{r setup, include=FALSE, child = here::here('slides/templates/setup.Rmd')}
 ```
 
-
-
-```{r, echo=FALSE, results='asis'}
-update_header()
-```
-
-
 ---
 
 ## Where we've been

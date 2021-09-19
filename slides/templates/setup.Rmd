@@ -1,25 +1,95 @@
 ```{r setup, include=FALSE, message = F, warning = F}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, comment="", 
                       cache = F)
-library(tidyverse)
-library(here)
-library(fs)
-library(readxl)
-library(flipbookr)
-library(broom)
-library(tableone)
-library(palmerpenguins)
-library(knitr)
-library(kableExtra)
-library(fontawesome)
-library(countdown)
 
-library(xaringanExtra)
-use_extra_styles(hover_code_line=TRUE, mute_unhighlighted_code = TRUE)
-use_tile_view()
-use_share_again()
-style_share_again(share_buttons = 'none')
+pacman::p_load(
+  tidyverse, here, fs, readxl, flipbookr, broom,tableone, palmerpenguins,
+  knitr, kableExtra, icons, countdown, xaringanthemer, xaringanExtra
+)
+options(htmltools.dir.version = FALSE) 
+options(htmltools.preserve.raw = FALSE)
 
 imgdir <- here('slides','lectures','img')
 datadir <- here('slides/lectures/data')
 source(here('lib/R/update_header.R'))
+
+hexes <- function(x) {
+  x <- paste0(x, ".png")
+  markup <- function(pkg) {
+    glue::glue('<img src="../img/{pkg}" class="title-hex">')
+  }
+  res <- purrr::map_chr(x, markup)
+  I(paste0(res, collapse = ""))
+}
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#2e19e6",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat"),
+  code_font_google   = google_font("Fira Mono"),
+  base_font_size = "18px",
+  table_row_even_background_color = '#fff',
+  header_background_auto = FALSE,
+  outfile = here::here("slides/css/xaringan-themer.css")
+)
+
+# style_duo(
+#   primary_color = "#2e19e6",
+#   secondary_color = "#D1E619",
+#   header_font_google = google_font("Josefin Sans"),
+#   text_font_google   = google_font("Montserrat"),
+#   code_font_google   = google_font("Fira Mono"),
+#   base_font_size = "18px",
+#   table_row_even_background_color = '#fff',
+#   header_background_auto = FALSE,
+#   outfile = here::here("slides/css/xaringan-themer.css")
+# 
+# )
+xaringanExtra::use_tachyons()
+xaringanExtra::use_panelset()
+xaringanExtra::use_extra_styles(hover_code_line=TRUE, mute_unhighlighted_code = TRUE)
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = 'none')
+
+```
+
+
+```{css, echo=FALSE}
+blockquote {
+  font-size: 10pt;
+  background-color: lightgrey;
+  border: 1px solid grey;
+}
+
+p {
+  font-family: Charter, serif;
+}
+.infobox {
+  padding-left: 3em;
+  padding-right: 0.5em;
+  margin: 1px;
+  border: 1px solid grey;
+  background: #f5f5f5 5px center/3em no-repeat;
+  background-size: 30px 30px;
+  font-style: italic;
+  font-size: 10pt
+}
+
+.bold {
+  font-weight: bold;
+}
+.info {
+  background-image: url("../img/information-button.png");
+  background-size: 20px 20px;
+}
+
+.title-hex{
+  height: 50px;
+  align: middle;
+  float: right;
+}
+
+```
