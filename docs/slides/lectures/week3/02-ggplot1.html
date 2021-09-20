@@ -4,21 +4,20 @@
     <title>Introduction to ggplot2</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="02-ggplot1_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="02-ggplot1_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="02-ggplot1_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="02-ggplot1_files/anchor-sections-1.0/anchor-sections.js"></script>
-    <link href="02-ggplot1_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="02-ggplot1_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="02-ggplot1_files/tile-view-0.2.3.9000/tile-view.js"></script>
-    <script src="02-ggplot1_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="02-ggplot1_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
-    <script src="02-ggplot1_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="02-ggplot1_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="02-ggplot1_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <script src="02-ggplot1_files/header-attrs/header-attrs.js"></script>
+    <link href="02-ggplot1_files/remark-css/default.css" rel="stylesheet" />
+    <link href="02-ggplot1_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="02-ggplot1_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="02-ggplot1_files/panelset/panelset.js"></script>
+    <link href="02-ggplot1_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="02-ggplot1_files/clipboard/clipboard.min.js"></script>
+    <link href="02-ggplot1_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="02-ggplot1_files/shareon/shareon.min.js"></script>
+    <link href="02-ggplot1_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="02-ggplot1_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -29,6 +28,11 @@ class: center, middle, inverse, title-slide
 ### BIOF 339
 
 ---
+
+
+
+
+
 
 
 
@@ -1231,7 +1235,7 @@ ggplot(
 ```
 
 This is great, but the dates are being treated as individual levels, since
-dates are encoded as characters &lt;svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM144 400h-8c-17.7 0-32-14.3-32-32v-8h40v40zm0-56h-40v-8c0-17.7 14.3-32 32-32h8v40zm-8-136c0-17.7 14.3-32 32-32s32 14.3 32 32-14.3 32-32 32-32-14.3-32-32zm72 192h-48v-40h48v40zm0-56h-48v-40h48v40zm64 56h-48v-40h48v40zm0-56h-48v-40h48v40zm64 56h-48v-40h48v40zm0-56h-48v-40h48v40zm-8-104c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm64 128c0 17.7-14.3 32-32 32h-8v-40h40v8zm0-24h-40v-40h8c17.7 0 32 14.3 32 32v8z"/&gt;&lt;/svg&gt;. 
+dates are encoded as characters <svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM144 400h-8c-17.7 0-32-14.3-32-32v-8h40v40zm0-56h-40v-8c0-17.7 14.3-32 32-32h8v40zm-8-136c0-17.7 14.3-32 32-32s32 14.3 32 32-14.3 32-32 32-32-14.3-32-32zm72 192h-48v-40h48v40zm0-56h-48v-40h48v40zm64 56h-48v-40h48v40zm0-56h-48v-40h48v40zm64 56h-48v-40h48v40zm0-56h-48v-40h48v40zm-8-104c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm64 128c0 17.7-14.3 32-32 32h-8v-40h40v8zm0-24h-40v-40h8c17.7 0 32 14.3 32 32v8z"/></svg>. 
 
 
 ```r

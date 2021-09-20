@@ -4,19 +4,20 @@
     <title>Using loops and map</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="01-loops_and_mapping_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="01-loops_and_mapping_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="01-loops_and_mapping_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="01-loops_and_mapping_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="01-loops_and_mapping_files/tile-view-0.2.3.9000/tile-view.js"></script>
-    <script src="01-loops_and_mapping_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="01-loops_and_mapping_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
-    <script src="01-loops_and_mapping_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="01-loops_and_mapping_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="01-loops_and_mapping_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <script src="01-loops_and_mapping_files/header-attrs/header-attrs.js"></script>
+    <link href="01-loops_and_mapping_files/remark-css/default.css" rel="stylesheet" />
+    <link href="01-loops_and_mapping_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="01-loops_and_mapping_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="01-loops_and_mapping_files/panelset/panelset.js"></script>
+    <link href="01-loops_and_mapping_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="01-loops_and_mapping_files/clipboard/clipboard.min.js"></script>
+    <link href="01-loops_and_mapping_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="01-loops_and_mapping_files/shareon/shareon.min.js"></script>
+    <link href="01-loops_and_mapping_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="01-loops_and_mapping_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/custom.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -34,11 +35,7 @@ class: center, middle, inverse, title-slide
 
 
 
-layout: true
 
-&lt;div class="my-header"&gt;
-&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
-&lt;/div&gt;
 
 
 ---
@@ -55,11 +52,12 @@ layout: true
     - joins
     - pivot_longer/wider
 
+
 ---
 
 # Repetitive copying
 
-For the last homework you had to do the same operations on mutiple files and data sets: 
+For the last homework you had to do the same operations on multiple files and data sets: 
 
 - Had to do same processing on multiple data sets
 - Had to do same graphs from multiple data sets
@@ -68,9 +66,23 @@ So you had to copy and paste code, changing the file name or the data name.
 
 --
 
+
 .bg-washed-red.b--red.ba.bw2.br3.shadow-5.ph4.mt5.center.fl.w-40.f2[
 This is generally **dangerous**
 ]
+
+
+--
+
+.ph4.mt5.fl.w-60.f2[
+You're better off having the computer do it!!
+]
+
+---
+class: middle, center
+
+## This week is a bit complicated. Learn by doing, taking the code apart and understand what each part does. 
+
 ---
 class: middle, center
 
@@ -91,6 +103,9 @@ for (variable in vector) {
   &lt;code to execute for each iteration&gt;
 }
 ```
+
+
+![](https://media.giphy.com/media/nQ4INexHqOX4oO8Mcp/giphy.gif)
 
 ---
 
@@ -134,6 +149,13 @@ for(n in sites){
 store a bunch of data that we want to operate on in similar ways
 ]
 
+--
+
+.bg-washed-blue.b--blue.ba.bw2.br3.shadow-5.mt2.center.f4[
+For loops can work on vectors or lists, so basically something array-like where you
+can count things either by name or by index
+]
+
 ---
 
 ## Lists
@@ -167,6 +189,7 @@ str(dats[['Brain']])
  $ Blacks,Both Sexes   : num  4.08 4.14 3.32 3.55 3.86 3.69 3.14 5.02 3.71 2.75 ...
  $ Blacks,Males        : num  4.79 4.31 5.37 5.17 4.34 4.19 3.35 7.24 4.4 3.79 ...
  $ Blacks,Females      : chr  "3.51" "3.88" "-" "2.47" ...
+ - attr(*, "filename")= chr "../data/Brain.csv"
 ```
 
 ---
@@ -211,24 +234,22 @@ tibble [43 × 10] (S3: tbl_df/tbl/data.frame)
  $ Blacks.Both.Sexes   : num [1:43] 4.08 4.14 3.32 3.55 3.86 3.69 3.14 5.02 3.71 2.75 ...
  $ Blacks.Males        : num [1:43] 4.79 4.31 5.37 5.17 4.34 4.19 3.35 7.24 4.4 3.79 ...
  $ Blacks.Females      : chr [1:43] "3.51" "3.88" "-" "2.47" ...
+ - attr(*, "filename")= chr "../data/Brain.csv"
 ```
 
 ---
 class: center, middle, inverse
 
-# `purrr::map`
+# purrr::map
 
 ---
 
 layout: true
 
-&lt;div class="my-header"&gt;
-&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
-&lt;/div&gt;
-
-## map
+## `map` &lt;img src="../img/purrr.png" class="title-hex"&gt;
 
 ---
+
 
 
 `map` is like a for-loop, but strictly for lists. It is more efficient than for-loops. The basic template is:
@@ -263,6 +284,7 @@ tibble [42 × 10] (S3: tbl_df/tbl/data.frame)
  $ Blacks.Both.Sexes   : num [1:42] 4.14 3.32 3.55 3.86 3.69 3.14 5.02 3.71 2.75 4.53 ...
  $ Blacks.Males        : num [1:42] 4.31 5.37 5.17 4.34 4.19 3.35 7.24 4.4 3.79 5.34 ...
  $ Blacks.Females      : num [1:42] 3.88 NA 2.47 3.51 3.23 2.92 3.16 3.05 1.84 3.88 ...
+ - attr(*, "filename")= chr "../data/Brain.csv"
 ```
 
 ---
@@ -316,11 +338,13 @@ tibble [42 × 10] (S3: tbl_df/tbl/data.frame)
  $ blacks_both_sexes   : num [1:42] 13.4 15.2 14.5 15.9 18.5 ...
  $ blacks_males        : num [1:42] 20.2 23.8 23.9 26 28.2 ...
  $ blacks_females      : num [1:42] 8.23 8.37 6.77 8.18 10.77 ...
+ - attr(*, "filename")= chr "../data/Oral.csv"
 ```
 
 .bg-washed-green.b--green.ba.bw2.br3.ph4.mt1[
 Note that `janitor::clean_names` takes a data.frame/tibble as its first argument (as all tidyverse functions), and `dats` is a list of tibbles. So `map` applies the `clean_names` function to each tibble in the list, and returns the result as a list
 ]
+
 ---
 
 
@@ -340,6 +364,7 @@ tibble [42 × 4] (S3: tbl_df/tbl/data.frame)
  $ all_races_both_sexes: num [1:42] 4.14 4.3 4.06 4.12 4.42 4.27 4.14 4.26 4.29 4.18 ...
  $ whites_both_sexes   : num [1:42] 3.55 3.72 3.33 3.41 3.73 3.54 3.31 3.46 3.57 3.52 ...
  $ blacks_both_sexes   : num [1:42] 10.9 10.7 12 13.1 12.9 ...
+ - attr(*, "filename")= chr "../data/Esophagus.csv"
 ```
 
 --
@@ -417,6 +442,7 @@ tibble [42 × 16] (S3: tbl_df/tbl/data.frame)
  $ all_races_Oral     : num [1:42] 13.2 13.3 12.7 13.4 14 ...
  $ whites_Oral        : num [1:42] 13.3 13.2 12.6 13.2 13.7 ...
  $ blacks_Oral        : num [1:42] 13.4 15.2 14.5 15.9 18.5 ...
+ - attr(*, "filename")= chr "../data/Brain.csv"
 ```
 
 ---
@@ -459,15 +485,10 @@ tibble [630 × 4] (S3: tbl_df/tbl/data.frame)
 Okay, this is voodoo 😈 Not really. Grab one of the datasets
 and work out what you need. Since you'll be doing the same to all of the datasets, you use `map` on the list of datasets
 ]
----
-
-layout: true
-
-&lt;div class="my-header"&gt;
-&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
-&lt;/div&gt;
 
 ---
+
+layout: false
 
 ## Final graphing
 
@@ -495,8 +516,6 @@ I'm using quite advanced R here, but hopefully you'll learn by example.
 .right-column70[
 ![](01-loops_and_mapping_files/figure-html/07-Maps-Table1-16-1.png)&lt;!-- --&gt;
 ]
-
-
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

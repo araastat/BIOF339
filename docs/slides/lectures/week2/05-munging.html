@@ -4,23 +4,22 @@
     <title>Practical R: Data Munging</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="05-munging_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="05-munging_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="05-munging_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="05-munging_files/anchor-sections-1.0/anchor-sections.js"></script>
-    <link href="05-munging_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="05-munging_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="05-munging_files/tile-view-0.2.3.9000/tile-view.js"></script>
-    <script src="05-munging_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="05-munging_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
-    <script src="05-munging_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="05-munging_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="05-munging_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <script src="05-munging_files/kePrint-0.0.1/kePrint.js"></script>
-    <link href="05-munging_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <script src="05-munging_files/header-attrs/header-attrs.js"></script>
+    <link href="05-munging_files/remark-css/default.css" rel="stylesheet" />
+    <link href="05-munging_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="05-munging_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="05-munging_files/panelset/panelset.js"></script>
+    <link href="05-munging_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="05-munging_files/clipboard/clipboard.min.js"></script>
+    <link href="05-munging_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="05-munging_files/shareon/shareon.min.js"></script>
+    <link href="05-munging_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="05-munging_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <script src="05-munging_files/kePrint/kePrint.js"></script>
+    <link href="05-munging_files/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -31,6 +30,11 @@ class: center, middle, inverse, title-slide
 ### BIOF 339
 
 ---
+
+
+
+
+
 
 
 
@@ -212,7 +216,7 @@ table1
 ```
 
 ```
-# A tibble: 6 x 4
+# A tibble: 6 × 4
   country      year  cases population
   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
 1 Afghanistan  1999    745   19987071
@@ -235,7 +239,7 @@ table2
 ```
 
 ```
-# A tibble: 12 x 4
+# A tibble: 12 × 4
    country      year type            count
    &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;           &lt;int&gt;
  1 Afghanistan  1999 cases             745
@@ -264,7 +268,7 @@ table3
 ```
 
 ```
-# A tibble: 6 x 3
+# A tibble: 6 × 3
   country      year rate             
 * &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;            
 1 Afghanistan  1999 745/19987071     
@@ -288,7 +292,7 @@ table4a # cases
 ```
 
 ```
-# A tibble: 3 x 3
+# A tibble: 3 × 3
   country     `1999` `2000`
 * &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;
 1 Afghanistan    745   2666
@@ -301,7 +305,7 @@ table4b # population
 ```
 
 ```
-# A tibble: 3 x 3
+# A tibble: 3 × 3
   country         `1999`     `2000`
 * &lt;chr&gt;            &lt;int&gt;      &lt;int&gt;
 1 Afghanistan   19987071   20595360
@@ -326,7 +330,7 @@ table3
 ```
 
 ```
-# A tibble: 6 x 3
+# A tibble: 6 × 3
   country      year rate             
 * &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;            
 1 Afghanistan  1999 745/19987071     
@@ -353,7 +357,7 @@ separate(table3, col = rate, into = c("cases", "population"),
 ```
 
 ```
-# A tibble: 6 x 4
+# A tibble: 6 × 4
   country      year  cases population
   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
 1 Afghanistan  1999    745   19987071
@@ -377,7 +381,7 @@ table2
 ```
 
 ```
-# A tibble: 12 x 4
+# A tibble: 12 × 4
    country      year type            count
    &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;           &lt;int&gt;
  1 Afghanistan  1999 cases             745
@@ -412,7 +416,7 @@ pivot_wider(table2, names_from = type, values_from = count)
 ```
 
 ```
-# A tibble: 6 x 4
+# A tibble: 6 × 4
   country      year  cases population
   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
 1 Afghanistan  1999    745   19987071
@@ -434,7 +438,7 @@ table4a
 ```
 
 ```
-# A tibble: 3 x 3
+# A tibble: 3 × 3
   country     `1999` `2000`
 * &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;
 1 Afghanistan    745   2666
@@ -462,7 +466,7 @@ pivot_longer(table4a, names_to = 'year', values_to  = 'cases',
 ```
 
 ```
-# A tibble: 6 x 3
+# A tibble: 6 × 3
   country     year   cases
   &lt;chr&gt;       &lt;chr&gt;  &lt;int&gt;
 1 Afghanistan 1999     745
@@ -540,7 +544,7 @@ head(weather1,5)
 ```
 
 ```
-# A tibble: 5 x 6
+# A tibble: 5 × 6
   id       year month element day    temp
   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
 1 MX17004  2010     1 tmax    d1       NA
@@ -565,7 +569,7 @@ head(weather2, 5)
 ```
 
 ```
-# A tibble: 5 x 6
+# A tibble: 5 × 6
   id       year month day    tmax  tmin
   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 1 MX17004  2010     1 d1       NA    NA
@@ -591,7 +595,7 @@ head(weather3,5)
 ```
 
 ```
-# A tibble: 5 x 7
+# A tibble: 5 × 7
   id       year month symbol day    tmax  tmin
   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 1 MX17004  2010     1 d      1        NA    NA
@@ -836,7 +840,7 @@ as_tibble(weather4)
 .pull-right[
 
 ```
-# A tibble: 341 x 8
+# A tibble: 341 × 8
    id       year month symbol day    tmax  tmin num_day
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
  1 MX17004  2010     1 d      1        NA    NA       1
@@ -869,7 +873,7 @@ as_tibble(weather4)
 .pull-right[
 
 ```
-# A tibble: 341 x 7
+# A tibble: 341 × 7
    id       year month symbol   day  tmax  tmin
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
  1 MX17004  2010     1 d          1    NA    NA
@@ -903,7 +907,7 @@ You wouldn't want to do exactly this, of course
 .pull-right[
 
 ```
-# A tibble: 341 x 7
+# A tibble: 341 × 7
    id       year month symbol   day  tmax  tmin
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
  1 MX17004  2010     1 d          1     0    NA
@@ -974,7 +978,7 @@ head(january)
 .pull-right[
 
 ```
-# A tibble: 6 x 7
+# A tibble: 6 × 7
   id       year month symbol   day  tmax  tmin
   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 1 MX17004  2010     1 d          1    NA    NA
@@ -1077,7 +1081,7 @@ select(mpg1, manufacturer, cty, hwy, class, year)
 .pull-right[
 
 ```
-# A tibble: 35 x 5
+# A tibble: 35 × 5
    manufacturer   cty   hwy class    year
    &lt;chr&gt;        &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;int&gt;
  1 chevrolet       13    17 suv      1999
@@ -1115,7 +1119,7 @@ So `!is.na` is the opposite of that.
 .pull-right[
 
 ```
-# A tibble: 20 x 7
+# A tibble: 20 × 7
    id       year month symbol   day  tmax  tmin
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
  1 MX17004  2010     1 d         30  27.8  14.5
@@ -1185,7 +1189,7 @@ Not quite.
 .pull-right[
 
 ```
-# A tibble: 33 x 7
+# A tibble: 33 × 7
    id       year month symbol   day  tmax  tmin
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
  1 MX17004  2010    12 d          1  29.9  13.8
@@ -1215,7 +1219,7 @@ arrange(weather5, month, day)
 .pull-right[
 
 ```
-# A tibble: 33 x 7
+# A tibble: 33 × 7
    id       year month symbol   day  tmax  tmin
    &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
  1 MX17004  2010     1 d         30  27.8  14.5
@@ -1254,10 +1258,11 @@ ls()
 ```
 
 ```
- [1] "dat"           "datadir"       "imgdir"        "january"      
- [5] "mpg1"          "tidy_pkgs"     "update_header" "weather_data" 
- [9] "weather1"      "weather2"      "weather3"      "weather4"     
-[13] "weather5"     
+ [1] "dat"           "datadir"       "hexes"         "icons_left"   
+ [5] "imgdir"        "january"       "mpg1"          "start_box"    
+ [9] "stop_box"      "tidy_pkgs"     "update_header" "weather_data" 
+[13] "weather1"      "weather2"      "weather3"      "weather4"     
+[17] "weather5"     
 ```
 
 We see a lot of intermediate datasets we've created, that we aren't going to really use anymore

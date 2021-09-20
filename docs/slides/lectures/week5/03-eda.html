@@ -4,19 +4,19 @@
     <title>Data validation and exploration</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="03-eda_files/header-attrs-2.5/header-attrs.js"></script>
+    <script src="03-eda_files/header-attrs-2.9/header-attrs.js"></script>
     <link href="03-eda_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="03-eda_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="03-eda_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="03-eda_files/tile-view-0.2.3.9000/tile-view.js"></script>
+    <link href="03-eda_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="03-eda_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="03-eda_files/tile-view-0.2.6/tile-view.js"></script>
     <script src="03-eda_files/clipboard-2.0.6/clipboard.min.js"></script>
     <link href="03-eda_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
     <script src="03-eda_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="03-eda_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="03-eda_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <link href="03-eda_files/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
+    <script src="03-eda_files/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -156,12 +156,12 @@ glimpse(airquality)
 ```
 Rows: 153
 Columns: 6
-$ Ozone   &lt;int&gt; 41, 36, 12, 18, NA, 28, 23, 19, 8, NA, 7, 16, 11, 14, 18, 14,…
-$ Solar.R &lt;int&gt; 190, 118, 149, 313, NA, NA, 299, 99, 19, 194, NA, 256, 290, 2…
-$ Wind    &lt;dbl&gt; 7.4, 8.0, 12.6, 11.5, 14.3, 14.9, 8.6, 13.8, 20.1, 8.6, 6.9, …
-$ Temp    &lt;int&gt; 67, 72, 74, 62, 56, 66, 65, 59, 61, 69, 74, 69, 66, 68, 58, 6…
-$ Month   &lt;int&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
-$ Day     &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18…
+$ Ozone   &lt;int&gt; 41, 36, 12, 18, NA, 28, 23, 19, 8, NA, 7, 16, 11, 14, 18, 14, …
+$ Solar.R &lt;int&gt; 190, 118, 149, 313, NA, NA, 299, 99, 19, 194, NA, 256, 290, 27…
+$ Wind    &lt;dbl&gt; 7.4, 8.0, 12.6, 11.5, 14.3, 14.9, 8.6, 13.8, 20.1, 8.6, 6.9, 9…
+$ Temp    &lt;int&gt; 67, 72, 74, 62, 56, 66, 65, 59, 61, 69, 74, 69, 66, 68, 58, 64…
+$ Month   &lt;int&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…
+$ Day     &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
 ```
 
 ]
@@ -325,7 +325,7 @@ mpg %&gt;% summarize(across(everything(), function(x) sum(is.na(x))))
 ```
 
 ```
-# A tibble: 1 x 11
+# A tibble: 1 × 11
   manufacturer model displ  year   cyl trans   drv   cty   hwy    fl class
          &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
 1            0     0     0     0     0     0     0     0     0     0     0
@@ -390,6 +390,11 @@ gg_miss_case(weather, show_pct = T)
 
 ```r
 gg_miss_var(weather, show_pct=T)
+```
+
+```
+Warning: It is deprecated to specify `guide = FALSE` to remove a guide. Please
+use `guide = "none"` instead.
 ```
 
 ![](03-eda_files/figure-html/12-CleaningExploring-14-1.png)&lt;!-- --&gt;

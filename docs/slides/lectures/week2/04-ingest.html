@@ -4,21 +4,20 @@
     <title>Practical R: Data Ingestion</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="04-ingest_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="04-ingest_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="04-ingest_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="04-ingest_files/anchor-sections-1.0/anchor-sections.js"></script>
-    <link href="04-ingest_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="04-ingest_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="04-ingest_files/tile-view-0.2.3.9000/tile-view.js"></script>
-    <script src="04-ingest_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="04-ingest_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
-    <script src="04-ingest_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="04-ingest_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="04-ingest_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <script src="04-ingest_files/header-attrs/header-attrs.js"></script>
+    <link href="04-ingest_files/remark-css/default.css" rel="stylesheet" />
+    <link href="04-ingest_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="04-ingest_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="04-ingest_files/panelset/panelset.js"></script>
+    <link href="04-ingest_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="04-ingest_files/clipboard/clipboard.min.js"></script>
+    <link href="04-ingest_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="04-ingest_files/shareon/shareon.min.js"></script>
+    <link href="04-ingest_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="04-ingest_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -29,6 +28,11 @@ class: center, middle, inverse, title-slide
 ### BIOF 339
 
 ---
+
+
+
+
+
 
 
 
@@ -210,7 +214,7 @@ str(brca_clinical)
 ```
 
 ```
-tibble [77 × 30] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+spec_tbl_df [77 × 30] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
  $ Complete TCGA ID                   : chr [1:77] "TCGA-A2-A0CM" "TCGA-BH-A18Q" "TCGA-A7-A0CE" "TCGA-D8-A142" ...
  $ Gender                             : chr [1:77] "FEMALE" "FEMALE" "FEMALE" "FEMALE" ...
  $ Age at Initial Pathologic Diagnosis: num [1:77] 40 56 57 74 61 67 45 48 59 36 ...
@@ -274,6 +278,7 @@ tibble [77 × 30] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
   ..   `Integrated Clusters (no exp)` = col_double(),
   ..   `Integrated Clusters (unsup exp)` = col_double()
   .. )
+ - attr(*, "problems")=&lt;externalptr&gt; 
 ```
 ]
 .pull-right[
@@ -326,25 +331,22 @@ Classes 'data.table' and 'data.frame':	77 obs. of  30 variables:
 A `tibble`
 
 ```
-# A tibble: 6 x 30
-  `Complete TCGA … Gender `Age at Initial… `ER Status` `PR Status`
-  &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      
-1 TCGA-A2-A0CM     FEMALE               40 Negative    Negative   
-2 TCGA-BH-A18Q     FEMALE               56 Negative    Negative   
-3 TCGA-A7-A0CE     FEMALE               57 Negative    Negative   
-4 TCGA-D8-A142     FEMALE               74 Negative    Negative   
-5 TCGA-AO-A0J6     FEMALE               61 Negative    Negative   
-6 TCGA-A2-A0YM     FEMALE               67 Negative    Negative   
-# … with 25 more variables: `HER2 Final Status` &lt;chr&gt;, Tumor &lt;chr&gt;, `Tumor--T1
-#   Coded` &lt;chr&gt;, Node &lt;chr&gt;, `Node-Coded` &lt;chr&gt;, Metastasis &lt;chr&gt;,
-#   `Metastasis-Coded` &lt;chr&gt;, `AJCC Stage` &lt;chr&gt;, `Converted Stage` &lt;chr&gt;,
-#   `Survival Data Form` &lt;chr&gt;, `Vital Status` &lt;chr&gt;, `Days to Date of Last
-#   Contact` &lt;dbl&gt;, `Days to date of Death` &lt;dbl&gt;, `OS event` &lt;dbl&gt;, `OS
-#   Time` &lt;dbl&gt;, `PAM50 mRNA` &lt;chr&gt;, `SigClust Unsupervised mRNA` &lt;dbl&gt;,
-#   `SigClust Intrinsic mRNA` &lt;dbl&gt;, `miRNA Clusters` &lt;dbl&gt;, `methylation
-#   Clusters` &lt;dbl&gt;, `RPPA Clusters` &lt;chr&gt;, `CN Clusters` &lt;dbl&gt;, `Integrated
-#   Clusters (with PAM50)` &lt;dbl&gt;, `Integrated Clusters (no exp)` &lt;dbl&gt;,
-#   `Integrated Clusters (unsup exp)` &lt;dbl&gt;
+# A tibble: 6 × 30
+  `Complete TCGA ID` Gender `Age at Initial Pathologic … `ER Status` `PR Status`
+  &lt;chr&gt;              &lt;chr&gt;                         &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      
+1 TCGA-A2-A0CM       FEMALE                           40 Negative    Negative   
+2 TCGA-BH-A18Q       FEMALE                           56 Negative    Negative   
+3 TCGA-A7-A0CE       FEMALE                           57 Negative    Negative   
+4 TCGA-D8-A142       FEMALE                           74 Negative    Negative   
+5 TCGA-AO-A0J6       FEMALE                           61 Negative    Negative   
+6 TCGA-A2-A0YM       FEMALE                           67 Negative    Negative   
+# … with 25 more variables: HER2 Final Status &lt;chr&gt;, Tumor &lt;chr&gt;,
+#   Tumor--T1 Coded &lt;chr&gt;, Node &lt;chr&gt;, Node-Coded &lt;chr&gt;, Metastasis &lt;chr&gt;,
+#   Metastasis-Coded &lt;chr&gt;, AJCC Stage &lt;chr&gt;, Converted Stage &lt;chr&gt;,
+#   Survival Data Form &lt;chr&gt;, Vital Status &lt;chr&gt;,
+#   Days to Date of Last Contact &lt;dbl&gt;, Days to date of Death &lt;dbl&gt;,
+#   OS event &lt;dbl&gt;, OS Time &lt;dbl&gt;, PAM50 mRNA &lt;chr&gt;,
+#   SigClust Unsupervised mRNA &lt;dbl&gt;, SigClust Intrinsic mRNA &lt;dbl&gt;, …
 ```
 ]
 .pull-right[

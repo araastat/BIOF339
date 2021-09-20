@@ -339,7 +339,7 @@ Learn once, use everywhere
 
 ---
 
-# Why use `r fa('r-project', fill='steelblue')`?
+# Why use `r icon_style(fontawesome('r-project'), fill='steelblue')`?
 
 + Specializes in statistics and data visualization
 + Flexible
@@ -353,7 +353,7 @@ Learn once, use everywhere
 
 ---
 
-# Why use `r fa('r-project', fill='steelblue')`?
+# Why use `r icon_style(fontawesome('r-project'), fill='steelblue')`?
 
 R is a very high-quality product that is accepted and used widely in 
 government agencies, corporations and universities worldwide
@@ -368,7 +368,7 @@ computations directly
 
 ---
 
-# Why use `r fa('r-project', fill='steelblue')`?
+# Why use `r icon_style(fontawesome('r-project'), fill='steelblue')`?
 
 - R has a well-deserved reputation for being a great data visualization 
 tool, with users being able to create complex, customizable graphs with relative 
@@ -380,7 +380,7 @@ which avoids visual inspection which can be time-consuming and mistake-prone.
 
 ---
 
-# Why use `r fa('r-project', fill='steelblue')`?
+# Why use `r icon_style(fontawesome('r-project'), fill='steelblue')`?
 
 Specialized packages available for many domains
 
@@ -398,7 +398,7 @@ The [Bioconductor Project](https://www.bioconductor.org) is THE source for bioin
 
 ---
 
-# Things `r fa('r-project', fill='steelblue')` is not (in this class)
+# Things `r icon_style(fontawesome('r-project'), fill='steelblue')` is not (in this class)
 
 --
 
@@ -420,7 +420,7 @@ The [Bioconductor Project](https://www.bioconductor.org) is THE source for bioin
 
 ---
 
-# A note on Excel `r fa('file-excel', fill='steelblue')`
+# A note on Excel `r icon_style(fontawesome('file-excel'), fill='steelblue')`
 
 .pull-left[
    

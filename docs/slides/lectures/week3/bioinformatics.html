@@ -4,19 +4,20 @@
     <title>Visualizations in bioinformatics contexts</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="bioinformatics_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="bioinformatics_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="bioinformatics_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="bioinformatics_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="bioinformatics_files/tile-view-0.2.3.9000/tile-view.js"></script>
-    <script src="bioinformatics_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="bioinformatics_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
-    <script src="bioinformatics_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="bioinformatics_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="bioinformatics_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <script src="bioinformatics_files/header-attrs/header-attrs.js"></script>
+    <link href="bioinformatics_files/remark-css/default.css" rel="stylesheet" />
+    <link href="bioinformatics_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="bioinformatics_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="bioinformatics_files/panelset/panelset.js"></script>
+    <link href="bioinformatics_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="bioinformatics_files/clipboard/clipboard.min.js"></script>
+    <link href="bioinformatics_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="bioinformatics_files/shareon/shareon.min.js"></script>
+    <link href="bioinformatics_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="bioinformatics_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -27,6 +28,11 @@ class: center, middle, inverse, title-slide
 ### BIOF 339
 
 ---
+
+
+
+
+
 
 
 
@@ -162,7 +168,7 @@ results %&gt;% pivot_longer(cols=everything(),
 ```
 
 ```
-# A tibble: 10 x 2
+# A tibble: 10 × 2
    protein     pvalue
    &lt;chr&gt;        &lt;dbl&gt;
  1 np_958782 0.699   
@@ -369,7 +375,7 @@ head(plt_x_position)
 .pull-right[
 
 ```
-# A tibble: 6 x 3
+# A tibble: 6 × 3
     CHR chr_len   tot
   &lt;int&gt;   &lt;int&gt; &lt;int&gt;
 1     1    1500     0
@@ -432,7 +438,7 @@ axisdf
 .pull-right[
 
 ```
-# A tibble: 22 x 2
+# A tibble: 22 × 2
      CHR center
    &lt;int&gt;  &lt;dbl&gt;
  1     1   750.

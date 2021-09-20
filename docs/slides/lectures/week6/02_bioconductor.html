@@ -4,18 +4,20 @@
     <title>A very short, sketchy, introduction to Bioconductor</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <link href="02_bioconductor_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="02_bioconductor_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="02_bioconductor_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="02_bioconductor_files/tile-view-0.2.3.9000/tile-view.js"></script>
-    <script src="02_bioconductor_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="02_bioconductor_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
-    <script src="02_bioconductor_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="02_bioconductor_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="02_bioconductor_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <script src="02_bioconductor_files/header-attrs/header-attrs.js"></script>
+    <link href="02_bioconductor_files/remark-css/default.css" rel="stylesheet" />
+    <link href="02_bioconductor_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="02_bioconductor_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="02_bioconductor_files/panelset/panelset.js"></script>
+    <link href="02_bioconductor_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="02_bioconductor_files/clipboard/clipboard.min.js"></script>
+    <link href="02_bioconductor_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="02_bioconductor_files/shareon/shareon.min.js"></script>
+    <link href="02_bioconductor_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="02_bioconductor_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -26,6 +28,11 @@ class: center, middle, inverse, title-slide
 ### BIOF 339
 
 ---
+
+
+
+
+
 
 
 
@@ -185,7 +192,7 @@ Formal class 'ExpressionSet' [package "Biobase"] with 7 slots
   .. .. .. .. ..@ .Data:List of 2
   .. .. .. .. .. ..$ : int [1:3] 1 0 0
   .. .. .. .. .. ..$ : int [1:3] 1 1 0
-  ..@ assayData        :&lt;environment: 0x7fee0594eb58&gt; 
+  ..@ assayData        :&lt;environment: 0x7fd84b6ab050&gt; 
   ..@ phenoData        :Formal class 'AnnotatedDataFrame' [package "Biobase"] with 4 slots
   .. .. ..@ varMetadata      :'data.frame':	3 obs. of  1 variable:
   .. .. .. ..$ labelDescription: chr [1:3] "Female/Male" "Case/Control" "Testing Score"
@@ -25559,25 +25566,25 @@ searchAttributes(mart=ensemblHuman, pattern='affy')
 
 ```
                      name                 description         page
-104          affy_hc_g110          AFFY HC G110 probe feature_page
-105         affy_hg_focus         AFFY HG Focus probe feature_page
-106         affy_hg_u133a         AFFY HG U133A probe feature_page
-107       affy_hg_u133a_2       AFFY HG U133A 2 probe feature_page
-108         affy_hg_u133b         AFFY HG U133B probe feature_page
-109   affy_hg_u133_plus_2   AFFY HG U133 Plus 2 probe feature_page
-110          affy_hg_u95a          AFFY HG U95A probe feature_page
-111        affy_hg_u95av2        AFFY HG U95Av2 probe feature_page
-112          affy_hg_u95b          AFFY HG U95B probe feature_page
-113          affy_hg_u95c          AFFY HG U95C probe feature_page
-114          affy_hg_u95d          AFFY HG U95D probe feature_page
-115          affy_hg_u95e          AFFY HG U95E probe feature_page
-116          affy_hta_2_0          AFFY HTA 2 0 probe feature_page
-117   affy_huex_1_0_st_v2   AFFY HuEx 1 0 st v2 probe feature_page
-118         affy_hugenefl         AFFY HuGeneFL probe feature_page
-119 affy_hugene_1_0_st_v1 AFFY HuGene 1 0 st v1 probe feature_page
-120 affy_hugene_2_0_st_v1 AFFY HuGene 2 0 st v1 probe feature_page
-121        affy_primeview        AFFY PrimeView probe feature_page
-122         affy_u133_x3p         AFFY U133 X3P probe feature_page
+107          affy_hc_g110          AFFY HC G110 probe feature_page
+108         affy_hg_focus         AFFY HG Focus probe feature_page
+109         affy_hg_u133a         AFFY HG U133A probe feature_page
+110       affy_hg_u133a_2       AFFY HG U133A 2 probe feature_page
+111         affy_hg_u133b         AFFY HG U133B probe feature_page
+112   affy_hg_u133_plus_2   AFFY HG U133 Plus 2 probe feature_page
+113          affy_hg_u95a          AFFY HG U95A probe feature_page
+114        affy_hg_u95av2        AFFY HG U95Av2 probe feature_page
+115          affy_hg_u95b          AFFY HG U95B probe feature_page
+116          affy_hg_u95c          AFFY HG U95C probe feature_page
+117          affy_hg_u95d          AFFY HG U95D probe feature_page
+118          affy_hg_u95e          AFFY HG U95E probe feature_page
+119          affy_hta_2_0          AFFY HTA 2 0 probe feature_page
+120   affy_huex_1_0_st_v2   AFFY HuEx 1 0 st v2 probe feature_page
+121         affy_hugenefl         AFFY HuGeneFL probe feature_page
+122 affy_hugene_1_0_st_v1 AFFY HuGene 1 0 st v1 probe feature_page
+123 affy_hugene_2_0_st_v1 AFFY HuGene 2 0 st v1 probe feature_page
+124        affy_primeview        AFFY PrimeView probe feature_page
+125         affy_u133_x3p         AFFY U133 X3P probe feature_page
 ```
 
 ---
@@ -25591,9 +25598,9 @@ searchAttributes(mart=ensemblHuman, pattern='hgnc')
 
 ```
               name        description         page
-61         hgnc_id            HGNC ID feature_page
-62     hgnc_symbol        HGNC symbol feature_page
-93 hgnc_trans_name Transcript name ID feature_page
+64         hgnc_id            HGNC ID feature_page
+65     hgnc_symbol        HGNC symbol feature_page
+96 hgnc_trans_name Transcript name ID feature_page
 ```
 
 ---

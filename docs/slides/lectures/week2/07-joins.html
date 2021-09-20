@@ -4,21 +4,20 @@
     <title>Practical R: Joining datasets</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta, PhD" />
-    <script src="07-joins_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="07-joins_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="07-joins_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="07-joins_files/anchor-sections-1.0/anchor-sections.js"></script>
-    <link href="07-joins_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="07-joins_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="07-joins_files/tile-view-0.2.3.9000/tile-view.js"></script>
-    <script src="07-joins_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="07-joins_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
-    <script src="07-joins_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="07-joins_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="07-joins_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <script src="07-joins_files/header-attrs/header-attrs.js"></script>
+    <link href="07-joins_files/remark-css/default.css" rel="stylesheet" />
+    <link href="07-joins_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="07-joins_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="07-joins_files/panelset/panelset.js"></script>
+    <link href="07-joins_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="07-joins_files/clipboard/clipboard.min.js"></script>
+    <link href="07-joins_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="07-joins_files/shareon/shareon.min.js"></script>
+    <link href="07-joins_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="07-joins_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/robot-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -28,6 +27,11 @@ class: center, middle, inverse, title-slide
 ### Abhijit Dasgupta, PhD
 
 ---
+
+
+
+
+
 
 
 
@@ -170,7 +174,7 @@ clinical
 ```
 
 ```
-# A tibble: 105 x 30
+# A tibble: 105 × 30
    Complete.TCGA.ID Gender Age.at.Initial.… ER.Status PR.Status HER2.Final.Stat…
    &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;           
  1 TCGA-A2-A0T2     FEMALE               66 Negative  Negative  Negative        
@@ -189,10 +193,7 @@ clinical
 #   Survival.Data.Form &lt;chr&gt;, Vital.Status &lt;chr&gt;,
 #   Days.to.Date.of.Last.Contact &lt;dbl&gt;, Days.to.date.of.Death &lt;dbl&gt;,
 #   OS.event &lt;dbl&gt;, OS.Time &lt;dbl&gt;, PAM50.mRNA &lt;chr&gt;,
-#   SigClust.Unsupervised.mRNA &lt;dbl&gt;, SigClust.Intrinsic.mRNA &lt;dbl&gt;,
-#   miRNA.Clusters &lt;dbl&gt;, methylation.Clusters &lt;dbl&gt;, RPPA.Clusters &lt;chr&gt;,
-#   CN.Clusters &lt;dbl&gt;, Integrated.Clusters..with.PAM50. &lt;dbl&gt;,
-#   Integrated.Clusters..no.exp. &lt;dbl&gt;, Integrated.Clusters..unsup.exp. &lt;dbl&gt;
+#   SigClust.Unsupervised.mRNA &lt;dbl&gt;, SigClust.Intrinsic.mRNA &lt;dbl&gt;, …
 ```
 ]
 .pull-right[
@@ -202,7 +203,7 @@ proteome
 ```
 
 ```
-# A tibble: 83 x 11
+# A tibble: 83 × 11
    TCGA_ID NP_958782 NP_958785 NP_958786 NP_000436 NP_958781 NP_958780 NP_958783
    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
  1 TCGA-A…     1.10      1.11      1.11      1.11      1.12      1.11      1.11 
@@ -242,7 +243,7 @@ clinical[,1:2]
 ```
 
 ```
-# A tibble: 105 x 2
+# A tibble: 105 × 2
    Complete.TCGA.ID Gender
    &lt;chr&gt;            &lt;chr&gt; 
  1 TCGA-A2-A0T2     FEMALE
@@ -265,7 +266,7 @@ proteome[,1:2]
 ```
 
 ```
-# A tibble: 83 x 2
+# A tibble: 83 × 2
    TCGA_ID      NP_958782
    &lt;chr&gt;            &lt;dbl&gt;
  1 TCGA-AO-A12D     1.10 
@@ -375,7 +376,7 @@ common_rows &lt;- inner_join(clinical[,1:6], proteome,
 ```
 
 ```
-# A tibble: 77 x 16
+# A tibble: 77 × 16
    Complete.TCGA.ID Gender Age.at.Initial.… ER.Status PR.Status HER2.Final.Stat…
    &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;           
  1 TCGA-A2-A0CM     FEMALE               40 Negative  Negative  Negative        
@@ -425,7 +426,7 @@ left_rows &lt;- left_join(clinical[,1:6], proteome, by=c('Complete.TCGA.ID'='TCG
 ```
 
 ```
-# A tibble: 105 x 16
+# A tibble: 105 × 16
   Complete.TCGA.ID Gender Age.at.Initial.Pathologic.Diagnosis ER.Status
   &lt;chr&gt;            &lt;chr&gt;                                &lt;dbl&gt; &lt;chr&gt;    
 1 TCGA-A2-A0T2     FEMALE                                  66 Negative 
@@ -466,7 +467,7 @@ right_rows &lt;- right_join(clinical[,1:6], proteome, by=c('Complete.TCGA.ID'='T
 ```
 
 ```
-# A tibble: 80 x 16
+# A tibble: 80 × 16
   Complete.TCGA.ID Gender Age.at.Initial.Pathologic.Diagnosis ER.Status
   &lt;chr&gt;            &lt;chr&gt;                                &lt;dbl&gt; &lt;chr&gt;    
 1 TCGA-A2-A0CM     FEMALE                                  40 Negative 
@@ -512,7 +513,7 @@ full_rows &lt;- full_join(clinical[,1:6], proteome, by=c('Complete.TCGA.ID'='TCG
 ```
 
 ```
-# A tibble: 108 x 16
+# A tibble: 108 × 16
   Complete.TCGA.ID Gender Age.at.Initial.Pathologic.Diagnosis ER.Status
   &lt;chr&gt;            &lt;chr&gt;                                &lt;dbl&gt; &lt;chr&gt;    
 1 TCGA-A2-A0T2     FEMALE                                  66 Negative 
@@ -580,7 +581,7 @@ final_data &lt;- clinical %&gt;%
 ```
 
 ```
-# A tibble: 75 x 13
+# A tibble: 75 × 13
   Complete.TCGA.ID Age.at.Initial.Pathologic.Diagnosis ER.Status NP_958782
   &lt;chr&gt;                                          &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;
 1 TCGA-A2-A0CM                                      40 Negative      0.683

@@ -92,7 +92,7 @@ knitr::kable(D)
 
 # Communication
 
-- Primarily via `r fa('slack')` [Slack](http://www.slack.com). 
+- Primarily via `r fontawesome('slack')` [Slack](http://www.slack.com). 
   - Please join the BIOF339 Slack channel using [this link](https://join.slack.com/t/biof339/shared_invite/zt-hczp2mg1-Yh0yqms52wAA8H445jkBUg).
   - You will see a channel `#fall2020-a`. Please join this channel
 - Slack for broadcasting messages, answering questions and the like. 

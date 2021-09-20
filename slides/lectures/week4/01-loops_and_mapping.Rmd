@@ -22,6 +22,7 @@ date: BIOF 339
     - joins
     - pivot_longer/wider
 
+
 ---
 
 # Repetitive copying
@@ -50,7 +51,7 @@ You're better off having the computer do it!!
 ---
 class: middle, center
 
-## This week is a bit complicated. Learn by doing, taking the code apart and understanding what each part does. 
+## This week is a bit complicated. Learn by doing, taking the code apart and understand what each part does. 
 
 ---
 class: middle, center

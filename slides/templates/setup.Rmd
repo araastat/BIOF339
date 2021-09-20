@@ -13,7 +13,7 @@ imgdir <- here('slides','lectures','img')
 datadir <- here('slides/lectures/data')
 source(here('lib/R/update_header.R'))
 
-hexes <- function(x) {
+hexes <- function(x) { # Hex sticker additions to files
   x <- paste0(x, ".png")
   markup <- function(pkg) {
     glue::glue('<img src="../img/{pkg}" class="title-hex">')
@@ -21,20 +21,35 @@ hexes <- function(x) {
   res <- purrr::map_chr(x, markup)
   I(paste0(res, collapse = ""))
 }
+
+start_box <- function(x){
+  glue::glue('<div class="{x}">')
+}
+stop_box <- function(){
+  cat('</div>')
+}
+icons_left <- function(x){ # icons for tipson left
+  x <- paste0(x, '.png')
+  markup <- function(pkg){
+    glue::glue('<img src="../img/{pkg}", class="icon-left">')
+  }
+  res <- purrr::map_chr(x, markup)
+  I(paste0(res, collapse=""))
+}
 ```
 
 ```{r xaringan-themer, include=FALSE}
 library(xaringanthemer)
-style_mono_accent(
-  base_color = "#2e19e6",
-  header_font_google = google_font("Josefin Sans"),
-  text_font_google   = google_font("Montserrat"),
-  code_font_google   = google_font("Fira Mono"),
-  base_font_size = "18px",
-  table_row_even_background_color = '#fff',
-  header_background_auto = FALSE,
-  outfile = here::here("slides/css/xaringan-themer.css")
-)
+# style_mono_accent(
+#   base_color = "#2e19e6",
+#   header_font_google = google_font("Josefin Sans"),
+#   text_font_google   = google_font("Montserrat"),
+#   code_font_google   = google_font("Fira Mono"),
+#   base_font_size = "18px",
+#   table_row_even_background_color = '#fff',
+#   header_background_auto = FALSE,
+#   outfile = here::here("slides/css/xaringan-themer.css")
+# )
 
 # style_duo(
 #   primary_color = "#2e19e6",

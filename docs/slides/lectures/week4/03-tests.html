@@ -4,19 +4,20 @@
     <title>Statistical tests</title>
     <meta charset="utf-8" />
     <meta name="author" content="Abhijit Dasgupta" />
-    <script src="03-tests_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="03-tests_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="03-tests_files/xaringanExtra-extra-styles-0.2.3.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link href="03-tests_files/tile-view-0.2.3.9000/tile-view.css" rel="stylesheet" />
-    <script src="03-tests_files/tile-view-0.2.3.9000/tile-view.js"></script>
-    <script src="03-tests_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="03-tests_files/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
-    <script src="03-tests_files/shareon-1.4.1/shareon.min.js"></script>
-    <link href="03-tests_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.css" rel="stylesheet" />
-    <script src="03-tests_files/xaringanExtra-shareagain-0.2.3.9000/shareagain.js"></script>
-    <link rel="stylesheet" href="../../css/robot.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/robot-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+    <script src="03-tests_files/header-attrs/header-attrs.js"></script>
+    <link href="03-tests_files/remark-css/default.css" rel="stylesheet" />
+    <link href="03-tests_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="03-tests_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="03-tests_files/panelset/panelset.js"></script>
+    <link href="03-tests_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="03-tests_files/clipboard/clipboard.min.js"></script>
+    <link href="03-tests_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="03-tests_files/shareon/shareon.min.js"></script>
+    <link href="03-tests_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="03-tests_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/custom.css" type="text/css" />
+    <link rel="stylesheet" href="/Users/abhijit/ARAASTAT/Teaching/BIOF339/slides/css/sfah.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -34,11 +35,9 @@ class: center, middle, inverse, title-slide
 
 
 
-layout: true
 
-&lt;div class="my-header"&gt;
-&lt;span&gt;BIOF 339: Practical R&lt;/span&gt;
-&lt;/div&gt;
+
+
 
 ---
 class: middle, center
@@ -103,7 +102,7 @@ t.test(NP_958782 ~ ER.Status, data=brca) %&gt;%
 ```
 
 ```
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352     0.676
@@ -949,7 +948,7 @@ brca %&gt;%
 .panel2-through-auto[
 
 ```
-# A tibble: 1,080 x 3
+# A tibble: 1,080 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_958782         NA
@@ -987,7 +986,7 @@ brca %&gt;%
 
 ```
 $NP_000436
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_000436     NA    
@@ -1003,7 +1002,7 @@ $NP_000436
 # … with 98 more rows
 
 $NP_001611
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_001611     NA    
@@ -1019,7 +1018,7 @@ $NP_001611
 # … with 98 more rows
 
 $NP_112598
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_112598     NA    
@@ -1035,7 +1034,7 @@ $NP_112598
 # … with 98 more rows
 
 $NP_958780
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_958780     NA    
@@ -1051,7 +1050,7 @@ $NP_958780
 # … with 98 more rows
 
 $NP_958781
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_958781     NA    
@@ -1067,7 +1066,7 @@ $NP_958781
 # … with 98 more rows
 
 $NP_958782
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_958782     NA    
@@ -1083,7 +1082,7 @@ $NP_958782
 # … with 98 more rows
 
 $NP_958783
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_958783     NA    
@@ -1099,7 +1098,7 @@ $NP_958783
 # … with 98 more rows
 
 $NP_958784
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_958784     NA    
@@ -1115,7 +1114,7 @@ $NP_958784
 # … with 98 more rows
 
 $NP_958785
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_958785     NA    
@@ -1131,7 +1130,7 @@ $NP_958785
 # … with 98 more rows
 
 $NP_958786
-# A tibble: 108 x 3
+# A tibble: 108 × 3
    ER.Status protein   expression
    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
  1 Negative  NP_958786     NA    
@@ -1171,70 +1170,70 @@ brca %&gt;%
 
 ```
 $NP_000436
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.161     0.432     0.271     0.628   0.534      41.5   -0.356     0.677
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_001611
-# A tibble: 1 x 10
-  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
-     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-1    -1.41    -0.566     0.840     -4.10 1.99e-4      39.9    -2.10    -0.712
+# A tibble: 1 × 10
+  estimate estimate1 estimate2 statistic  p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    -1.41    -0.566     0.840     -4.10 0.000199      39.9    -2.10    -0.712
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_112598
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.160    -0.197    -0.357     0.306   0.761      43.5   -0.892      1.21
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_958780
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.163     0.436     0.273     0.637   0.528      41.6   -0.354     0.680
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_958781
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.162     0.436     0.274     0.633   0.530      41.5   -0.356     0.680
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_958782
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.162     0.429     0.267     0.635   0.529      41.8   -0.352     0.676
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_958783
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.164     0.436     0.272     0.639   0.527      41.5   -0.354     0.681
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_958784
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.164     0.436     0.273     0.639   0.527      41.5   -0.354     0.681
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_958785
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.165     0.438     0.273     0.642   0.524      41.6   -0.353     0.682
 # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
 
 $NP_958786
-# A tibble: 1 x 10
+# A tibble: 1 × 10
   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1    0.166     0.439     0.272     0.649   0.520      41.6   -0.351     0.684
@@ -1265,19 +1264,19 @@ brca %&gt;%
 .panel2-through-auto[
 
 ```
-# A tibble: 10 x 11
-   Protein estimate estimate1 estimate2 statistic p.value parameter conf.low
-   &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
- 1 NP_000…    0.161     0.432     0.271     0.628 5.34e-1      41.5   -0.356
- 2 NP_001…   -1.41     -0.566     0.840    -4.10  1.99e-4      39.9   -2.10 
- 3 NP_112…    0.160    -0.197    -0.357     0.306 7.61e-1      43.5   -0.892
- 4 NP_958…    0.163     0.436     0.273     0.637 5.28e-1      41.6   -0.354
- 5 NP_958…    0.162     0.436     0.274     0.633 5.30e-1      41.5   -0.356
- 6 NP_958…    0.162     0.429     0.267     0.635 5.29e-1      41.8   -0.352
- 7 NP_958…    0.164     0.436     0.272     0.639 5.27e-1      41.5   -0.354
- 8 NP_958…    0.164     0.436     0.273     0.639 5.27e-1      41.5   -0.354
- 9 NP_958…    0.165     0.438     0.273     0.642 5.24e-1      41.6   -0.353
-10 NP_958…    0.166     0.439     0.272     0.649 5.20e-1      41.6   -0.351
+# A tibble: 10 × 11
+   Protein   estimate estimate1 estimate2 statistic  p.value parameter conf.low
+   &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 NP_000436    0.161     0.432     0.271     0.628 0.534         41.5   -0.356
+ 2 NP_001611   -1.41     -0.566     0.840    -4.10  0.000199      39.9   -2.10 
+ 3 NP_112598    0.160    -0.197    -0.357     0.306 0.761         43.5   -0.892
+ 4 NP_958780    0.163     0.436     0.273     0.637 0.528         41.6   -0.354
+ 5 NP_958781    0.162     0.436     0.274     0.633 0.530         41.5   -0.356
+ 6 NP_958782    0.162     0.429     0.267     0.635 0.529         41.8   -0.352
+ 7 NP_958783    0.164     0.436     0.272     0.639 0.527         41.5   -0.354
+ 8 NP_958784    0.164     0.436     0.273     0.639 0.527         41.5   -0.354
+ 9 NP_958785    0.165     0.438     0.273     0.642 0.524         41.6   -0.353
+10 NP_958786    0.166     0.439     0.272     0.649 0.520         41.6   -0.351
 # … with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;, alternative &lt;chr&gt;
 ```
 ]
@@ -1306,7 +1305,7 @@ brca %&gt;%
 .panel2-through-auto[
 
 ```
-# A tibble: 10 x 5
+# A tibble: 10 × 5
    Protein   estimate  p.value conf.low conf.high
    &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
  1 NP_000436    0.161 0.534      -0.356     0.677
@@ -1368,10 +1367,10 @@ wilcox.test(NP_958782 ~ ER.Status, data=brca) %&gt;%
 ```
 
 ```
-# A tibble: 1 x 4
-  statistic p.value method                                           alternative
-      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                                            &lt;chr&gt;      
-1       755   0.590 Wilcoxon rank sum test with continuity correcti… two.sided  
+# A tibble: 1 × 4
+  statistic p.value method                                            alternative
+      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                                             &lt;chr&gt;      
+1       755   0.590 Wilcoxon rank sum test with continuity correction two.sided  
 ```
 
 --
@@ -1406,7 +1405,7 @@ brca %&gt;%
 .pull-right[
 
 ```
-# A tibble: 10 x 2
+# A tibble: 10 × 2
    Protein     p.value
    &lt;chr&gt;         &lt;dbl&gt;
  1 NP_000436 0.583    
@@ -1549,7 +1548,7 @@ chisq.test(table(brca$Tumor, brca$ER.Status)) %&gt;%
 ```
 
 ```
-# A tibble: 1 x 4
+# A tibble: 1 × 4
   statistic p.value parameter method                    
       &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
 1      2.09   0.553         3 Pearson's Chi-squared test
