@@ -2,10 +2,13 @@ SUBDIRS := $(wildcard slides/lectures/week*)
 HWDIRS := $(wildcard assignments/HW/week*)
 OUTDIR=docs
 
-
 lectures: $(SUBDIRS) ## Compile lecture slides
 $(SUBDIRS):
-	cp make_subdirs $@/Makefile; $(MAKE) -C $@
+	cp make_subdirs $@/Makefile; $(MAKE) -j -C $@
+
+lectures_pdf: $(SUBDIRS) ## Compile lecture slides
+$(SUBDIRS):
+	cp make_subdirs $@/Makefile; $(MAKE) -j -C $@ pdf
 
 homework: FORCE
 	cd assignments/HW; $(MAKE) -C . ; cd ../..
@@ -36,4 +39,4 @@ FORCE:
 .PHONY: help
 
 help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)
