@@ -39,9 +39,9 @@ icons_left <- function(x){ # icons for tipson left
 ```
 
 ```{r xaringan-themer, include=FALSE}
-library(xaringanthemer)
+# library(xaringanthemer)
 # style_mono_accent(
-#   base_color = "#2e19e6",
+#   base_color = "#20558a",
 #   header_font_google = google_font("Josefin Sans"),
 #   text_font_google   = google_font("Montserrat"),
 #   code_font_google   = google_font("Fira Mono"),
