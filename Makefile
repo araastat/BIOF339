@@ -6,10 +6,6 @@ lectures: $(SUBDIRS) ## Compile lecture slides
 $(SUBDIRS):
 	cp make_subdirs $@/Makefile; $(MAKE) -j -C $@
 
-lectures_pdf: $(SUBDIRS) ## Compile lecture slides
-$(SUBDIRS):
-	cp make_subdirs $@/Makefile; $(MAKE) -j -C $@ pdf
-
 homework: FORCE
 	cd assignments/HW; $(MAKE) -C . ; cd ../..
 
