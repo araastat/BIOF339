@@ -170,35 +170,6 @@ pre code {
 </div>
 
 
-<style type="text/css">
-blockquote {
-  font-size: 10pt;
-  background-color: lightgrey;
-  border: 1px solid grey;
-}
-
-p {
-  font-family: Charter, serif;
-}
-.infobox {
-  padding-left: 3em;
-  padding-right: 0.5em;
-  margin: 1px;
-  border: 1px solid grey;
-  background: #f5f5f5 5px center/3em no-repeat;
-  background-size: 30px 30px;
-  font-style: italic;
-  font-size: 10pt
-}
-
-.bold {
-  font-weight: bold;
-}
-.info {
-  background-image: url("../img/information-button.png");
-  background-size: 20px 20px;
-}
-</style>
 <p>First modify the setup chunk to activate the packages you will need for this HW. Ensure you have <strong>tidyverse</strong>, <strong>knitr</strong> and <strong>rmarkdown</strong> installed. Add statements like <code>library(tidyverse)&#39;)</code></p>
 <pre class="r"><code>```{r setup}
 library(pacman)
@@ -307,175 +278,91 @@ breast_cancer %&gt;%
   knitr::kable()</code></pre>
 <table>
 <thead>
-<tr>
-<th style="text-align:left;">
-Variable
-</th>
-<th style="text-align:left;">
-Class
-</th>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Class</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-Complete.TCGA.ID
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="odd">
+<td align="left">Complete.TCGA.ID</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Gender
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="even">
+<td align="left">Gender</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age.at.Initial.Pathologic.Diagnosis
-</td>
-<td style="text-align:left;">
-numeric
-</td>
+<tr class="odd">
+<td align="left">Age.at.Initial.Pathologic.Diagnosis</td>
+<td align="left">numeric</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-ER.Status
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="even">
+<td align="left">ER.Status</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-PR.Status
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="odd">
+<td align="left">PR.Status</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-HER2.Final.Status
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="even">
+<td align="left">HER2.Final.Status</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Tumor
-</td>
-<td style="text-align:left;">
-factor
-</td>
+<tr class="odd">
+<td align="left">Tumor</td>
+<td align="left">factor</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Tumor..T1.Coded
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="even">
+<td align="left">Tumor..T1.Coded</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Node
-</td>
-<td style="text-align:left;">
-factor
-</td>
+<tr class="odd">
+<td align="left">Node</td>
+<td align="left">factor</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Node.Coded
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="even">
+<td align="left">Node.Coded</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Metastasis
-</td>
-<td style="text-align:left;">
-factor
-</td>
+<tr class="odd">
+<td align="left">Metastasis</td>
+<td align="left">factor</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Metastasis.Coded
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="even">
+<td align="left">Metastasis.Coded</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-AJCC.Stage
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="odd">
+<td align="left">AJCC.Stage</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Converted.Stage
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="even">
+<td align="left">Converted.Stage</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Survival.Data.Form
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="odd">
+<td align="left">Survival.Data.Form</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Vital.Status
-</td>
-<td style="text-align:left;">
-character
-</td>
+<tr class="even">
+<td align="left">Vital.Status</td>
+<td align="left">character</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Days.to.Date.of.Last.Contact
-</td>
-<td style="text-align:left;">
-integer
-</td>
+<tr class="odd">
+<td align="left">Days.to.Date.of.Last.Contact</td>
+<td align="left">integer</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Days.to.date.of.Death
-</td>
-<td style="text-align:left;">
-integer
-</td>
+<tr class="even">
+<td align="left">Days.to.date.of.Death</td>
+<td align="left">integer</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-OS.event
-</td>
-<td style="text-align:left;">
-integer
-</td>
+<tr class="odd">
+<td align="left">OS.event</td>
+<td align="left">integer</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-OS.Time
-</td>
-<td style="text-align:left;">
-integer
-</td>
+<tr class="even">
+<td align="left">OS.Time</td>
+<td align="left">integer</td>
 </tr>
 </tbody>
 </table>
@@ -495,19 +382,19 @@ integer
 <pre class="r"><code>glimpse(brca_data)</code></pre>
 <pre><code>## Rows: 105
 ## Columns: 13
-## $ Complete.TCGA.ID                    [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;TCGA-A2-A0T2&quot;, &quot;TCGA-A2-A0CM&quot;, &quot;TCGA-BH-…
-## $ Gender                              [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;FEMALE&quot;, &quot;FEMALE&quot;, &quot;FEMALE&quot;, &quot;FEMALE&quot;, &quot;…
-## $ Age.at.Initial.Pathologic.Diagnosis [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;66&quot;, &quot;40&quot;, &quot;48&quot;, &quot;56&quot;, &quot;38&quot;, &quot;57&quot;, &quot;74&quot;,…
-## $ ER.Status                           [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Negative&quot;, &quot;Negative&quot;, &quot;Negative&quot;, &quot;Nega…
-## $ PR.Status                           [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Negative&quot;, &quot;Negative&quot;, &quot;Negative&quot;, &quot;Nega…
-## $ HER2.Final.Status                   [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Negative&quot;, &quot;Negative&quot;, &quot;Negative&quot;, &quot;Nega…
-## $ Tumor                               [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;T3&quot;, &quot;T2&quot;, &quot;T2&quot;, &quot;T2&quot;, &quot;T3&quot;, &quot;T2&quot;, &quot;T3&quot;,…
-## $ Node                                [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;N3&quot;, &quot;N0&quot;, &quot;N1&quot;, &quot;N1&quot;, &quot;N3&quot;, &quot;N0&quot;, &quot;N0&quot;,…
-## $ Metastasis                          [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;M1&quot;, &quot;M0&quot;, &quot;M0&quot;, &quot;M0&quot;, &quot;M0&quot;, &quot;M0&quot;, &quot;M0&quot;,…
-## $ AJCC.Stage                          [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Stage IV&quot;, &quot;Stage IIA&quot;, &quot;Stage IIB&quot;, &quot;St…
-## $ Vital.Status                        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;DECEASED&quot;, &quot;DECEASED&quot;, &quot;DECEASED&quot;, &quot;DECE…
-## $ Days.to.Date.of.Last.Contact        [3m[38;5;246m&lt;int&gt;[39m[23m 240, 754, 1555, 1692, 133, 309, 425, 643,…
-## $ Days.to.date.of.Death               [3m[38;5;246m&lt;int&gt;[39m[23m 240, 754, 1555, 1692, NA, NA, NA, NA, NA,…</code></pre>
+## $ Complete.TCGA.ID                    &lt;chr&gt; &quot;TCGA-A2-A0T2&quot;, &quot;TCGA-A2-A0CM&quot;, &quot;T…
+## $ Gender                              &lt;chr&gt; &quot;FEMALE&quot;, &quot;FEMALE&quot;, &quot;FEMALE&quot;, &quot;FEM…
+## $ Age.at.Initial.Pathologic.Diagnosis &lt;chr&gt; &quot;66&quot;, &quot;40&quot;, &quot;48&quot;, &quot;56&quot;, &quot;38&quot;, &quot;57&quot;…
+## $ ER.Status                           &lt;chr&gt; &quot;Negative&quot;, &quot;Negative&quot;, &quot;Negative&quot;…
+## $ PR.Status                           &lt;chr&gt; &quot;Negative&quot;, &quot;Negative&quot;, &quot;Negative&quot;…
+## $ HER2.Final.Status                   &lt;chr&gt; &quot;Negative&quot;, &quot;Negative&quot;, &quot;Negative&quot;…
+## $ Tumor                               &lt;chr&gt; &quot;T3&quot;, &quot;T2&quot;, &quot;T2&quot;, &quot;T2&quot;, &quot;T3&quot;, &quot;T2&quot;…
+## $ Node                                &lt;chr&gt; &quot;N3&quot;, &quot;N0&quot;, &quot;N1&quot;, &quot;N1&quot;, &quot;N3&quot;, &quot;N0&quot;…
+## $ Metastasis                          &lt;chr&gt; &quot;M1&quot;, &quot;M0&quot;, &quot;M0&quot;, &quot;M0&quot;, &quot;M0&quot;, &quot;M0&quot;…
+## $ AJCC.Stage                          &lt;chr&gt; &quot;Stage IV&quot;, &quot;Stage IIA&quot;, &quot;Stage II…
+## $ Vital.Status                        &lt;chr&gt; &quot;DECEASED&quot;, &quot;DECEASED&quot;, &quot;DECEASED&quot;…
+## $ Days.to.Date.of.Last.Contact        &lt;int&gt; 240, 754, 1555, 1692, 133, 309, 42…
+## $ Days.to.date.of.Death               &lt;int&gt; 240, 754, 1555, 1692, NA, NA, NA, …</code></pre>
 <pre class="r"><code>## Add code here to correct any problems in the data set
 
 brca_data &lt;- brca_data %&gt;% 

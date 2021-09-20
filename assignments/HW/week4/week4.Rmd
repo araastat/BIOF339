@@ -5,7 +5,7 @@ output: html_document
 ---
 
 ```{r setup, include=F}
-knitr::opts_chunk$set(include=FALSE, message=F, warning=F, cache=TRUE)
+knitr::opts_chunk$set(include=FALSE, eval=F,message=F, warning=F, cache=TRUE)
 ```
 
 <p style="color: black; border:3px; border-style: solid; border-color: red;padding: 1em;
@@ -21,20 +21,22 @@ variants. This interest is derived from PIK3CA's implication in glioblastoma tum
 The data are available as a zip file [here](https://www.dropbox.com/s/0fttg8r9ub3gm82/GSE123519_RAW.zip?dl=1). The 
 experimental design is available [here](https://www.dropbox.com/s/b510c7fx82u5prh/GSE123519design.xlsx?dl=1).
 
+> Please let me know if these links don't work.
+
 ### Prelim work
-1. Download and unzip the data file in the data directory you just created. You should get 26 text files, perhaps in a sub-directory. Note this, since you'll need it
+1. Download and unzip the data file in your project data directory. You should get 26 text files, perhaps in a sub-directory. Note this, since you'll need it
 in the next step. Also download the experimental design file here.
 
 ### Homework
 
 #### Data preparation
 
-Open a R script file in the RStudio Project you created. This will be Part 1 of your submission. Your code should be annotated with sufficient comments so that the reader/grader can understand what you are intending to do with each part of your code. 
+Open a R script file in your class RStudio Project. This will be Part 1 of your submission. Your code should be annotated with sufficient comments so that the reader/grader can understand what you are intending to do with each part of your code. 
 
 
 
 1. Read all 26 files into a list in R, where the list consists of 26 data frames
-    ```{r}
+    ```{r, echo=F}
     library(here)
     library(rio)
     dat <- import_list(dir(here('data/GSE123519_RAW/'), full.names = TRUE))
@@ -44,7 +46,7 @@ Open a R script file in the RStudio Project you created. This will be Part 1 of 
     b. Change the gene names in `gene_id` to capital letters (use `stringr::str_to_upper` or other equivalent functions)
     c. Split the `locus` variable into a `chromosome` and a `location` variable.
     d. Filter **out** all observations with FPKM less than 1 (no real scientific reason, just because)
-    ```{r}
+    ```{r, echo=F}
     library(tidyverse)
     dat1 <- dat %>% 
         map(select, tracking_id, gene_id, locus:FPKM) %>% 
@@ -54,22 +56,22 @@ Open a R script file in the RStudio Project you created. This will be Part 1 of 
     ```
 1. Now make a single data set stacking the processed datasets, adding a column that
 specifies the sample identifier of each observation. You might like to call this column `sampleID` to make the next step simpler
-    ```{r}
+    ```{r, echo=F}
     dat2 <- bind_rows(dat1, .id = 'sampleID') %>% 
         mutate(sampleID = str_extract(sampleID, 'GSM\\d+'))
     ```
 1. Import the design information into a data frame. Add the design information to 
 the genetic dataset you created above, ensuring that ids and genotype
 specification (stored in the column `Class`) are aligned.
-    ```{r}
+    ```{r, echo=F}
     design <- import(here('data/GSE123519design.xlsx'))
     dat2 <- dat2 %>% left_join(design)
     ```
 1. Note that there is an add-on to the genotype information, in the form `-1`,
 `-2` to specify which particular sample it is. This is unnecessary and would
 create problems for any comparative analyses using t-tests or ANOVA later.
-Please removeit so that you just have genotype information.
-    ```{r}
+Please remove it so that you just have genotype information.
+    ```{r, echo=F}
     dat2 <- dat2 %>% 
         mutate(Class = str_remove(Class, '-[0-9]'))
     ```
@@ -124,7 +126,7 @@ dat2 %>% filter(str_detect(gene_id, 'PIK3C')) %>%
 
 ```
 
-1. Perform a statistical test to see if FPKM expression levels are different at PIK3C* genes compared to all other genes. (the correct test is actually complicated, but doing t-test, wilcoxon test or permutation tests are all allowed here)
+1. Perform a statistical test to see if FPKM expression levels are different at PIK3C* genes (i.e. any gene name starting with "PIK3C") compared to all other genes. (the correct test is actually complicated, but doing t-test, wilcoxon test or permutation tests are all allowed here)
 ```{r week4-3}
 dat2 %>% mutate(pik3c_ind = ifelse(str_detect(gene_id, 'PIK3C'), 1, 0)) %>% 
     t.test(FPKM ~ pik3c_ind, data = .) %>% 
