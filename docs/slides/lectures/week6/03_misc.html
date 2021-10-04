@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Miscellaneous topics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Abhijit Dasgupta" />
+    <script src="03_misc_files/header-attrs/header-attrs.js"></script>
+    <link href="03_misc_files/remark-css/default.css" rel="stylesheet" />
+    <link href="03_misc_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="03_misc_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="03_misc_files/panelset/panelset.js"></script>
+    <link href="03_misc_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="03_misc_files/clipboard/clipboard.min.js"></script>
+    <link href="03_misc_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="03_misc_files/shareon/shareon.min.js"></script>
+    <link href="03_misc_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="03_misc_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <link rel="stylesheet" href="../../css/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/sfah.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Miscellaneous topics
+### Abhijit Dasgupta
+### BIOF 339
+
+---
+
+
+
+
+
+
+
+
+
+
+class: middle,center
+
+# Search strategies 
+
+---
+
+## Google/Bing/DuckDuckGo
+
++ A problem we have here is that "R" is just a letter of the alphabet, so we get too many results
++ The same term (say, `filter` or `print`) is used in various contexts and in various computer languages
+
+---
+
+## Google/Bing/DuckDuckGo
+
+
++ **Strategy 1:** Use "CRAN" instead of "R" to mean R. If there is a package that meets your needs, this will pick it up
++ **Strategy 2:** You can use "-" to qualify what you don't want to search for. So you could do "signal R -python" to look for sites which are not talking about Python
++ **Strategy 3:** Restrict yourself to [StackOverflow](https://stackoverflow.com) or [Cross-Validated](https://stats.stackexchange.com/), which are dedicated to computer issues
+    - On StackOverflow and CrossValidated, R issues have the tag "r"
+    - Have thick skin, since things can get heated sometimes if you are thought to have asked a "stupid" question
+
+---
+
+## rseek.org, a better choice
+
+![](img/rseek.png)
+
+---
+
+## Twitter
+
+The R community is organized on Twitter with the hashtag ["#rstats"](https://twitter.com/search?q=%23rstats&amp;src=typed_query)
+
+- This is a very active community
+- Welcoming, diverse, patient, quick, fun
+- Lots of top developers contribute daily (Wickham, Averick, Kuhn, lots of RStudio folk, package developers)
+- Can virtually follow all the major and minor R conferences, since someone is certainly live-tweeting. Just need to find the hashtag or conference Twitter handle
+- Almost never bashed for asking a "stupid" question
+
+---
+
+## Blog aggregators
+
+R-bloggers [(link)](https://www.r-bloggers.com) &amp; R weekly [(link)](https://rweekly.org/)
+
+
+- Find blogs on almost any R topic under the sun (since 2005)
+- Announcements of new packages
+- Hundreds of contributing blogs
+- Some curated tutorials
+
+---
+
+## Useful blogs
+
+- RStudio has several blogs which are quite useful and informative
+  - R Views [(link)](https://rviews.rstudio.com)
+    - includes a "Top 40" monthly new packages update
+  - Tidyverse blog [(link)](https://www.tidyverse.org/blog/)
+- [STHDA](http://www.sthda.com/english/) 
+  - Really useful site
+- [Shirin's Playground](https://www.shirin-glander.de/)
+- [ouR data generation](https://www.rdatagen.net/)
+
+---
+
+## Multimedia sources
+
+### YouTube and video
+
+- R Consortium channel: [This channel](https://www.youtube.com/channel/UC_R5smHVXRYGhZYDJsnXTwg/featured) contains videos from several useR and other conferences, including the excellent R/Medicine conference
+- RStudio [webinars](https://www.rstudio.com/resources/webinars/)
+  This site also contains links to all the `rstudio::conf` conference videos
+- The New York and DC [R conferences](https://rstats.ai). Yours truly was a speaker at the DC 2018 and 2019 conferences
+
+
+---
+
+## Other websites of interest
+
+- [Awesome-R](https://awesome-r.com/): A curated list of R packages and tools
+- [Flowing Data](https://flowingdata.com/): One of the top visualization blogs out there, based in R, by Nathan Yau
+- [crazyhottommy/getting-started-wtih-genomics-tools-and-resources](https://github.com/crazyhottommy/getting-started-with-genomics-tools-and-resources)
+- The Carpentries ([Data Carpentry](https://datacarpentry.org/lessons/) and [Software Carpentry](
+  - Intro to R and RStudio for Genomics [(link)](https://datacarpentry.org/genomics-r-intro/)
+  - R for Reproducible Scientific Analysis [(link)](https://swcarpentry.github.io/r-novice-gapminder/)
+
+
+---
+class: middle, center
+
+# Stealing code
+
+---
+
+## GitHub <svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+GitHub is a website where developers come to play. It hosts *repositories* of code where people can submit issues, contribute code and co-develop software products. 
+
+Most R developers put their developing code on GitHub. There are over 108,000 repositories on GitHub using R. 
+
+To see what's there, [click here](https://github.com/search?l=R&amp;q=R&amp;type=Repositories)
+
+Developers to follow:
+
+- [RStudio](https://github.com/rstudio)
+- [ROpenSci](https://github.com/ropensci)
+- [tidyverse](https://github.com/tidyverse/)
+
+
+
+---
+class: center, middle
+
+# Changing some default behaviors
+
+---
+
+## .Rprofile
+
+You can create a `.Rprofile` file either in each project or globally (place the file in your HOME folder)
+
+Every time R starts, it will look at this file and load things if you so specify
+
+Some examples you could put in there to be available every time
+
+
+```r
+## ht == headtail
+ht = function(d, n=6) rbind(head(d, n), tail(d, n))
+
+local({
+  r = getOption("repos")             
+  r["CRAN"] = "https://cran.rstudio.com/"
+  options(repos = r)
+})
+```
+
+&gt; Don't put anything in there that might make your R non-portable, for example `options(stringsAsFactors=F)`.
+
+See this [chapter](https://csgillespie.github.io/efficientR/3-3-r-startup.html#r-startup) of "Efficient R Programming" by Gillespie and Lovelace. 
+
+
+---
+
+## Changing default operations for a R class
+
+R uses what is called the *S3* system for object oriented programming. It is a simplistic system where you create a default function and then specify functions for different classes. For example:
+
+
+```r
+format_output &lt;- function(x,...){
+  # Make a S3 class
+  UseMethod('format_output',x)
+}
+
+format_output.lm &lt;- function(x, refs=NULL, labs=NULL, pretty=T){
+  tmp &lt;- summary(x)$coef
+  if(is.null(refs)){
+    term &lt;- attr(x$terms, 'term.labels')
+  } else {
+    term &lt;- names(refs)
+  }
+  out &lt;- data.frame(tmp[,c(1,2,4)])
+  names(out) &lt;- c('LOR','SE','pvalue')
+  
+  ## Truncated for space, see https://github.com/webbedfeet/abhiR.git
+```
+
+So class-specific functions just need the name of the class after the dot.
+
+---
+
+## Changing default operations for a R class
+
+Sometimes, there already is a default that you want to change. Then you don't need to create the generic first since it already exists
+
+
+```r
+print.lm &lt;- function(x){
+  suppressPackageStartupMessages(require(tidyverse))
+  require(broom)
+  out &lt;- tidy(x) %&gt;% 
+    select(term, estimate, p.value)
+  print(out)
+}
+```
+
+So now:
+
+
+```r
+m &lt;- lm(mpg ~ wt, data = mtcars)
+print(m)
+```
+
+```
+# A tibble: 2 × 3
+  term        estimate  p.value
+  &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)    37.3  8.24e-19
+2 wt             -5.34 1.29e-10
+```
+
+---
+
+## Creating your own function repository
+
+You should create functions that you use all the time and make your own repository
+
+Create each function in a separate file, and then load them using the `source` function.
+
+--
+
+### Why is this a good idea?
+
+- Functions are meant to be re-usable recipes for particular purpose
+- If we hide functions in general script files, we'll have a hard time finding them
+- Separating functions out into separate files allows easier
+  - editing
+  - documenting
+  - loading
+
+
+
+---
+
+## Creating packages
+
+Creating packages sounds intimidating, but really isn't
+
+The `devtools` package makes it very easy. So does RStudio.
+
+![](img/pkg_rstudio.png)
+
+---
+
+## R packages
+
+[![](https://d33wubrfki0l68.cloudfront.net/19c4a5cab01d9bcb1d2edeb63ce5ba0f21870e33/68feb/images/cover.png)](http://r-pkgs.org/)
+
+---
+
+## R packages
+
+Once you have some functions written, it may be worthwhile creating a R package for your own purposes
+
+R packages have a particular structure that can be created with the `package.skeleton` function.
+
+A few nice tutorials for writing R packages are:
+
+1. by [Hilary Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)
+1. by [Daniel Sjoberg](http://www.danieldsjoberg.com/writing-R-packages/#1)
+1. by [Sharon Machlis](https://www.infoworld.com/article/3346261/how-to-write-an-r-package.html)
+1. by [Neeraj Dhanraj](https://neerajdhanraj.medium.com/easy-steps-to-develop-and-publish-your-first-r-package-e5f1a5c5f04c)
+
+---
+
+## Version control
+
+Version control systems (VCS) are systems that allow you to keep track of changes in files in a way
+that allows "rewinding". 
+
+Examples are **git**, **mercurial** and **subversion**
+
+**git** tends to be the most popular VCS. 
+
+There are several online collaborative environments that utilize **git**. These include
+**GitHub**, **GitLab** and **BitBucket**. 
+
+---
+
+## Version control
+
+The basic idea is that 
+
+- you make small edits in your code files
+- you then "save" the changes as a _commit_ in **git**
+- if you want, you can then "push" your changes to an online repository (repo), so others can use and share the code
+
+If you want to learn **git**, which is a really useful skill, here are some 
+resources:
+
+- [Happy git with R](https://happygitwithr.com)
+- [Learn the basics of git in under 10 minutes](https://www.freecodecamp.org/news/learn-the-basics-of-git-in-under-10-minutes-da548267cc91/)
+- [Git immersion](https://gitimmersion.com)
+
+Version control systems like **git** will save your bacon more times than not!!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../../js/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLanguage": "r",
+"countIncrementalSlides": false,
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

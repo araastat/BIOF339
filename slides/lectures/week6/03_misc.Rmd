@@ -1,0 +1,286 @@
+---
+title: "Miscellaneous topics"
+author: Abhijit Dasgupta
+date: BIOF 339
+---
+
+```{r setup, include=F, child=here::here('slides/templates/setup.Rmd')}
+```
+
+class: middle,center
+
+# Search strategies 
+
+---
+
+## Google/Bing/DuckDuckGo
+
++ A problem we have here is that "R" is just a letter of the alphabet, so we get too many results
++ The same term (say, `filter` or `print`) is used in various contexts and in various computer languages
+
+---
+
+## Google/Bing/DuckDuckGo
+
+
++ **Strategy 1:** Use "CRAN" instead of "R" to mean R. If there is a package that meets your needs, this will pick it up
++ **Strategy 2:** You can use "-" to qualify what you don't want to search for. So you could do "signal R -python" to look for sites which are not talking about Python
++ **Strategy 3:** Restrict yourself to [StackOverflow](https://stackoverflow.com) or [Cross-Validated](https://stats.stackexchange.com/), which are dedicated to computer issues
+    - On StackOverflow and CrossValidated, R issues have the tag "r"
+    - Have thick skin, since things can get heated sometimes if you are thought to have asked a "stupid" question
+
+---
+
+## rseek.org, a better choice
+
+![](img/rseek.png)
+
+---
+
+## Twitter
+
+The R community is organized on Twitter with the hashtag ["#rstats"](https://twitter.com/search?q=%23rstats&src=typed_query)
+
+- This is a very active community
+- Welcoming, diverse, patient, quick, fun
+- Lots of top developers contribute daily (Wickham, Averick, Kuhn, lots of RStudio folk, package developers)
+- Can virtually follow all the major and minor R conferences, since someone is certainly live-tweeting. Just need to find the hashtag or conference Twitter handle
+- Almost never bashed for asking a "stupid" question
+
+---
+
+## Blog aggregators
+
+R-bloggers [(link)](https://www.r-bloggers.com) & R weekly [(link)](https://rweekly.org/)
+
+
+- Find blogs on almost any R topic under the sun (since 2005)
+- Announcements of new packages
+- Hundreds of contributing blogs
+- Some curated tutorials
+
+---
+
+## Useful blogs
+
+- RStudio has several blogs which are quite useful and informative
+  - R Views [(link)](https://rviews.rstudio.com)
+    - includes a "Top 40" monthly new packages update
+  - Tidyverse blog [(link)](https://www.tidyverse.org/blog/)
+- [STHDA](http://www.sthda.com/english/) 
+  - Really useful site
+- [Shirin's Playground](https://www.shirin-glander.de/)
+- [ouR data generation](https://www.rdatagen.net/)
+
+---
+
+## Multimedia sources
+
+### YouTube and video
+
+- R Consortium channel: [This channel](https://www.youtube.com/channel/UC_R5smHVXRYGhZYDJsnXTwg/featured) contains videos from several useR and other conferences, including the excellent R/Medicine conference
+- RStudio [webinars](https://www.rstudio.com/resources/webinars/)
+  This site also contains links to all the `rstudio::conf` conference videos
+- The New York and DC [R conferences](https://rstats.ai). Yours truly was a speaker at the DC 2018 and 2019 conferences
+
+
+---
+
+## Other websites of interest
+
+- [Awesome-R](https://awesome-r.com/): A curated list of R packages and tools
+- [Flowing Data](https://flowingdata.com/): One of the top visualization blogs out there, based in R, by Nathan Yau
+- [crazyhottommy/getting-started-wtih-genomics-tools-and-resources](https://github.com/crazyhottommy/getting-started-with-genomics-tools-and-resources)
+- The Carpentries ([Data Carpentry](https://datacarpentry.org/lessons/) and [Software Carpentry](
+  - Intro to R and RStudio for Genomics [(link)](https://datacarpentry.org/genomics-r-intro/)
+  - R for Reproducible Scientific Analysis [(link)](https://swcarpentry.github.io/r-novice-gapminder/)
+
+
+---
+class: middle, center
+
+# Stealing code
+
+---
+
+## GitHub `r fontawesome::fa("github")`
+
+GitHub is a website where developers come to play. It hosts *repositories* of code where people can submit issues, contribute code and co-develop software products. 
+
+Most R developers put their developing code on GitHub. There are over 108,000 repositories on GitHub using R. 
+
+To see what's there, [click here](https://github.com/search?l=R&q=R&type=Repositories)
+
+Developers to follow:
+
+- [RStudio](https://github.com/rstudio)
+- [ROpenSci](https://github.com/ropensci)
+- [tidyverse](https://github.com/tidyverse/)
+
+
+
+---
+class: center, middle
+
+# Changing some default behaviors
+
+---
+
+## .Rprofile
+
+You can create a `.Rprofile` file either in each project or globally (place the file in your HOME folder)
+
+Every time R starts, it will look at this file and load things if you so specify
+
+Some examples you could put in there to be available every time
+
+```{r 13-Misc-1, eval=F}
+## ht == headtail
+ht = function(d, n=6) rbind(head(d, n), tail(d, n))
+
+local({
+  r = getOption("repos")             
+  r["CRAN"] = "https://cran.rstudio.com/"
+  options(repos = r)
+})
+```
+
+> Don't put anything in there that might make your R non-portable, for example `options(stringsAsFactors=F)`.
+
+See this [chapter](https://csgillespie.github.io/efficientR/3-3-r-startup.html#r-startup) of "Efficient R Programming" by Gillespie and Lovelace. 
+
+
+---
+
+## Changing default operations for a R class
+
+R uses what is called the *S3* system for object oriented programming. It is a simplistic system where you create a default function and then specify functions for different classes. For example:
+
+```{r 13-Misc-2, eval=F}
+format_output <- function(x,...){
+  # Make a S3 class
+  UseMethod('format_output',x)
+}
+
+format_output.lm <- function(x, refs=NULL, labs=NULL, pretty=T){
+  tmp <- summary(x)$coef
+  if(is.null(refs)){
+    term <- attr(x$terms, 'term.labels')
+  } else {
+    term <- names(refs)
+  }
+  out <- data.frame(tmp[,c(1,2,4)])
+  names(out) <- c('LOR','SE','pvalue')
+  
+  ## Truncated for space, see https://github.com/webbedfeet/abhiR.git
+```
+
+So class-specific functions just need the name of the class after the dot.
+
+---
+
+## Changing default operations for a R class
+
+Sometimes, there already is a default that you want to change. Then you don't need to create the generic first since it already exists
+
+```{r 13-Misc-3}
+print.lm <- function(x){
+  suppressPackageStartupMessages(require(tidyverse))
+  require(broom)
+  out <- tidy(x) %>% 
+    select(term, estimate, p.value)
+  print(out)
+}
+```
+
+So now:
+
+```{r 13-Misc-4, message=F, warning=F}
+m <- lm(mpg ~ wt, data = mtcars)
+print(m)
+```
+
+---
+
+## Creating your own function repository
+
+You should create functions that you use all the time and make your own repository
+
+Create each function in a separate file, and then load them using the `source` function.
+
+--
+
+### Why is this a good idea?
+
+- Functions are meant to be re-usable recipes for particular purpose
+- If we hide functions in general script files, we'll have a hard time finding them
+- Separating functions out into separate files allows easier
+  - editing
+  - documenting
+  - loading
+
+
+
+---
+
+## Creating packages
+
+Creating packages sounds intimidating, but really isn't
+
+The `devtools` package makes it very easy. So does RStudio.
+
+![](img/pkg_rstudio.png)
+
+---
+
+## R packages
+
+[![](https://d33wubrfki0l68.cloudfront.net/19c4a5cab01d9bcb1d2edeb63ce5ba0f21870e33/68feb/images/cover.png)](http://r-pkgs.org/)
+
+---
+
+## R packages
+
+Once you have some functions written, it may be worthwhile creating a R package for your own purposes
+
+R packages have a particular structure that can be created with the `package.skeleton` function.
+
+A few nice tutorials for writing R packages are:
+
+1. by [Hilary Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)
+1. by [Daniel Sjoberg](http://www.danieldsjoberg.com/writing-R-packages/#1)
+1. by [Sharon Machlis](https://www.infoworld.com/article/3346261/how-to-write-an-r-package.html)
+1. by [Neeraj Dhanraj](https://neerajdhanraj.medium.com/easy-steps-to-develop-and-publish-your-first-r-package-e5f1a5c5f04c)
+
+---
+
+## Version control
+
+Version control systems (VCS) are systems that allow you to keep track of changes in files in a way
+that allows "rewinding". 
+
+Examples are **git**, **mercurial** and **subversion**
+
+**git** tends to be the most popular VCS. 
+
+There are several online collaborative environments that utilize **git**. These include
+**GitHub**, **GitLab** and **BitBucket**. 
+
+---
+
+## Version control
+
+The basic idea is that 
+
+- you make small edits in your code files
+- you then "save" the changes as a _commit_ in **git**
+- if you want, you can then "push" your changes to an online repository (repo), so others can use and share the code
+
+If you want to learn **git**, which is a really useful skill, here are some 
+resources:
+
+- [Happy git with R](https://happygitwithr.com)
+- [Learn the basics of git in under 10 minutes](https://www.freecodecamp.org/news/learn-the-basics-of-git-in-under-10-minutes-da548267cc91/)
+- [Git immersion](https://gitimmersion.com)
+
+Version control systems like **git** will save your bacon more times than not!!

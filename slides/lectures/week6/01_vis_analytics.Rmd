@@ -10,23 +10,18 @@ date: BIOF 339
 ```{r setup1, include=F}
 library(ggpubr)
 library(survival)
+knitr::opts_chunk$set(cache=F)
+
 ```
 
-
-```{r, echo=FALSE, results='asis'}
-update_header()
-```
-
----
 class: middle,center,inverse
 
 # Comparing groups
 
 ---
+layout: true
 
-```{r, echo=FALSE, results='asis'}
-update_header('The `ggpubr` package')
-```
+## The `ggpubr` package
 
 ---
 
@@ -37,7 +32,6 @@ Under the hood, it's just fancy application of R for statistical tests and then
 translating the results to ggplot geometries.
 
 ---
-
 
 .pull-left[
 ```{r boxes, echo=T, eval=F}
@@ -136,17 +130,14 @@ summary.stats <- penguins %>%
 ```{r, ref.label='box2',echo=T, eval=F}
 
 ```
-```{r box3, eval=F, echo=T}
-ggarrange(plt, plt2, ncol=1, heights = c(4,1))
-```
+
 
 
 ]
 .pull-right[
-```{r, eval=T, echo=F, ref.label='box3'}
-
+```{r box3, eval=T, echo=T}
+ggarrange(plt, plt2, ncol=1, heights = c(4,1))
 ```
-
 ]
 
 ---
@@ -218,14 +209,15 @@ ggscatter(penguins,
 
 .pull-left[
 ```{r dens1, eval = F, echo = T}
-library(ggsci)
+library(ggsci) # Themes for science journals
 dens_plt <- ggplot(penguins, 
                    aes(x = body_mass_g))+
   geom_density(aes(fill=species))+
-  scale_fill_jco(alpha=0.3)+
+  scale_fill_jco(alpha=0.3)+  # Journal of Clinical Oncology colors
   theme_classic() +
   theme(axis.text.y = element_blank(),
-        legend.position='top') 
+        legend.position='top') +
+  labs(y="")
 
 stable <- desc_statby(penguins, 
                    measure.var='body_mass_g',
@@ -261,7 +253,8 @@ dens_plt <- ggplot(penguins,
     type='mean', #<<
     geom='line', linetype=2 #<<
   ) + #<<
-  scale_color_jco() #<<
+  scale_color_jco() + #<<
+  labs(y = "")
 
 stable <- desc_statby(penguins, 
                    measure.var='body_mass_g',
@@ -273,25 +266,11 @@ ggarrange(dens_plt, stable_plt,
           ncol=1, heights=c(2,1))
 ```
 ]
-
----
-
-```{r, echo=FALSE, results='asis'}
-update_header('Modeling results')
-```
-
----
-
-Let's start with a somewhat naive multiple linear regression model
-
-```{r}
-m1 <- lm(body_mass_g ~ ., data=penguins)
-
-```
-
 .pull-right[
-```{r, eval=T, echo = F, ref.label="dens2"}
+```{r, ref.label='dens2', eval=T, echo=F}
+
 ```
+
 ]
 
 ---
@@ -314,10 +293,9 @@ ggscatter(penguins,
 ]
 
 ---
+layout: true
 
-```{r, echo=FALSE, results='asis'}
-update_header('## Model results')
-```
+## Modeling results
 
 ---
 
@@ -334,8 +312,15 @@ summary(m1)$coef
 library(gtsummary)
 theme_gtsummary_compact()
 tbl_regression(m1,
-  label = list(bill_length_mm ~ 'Bill length (mm)',
-               bill_depth_mm ~ 'Bill depth (mm)')) %>% 
+  label = list(
+    bill_length_mm ~ 'Bill length (mm)',
+    bill_depth_mm ~ 'Bill depth (mm)',
+    flipper_length_mm ~ 'Flipper length (mm)',
+    species ~ 'Species',
+    island ~ 'Island',
+    sex ~ 'Sex',
+    year ~ 'Year')
+) %>% 
   add_global_p() %>% 
   bold_p(t = 0.05) %>% 
   bold_labels() %>% 
@@ -436,20 +421,27 @@ knitr::kable(t2[[1]], row.names = F)
 
 ### Other packages
 
++ **sjPlot** [(link)](https://strengejacke.github.io/sjPlot/articles/tab_model_estimates.html)
 + **stargazer**
-+ **sjPlot**
 
 #### Utility packages
 
-+ **gt**
-+ **flextable**
-* **huxtable**
+The function `broom::tidy` takes results from  [many](https://broom.tidymodels.org/articles/available-methods.html) models and transforms
+them into _tidy datasets_, which can be formatted and output using a variety of
+other packages in the R ecosystem. Some popular and effective packages are
+
++ **gt**: The grammar of tables [(link)](https://gt.rstudio.com)
++ **flextable**: Creating tables that can work with RMarkdown/HTML as well as the [officeverse](https://ardata-fr.github.io/officeverse/), which creates Microsoft Word and Powerpoint files from R and RMarkdown [(link)](https://ardata-fr.github.io/flextable-book/index.html)
++ **pixiedust** is designed to format the results from the `broom::tidy` [(link)](https://github.com/nutterb/pixiedust)
+* **xtable** and **stargazer** are targeted towards \LaTeX and PDF outputs
+
+.footnote[This slide differs from the video. It was updated in 2021]
 
 ---
+layout: true
 
-```{r, echo=FALSE, results='asis'}
-update_header('## Model results\n### Plotting results')
-```
+## Model results
+### Plotting results
 
 ---
 
@@ -531,9 +523,47 @@ ggpubr::ggarrange(plt1, plt2, nrow=1, widths=c(2,1), align='h')
 
 ---
 
-```{r, echo=FALSE, results='asis'}
-update_header('## Model results \n### Survival analysis')
+We can use the **coefplot** package to make a similar plot
+
+.pull-left[
+```{r mod4, eval = F, echo = T}
+pacman::p_load("coefplot")
+coefplot(m1, intercept=FALSE)
+
 ```
+.footnote[This slide differs from the video. It was updated in 2021]
+
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="mod4", fig.width=8, fig.asp=1/1.62}
+```
+]
+
+---
+
+.pull-left[
+We can also use the **see** package
+
+```{r mod5, eval = F, echo = T}
+pacman::p_load(see, parameters)
+plot(model_parameters(m1), show_labels = TRUE)
+```
+
+.footnote[This slide differs from the video. It was updated in 2021]
+
+]
+.pull-right[
+```{r, eval=T, echo = F, ref.label="mod5", fig.width=8, fig.asp = 1/1.62}
+```
+]
+
+---
+
+layout: true
+
+## Model results 
+### Survival analysis
+
 
 ---
 
@@ -574,18 +604,23 @@ gtsummary::tbl_regression(m2, exponentiate=T)
 ---
 
 .pull-left[
-```{r, echo=T, eval=F}
+```{r, echo = FALSE, eval = TRUE}
+gtsummary::theme_gtsummary_journal("jama")
+gtsummary::theme_gtsummary_compact()
+```
+
+```{r, echo=T, eval=T}
 m3 <- coxph(Surv(time, status==2) ~ trt + sex + 
               age + stage, data=pbc)
 out <- broom::tidy(m3) %>% 
   mutate(lcb = estimate - 2*std.error,
          ucb = estimate + 2*std.error) %>% 
   mutate(across(c(estimate,lcb,ucb), exp))
-gtsummary::tbl_regression(m3, exponentiate = T)
+gtsummary::tbl_regression(m3, exponentiate = T) #<<
 ```
 ]
 .pull-right[
-```{r, echo=T}
+```{r, echo=T, fig.width=8, fig.asp = 1/1.62}
 out %>% 
   ggplot(aes(x = term, y = estimate,
              ymin = lcb, ymax=ucb))+
@@ -596,3 +631,29 @@ out %>%
 ```
 
 ]
+
+---
+
+.pull-left[
+```{r surv3, echo=T, eval=F}
+ggsurvplot(
+    m, pval = TRUE, risk.table = FALSE,
+    palette="jama",
+    xlab = "Days",
+    legend.title="",
+    facet.by = "stage", #<<
+    legend.labs=c("Control","Treatment")
+)
+```
+
+.footnote[This slide differs from the video and was updated in 2021]
+]
+.pull-right[
+```{r, echo=F, eval=T, ref.label="surv3", fig.height=6}
+
+```
+]
+
+
+
+

@@ -75,3 +75,45 @@
   align: middle;
   float: right;
 }
+
+.icon-left{
+  height: 60px;
+  align: middle;
+  float: left;
+}
+
+
+div.caution,div.note,div.tip,div.warning{
+    padding: 0;
+    margin: 1em 0;
+    padding-left: 100px;
+    background-size: 50px;
+    background-repeat: no-repeat;
+    background-position: 15px center;
+    border-radius: .5rem;
+    min-height: 100px;
+    color: #1f5386;
+}
+
+div.caution{
+  background-image: url("../lectures/img/caution.png");
+  background-color: #ffdfdf;
+  border: #ff725c solid 2px;
+}
+div.note{
+  background-image: url("../lectures/img/note.png");
+  background-color: #cdecff;
+  border: #357edd solid 2px;
+}
+div.tip{
+  background-image: url("../lectures/img/Lightbulb.png");
+  background-color: #cdecff;
+  border: #357edd solid 2px;
+}
+div.warning{
+  background-image: url("../lectures/img/warning.png");
+  background-color: #ffdfdf;
+  border: #ff725c solid 2px;
+}
+
+
