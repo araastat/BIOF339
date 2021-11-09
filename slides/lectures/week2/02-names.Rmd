@@ -1,7 +1,6 @@
 ---
 title: "Naming conventions in R"
 author: Abhijit Dasgupta
-date: BIOF 339
 
 ---
 
@@ -14,12 +13,6 @@ library(emo)
 library(countdown)
 ```
 
-layout: true
-
-<div class="my-header">
-<span>BIOF 339: Practical R</span></div>
-
----
 class: middle,center,inverse
 
 # Naming rules

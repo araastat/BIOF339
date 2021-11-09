@@ -12,12 +12,6 @@ library(countdown)
 library(fontawesome)
 ```
 
-layout: true
-
-<div class="my-header">
-<span>BIOF 339: Practical R</span></div>
-
----
 class: middle, center
 
 # Data munging

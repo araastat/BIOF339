@@ -19,12 +19,7 @@ theme_set(theme_classic()+theme(axis.text = element_text(size=14),
 
 ```
 
-layout: true
 
-<div class="my-header">
-<span>BIOF 339: Practical R</span></div>
-
----
 
 # Goals 
 

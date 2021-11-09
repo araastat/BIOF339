@@ -1,7 +1,6 @@
 ---
 title: "Practical R: Factors"
 author: Abhijit Dasgupta
-date: BIOF 339
 
 ---
 
@@ -14,12 +13,6 @@ library(countdown)
 library(fontawesome)
 ```
 
-layout: true
-
-<div class="my-header">
-<span>BIOF 339: Practical R</span></div>
-
----
 class: middle,center
 
 # Categorical variables
@@ -34,8 +27,6 @@ Categorical variables are variables that
 + typically have a few unique values
 + may or may not be ordered
 + are not interval-scaled, i.e., their differences don't make sense _per se_
-
-
 
 ---
 
@@ -60,7 +51,7 @@ Categorical variables are variables that
 ---
 class: middle, center
 
-# Cateogical variables in R
+# Categorical variables in R
 
 ---
 
